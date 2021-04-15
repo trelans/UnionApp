@@ -1,4 +1,4 @@
-package com.example.unionapp;
+package com.union.unionapp;
 
 import android.content.Context;
 
