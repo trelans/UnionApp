@@ -1,8 +1,10 @@
-package com.example.unionapp;
+package com.union.unionapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.union.unionapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
