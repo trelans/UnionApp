@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "226808863375",
+    "project_id": "unionuniversityapp",
+    "storage_bucket": "unionuniversityapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226808863375:android:9a08d15b162223b79eeefa",
+        "android_client_info": {
+          "package_name": "com.union.unionapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226808863375-u0o35fnrr50805j0q0tasphvq1r9gr6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6hBXFgsrMnVpM8tivGBWGwvsp2KTVWnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226808863375-u0o35fnrr50805j0q0tasphvq1r9gr6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
