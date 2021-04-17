@@ -121,7 +121,7 @@
                 android:textStyle="bold" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/loginCardView"
+                android:id="@+id/sendAgainCardView"
                 android:layout_width="90dp"
                 android:layout_height="33dp"
                 android:layout_alignParentBottom="true"
@@ -145,7 +145,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/loginCardView"
+                android:id="@+id/sendAgainCardView"
                 android:layout_width="114dp"
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
