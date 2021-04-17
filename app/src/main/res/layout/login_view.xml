@@ -54,7 +54,7 @@
                 android:inputType="textPassword" />
 
             <EditText
-                android:id="@+id/emailAdressTextView"
+                android:id="@+id/nameTextView"
                 android:layout_width="247dp"
                 android:layout_height="44dp"
                 android:layout_alignParentBottom="true"
