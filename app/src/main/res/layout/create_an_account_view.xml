@@ -139,7 +139,7 @@
                 app:srcCompat="@drawable/ic_action_name" />
 
             <TextView
-                android:id="@+id/unionTextView"
+                android:id="@+id/recoverAccountTextView"
                 android:layout_width="238dp"
                 android:layout_height="38dp"
                 android:layout_alignParentBottom="true"
@@ -210,7 +210,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/aggreementAndPrivacyTextView"
+                android:id="@+id/incorrectCodeTextView"
                 android:layout_width="152dp"
                 android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
