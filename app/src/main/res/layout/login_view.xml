@@ -23,7 +23,7 @@
 
 
             <CheckBox
-                android:id="@+id/rememberMeBox"
+                android:id="@+id/iAgreeWithTextView"
                 android:layout_width="101dp"
                 android:layout_height="16dp"
                 android:layout_alignParentBottom="true"
@@ -146,7 +146,7 @@
                 android:textColor="#868686" />
 
             <TextView
-                android:id="@+id/forgotYourPasswordText"
+                android:id="@+id/loginTextView"
                 android:layout_width="134dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
