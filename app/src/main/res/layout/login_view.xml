@@ -166,7 +166,7 @@
                 android:textColor="#66B5E0" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/loginCardView"
+                android:id="@+id/sendAgainCardView"
                 android:layout_width="90dp"
                 android:layout_height="33dp"
                 android:layout_alignParentBottom="true"
