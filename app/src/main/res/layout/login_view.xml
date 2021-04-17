@@ -106,7 +106,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/unionTextView"
+                android:id="@+id/recoverAccountTextView"
                 android:layout_width="100dp"
                 android:layout_height="33dp"
                 android:layout_alignParentBottom="true"

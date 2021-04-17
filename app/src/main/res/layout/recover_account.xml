@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="336dp"
+        android:layout_height="415dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="336dp"
+            android:layout_height="415dp"
+            android:gravity="fill">
+
+
+            <EditText
+                android:id="@+id/emailAdressTextView"
+                android:layout_width="171dp"
+                android:layout_height="41dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="253dp"
+                android:layout_marginEnd="130dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="120dp"
+                android:ems="10"
+                android:hint="Email Adress"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/errorCodeTextView"
+                android:layout_width="171dp"
+                android:layout_height="41dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="199dp"
+                android:layout_marginEnd="130dp"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="174dp"
+                android:ems="10"
+                android:hint="Error Code"
+                android:inputType="textPersonName"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/recoverAccountTextView"
+                android:layout_width="231dp"
+                android:layout_height="33dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="330dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="51dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Recover Your Account"
+                android:textAlignment="center"
+                android:textColor="#1068DA"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/orTextView"
+                android:layout_width="23dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="36dp"
+                android:layout_marginEnd="150dp"
+                android:layout_marginStart="150dp"
+                android:gravity="center"
+                android:text="or"
+                android:textColor="#868686" />
+
+            <TextView
+                android:id="@+id/loginTextView"
+                android:layout_width="134dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="90dp"
+                android:layout_marginStart="90dp"
+                android:gravity="center"
+                android:text="Login"
+                android:textColor="#66B5E0" />
+
+            <TextView
+                android:id="@+id/incorrectCodeTextView"
+                android:layout_width="160dp"
+                android:layout_height="26dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="369dp"
+                android:layout_marginEnd="163dp"
+                android:layout_marginStart="13dp"
+                android:gravity="center"
+                android:text="Incorrect Code!"
+                android:textColor="#E40808"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/loginCardView"
+                android:layout_width="90dp"
+                android:layout_height="33dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="63dp"
+                android:layout_marginEnd="100dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="320dp"
+                app:cardBackgroundColor="#00FFFFFF"
+                app:cardCornerRadius="6dp">
+
+                <Button
+                    android:id="@+id/loginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#8580FA"
+                    android:text="Sign Up"
+                    android:textColor="#FFFFFF" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/loginCardView"
+                android:layout_width="114dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="230dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginStart="216dp"
+                android:layout_marginTop="145dp"
+                app:cardBackgroundColor="#00FFFFFF"
+                app:cardCornerRadius="6dp" >
+
+                <Button
+                    android:id="@+id/sendAgainButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#8580FA"
+                    android:text="Send Again"
+                    android:textColor="#FFFFFF" />
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
