@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg">
 
-    <RelativeLayout
+     <RelativeLayout
         android:layout_width="297dp"
         android:layout_height="377dp"
         android:layout_marginBottom="177dp"
@@ -53,8 +53,9 @@
             android:layout_marginStart="47dp"
             android:layout_marginTop="31dp"
             android:fontFamily="sans-serif-light"
-            android:text="Welcome to"
+           android:text="Welcome to"
             android:textAlignment="center"
             android:textSize="20sp" />
     </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
