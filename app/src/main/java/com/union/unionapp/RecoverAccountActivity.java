@@ -40,7 +40,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
         tw_enter_code = findViewById(R.id.EnterCodeTextView);
         tw_incorrect_code = findViewById(R.id.incorrectCodeTextView);
         sendAgainButton = findViewById(R.id.sendAgainButton);
-        signUpButton = findViewById(R.id.SignUpButton);
+        signUpButton = findViewById(R.id.signUpButton);
 
     }
 }

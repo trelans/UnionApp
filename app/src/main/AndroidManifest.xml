@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp">
-        <activity android:name="com.union.unionapp.LoginActivity">
+        <activity android:name="com.union.unionapp.CreateAnAccountActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
