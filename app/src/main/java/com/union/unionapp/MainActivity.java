@@ -36,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
         // Check if user is signed in (non-null).
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            System.out.println("girdim");
+            Log.i("a","girdim");
+        }else{
+            System.out.println("girmedim");
         }
     }
-
     /*
     private void createAccount(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
