@@ -88,6 +88,7 @@
                 android:ems="10"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:hint="Password"
+
                 android:inputType="textPassword" />
 
             <EditText
