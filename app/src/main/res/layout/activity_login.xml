@@ -23,7 +23,7 @@
 
 
             <CheckBox
-                android:id="@+id/CheckBoxRemember"
+                android:id="@+id/AgreementCheckBox"
                 android:layout_width="101dp"
                 android:layout_height="16dp"
                 android:layout_alignParentBottom="true"
@@ -56,7 +56,7 @@
                 android:inputType="textPassword" />
 
             <EditText
-                android:id="@+id/emailTextView"
+                android:id="@+id/nameTextView"
                 android:layout_width="247dp"
                 android:layout_height="44dp"
                 android:layout_alignParentBottom="true"
