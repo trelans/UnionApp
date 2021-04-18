@@ -185,9 +185,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#8580FA"
-                    android:text="Login"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:textColor="#FFFFFF" />
+                    android:text="Login"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12dp" />
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
