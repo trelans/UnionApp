@@ -42,7 +42,7 @@
                 android:textSize="14sp" />
 
             <EditText
-                android:id="@+id/errorCodeTextView"
+                android:id="@+id/EnterCodeTextView"
                 android:layout_width="171dp"
                 android:layout_height="41dp"
                 android:layout_alignParentStart="true"
@@ -55,7 +55,7 @@
                 android:layout_marginBottom="199dp"
                 android:ems="10"
                 android:fontFamily="@font/myriad_pro_regular"
-                android:hint="Error Code"
+                android:hint="Enter Code"
                 android:inputType="textPersonName"
                 android:textSize="14sp" />
 
@@ -105,6 +105,7 @@
                 android:layout_marginBottom="12dp"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:gravity="center"
+                android:onClick="login"
                 android:text="Login"
                 android:textColor="#66B5E0" />
 
@@ -146,6 +147,7 @@
                     android:layout_height="match_parent"
                     android:background="#8580FA"
                     android:fontFamily="@font/myriad_pro_regular"
+                    android:onClick="sendAgain"
                     android:text="Send Again"
                     android:textColor="#FFFFFF"
                     android:textSize="12dp" />
@@ -167,11 +169,12 @@
                 app:cardCornerRadius="6dp">
 
                 <Button
-                    android:id="@+id/loginButton"
+                    android:id="@+id/SignUpButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#8580FA"
                     android:fontFamily="@font/myriad_pro_regular"
+                    android:onClick="SignUp"
                     android:text="Sign Up"
                     android:textColor="#FFFFFF"
                     android:textSize="12dp" />
