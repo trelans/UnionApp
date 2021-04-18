@@ -147,7 +147,8 @@
                     android:background="#8580FA"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="Send Again"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="12dp" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -172,7 +173,8 @@
                     android:background="#8580FA"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="Sign Up"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="12dp" />
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>

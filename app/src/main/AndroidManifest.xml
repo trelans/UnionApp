@@ -9,9 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp">
-        <activity android:name=".RecoverAccountActivity"></activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.union.unionapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
