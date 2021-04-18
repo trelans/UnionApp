@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.GetChars;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -26,14 +27,12 @@ import java.util.regex.Pattern;
 public class CreateAnAccountActivity extends AppCompatActivity {
     // Variables
     final String regexStr = "[a-zA-ZığüşöçİĞÜŞÖÇ ]+$";
-    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-            "[a-zA-ZığüşöçİĞÜŞÖÇ ]+$"
-    );
     TextView tw_name;
     TextView tw_email;
     TextView tw_surname;
     TextView tw_password;
     TextView tw_password_Auth;
+    TextView tw_terms;
     CheckBox cb_aggrement;
     ImageView tick1;
     ImageView tick2;
@@ -44,6 +43,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     String name;
     String surname;
     String password;
+    boolean isPasswordNotValid;
 
     ProgressBar pb_waiting;
     Button bt_signUp;
@@ -65,13 +65,10 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_email = findViewById(R.id.emailTextView);
         tw_password = findViewById(R.id.passwordTextView);
         tw_password_Auth = findViewById(R.id.passwordAuthTextView);
+        tw_terms = findViewById(R.id.termsTextView);
         cb_aggrement = findViewById(R.id.rememberMeCheckBox);
         pb_waiting = findViewById(R.id.waitingProgressBar);
         bt_signUp = findViewById(R.id.signUpButton);
-        email = tw_email.getText().toString().trim();
-        name = tw_name.getText().toString().trim();
-        surname = tw_surname.getText().toString().trim();
-        password = tw_password.getText().toString().trim();
         tick1 = findViewById(R.id.thickView1);
         tick2 = findViewById(R.id.thickView2);
         tick3 = findViewById(R.id.thickView3);
@@ -79,18 +76,22 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tick5 = findViewById(R.id.thickView5);
         tickIcon = getResources().getDrawable(R.drawable.ic_action_name);
         tickIcon.setBounds(0, 0, tickIcon.getIntrinsicWidth(), tickIcon.getIntrinsicHeight());
+        Pattern pattern = Pattern.compile(regexStr);
 
         tw_password_Auth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!tw_password_Auth.hasFocus() && tw_password_Auth.getText().toString().length() != 0) {
-                    if (tw_password.getText().toString().equals(tw_password_Auth.getText().toString().trim())) {
+                    if (password.equals(tw_password_Auth.getText().toString().trim()) && !isPasswordNotValid) {
                         tick5.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(),"adasda",Toast.LENGTH_SHORT).show();
                         return;
-                    }else{
-                        if (!password.equals(tw_password_Auth.getText().toString().trim())) {
+                    } else {
+                        if (!password.equals(tw_password_Auth.getText().toString().trim())){
                             tw_password_Auth.setError("Passwords don't match");
+                            tick5.setVisibility(View.INVISIBLE);
+                            return;
+                        }else{
+                            tw_password_Auth.setError("Password length must be at least 6 character");
                             tick5.setVisibility(View.INVISIBLE);
                             return;
                         }
@@ -102,14 +103,16 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                password = tw_password.getText().toString().trim();
                 if (!tw_password.hasFocus() && tw_password.getText().toString().length() != 0) {
                     if (password.length() < 6) {
                         tw_password.setError("Password length must be at least 6 character");
                         tick4.setVisibility(View.INVISIBLE);
+                        isPasswordNotValid = true;
                         return;
-                    }else{
+                    } else {
                         tick4.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(),"adasda",Toast.LENGTH_SHORT).show();
+                        isPasswordNotValid = false;
                         return;
                     }
                 }
@@ -119,13 +122,15 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                name = tw_name.getText().toString();
+                name = tw_name.getText().toString().trim();
                 if (!tw_name.hasFocus() && name.length() != 0) {
-                    Pattern pattern = Pattern.compile(regexStr);
+
                     Matcher matcher = pattern.matcher(name);
                     if (matcher.find()) {
-                        Toast.makeText(getApplicationContext(),"a",Toast.LENGTH_SHORT).show();
                         tick1.setVisibility(View.VISIBLE);
+                    }else {
+                        tick1.setVisibility(View.INVISIBLE);
+                        tw_name.setError("Invalid characters!");
                     }
                 }
             }
@@ -133,13 +138,15 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (!tw_email.hasFocus() && tw_email.getText().toString().length() != 0) {
+                email = tw_email.getText().toString().trim();
+                if (!tw_email.hasFocus() && email.length() != 0) {
                     if (!email.contains("ug.bilkent.edu.tr")) {
                         tw_email.setError("Your university hasn't registered yet");
                         tick3.setVisibility(View.INVISIBLE);
                         return;
-                    }else{
+                    } else {
                         tick3.setVisibility(View.VISIBLE);
+                        return;
                     }
                 }
             }
@@ -148,24 +155,20 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_surname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (!tw_surname.hasFocus() && tw_surname.getText().toString().length() != 0) {
-                    if (surname.matches("[A-Za-z0-9]+")){
+                surname = tw_surname.getText().toString().trim();
+                if (!tw_surname.hasFocus() && surname.length() != 0) {
+                    Matcher matcher = pattern.matcher(surname);
+                    if (matcher.find()) {
                         tick2.setVisibility(View.VISIBLE);
-                    }else{
+                        return;
+                    } else {
                         tick2.setVisibility(View.INVISIBLE);
+                        tw_surname.setError("Invalid characters!");
+                        return;
                     }
                 }
             }
         });
-
-
-
-
-
-
-
-
-
 
 
         bt_signUp.setOnClickListener(new View.OnClickListener() {
@@ -175,12 +178,23 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(email)) {
                     tw_email.setError("Email is required");
-                    return; // metodu bitirir
                 }
                 if (TextUtils.isEmpty(password)) {
                     tw_password.setError("Password is required");
-                    return;
                 }
+                if (TextUtils.isEmpty(tw_password_Auth.getText().toString())) {
+                    tw_password_Auth.setError("Password is required");
+                }
+                if (TextUtils.isEmpty(name)) {
+                    tw_name.setError("Name is required");
+                }
+                if (TextUtils.isEmpty(surname)) {
+                    tw_surname.setError("Surname is required");
+                }
+                if (!cb_aggrement.isChecked()){
+                    tw_terms.setError("You must agree the terms first");
+                }
+
 
                 pb_waiting.setVisibility(View.VISIBLE);
             }
@@ -190,18 +204,16 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     }
 
     public static void signUp(View view) {
+
     }
 
     public void login(View view) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
-    public static void previewTerms(View view) {
+    public void previewTerms(View view) {
 
-    }
-
-    public final static boolean isValidEmail(CharSequence target) {
-        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }
