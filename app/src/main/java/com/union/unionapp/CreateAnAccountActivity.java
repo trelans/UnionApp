@@ -9,7 +9,9 @@ import android.text.GetChars;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -77,6 +79,16 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tickIcon = getResources().getDrawable(R.drawable.ic_action_name);
         tickIcon.setBounds(0, 0, tickIcon.getIntrinsicWidth(), tickIcon.getIntrinsicHeight());
         Pattern pattern = Pattern.compile(regexStr);
+
+        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return true;
+            }
+        });
 
         tw_password_Auth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
