@@ -1,7 +1,9 @@
 package com.union.unionapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,6 +21,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
@@ -62,6 +67,11 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_an_account);
 
         mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+
         tw_name = findViewById(R.id.nameTextView);
         tw_surname = findViewById(R.id.surnameTextView);
         tw_email = findViewById(R.id.emailTextView);
@@ -98,11 +108,11 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                         tick5.setVisibility(View.VISIBLE);
                         return;
                     } else {
-                        if (!password.equals(tw_password_Auth.getText().toString().trim())){
+                        if (!password.equals(tw_password_Auth.getText().toString().trim())) {
                             tw_password_Auth.setError("Passwords don't match");
                             tick5.setVisibility(View.INVISIBLE);
                             return;
-                        }else{
+                        } else {
                             tw_password_Auth.setError("Password length must be at least 6 character");
                             tick5.setVisibility(View.INVISIBLE);
                             return;
@@ -140,7 +150,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     Matcher matcher = pattern.matcher(name);
                     if (matcher.find()) {
                         tick1.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         tick1.setVisibility(View.INVISIBLE);
                         tw_name.setError("Invalid characters!");
                     }
@@ -203,21 +213,34 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(surname)) {
                     tw_surname.setError("Surname is required");
                 }
-                if (!cb_aggrement.isChecked()){
+                if (!cb_aggrement.isChecked()) {
                     tw_terms.setError("You must agree the terms first");
                 }
 
 
                 pb_waiting.setVisibility(View.VISIBLE);
+
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Context context;
+                            CharSequence text;
+                            Toast.makeText(getApplicationContext(), "user created", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
             }
         });
 
 
     }
 
-    public static void signUp(View view) {
-
-    }
 
     public void login(View view) {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

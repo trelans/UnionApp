@@ -16,31 +16,12 @@ import com.union.unionapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("Oke Yunus");
-
-        //significant
-        System.out.println("Lalaland");
-
-        mAuth = FirebaseAuth.getInstance();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null).
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
-            Log.i("a","girdim");
-        }else{
-            System.out.println("girmedim");
-        }
-    }
     /*
     private void createAccount(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
