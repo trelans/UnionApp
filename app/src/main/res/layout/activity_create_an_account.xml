@@ -33,6 +33,7 @@
             android:layout_height="match_parent">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardview"
                 android:layout_width="336dp"
                 android:layout_height="415dp"
                 app:cardCornerRadius="25dp"
@@ -206,7 +207,7 @@
                         app:srcCompat="@drawable/ic_action_name" />
 
                     <TextView
-                        android:id="@+id/recoverAccountTextView"
+                        android:id="@+id/unionTextView"
                         android:layout_width="238dp"
                         android:layout_height="38dp"
                         android:layout_alignParentStart="true"
