@@ -37,7 +37,7 @@
                 android:layout_marginBottom="111dp"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:text="Remember Me"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
 
             <EditText
                 android:id="@+id/passwordTextView"
