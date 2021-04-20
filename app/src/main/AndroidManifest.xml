@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.union.unionapp.LoginActivity">
-        </activity>
+        <activity android:name="com.union.unionapp.LoginActivity"/>
+        <activity android:name="com.union.unionapp.MainActivity"/>
     </application>
 
 </manifest>

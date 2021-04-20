@@ -7,6 +7,7 @@
     android:background="@drawable/bg">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="336dp"
         android:layout_height="415dp"
         app:cardCornerRadius="25dp"
@@ -26,14 +27,14 @@
                 android:id="@+id/rememberMeCheckBox"
                 android:layout_width="101dp"
                 android:layout_height="16dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="111dp"
-                android:layout_marginEnd="196dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="39dp"
                 android:layout_marginTop="288dp"
+                android:layout_marginEnd="196dp"
+                android:layout_marginBottom="111dp"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:text="Remember Me"
                 android:textSize="11sp" />
@@ -54,6 +55,7 @@
                 android:fontFamily="@font/myriad_pro_regular"
                 android:hint="Password"
                 android:inputType="textPassword" />
+
 
             <EditText
                 android:id="@+id/nameTextView"
@@ -124,17 +126,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/thickView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="44dp"
-                android:layout_marginBottom="145dp"
-                android:fontFamily="@font/myriad_pro_regular"
-                app:srcCompat="@drawable/ic_action_name" />
-
             <TextView
                 android:id="@+id/orTextView"
                 android:layout_width="23dp"
@@ -192,6 +183,50 @@
                     android:textColor="#FFFFFF"
                     android:textSize="12dp" />
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/tickView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="46dp"
+                android:layout_marginBottom="186dp"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_action_name" />
+
+            <ImageView
+                android:id="@+id/tickView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="46dp"
+                android:layout_marginBottom="146dp"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/ic_action_name" />
+
+            <TextView
+                android:id="@+id/errorTextView"
+                android:layout_width="160dp"
+                android:layout_height="26dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="-4dp"
+                android:layout_marginRight="91dp"
+                android:layout_marginBottom="385dp"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:gravity="center"
+                android:text="Incorrect Code!"
+                android:textColor="#E40808"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

@@ -1,16 +1,25 @@
 package com.union.unionapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -22,18 +31,26 @@ public class LoginActivity extends AppCompatActivity {
     TextView tw_email;
     TextView tw_password;
     TextView tw_forgot_password;
+    TextView tw_error;
     CheckBox check_box_remember_me;
     Button button_login;
+    CardView cardView;
     ProgressBar pb_waiting;
+    ImageView tick1;
+    ImageView tick2;
     private FirebaseAuth mAuth;
+    String email;
+    String password;
 
-    public void login (View view) {
+
+    public void login(View view) {
         // Button onClick
-        Log.i("Butona basıldı" , " YESS");
+        Log.i("Butona basıldı", " YESS");
     }
-    public void ForgotPassword (View view) {
+
+    public void ForgotPassword(View view) {
         // Button onClick
-        Log.i("Forgot Passworda Basil" , " YESS");
+        Log.i("Forgot Passworda Basil", " YESS");
     }
 
     @Override
@@ -43,17 +60,105 @@ public class LoginActivity extends AppCompatActivity {
         tw_email = findViewById(R.id.nameTextView);
         tw_password = findViewById(R.id.passwordTextView);
         tw_forgot_password = findViewById(R.id.forgot_pass_tw);
+        tw_error = findViewById(R.id.errorTextView);
+        tw_error.setVisibility(View.INVISIBLE);
+
+        cardView = findViewById(R.id.cardView);
+        /*
+        ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams);
+        cardView.getLayoutParams();
+        layoutParams.height = 10;
+         */
+
         check_box_remember_me = findViewById(R.id.rememberMeCheckBox);
         button_login = findViewById(R.id.signUpButton);
         pb_waiting = findViewById(R.id.waitingProgressBar);
+        tick1 = findViewById(R.id.tickView1);
+        tick2 = findViewById(R.id.tickView2);
 
         mAuth = FirebaseAuth.getInstance();
         // Check if user is signed in (non-null) and if there is a user go to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
+        if (currentUser != null) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
 
+        tw_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                email = tw_email.getText().toString().trim();
+                if (!tw_email.hasFocus() && email.length() != 0) {
+                    if (!email.contains("ug.bilkent.edu.tr")) {
+                        tw_email.setError("Your university hasn't registered yet");
+                        tick1.setVisibility(View.INVISIBLE);
+                        return;
+                    } else {
+                        tick1.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                }
+            }
+        });
+
+        tw_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                password = tw_password.getText().toString().trim();
+                if (!tw_password.hasFocus() && tw_password.getText().toString().length() != 0) {
+                    if (password.length() < 6) {
+                        tw_password.setError("Password length must be at least 6 character");
+                        tick2.setVisibility(View.INVISIBLE);
+                        return;
+                    } else {
+                        tick2.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                }
+            }
+        });
+
+        button_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isThereError = false;
+
+                email = tw_email.getText().toString().trim();
+                password = tw_password.getText().toString().trim();
+
+
+                if (TextUtils.isEmpty(email)) {
+                    tw_email.setError("Email is required");
+                    isThereError = true;
+                }
+                if (TextUtils.isEmpty(password)) {
+                    tw_password.setError("Password is required");
+                    isThereError = true;
+                }
+
+
+                if (!isThereError) {
+                    pb_waiting.setVisibility(View.VISIBLE);
+
+                    // authenticate user
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "Giriş yapıldı", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                tw_error.setText("Email or Password is not correct!");
+                                tw_error.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+                }
+
+
+            }
+        });
     }
 }

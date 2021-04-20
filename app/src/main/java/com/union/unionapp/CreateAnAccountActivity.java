@@ -196,45 +196,52 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         bt_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean isThereError = false;
 
 
                 if (TextUtils.isEmpty(email)) {
                     tw_email.setError("Email is required");
+                    isThereError = true;
                 }
                 if (TextUtils.isEmpty(password)) {
                     tw_password.setError("Password is required");
+                    isThereError = true;
                 }
                 if (TextUtils.isEmpty(tw_password_Auth.getText().toString())) {
                     tw_password_Auth.setError("Password is required");
+                    isThereError = true;
                 }
                 if (TextUtils.isEmpty(name)) {
                     tw_name.setError("Name is required");
+                    isThereError = true;
                 }
                 if (TextUtils.isEmpty(surname)) {
                     tw_surname.setError("Surname is required");
+                    isThereError = true;
                 }
                 if (!cb_aggrement.isChecked()) {
                     tw_terms.setError("You must agree the terms first");
+                    isThereError = true;
                 }
 
+                if (!isThereError) {
+                    pb_waiting.setVisibility(View.VISIBLE);
 
-                pb_waiting.setVisibility(View.VISIBLE);
-
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Context context;
-                            CharSequence text;
-                            Toast.makeText(getApplicationContext(), "user created", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Context context;
+                                CharSequence text;
+                                Toast.makeText(getApplicationContext(), "user created", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
             }
         });
 
