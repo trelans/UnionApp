@@ -111,14 +111,14 @@
                 android:id="@+id/recoverAccountTextView"
                 android:layout_width="100dp"
                 android:layout_height="33dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="322dp"
+                android:layout_marginEnd="57dp"
                 android:layout_marginStart="159dp"
                 android:layout_marginTop="33dp"
-                android:layout_marginEnd="57dp"
-                android:layout_marginBottom="322dp"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:text="unI0n"
                 android:textAlignment="center"
@@ -157,32 +157,39 @@
                 android:text="Forgot Your Password?"
                 android:textColor="#66B5E0" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/sendAgainCardView"
-                android:layout_width="90dp"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/signUpButton"
+
+                android:layout_width="99dp"
                 android:layout_height="33dp"
+
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="120dp"
-                android:layout_marginTop="320dp"
-                android:layout_marginEnd="120dp"
                 android:layout_marginBottom="63dp"
-                app:cardBackgroundColor="#00FFFFFF"
-                app:cardCornerRadius="6dp">
-
-                <Button
-                    android:id="@+id/signUpButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#8580FA"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:onClick="login"
-                    android:text="Login"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12dp" />
-            </androidx.cardview.widget.CardView>
+                android:layout_marginEnd="120dp"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="319dp"
+                android:background="@drawable/login_signup_button_template"
+                android:backgroundTint="#857FFD"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:insetBottom="0sp"
+                android:insetTop="0sp"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:text="LOGIN"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="21sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.512" />
 
             <ImageView
                 android:id="@+id/tickView1"
