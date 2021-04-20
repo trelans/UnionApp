@@ -110,6 +110,8 @@ public class CreateAnAccountActivity extends AppCompatActivity {
             }
         });
 
+
+
         // Buttonu disable yapma (until checkbox işaretlenince diğer şeylerde hata yoksa)
         bt_signUp.setEnabled(false);
 

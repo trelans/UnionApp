@@ -85,6 +85,21 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        // Klavye açık mı kapalı mı onu dinlio
+     KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener()
+        {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible)
+            {
+                if (!isVisible && !isThereError ) {
+                    button_login.setEnabled(true);
+                }
+            }
+
+        });
+
+
+        // Focus Listeners
         tw_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
