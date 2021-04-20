@@ -2,16 +2,19 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,8 +28,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        /*
+        //button = findViewById(R.id.button);
+        //button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
@@ -36,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
+
     private void createAccount(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -60,5 +68,39 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-     */
+
+}
+*/
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selectedFragment = null;
+                    switch (item.getItemId()) {
+                        case R.id.nav_message:
+                            selectedFragment = new MessageFragment();
+                            break;
+                        case R.id.nav_buddy:
+                            selectedFragment = new BuddyFragment();
+                            break;
+                        case R.id.nav_club:
+                            selectedFragment = new ClubsFragment();
+                            break;
+                        case R.id.nav_stack:
+                            selectedFragment = new StackFragment();
+                            break;
+                        case R.id.nav_profile:
+                            selectedFragment = new ProfileFragment();
+                            break;
+                    }
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            selectedFragment).commit();
+                    return true;
+                }
+            };
+
+
+
 }
