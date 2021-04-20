@@ -58,7 +58,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
 
-    // yükleme metodu yazınca progress barı üste al, arkayı blur yap ....
+    // yükleme metodu yazınca progress barı üste al, arkayı blur yap .....
 
 
     @Override
