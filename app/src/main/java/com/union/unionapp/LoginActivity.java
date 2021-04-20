@@ -7,9 +7,7 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -44,14 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     boolean isThereError = false;
 
 
-    public void login(View view) {
-        // Button onClick
-        Log.i("Butona basıldı", " YESS");
-    }
 
     public void ForgotPassword(View view) {
         // Button onClick
-        Log.i("Forgot Passworda Basil", " YESS");
+
     }
 
     @Override
@@ -60,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         tw_email = findViewById(R.id.nameTextView);
         tw_password = findViewById(R.id.passwordTextView);
-        tw_forgot_password = findViewById(R.id.forgot_pass_tw);
+        tw_forgot_password = findViewById(R.id.loginTextView);
         tw_error = findViewById(R.id.errorTextView);
         tw_error.setVisibility(View.INVISIBLE);
 
@@ -144,6 +138,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
+            // click listeners
+        tw_forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RecoverAccountActivity.class));
+
+            }
+        });
 
 
         button_login.setOnClickListener(new View.OnClickListener() {

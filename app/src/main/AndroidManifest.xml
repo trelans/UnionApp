@@ -20,6 +20,7 @@
         </activity>
         <activity android:name="com.union.unionapp.LoginActivity"/>
         <activity android:name="com.union.unionapp.MainActivity"/>
+        <activity android:name="com.union.unionapp.RecoverAccountActivity"/>
     </application>
 
 </manifest>
