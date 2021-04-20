@@ -177,8 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 finish();
                             } else {
-                                Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
-                                tw_error.setText("Email or Password is not correct!");
+                                tw_error.setText(task.getException().getMessage());
                                 tw_error.setVisibility(View.VISIBLE);
                             }
                         }
