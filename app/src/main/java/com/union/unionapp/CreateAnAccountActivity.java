@@ -90,7 +90,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tickIcon.setBounds(0, 0, tickIcon.getIntrinsicWidth(), tickIcon.getIntrinsicHeight());
         Pattern pattern = Pattern.compile(regexStr);
 
-        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+        // klavyeyi dışarı tıklayınca kapatmaya yarıyor  //TO DO boş yollayınca uygulama çöküyor
         findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
