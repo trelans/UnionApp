@@ -54,7 +54,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     String surname;
     String password;
     boolean isPasswordNotValid;
-    boolean isThereError = false;
+    boolean isThereError = false; // int
 
     ProgressBar pb_waiting;
     Button bt_signUp;
