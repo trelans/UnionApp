@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     String email;
     String password;
+    boolean isThereError = false;
 
 
     public void login(View view) {
@@ -88,13 +89,18 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 email = tw_email.getText().toString().trim();
+                // if something wrong with email
                 if (!tw_email.hasFocus() && email.length() != 0) {
                     if (!email.contains("ug.bilkent.edu.tr")) {
+                        isThereError = true;
+                        button_login.setEnabled(false);
                         tw_email.setError("Your university hasn't registered yet");
                         tick1.setVisibility(View.INVISIBLE);
                         return;
                     } else {
                         tick1.setVisibility(View.VISIBLE);
+                        isThereError = false;
+                        button_login.setEnabled(true);
                         return;
                     }
                 }
@@ -105,23 +111,30 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View view, boolean b) {
                 password = tw_password.getText().toString().trim();
+                // if something wrong with password
                 if (!tw_password.hasFocus() && tw_password.getText().toString().length() != 0) {
                     if (password.length() < 6) {
+                        isThereError = true;
+                        button_login.setEnabled(false);
                         tw_password.setError("Password length must be at least 6 character");
                         tick2.setVisibility(View.INVISIBLE);
                         return;
                     } else {
                         tick2.setVisibility(View.VISIBLE);
+                        isThereError = false;
+                        button_login.setEnabled(true);
                         return;
                     }
                 }
             }
         });
 
+
+
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isThereError = false;
+
 
                 email = tw_email.getText().toString().trim();
                 password = tw_password.getText().toString().trim();

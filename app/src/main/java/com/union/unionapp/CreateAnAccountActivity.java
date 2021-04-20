@@ -2,6 +2,7 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +73,12 @@ public class CreateAnAccountActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+        // card denemesi : fail daskjddfdsf
+       // RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
+       // CardView cardView = findViewById(R.id.cardView);
+        //cardView.setLayoutParams(new RelativeLayout.LayoutParams(20, 20));
+
+
 
         tw_name = findViewById(R.id.nameTextView);
         tw_surname = findViewById(R.id.surnameTextView);
