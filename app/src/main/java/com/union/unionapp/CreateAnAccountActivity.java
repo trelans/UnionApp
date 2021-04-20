@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -53,6 +54,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     String surname;
     String password;
     boolean isPasswordNotValid;
+    boolean isThereError = false;
 
     ProgressBar pb_waiting;
     Button bt_signUp;
@@ -108,23 +110,33 @@ public class CreateAnAccountActivity extends AppCompatActivity {
             }
         });
 
+        // Buttonu disable yapma (until checkbox işaretlenince diğer şeylerde hata yoksa)
+        bt_signUp.setEnabled(false);
+
         tw_password_Auth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!tw_password_Auth.hasFocus() && tw_password_Auth.getText().toString().length() != 0) {
                     if (password.equals(tw_password_Auth.getText().toString().trim()) && !isPasswordNotValid) {
                         tick5.setVisibility(View.VISIBLE);
+                        isThereError = false;
+                        bt_signUp.setEnabled(true);
                         return;
                     } else {
                         if (!password.equals(tw_password_Auth.getText().toString().trim())) {
                             tw_password_Auth.setError("Passwords don't match");
                             tick5.setVisibility(View.INVISIBLE);
+                            isThereError = true;
+                            bt_signUp.setEnabled(false);
                             return;
                         } else {
                             tw_password_Auth.setError("Password length must be at least 6 character");
                             tick5.setVisibility(View.INVISIBLE);
+                            isThereError = true;
                             return;
                         }
+
+
                     }
                 }
             }
@@ -139,10 +151,13 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                         tw_password.setError("Password length must be at least 6 character");
                         tick4.setVisibility(View.INVISIBLE);
                         isPasswordNotValid = true;
+                        isThereError = true;
                         return;
                     } else {
                         tick4.setVisibility(View.VISIBLE);
                         isPasswordNotValid = false;
+                        isThereError = false;
+                        bt_signUp.setEnabled(true);
                         return;
                     }
                 }
@@ -158,9 +173,12 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     Matcher matcher = pattern.matcher(name);
                     if (matcher.find()) {
                         tick1.setVisibility(View.VISIBLE);
+                        isThereError = false;
+                        bt_signUp.setEnabled(true);
                     } else {
                         tick1.setVisibility(View.INVISIBLE);
                         tw_name.setError("Invalid characters!");
+                        isThereError = true;
                     }
                 }
             }
@@ -173,9 +191,12 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     if (!email.contains("ug.bilkent.edu.tr")) {
                         tw_email.setError("Your university hasn't registered yet");
                         tick3.setVisibility(View.INVISIBLE);
+                        isThereError = true;
                         return;
                     } else {
                         tick3.setVisibility(View.VISIBLE);
+                        isThereError = false;
+                        bt_signUp.setEnabled(true);
                         return;
                     }
                 }
@@ -190,21 +211,35 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     Matcher matcher = pattern.matcher(surname);
                     if (matcher.find()) {
                         tick2.setVisibility(View.VISIBLE);
+                        isThereError = false;
+                        bt_signUp.setEnabled(true);
                         return;
                     } else {
                         tick2.setVisibility(View.INVISIBLE);
                         tw_surname.setError("Invalid characters!");
+                        isThereError = true;
                         return;
                     }
                 }
             }
         });
 
+            cb_aggrement.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (cb_aggrement.isChecked()) {
+                        bt_signUp.setEnabled(true);
+                    }
+                    else {
+                        bt_signUp.setEnabled(false);
+                    }
+                }
+            });
 
         bt_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isThereError = false;
+
 
 
                 if (TextUtils.isEmpty(email)) {
