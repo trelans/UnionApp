@@ -142,7 +142,7 @@
                 android:textColor="#868686" />
 
             <TextView
-                android:id="@+id/forgot_pass_tw"
+                android:id="@+id/loginTextView"
                 android:layout_width="134dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
