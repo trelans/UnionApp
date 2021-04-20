@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="336dp"
-        android:layout_height="wrap_content"
+        android:layout_height="415dp"
         app:cardCornerRadius="25dp"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,28 +22,6 @@
             android:layout_height="415dp"
             android:gravity="fill">
 
-
-            <TextView
-                android:id="@+id/errorTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="-4dp"
-                android:layout_marginRight="91dp"
-                android:layout_marginBottom="385dp"
-                android:fontFamily="@font/myriad_pro_regular"
-                android:gravity="center"
-                android:text="Incorrect Code!"
-                android:textColor="#E40808"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
                 android:id="@+id/rememberMeCheckBox"
@@ -130,7 +108,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/unionTextView"
+                android:id="@+id/recoverAccountTextView"
                 android:layout_width="100dp"
                 android:layout_height="33dp"
                 android:layout_alignParentStart="true"
@@ -227,6 +205,28 @@
                 android:layout_marginBottom="146dp"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/ic_action_name" />
+
+            <TextView
+                android:id="@+id/errorTextView"
+                android:layout_width="160dp"
+                android:layout_height="26dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="-4dp"
+                android:layout_marginRight="91dp"
+                android:layout_marginBottom="385dp"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:gravity="center"
+                android:text="Incorrect Code!"
+                android:textColor="#E40808"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
