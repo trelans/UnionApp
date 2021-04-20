@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/aButton"
 
         android:layout_width="130dp"
         android:layout_height="40dp"
 
         android:background="@drawable/tag_button_template"
+        android:backgroundTint="#5FC1E8"
         android:fontFamily="@font/myriad_pro_regular"
         android:insetBottom="0sp"
         android:insetTop="0sp"
