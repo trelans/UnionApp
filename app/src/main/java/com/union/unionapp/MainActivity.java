@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     Button showSettingsButton;
     TextView selectedOptionTextView;
+    Dialog myDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+        myDialog = new Dialog(this);
+
+
+
+
+
+        /*
         //init UI view
         showSettingsButton = findViewById(R.id.showSettingsButton);
         selectedOptionTextView = findViewById(R.id.selectedOptionTextView);
@@ -120,6 +130,20 @@ public class MainActivity extends AppCompatActivity {
 }
 */
     }
+
+    public void showPopup (View view) {
+
+        myDialog.setContentView(R.layout.custom_popup);
+        myDialog.show();
+    }
+
+
+
+
+
+
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
