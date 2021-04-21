@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         WindowManager.LayoutParams wlp = window.getAttributes();
 
         wlp.gravity =  Gravity.TOP;
+        wlp.horizontalMargin = 0.2F;
+        wlp.verticalMargin = 0.07F;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
         window.setAttributes(wlp);
 

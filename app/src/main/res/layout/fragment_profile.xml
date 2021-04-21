@@ -103,6 +103,7 @@
                         android:gravity="center"
                         android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:onClick="Achs"
                         android:shadowDx="0"
                         android:shadowDy="0"
                         android:shadowRadius="5"
@@ -135,6 +136,7 @@
                         android:gravity="center"
                         android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:onClick="lastActs"
                         android:shadowDx="0"
                         android:shadowDy="0"
                         android:shadowRadius="5"
@@ -157,7 +159,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginBottom="133dp"
                         android:layout_marginEnd="67dp"
-                        android:layout_marginStart="0"
+                        android:layout_marginStart="0dp"
                         android:layout_marginTop="0dp"
                         android:text="\@____________________" />
 
