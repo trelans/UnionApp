@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/ppTemplate"
+        android:id="@+id/userPp"
 
         android:layout_width="120dp"
         android:layout_height="120dp"
