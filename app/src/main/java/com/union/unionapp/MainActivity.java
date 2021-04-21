@@ -50,10 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
 */
    /* //logout button clickine konulcak
-    mAuth.signOut();
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivity(intent);
-        finish();
+
 */
         myDialog = new Dialog(this);
 
@@ -145,6 +142,34 @@ public class MainActivity extends AppCompatActivity {
 }
 */
     }
+
+    public void showPopup (View view) {
+        Dialog dialog;
+        myDialog.setContentView(R.layout.custom_popup);
+        myDialog.show();
+
+        Button logout = myDialog.findViewById(R.id.logOutButton);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myDialog.dismiss();
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
