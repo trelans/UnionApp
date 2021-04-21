@@ -33,7 +33,7 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp"
-                android:visibility="gone" />
+                android:visibility="invisible" />
 
             <ListView
                 android:id="@+id/lastActsList"
@@ -45,7 +45,7 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
             </ListView>
 

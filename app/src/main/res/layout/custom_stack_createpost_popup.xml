@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="300dp"
+    android:layout_gravity="top"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+
+    <TextView
+        android:id="@+id/textViewCreateQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Create a Question"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextQuestion"
+        android:layout_width="152dp"
+        android:layout_height="87dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/edittext_border_template"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint=" write your question here..."
+        android:inputType="textMultiLine"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonAddPhoto"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCreateQuestion"
+        app:layout_constraintVertical_bias="0.741" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="177dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextQuestion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCreateQuestion"
+        app:layout_constraintVertical_bias="0.133">
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="17dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/edittext_border_template" />
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/imageButtonAddPhoto"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginBottom="91dp"
+        android:src="@drawable/ic_baseline_add_a_photo_24"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxAnonymous"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextQuestion"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+
+    <CheckBox
+        android:id="@+id/checkBoxAnonymous"
+        android:layout_width="151dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="40dp"
+        android:text="Ask Anonymously"
+        android:textSize="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButtonSend"
+        android:layout_width="38dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxAnonymous"
+        app:srcCompat="@drawable/ic_baseline_send_24" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
