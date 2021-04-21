@@ -43,10 +43,31 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 if (lastActsIsActive){
                     lastActsIsActive = false;
-                    lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
-                    lastActsTextView.getBackground().setTint(Color.parseColor("#FFFFFF"));
+                    lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                    lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+
+                    achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
+                    achsTextView.setBackgroundTintList(null);
+                    achsIsActive = true;
                 }
             }
+
+        });
+
+        achsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (achsIsActive){
+                    achsIsActive = false;
+                    achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                    achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+
+                    lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
+                    lastActsTextView.setBackgroundTintList(null);
+                    lastActsIsActive = true;
+                }
+            }
+
         });
 
         return view;
