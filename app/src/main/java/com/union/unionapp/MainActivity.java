@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     Dialog myDialog;
     ImageView popUpButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

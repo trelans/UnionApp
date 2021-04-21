@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#88ABE3">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="336dp"
+        android:layout_height="415dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editTextTextPersonName6"
+                android:layout_width="260dp"
+                android:layout_height="68dp"
+                android:background="@drawable/create_post_location"
+                android:ems="10"
+                android:hint="Write buddy details"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.513"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.827" />
+
+            <EditText
+                android:id="@+id/editTextTextPersonName5"
+                android:layout_width="113dp"
+                android:layout_height="27dp"
+                android:background="@drawable/create_post_location"
+                android:ems="10"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.834"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.646" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="323dp"
+                android:layout_height="47dp"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textAlignment="viewStart"
+                android:textColor="#0C0C0C"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.538"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.418" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/create_post_date_template"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textColor="#090909"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.417" />
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/create_post_date_template"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textColor="#090909"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView19"
+                app:layout_constraintStart_toEndOf="@+id/textView15"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.417" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/create_post_date_template"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textColor="#090909"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textView20"
+                app:layout_constraintHorizontal_bias="0.588"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.417" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="1dp"
+                android:background="@drawable/create_post_date_template"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textColor="#090909"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView18"
+                app:layout_constraintStart_toEndOf="@+id/textView10"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.417" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="170dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="238dp"
+                android:layout_marginBottom="354dp"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:text="Find a buddy"
+                android:textSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.214"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.315" />
+
+            <SearchView
+                android:id="@+id/searchView2"
+                android:layout_width="286dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="34dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="34dp"
+                android:layout_marginBottom="287dp"
+                android:background="@drawable/searhbar_template"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.277"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="124dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/tag_button_template"
+                android:backgroundTint="#FF9800"
+                android:text="#Study"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.281" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="3dp"
+                android:background="@drawable/create_post_date_template"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textColor="#090909"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView15"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/textView23"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.417" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="105dp"
+                android:layout_height="27dp"
+                android:layout_marginStart="224dp"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:text="Quota:"
+                android:textColor="#0C0C0C"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.42" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="224dp"
+                android:background="@drawable/create_post_date_template"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:textColor="#090909"
+                android:textSize="25sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.932"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:text="Date:"
+                android:textColor="#0E0E0E"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.024"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.417" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="321dp"
+                android:layout_height="32dp"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:text="Location:"
+                android:textColor="#0E0E0E"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.548" />
+
+            <EditText
+                android:id="@+id/editTextTextPersonName4"
+                android:layout_width="227dp"
+                android:layout_height="32dp"
+                android:background="@drawable/create_post_location"
+                android:ems="10"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.853"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.548" />
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="321dp"
+                android:layout_height="29dp"
+                android:text="Gender preference:"
+                android:textColor="#100F0F"
+                android:textSize="20dp"
+                tools:layout_editor_absoluteX="9dp"
+                tools:layout_editor_absoluteY="251dp" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="58dp"
+                android:layout_height="42dp"
+
+                android:background="@drawable/send_icon"
+                tools:layout_editor_absoluteX="140dp"
+                tools:layout_editor_absoluteY="365dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
