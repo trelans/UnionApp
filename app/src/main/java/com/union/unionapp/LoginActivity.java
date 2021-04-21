@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+
     public void ForgotPassword(View view) {
         // Button onClick
 
@@ -66,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
          */
 
         check_box_remember_me = findViewById(R.id.rememberMeCheckBox);
-        button_login = findViewById(R.id.signUpButton);
+        button_login = findViewById(R.id.VerifyButton);
         pb_waiting = findViewById(R.id.waitingProgressBar);
         tick1 = findViewById(R.id.tickView1);
         tick2 = findViewById(R.id.tickView2);

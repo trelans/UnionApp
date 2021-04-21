@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/signUpButton"
+        android:id="@+id/VerifyButton"
 
         android:layout_width="99dp"
         android:layout_height="33dp"

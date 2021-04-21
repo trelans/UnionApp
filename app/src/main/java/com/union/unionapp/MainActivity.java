@@ -23,6 +23,7 @@ import com.union.unionapp.R;
 public class MainActivity extends AppCompatActivity {
 
     Button button;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+        mAuth = FirebaseAuth.getInstance();
+
+   /* //logout button clickine konulcak
+    mAuth.signOut();
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(intent);
+        finish();
+*/
         /*
         //button = findViewById(R.id.button);
         //button.setOnClickListener(new View.OnClickListener() {

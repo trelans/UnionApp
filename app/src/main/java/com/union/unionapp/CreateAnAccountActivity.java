@@ -2,16 +2,12 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.GetChars;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -90,7 +83,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_terms = findViewById(R.id.termsTextView);
         cb_aggrement = findViewById(R.id.rememberMeCheckBox);
         pb_waiting = findViewById(R.id.waitingProgressBar);
-        bt_signUp = findViewById(R.id.signUpButton);
+        bt_signUp = findViewById(R.id.VerifyButton);
         tick1 = findViewById(R.id.thickView1);
         tick2 = findViewById(R.id.thickView2);
         tick3 = findViewById(R.id.thickView3);
