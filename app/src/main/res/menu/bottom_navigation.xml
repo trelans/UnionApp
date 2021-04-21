@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/nav_message"
-          android:icon="@drawable/ic_baseline_email_24"
-          android:title="Message" />
+    <item
+        android:id="@+id/nav_message"
+        android:icon="@drawable/msg_icon"
+        android:title="Message" />
 
-    <item android:id="@+id/nav_buddy"
-        android:icon="@drawable/ic_baseline_group_24"
+    <item
+        android:id="@+id/nav_buddy"
+        android:icon="@drawable/buddy_icon"
         android:title="Buddy" />
 
-    <item android:id="@+id/nav_club"
-        android:icon="@drawable/ic_baseline_query_builder_24"
+    <item
+        android:id="@+id/nav_club"
+        android:icon="@drawable/club_icon"
         android:title="Club" />
 
-    <item android:id="@+id/nav_stack"
-        android:icon="@drawable/ic_baseline_menu_book_24"
+    <item
+        android:id="@+id/nav_stack"
+        android:icon="@drawable/stack_icon"
         android:title="Stack" />
 
-    <item android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_baseline_person_24"
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/profile_icon"
         android:title="Profile" />
 
 </menu>
