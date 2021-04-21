@@ -4,7 +4,6 @@ package com.union.unionapp;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.se.omapi.Session;
 import android.widget.Toast;
 import java.util.Properties;
 import javax.mail.Message;
