@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/tagButton1"
+        android:id="@+id/sampleButton"
 
         android:layout_width="130dp"
         android:layout_height="40dp"
@@ -14,14 +14,15 @@
         android:background="@drawable/tag_button_template"
         android:backgroundTint="#5FC1E8"
         android:fontFamily="@font/myriad_pro_regular"
-        android:insetBottom="0sp"
         android:insetTop="0sp"
+        android:insetBottom="0sp"
         android:shadowColor="#A8A8A8"
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
         android:text="Button"
         android:textAlignment="center"
+        android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"
