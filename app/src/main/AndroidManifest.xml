@@ -13,14 +13,14 @@
         android:theme="@style/Theme.UnionApp"
         android:windowSoftInputMode="adjustResize">
         <activity android:name=".CreateAnAccountActivity"></activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".RecoverAccountActivity" />
     </application>
