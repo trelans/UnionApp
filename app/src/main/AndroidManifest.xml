@@ -12,8 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".CreateAnAccountActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".CreateAnAccountActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
