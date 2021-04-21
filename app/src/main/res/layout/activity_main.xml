@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#88ABE3"
     tools:context="com.union.unionapp.MainActivity">
 
     <FrameLayout
@@ -22,8 +23,8 @@
                 android:layout_height="77dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="19dp"
-                android:layout_marginEnd="21dp"
+                android:layout_marginTop="341dp"
+                android:layout_marginEnd="33dp"
                 android:background="@drawable/buttonstyle"
                 android:onClick="showPopup"
                 android:text="settings" />
@@ -66,8 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation"/>
-
+        app:menu="@menu/bottom_navigation" />
 
 
 </RelativeLayout>
