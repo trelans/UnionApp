@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,12 +27,11 @@ import com.union.unionapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button;
+
     FirebaseAuth mAuth;
-    Button showSettingsButton;
     TextView selectedOptionTextView;
     Dialog myDialog;
-    Button logOutButton;
+    ImageView popUpButton;
 
 
     @Override
@@ -41,106 +43,19 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         mAuth = FirebaseAuth.getInstance();
-        logOutButton = (Button) findViewById(R.id.logOutButton);
 
-/*
-                mAuth.signOut();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
-*/
-   /* //logout button clickine konulcak
-
-*/
+        popUpButton = (ImageView) findViewById(R.id.showPopUpMenu);
         myDialog = new Dialog(this);
 
 
-
-
-
-        /*
-        //init UI view
-        showSettingsButton = findViewById(R.id.showSettingsButton);
-        selectedOptionTextView = findViewById(R.id.selectedOptionTextView);
-
-        //pop up menu
-        PopupMenu popupMenu = new PopupMenu(this,showSettingsButton);
-
-        //add menu items in the popup menu
-        popupMenu.getMenu().add(Menu.NONE,0,0,"Log Out"); // 2. parametre id oluyor. (bunda 0 aşağıda 1)
-        popupMenu.getMenu().add(Menu.NONE,1,1,"Nothing"); // 3. parametre menu listesindeki pozisyonu.
-        popupMenu.getMenu().add(Menu.NONE,2,2,"Merhaba");
-
-        //handle menu
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-
-                //get id of the clicked item
-                int id = item.getItemId();
-
-                //handle clicks
-                if ( id==0 ) { //log out secilmis
-                    selectedOptionTextView.setText("Log out yapiliyor...");
-                }
-                else if ( id==1 ) {
-                    selectedOptionTextView.setText("Nothing");
-                }
-                else if ( id==2 ) {
-                    selectedOptionTextView.setText("Sana da merhaba");
-                }
-
-                return false;
+            public void onDismiss(DialogInterface dialog) {
+                popUpButton.setImageResource(R.drawable.notif);
             }
         });
 
-        //handle button click, show popup menu
-        showSettingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupMenu.show();
-            }
-        });
 
-        /*
-        //button = findViewById(R.id.button);
-        //button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
-            }
-        });
-    }
-
-
-    private void createAccount(String email, String password){
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }
-
-
-}
-*/
     }
 
     public void showPopup (View view) {
@@ -148,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         myDialog.setContentView(R.layout.custom_popup);
         myDialog.show();
 
+
+        popUpButton = (ImageView) findViewById(R.id.showPopUpMenu);
+        popUpButton.setImageResource(R.drawable.notifo);
         Button logout = myDialog.findViewById(R.id.logOutButton);
 
         logout.setOnClickListener(new View.OnClickListener() {
