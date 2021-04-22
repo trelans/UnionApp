@@ -349,7 +349,7 @@
                     android:textSize="13sp" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/send"
                     android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"

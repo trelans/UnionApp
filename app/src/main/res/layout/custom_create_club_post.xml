@@ -179,7 +179,7 @@
 
 
             <EditText
-                android:id="@+id/editTextQuestion"
+                android:id="@+id/editTextChat"
                 android:layout_width="239dp"
                 android:layout_height="115dp"
                 android:layout_marginLeft="40dp"

@@ -45,7 +45,7 @@
                 android:textSize="10dp" />
 
             <EditText
-                android:id="@+id/editTextQuestion"
+                android:id="@+id/editTextChat"
                 android:layout_width="302dp"
                 android:layout_height="243dp"
                 android:layout_marginLeft="10dp"
