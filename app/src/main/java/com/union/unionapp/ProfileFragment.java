@@ -17,12 +17,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
     boolean lastActsIsActive = true;
     boolean achsIsActive = false;
@@ -32,11 +44,54 @@ public class ProfileFragment extends Fragment {
     ListView achsListView;
     ImageView openCalendar;
     Dialog calendarDialog;
+    TextView usernameTW;
+    ImageView userPP;
+    AppCompatButton tagButton1;
+    AppCompatButton tagButton2;
+    AppCompatButton tagButton3;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        firebaseDatabase = firebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
+
+        //init views
+        usernameTW = view.findViewById(R.id.userNameTextView);
+        userPP = view.findViewById(R.id.userPp);
+        tagButton1 = view.findViewById(R.id.tagButton1);
+        tagButton2 = view.findViewById(R.id.tagButton2);
+        tagButton3 = view.findViewById(R.id.tagButton3);
+        Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // check until required data get
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    //get data
+                    String name = "" + ds.child("name").getValue();
+                    String pp = "" + ds.child("image").getValue();
+
+                    //set data
+                    usernameTW.setText(name);
+                    try {
+                        //if image received, set
+                        Picasso.get().load(pp).into(userPP);
+                    }catch (Exception e){
+                        //if there is any exception while getting image then set default
+                        Picasso.get().load(R.drawable.user_pp_template).into(userPP);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         calendarDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
