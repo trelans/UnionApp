@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         popUpButton.setBackground(null);
         popUpButton.setImageResource(R.drawable.notif);
 
+        if (savedInstanceState == null) {
+            bottomNav.setSelectedItemId(R.id.nav_club); // change to whichever id should be default
+        }
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
