@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">UnionApp</string>
+    <string name="buddy_search_promt">find buddy</string>
     <string-array name="gender_preferences">
         <item>None</item>
         <item>Female</item>
