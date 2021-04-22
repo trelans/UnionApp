@@ -44,10 +44,10 @@
                     android:layout_height="40dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginEnd="32dp"
-                    android:rotation="90"
-                    app:srcCompat="@drawable/up_icon" />
+                    android:rotation="0"
+                    app:srcCompat="@drawable/calender_move_icon" />
 
                 <TextView
                     android:id="@+id/textViewCreateQuestion"
@@ -69,8 +69,8 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="8dp"
-                    android:rotation="-90"
-                    app:srcCompat="@drawable/up_icon" />
+                    android:rotation="180"
+                    app:srcCompat="@drawable/calender_move_icon" />
 
                 <View
                     android:layout_width="match_parent"

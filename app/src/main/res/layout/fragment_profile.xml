@@ -161,13 +161,13 @@
 
                     <ImageView
                         android:id="@+id/openCalendar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
+                        android:layout_width="36dp"
+                        android:layout_height="32dp"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="139dp"
+                        android:layout_alignParentBottom="true"
                         android:layout_marginEnd="23dp"
-                        app:srcCompat="@android:drawable/ic_menu_today" />
+                        android:layout_marginBottom="139dp"
+                        android:background="@drawable/calender_icon" />
 
                     <ImageView
                         android:id="@+id/userPp"
