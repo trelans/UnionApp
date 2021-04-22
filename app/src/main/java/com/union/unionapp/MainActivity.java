@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+
+
         mAuth = FirebaseAuth.getInstance();
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         popUpButton.setBackground(null);
         popUpButton.setImageResource(R.drawable.notif);
 
+        if (savedInstanceState == null) {
+            bottomNav.setSelectedItemId(R.id.nav_club); // change to whichever id should be default
+        }
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     public void showPopup (View view) {
         Dialog dialog;
         if (currentActivity == 5) {
-            myDialog.setContentView(R.layout.custom_popup);
+            myDialog.setContentView(R.layout.custom_settings);
 
             Button logout = myDialog.findViewById(R.id.logOutButton);
             logout.setOnClickListener(new View.OnClickListener() {
@@ -142,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
                             break;
+
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             selectedFragment).commit();

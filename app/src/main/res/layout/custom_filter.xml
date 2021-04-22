@@ -76,8 +76,8 @@
 
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="82dp"
-                    android:layout_marginEnd="219dp"
+                    android:layout_marginBottom="341dp"
+                    android:layout_marginEnd="221dp"
                     android:background="@drawable/tag_button_template"
                     android:backgroundTint="#EA2A31"
                     android:fontFamily="@font/myriad_pro_regular"
@@ -105,8 +105,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="110dp"
-                    android:layout_marginEnd="22dp"
+                    android:layout_marginBottom="371dp"
+                    android:layout_marginEnd="24dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginStart="24dp"
@@ -149,81 +149,6 @@
                     android:inputType="textPassword"
                     android:paddingLeft="5dp"
                     android:textSize="13sp" />
-
-                <ImageView
-                    android:id="@+id/imageButtonAddPhoto"
-                    android:layout_width="49dp"
-                    android:layout_height="35dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="262dp"
-                    android:layout_marginEnd="102dp"
-                    android:layout_marginRight="3dp"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="153dp"
-                    android:src="@drawable/ic_baseline_add_a_photo_24" />
-
-                <ImageView
-                    android:id="@+id/userPp2"
-
-                    android:layout_width="161dp"
-                    android:layout_height="131dp"
-
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="304dp"
-                    android:layout_marginEnd="100dp"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/user_pp_template"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_baseline_person_24"
-                    tools:ignore="MissingConstraints" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/saveButton"
-
-                    android:layout_width="77dp"
-                    android:layout_height="21dp"
-
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="232dp"
-                    android:layout_marginEnd="125dp"
-                    android:layout_marginStart="125dp"
-                    android:background="@drawable/tag_button_template"
-                    android:backgroundTint="#68C4AF"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center|center_vertical"
-                    android:insetBottom="0sp"
-                    android:insetTop="0sp"
-                    android:shadowDx="0"
-                    android:shadowDy="0"
-                    android:shadowRadius="5"
-                    android:text="Save"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="#00291D"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.497"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.512" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/changePasswordButton"
@@ -359,27 +284,45 @@
 
                 <TextView
                     android:id="@+id/filterTextView"
-                    android:layout_width="130dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="206dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="410dp"
+                    android:layout_marginStart="25dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
-                    android:text="Current Password" />
+                    android:text="Filter"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/dateTextView"
-                    android:layout_width="130dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="206dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="296dp"
+                    android:layout_marginEnd="266dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
-                    android:text="New Password" />
+                    android:text="Date:"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/quotaTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="296dp"
+                    android:layout_marginEnd="57dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Quota:"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sampleTag3"
@@ -404,6 +347,16 @@
                     android:textAllCaps="false"
                     android:textColor="#00291D"
                     android:textSize="13sp" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="403dp"
+                    android:layout_marginEnd="232dp"
+                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
             </RelativeLayout>
 
