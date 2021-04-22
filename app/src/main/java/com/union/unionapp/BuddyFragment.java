@@ -4,6 +4,7 @@ package com.union.unionapp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,8 @@ public class BuddyFragment extends Fragment {
         Dialog myDialog;
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(getActivity());
-
+        // Layoutu transparent yapıo
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 
         createPost.setOnClickListener(new View.OnClickListener() {

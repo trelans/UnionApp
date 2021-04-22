@@ -2,98 +2,101 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="200dp"
-    android:layout_height="300dp"
-    android:layout_gravity="top"
-    android:background="#605555"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
     android:orientation="vertical"
+
     android:padding="5dp">
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="11dp"
-        app:cardCornerRadius="5dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="324dp"
+        android:layout_height="451dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="300dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <CheckBox
-            android:id="@+id/checkBoxAnonymous"
-            android:layout_width="151dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="190dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="40dp"
-            android:text="Ask Anonymously"
-            android:textSize="10dp" />
-
-        <EditText
-            android:id="@+id/editTextQuestion"
-            android:layout_width="162dp"
-            android:layout_height="99dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="80dp"
-            android:background="@drawable/edittext_border_template"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint=" write your question here..."
-            android:inputType="textMultiLine"
-            android:textSize="12sp" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="133dp">
 
-            android:layout_marginStart="80dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="245dp"
-            android:layout_marginEnd="80dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/send_icon" />
+            <CheckBox
+                android:id="@+id/checkBoxAnonymous"
+                android:layout_width="151dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="370dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="40dp"
+                android:text="Ask Anonymously"
+                android:textSize="10dp" />
 
-        <ImageView
-            android:id="@+id/imageButtonAddPhoto"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="90dp"
-            android:src="@drawable/ic_baseline_add_a_photo_24" />
+            <EditText
+                android:id="@+id/editTextQuestion"
+                android:layout_width="302dp"
+                android:layout_height="243dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="80dp"
+                android:background="@drawable/edittext_border_template"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint=" Write your question here..."
+                android:inputType="textMultiLine"
+                android:textSize="12sp" />
 
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="17dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/edittext_border_template" />
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
 
-        <RelativeLayout
-            android:id="@+id/relativeLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="43dp"
-            android:layout_marginBottom="8dp">
+                android:layout_marginStart="140dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="395dp"
+                android:layout_marginEnd="140dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/send_icon" />
 
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/imageButtonAddPhoto"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="120dp"
+                android:src="@drawable/ic_baseline_add_a_photo_24" />
 
-        <TextView
-            android:id="@+id/textViewCreateQuestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Create a Question"
-            android:textAlignment="center"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
+            <SearchView
+                android:layout_width="match_parent"
+                android:layout_height="17dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="55dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/edittext_border_template" />
+
+            <TextView
+                android:id="@+id/textViewCreateQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Create a Question"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
