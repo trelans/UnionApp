@@ -43,7 +43,7 @@
         android:layout_marginTop="120dp"
         android:background="@drawable/buttonstyle"
         android:onClick="logOut"
-        android:text="LOG OUT" />
+        android:text="logout" />
 
 
 </LinearLayout>
