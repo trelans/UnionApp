@@ -21,6 +21,7 @@ public class BuddyFragment extends Fragment {
 
     Dialog buddyDialog;
     Spinner genderSpinner;
+    Spinner tagSpinner;
 
     @Nullable
     @Override
@@ -44,9 +45,15 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
-                ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.gender_preferences, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                genderSpinner.setAdapter(adapter);
+                ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.gender_preferences, android.R.layout.simple_spinner_item);
+                genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                genderSpinner.setAdapter(genderAdapter);
+
+                tagSpinner = buddyDialog.findViewById(R.id.tagSpinner);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                tagSpinner.setAdapter(tagAdapter);
+
                 buddyDialog.show();
             }
         });
