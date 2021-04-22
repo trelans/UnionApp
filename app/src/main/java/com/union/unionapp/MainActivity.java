@@ -8,8 +8,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,15 +16,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.union.unionapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        popUpButton = (ImageView) findViewById(R.id.showPopUpMenu);
+        popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
         Window window = myDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -73,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         myDialog.show();
 
 
-        popUpButton = (ImageView) findViewById(R.id.showPopUpMenu);
+        popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         popUpButton.setImageResource(R.drawable.notifo);
         Button logout = myDialog.findViewById(R.id.logOutButton);
 
