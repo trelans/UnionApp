@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.concurrent.TimeUnit;
-
 public class RecoverAccountActivity extends AppCompatActivity {
     // Variables
     TextView tw_email;
