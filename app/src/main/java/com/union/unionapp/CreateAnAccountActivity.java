@@ -3,6 +3,7 @@ package com.union.unionapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -20,10 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +52,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     String name;
     String surname;
     String password;
+    ProgressDialog progressDialog;
     boolean isPasswordNotValid;
     boolean isThereError = false; // int yap
 
@@ -69,11 +76,13 @@ public class CreateAnAccountActivity extends AppCompatActivity {
             finish();
         }
         // card denemesi : fail daskjddfdsf
-       // RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
-       // CardView cardView = findViewById(R.id.cardView);
+        // RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
+        // CardView cardView = findViewById(R.id.cardView);
         //cardView.setLayoutParams(new RelativeLayout.LayoutParams(20, 20));
 
 
+        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog.setTitle("Registering User...");
 
         tw_name = findViewById(R.id.nameTextView);
         tw_surname = findViewById(R.id.surnameTextView);
@@ -102,7 +111,6 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                 return true;
             }
         });
-
 
 
         // Buttonu disable yapma (until checkbox işaretlenince diğer şeylerde hata yoksa)
@@ -219,22 +227,20 @@ public class CreateAnAccountActivity extends AppCompatActivity {
             }
         });
 
-            cb_aggrement.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (cb_aggrement.isChecked()) {
-                        bt_signUp.setEnabled(true);
-                    }
-                    else {
-                        bt_signUp.setEnabled(false);
-                    }
+        cb_aggrement.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (cb_aggrement.isChecked()) {
+                    bt_signUp.setEnabled(true);
+                } else {
+                    bt_signUp.setEnabled(false);
                 }
-            });
+            }
+        });
 
         bt_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
 
                 if (TextUtils.isEmpty(email)) {
@@ -262,21 +268,49 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     isThereError = true;
                 }
 
+
                 if (!isThereError) {
                     pb_waiting.setVisibility(View.VISIBLE);
 
+                    progressDialog.show();
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Context context;
-                                CharSequence text;
-                                Toast.makeText(getApplicationContext(), "user created", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                //Get user email and uid from auth.
+                                String email = user.getEmail();
+                                String uid = user.getUid();
+
+                                // when user is registered store user info in firebase realtime database too
+                                // using hashmap
+                                HashMap<Object, String> hashMap = new HashMap<>();
+                                // put info in hashmap
+                                hashMap.put("email", email);
+                                hashMap.put("uid", uid);
+                                // will add later!
+                                hashMap.put("name", "");
+                                hashMap.put("phone", "");
+                                hashMap.put("image", "");
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                //path to store user data
+                                DatabaseReference reference = database.getReference("Users");
+                                // put data within hashmap in database
+                                reference.child(uid).setValue(hashMap);
+
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 finish();
                             } else {
+                                progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
                             }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
                         }
                     });
                 }

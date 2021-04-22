@@ -1,5 +1,20 @@
 <resources>
     <string name="app_name">UnionApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="gender_preferences">
+        <item>None</item>
+        <item>Female</item>
+        <item>Male</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="buddy_tags">
+        <item>#walk</item>
+        <item>#study</item>
+        <item>#gym</item>
+        <item>#basketball</item>
+        <item>#chat</item>
+        <item>#football</item>
+        <item>#running</item>
+        <item>#design</item>
+        <item>#flatmate</item>
+    </string-array>
 </resources>

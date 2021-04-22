@@ -1,6 +1,7 @@
 package com.union.unionapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public void showPopup (View view) {
         Dialog dialog;
         if (currentActivity == 5) {
-            myDialog.setContentView(R.layout.custom_popup);
+            myDialog.setContentView(R.layout.custom_settings);
 
             Button logout = myDialog.findViewById(R.id.logOutButton);
             logout.setOnClickListener(new View.OnClickListener() {
