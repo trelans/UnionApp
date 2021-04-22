@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -66,8 +67,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopup (View view) {
         Dialog dialog;
-        myDialog.setContentView(R.layout.custom_popup);
+        if (currentActivity == 5) {
+            myDialog.setContentView(R.layout.custom_popup);
+
+            Button logout = myDialog.findViewById(R.id.logOutButton);
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    myDialog.dismiss();
+                    mAuth.signOut();
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+        else {
+            myDialog.setContentView(R.layout.custom_notification_popup);
+
+        }
+
         myDialog.show();
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
@@ -77,18 +98,7 @@ public class MainActivity extends AppCompatActivity {
         else
             popUpButton.setImageResource(R.drawable.notifo);
 
-        Button logout = myDialog.findViewById(R.id.logOutButton);
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myDialog.dismiss();
-                mAuth.signOut();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
     }
 
