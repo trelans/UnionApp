@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public void showPopup (View view) {
         Dialog dialog;
         if (currentActivity == 5) {
-            myDialog.setContentView(R.layout.custom_popup);
+            myDialog.setContentView(R.layout.custom_settings);
 
             Button logout = myDialog.findViewById(R.id.logOutButton);
             logout.setOnClickListener(new View.OnClickListener() {
