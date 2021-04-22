@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     TextView selectedOptionTextView;
     Dialog myDialog;
     ImageView popUpButton;
+    int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +43,21 @@ public class MainActivity extends AppCompatActivity {
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
-        Window window = myDialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
 
-        wlp.gravity =  Gravity.TOP;
-        wlp.horizontalMargin = 0.2F;
-        wlp.verticalMargin = 0.07F;
-        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        window.setAttributes(wlp);
+        //initial popup icon
+        popUpButton.setBackground(null);
+        popUpButton.setImageResource(R.drawable.notif);
+
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                popUpButton.setImageResource(R.drawable.notif);
+                if (currentActivity == 5) {
+                    popUpButton.setImageResource(R.drawable.settings_icon);
+                }
+                else {
+                    popUpButton.setImageResource(R.drawable.notif);
+                }
             }
         });
 
@@ -66,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
-        popUpButton.setImageResource(R.drawable.notifo);
+
+        if (currentActivity == 5)
+            popUpButton.setImageResource(R.drawable.settings_icon_open);
+        else
+            popUpButton.setImageResource(R.drawable.notifo);
+
         Button logout = myDialog.findViewById(R.id.logOutButton);
 
         logout.setOnClickListener(new View.OnClickListener() {
@@ -98,18 +108,28 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
                         case R.id.nav_message:
                             selectedFragment = new MessageFragment();
+                            currentActivity = 1;
+                            popUpButton.setImageResource(R.drawable.notif);
                             break;
                         case R.id.nav_buddy:
                             selectedFragment = new BuddyFragment();
+                            currentActivity = 2;
+                            popUpButton.setImageResource(R.drawable.notif);
                             break;
                         case R.id.nav_club:
                             selectedFragment = new ClubsFragment();
+                            currentActivity = 3;
+                            popUpButton.setImageResource(R.drawable.notif);
                             break;
                         case R.id.nav_stack:
                             selectedFragment = new StackFragment();
+                            currentActivity = 4;
+                            popUpButton.setImageResource(R.drawable.notif);
                             break;
                         case R.id.nav_profile:
                             selectedFragment = new ProfileFragment();
+                            currentActivity = 5;
+                            popUpButton.setImageResource(R.drawable.settings_icon);
                             break;
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -117,6 +137,25 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             };
+
+    private void NotifOrSettingsDecider() {
+        if (currentActivity == 5) {
+
+
+
+
+
+        }
+        else {
+            myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    popUpButton.setImageResource(R.drawable.notif);
+                }
+            });
+        }
+
+    }
 
 
 
