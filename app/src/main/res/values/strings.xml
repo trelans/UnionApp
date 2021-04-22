@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">UnionApp</string>
+    <string-array name="gender_preferences">
+        <item>None</item>
+        <item>Female</item>
+        <item>Male</item>
+        <item>Other</item>
+    </string-array>
 </resources>
