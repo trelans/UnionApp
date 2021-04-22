@@ -18,4 +18,14 @@
         <item>#design</item>
         <item>#flatmate</item>
     </string-array>
+    <string-array name="stack_tags">
+        <item>#MATH101</item>
+        <item>#MATH102</item>
+        <item>#MATH132</item>
+        <item>#CS101</item>
+        <item>#CS102</item>
+        <item>#ENG101</item>
+        <item>#ENG102</item>
+        <item>#TURK101</item>
+    </string-array>
 </resources>
