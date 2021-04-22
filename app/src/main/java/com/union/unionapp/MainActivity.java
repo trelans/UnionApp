@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+
+
         mAuth = FirebaseAuth.getInstance();
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
                             break;
+
                     }
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             selectedFragment).commit();
