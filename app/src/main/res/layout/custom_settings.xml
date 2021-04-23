@@ -151,7 +151,7 @@
                     android:textSize="13sp" />
 
                 <ImageView
-                    android:id="@+id/imageButtonAddPhoto"
+                    android:id="@+id/changePp"
                     android:layout_width="49dp"
                     android:layout_height="35dp"
                     android:layout_alignParentBottom="true"

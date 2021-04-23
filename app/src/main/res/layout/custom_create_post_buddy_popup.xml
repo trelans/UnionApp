@@ -227,7 +227,7 @@
                     android:text="Location:" />
 
                 <ImageView
-                    android:id="@+id/imageButtonAddPhoto"
+                    android:id="@+id/changePp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
