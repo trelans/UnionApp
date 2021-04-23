@@ -113,7 +113,9 @@
                     android:layout_marginTop="55dp"
                     android:layout_marginEnd="44dp"
                     android:layout_marginRight="28dp"
-                    android:background="@drawable/edittext_border_template">
+                    android:background="@drawable/edittext_border_template"
+                    android:prompt="@string/buddy_search_promt"
+                    android:entries="@array/buddy_tags">
 
                 </Spinner>
 

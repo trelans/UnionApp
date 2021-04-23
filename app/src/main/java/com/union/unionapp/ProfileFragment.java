@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
@@ -49,6 +54,11 @@ public class ProfileFragment extends Fragment {
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
+    ImageView forwardDateImageView;
+    ImageView backwardDateImageView;
+    TextView dateTextView;
+    String date;
+    SimpleDateFormat dateFormat;
 
     @Nullable
     @Override
@@ -136,9 +146,55 @@ public class ProfileFragment extends Fragment {
         openCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar calendar;
+
                 Dialog dialog;
+
                 calendarDialog.setContentView(R.layout.custom_user_calendar_popup);
+
+                forwardDateImageView = calendarDialog.findViewById(R.id.forwardImageView);
+                backwardDateImageView = calendarDialog.findViewById(R.id.backwardsImageView);
+                dateTextView = calendarDialog.findViewById(R.id.dateTextView);
+
+                calendar = Calendar.getInstance(); // TODO tarih sistemden çekiyor ama serverdan çekicek
+                calendarToString(calendar);
+
+
+                //current date - initial date
+                dateTextView.setText(date);
+                getCurrentDateActivities(calendar); // displays specified dates activities.
+
+                forwardDateImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //date 1 gün ileriye
+                        Log.i("basıldı","calisiyor");
+                        calendar.add(Calendar.DATE, 1);
+                        calendarToString(calendar);
+                        dateTextView.setText(date);
+                        getCurrentDateActivities(calendar);
+
+
+
+                    }
+                });
+
+
+                backwardDateImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //date 1 gün geriye
+                        Log.i("basıldı","calisiyor");
+                        calendar.add(Calendar.DATE, -1);
+                        calendarToString(calendar);
+                        dateTextView.setText(date);
+                        getCurrentDateActivities(calendar);
+                    }
+                });
+
                 calendarDialog.show();
+
+
             }
         });
 
@@ -147,7 +203,14 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    public void getCurrentDateActivities(Calendar calendar) {
 
+    }
+
+    public void calendarToString(Calendar calendar) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        date = dateFormat.format(calendar.getTime());
+    }
 
 
 }
