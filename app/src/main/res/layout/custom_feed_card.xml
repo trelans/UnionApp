@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_200">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="324dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="87dp"
+        android:layout_marginEnd="87dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="25dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="63dp"
+            tools:layout_editor_absoluteY="102dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="73dp">
+
+                <TextView
+                    android:id="@+id/textViewTopicTag"
+                    android:layout_width="80dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="#FF9800"
+                    android:text="#study"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.281" />
+
+                <TextView
+                    android:id="@+id/textViewAuthor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="43dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/bbg_only_top_rounded"
+                    android:text="@YES_Bilkent"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textViewContent"
+                    android:layout_width="287dp"
+                    android:layout_height="54dp"
+                    android:layout_below="@+id/textViewAuthor"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/bbg_only_bottom_rounded"
+                    android:text="bla bla bla bla"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonSendButton"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="410dp"
+                    android:layout_marginEnd="100dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/send_icon" />
+
+                <TextView
+                    android:id="@+id/textViewDate"
+                    android:layout_width="139dp"
+                    android:layout_height="20dp"
+                    android:layout_above="@+id/textViewGenderPreference"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toStartOf="@+id/textViewZoomLink"
+                    android:background="@drawable/bbg_only_top_left_rounded"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:text="   23/04/2020   19.06"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textViewZoomLink"
+                    android:layout_width="139dp"
+                    android:layout_height="20dp"
+                    android:layout_above="@+id/textViewQuota"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/bbg_only_top_right_rounded"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:text="   Zoom link deuufdhgdg"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textViewQuota"
+                    android:layout_width="139dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="60dp"
+                    android:background="@drawable/bbg_only_bottom_right_rounded"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:text="   Quota: 15"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/textViewGenderPreference"
+                    android:layout_width="139dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="60dp"
+                    android:layout_toStartOf="@+id/textViewQuota"
+                    android:background="@drawable/bbg_only_bottom_left_rounded"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:text="   Gender: optional"
+                    android:textSize="12sp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginBottom="20dp"
+                    app:srcCompat="@drawable/fixed_calender_icon" />
+
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

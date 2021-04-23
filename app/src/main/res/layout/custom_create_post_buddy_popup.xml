@@ -37,21 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="31dp"
-                    android:layout_height="31dp"
-
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="145dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="420dp"
-                    android:layout_marginEnd="145dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@drawable/send_icon" />
-
                 <ScrollView
                     android:id="@+id/scrollViewTagArea"
                     android:layout_width="283dp"
@@ -176,12 +161,14 @@
 
                 <Spinner
                     android:id="@+id/genderSpinner"
+                    android:prompt="@string/buddy_search_promt"
+                    android:spinnerMode="dialog"
                     android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="203dp"
-                    android:layout_marginEnd="74dp" />
+                    android:layout_marginEnd="74dp"/>
 
                 <TextView
                     android:id="@+id/textView6"
@@ -205,7 +192,7 @@
                     android:inputType="number" />
 
                 <EditText
-                    android:id="@+id/editTextQuestion"
+                    android:id="@+id/editTextChat"
                     android:layout_width="303dp"
                     android:layout_height="107dp"
                     android:layout_alignParentBottom="true"
@@ -219,7 +206,7 @@
                     android:textSize="12sp" />
 
                 <EditText
-                    android:id="@+id/editTextTextPersonName"
+                    android:id="@+id/editTextLocation"
                     android:layout_width="114dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -251,6 +238,21 @@
                     android:layout_marginEnd="115dp"
                     android:layout_marginBottom="42dp"
                     android:src="@drawable/ic_baseline_add_a_photo_24" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonSendButton"
+                    android:layout_width="31dp"
+                    android:layout_height="31dp"
+
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="145dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="420dp"
+                    android:layout_marginEnd="145dp"
+                    android:layout_marginBottom="0dp"
+                    android:background="@drawable/send_icon" />
 
             </RelativeLayout>
 

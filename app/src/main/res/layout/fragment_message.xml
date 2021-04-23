@@ -26,7 +26,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/profilePhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/cizgi"
@@ -42,11 +42,23 @@
                 android:layout_width="226dp"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/cizgi"
+                android:layout_alignParentTop="true"
                 android:layout_marginLeft="80dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="-40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="-35dp"
                 android:text="\@username"
                 android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/userStatus"
+                android:layout_width="226dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/cizgi"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="-50dp"
+                android:text="Online"
+                android:textSize="12sp" />
 
             <View
                 android:id="@+id/cizgi"
@@ -57,13 +69,13 @@
                 android:background="#000000" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/send"
                 android:layout_width="40dp"
                 android:layout_height="31dp"
                 android:layout_below="@id/chat_recyclerView"
                 android:layout_marginLeft="6dp"
                 android:layout_marginTop="-50dp"
-                android:layout_toEndOf="@id/editTextQuestion"
+                android:layout_toEndOf="@id/editTextChat"
                 app:srcCompat="@drawable/send_icon" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -78,7 +90,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <EditText
-                android:id="@+id/editTextQuestion"
+                android:id="@+id/editTextChat"
                 android:layout_width="270dp"
                 android:layout_height="31dp"
                 android:layout_below="@id/chat_recyclerView"

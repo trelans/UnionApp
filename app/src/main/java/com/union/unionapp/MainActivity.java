@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,16 +38,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-
-
-
+        // FireBase user check
         mAuth = FirebaseAuth.getInstance();
 
-        popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
+
+        // Variables
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
+
 
         //initial popup icon
         popUpButton.setBackground(null);
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
     }
