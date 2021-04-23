@@ -102,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
         popUpButton.setBackground(null);
         popUpButton.setImageResource(R.drawable.notif);
 
+        //clubtan başlatıyor
+        if(savedInstanceState == null) {
+            bottomNav.setSelectedItemId(R.id.nav_club);
+        }
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
