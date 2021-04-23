@@ -183,7 +183,7 @@
                     android:text="Preferred Gender:" />
 
                 <EditText
-                    android:id="@+id/editTextNumber2"
+                    android:id="@+id/editTextQuota"
                     android:layout_width="56dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -194,7 +194,7 @@
                     android:inputType="number" />
 
                 <EditText
-                    android:id="@+id/editTextChat"
+                    android:id="@+id/editTextPostDetails"
                     android:layout_width="303dp"
                     android:layout_height="107dp"
                     android:layout_alignParentBottom="true"
@@ -229,7 +229,7 @@
                     android:text="Location:" />
 
                 <ImageView
-                    android:id="@+id/changePp"
+                    android:id="@+id/uploadPhotoImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -241,8 +241,8 @@
                     android:layout_marginBottom="42dp"
                     android:src="@drawable/ic_baseline_add_a_photo_24" />
 
-                <ImageButton
-                    android:id="@+id/imageButtonSendButton"
+                <ImageView
+                    android:id="@+id/imageViewSendButton"
                     android:layout_width="31dp"
                     android:layout_height="31dp"
 
