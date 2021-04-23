@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
@@ -51,6 +51,7 @@ public class ProfileFragment extends Fragment {
     Dialog calendarDialog;
     TextView usernameTW;
     ImageView userPP;
+
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
@@ -59,6 +60,7 @@ public class ProfileFragment extends Fragment {
     TextView dateTextView;
     String date;
     SimpleDateFormat dateFormat;
+
 
     @Nullable
     @Override
@@ -75,6 +77,9 @@ public class ProfileFragment extends Fragment {
         tagButton1 = view.findViewById(R.id.tagButton1);
         tagButton2 = view.findViewById(R.id.tagButton2);
         tagButton3 = view.findViewById(R.id.tagButton3);
+
+
+
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -82,8 +87,8 @@ public class ProfileFragment extends Fragment {
                 // check until required data get
                 for (DataSnapshot ds: snapshot.getChildren()){
                     //get data
-                    String name = "" + ds.child("name").getValue();
-                    String pp = "" + ds.child("image").getValue();
+                    String name = "@" + ds.child("username").getValue();
+                    String pp = "" + ds.child("pp").getValue();
 
                     //set data
                     usernameTW.setText(name);
@@ -168,7 +173,6 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //date 1 gün ileriye
-                        Log.i("basıldı","calisiyor");
                         calendar.add(Calendar.DATE, 1);
                         calendarToString(calendar);
                         dateTextView.setText(date);
@@ -184,7 +188,6 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //date 1 gün geriye
-                        Log.i("basıldı","calisiyor");
                         calendar.add(Calendar.DATE, -1);
                         calendarToString(calendar);
                         dateTextView.setText(date);
@@ -193,8 +196,6 @@ public class ProfileFragment extends Fragment {
                 });
 
                 calendarDialog.show();
-
-
             }
         });
 

@@ -23,6 +23,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,14 +40,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,9 +63,11 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     TextView selectedOptionTextView;
     Dialog myDialog;
+    SearchView searchView;
     ImageView popUpButton;
+    AdapterUsers adapterUsers;
+    List<ModelUsers> userList;
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
-
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
     private static final int IMAGE_PICK__GALLERY_CODE = 300;
@@ -88,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
 
+        //init List
+        userList = new ArrayList<>();
+
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -107,6 +120,38 @@ public class MainActivity extends AppCompatActivity {
             bottomNav.setSelectedItemId(R.id.nav_club);
         }
 
+        // searchView
+        searchView = findViewById(R.id.searchTool);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+            // user bastıgında cagrılıo
+            // if search query is not empty then search
+                if (!TextUtils.isEmpty(query.trim())) {
+                    searchUsers(query);
+                }
+                else {
+                    // search text empty, get all users
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // user yazı yazdıgında cagrılıyor
+                // if search query is not empty then search
+                if (!TextUtils.isEmpty(newText.trim())) {
+                    searchUsers(newText);
+                }
+                else {
+                    // search text empty, get all users
+                }
+                return false;
+            }
+        });
+
+
+
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
@@ -118,6 +163,77 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void  searchUsers(String query) {
+        //get current user
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        //get path of database named "Users" containing user info
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        // get all data from path
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ModelUsers modelUser = ds.getValue(ModelUsers.class);
+                    // get all searched users except currently signed in user
+                    if (!modelUser.getUid().equals(fUser.getUid())) {
+                        if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
+                            userList.add(modelUser);
+                            Toast.makeText(getApplicationContext(), modelUser.getEmail(),Toast.LENGTH_SHORT ).show();
+                        }
+
+                    }
+                    // adapter
+                    adapterUsers = new AdapterUsers(getApplicationContext(), userList);
+                    // reflesh adapter
+                    adapterUsers.notifyDataSetChanged();
+                    // set adapter to recyler view
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void getAllUsers() {
+
+        //get current user
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        //get path of database named "Users" containing user info
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        // get all data from path
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ModelUsers modelUser = ds.getValue(ModelUsers.class);
+                    // get all users except currently signed in user
+                    if (!modelUser.getUid().equals(fUser.getUid())) {
+                        userList.add(modelUser);
+                    }
+                    // adapter
+                    adapterUsers = new AdapterUsers(getApplicationContext(), userList);
+                    // set adapter to recyler view
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 

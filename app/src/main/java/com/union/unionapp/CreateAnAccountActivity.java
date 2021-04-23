@@ -292,6 +292,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 // put info in hashmap
                                 hashMap.put("email", email);
                                 hashMap.put("uid", uid);
+
                                 // will add later!
                                 hashMap.put("username", username);
                                 hashMap.put("pp", "drawable-v24/profile_icon.png");
