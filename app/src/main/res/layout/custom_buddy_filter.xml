@@ -39,22 +39,22 @@
                 android:layout_height="match_parent"
                 android:background="#FCF7F4">
 
+
                 <EditText
                     android:id="@+id/locationPlainText"
                     android:layout_width="174dp"
                     android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="125dp"
-                    android:layout_marginEnd="43dp"
+                    android:layout_marginBottom="108dp"
+                    android:layout_marginEnd="44dp"
                     android:background="@drawable/text_view_comment_template"
                     android:hint="Type a location"
                     android:inputType="textLongMessage"
                     android:paddingLeft="5dp" />
 
-
                 <EditText
-                    android:id="@+id/editTextDate3"
+                    android:id="@+id/dateNumberText"
                     android:layout_width="139dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -65,13 +65,24 @@
                     android:inputType="date" />
 
                 <EditText
-                    android:id="@+id/editTextNumber"
+                    android:id="@+id/timaNumberText"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="6dp"
                     android:layout_marginTop="129dp"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/quotaNumberText"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="179dp"
+                    android:layout_marginTop="164dp"
                     android:ems="10"
                     android:inputType="number" />
 
@@ -104,7 +115,7 @@
                     android:layout_height="21dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="96dp"
+                    android:layout_marginBottom="82dp"
                     android:layout_marginEnd="28dp"
                     android:background="@drawable/text_view_comment_template"
                     android:paddingLeft="5dp" />
@@ -126,13 +137,27 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/timeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="180dp"
+                    android:layout_marginEnd="74dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Time:"
+
+                    android:textSize="18sp" />
+
+                <TextView
                     android:id="@+id/quotaTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="182dp"
-                    android:layout_marginEnd="70dp"
+                    android:layout_marginBottom="142dp"
+                    android:layout_marginEnd="245dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
                     android:text="Quota:"
@@ -146,9 +171,9 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="127dp"
+                    android:layout_marginBottom="110dp"
                     android:layout_marginEnd="221dp"
-                    android:layout_marginStart="23dp"
+                    android:layout_marginStart="24dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
                     android:text="Location:"
@@ -161,8 +186,8 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="97dp"
-                    android:layout_marginEnd="154dp"
+                    android:layout_marginBottom="81dp"
+                    android:layout_marginEnd="152dp"
                     android:layout_marginStart="19dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
