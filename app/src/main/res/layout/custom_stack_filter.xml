@@ -11,8 +11,8 @@
     android:padding="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="322dp"
-        android:layout_height="346dp"
+        android:layout_width="325dp"
+        android:layout_height="319dp"
         android:layout_marginBottom="300dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
@@ -41,26 +41,13 @@
 
 
                 <EditText
-                    android:id="@+id/locationPlainText"
-                    android:layout_width="174dp"
-                    android:layout_height="25dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="108dp"
-                    android:layout_marginEnd="44dp"
-                    android:background="@drawable/text_view_comment_template"
-                    android:hint="Type a location"
-                    android:inputType="textLongMessage"
-                    android:paddingLeft="5dp" />
-
-                <EditText
                     android:id="@+id/dateNumberText"
                     android:layout_width="139dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="64dp"
-                    android:layout_marginTop="129dp"
+                    android:layout_marginTop="140dp"
                     android:ems="10"
                     android:inputType="date" />
 
@@ -70,19 +57,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginTop="129dp"
-                    android:ems="10"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/quotaNumberText"
-                    android:layout_width="65dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="179dp"
-                    android:layout_marginTop="164dp"
+                    android:layout_marginEnd="11dp"
+                    android:layout_marginTop="138dp"
                     android:ems="10"
                     android:inputType="number" />
 
@@ -92,9 +68,21 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="304dp"
-                    android:layout_marginEnd="220dp"
+                    android:layout_marginBottom="280dp"
+                    android:layout_marginEnd="216dp"
                     app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="48dp"
+                    android:layout_height="52dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="47dp"
+                    android:layout_marginEnd="145dp"
+                    android:layout_marginStart="145dp"
+                    app:srcCompat="@drawable/search_icon" />
 
                 <Spinner
                     android:id="@+id/tagSpinner"
@@ -109,89 +97,18 @@
                     android:layout_marginTop="48dp"
                     android:background="@drawable/edittext_border_template" />
 
-                <Spinner
-                    android:id="@+id/genderPrefPlainText"
-                    android:layout_width="124dp"
-                    android:layout_height="21dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="82dp"
-                    android:layout_marginEnd="28dp"
-                    android:background="@drawable/text_view_comment_template"
-                    android:paddingLeft="5dp" />
-
-                <TextView
-                    android:id="@+id/dateTextView"
-                    android:layout_width="43dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="171dp"
-                    android:layout_marginEnd="255dp"
-                    android:layout_marginStart="24dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Date:"
-
-                    android:textSize="18sp" />
-
                 <TextView
                     android:id="@+id/timeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="180dp"
-                    android:layout_marginEnd="74dp"
+                    android:layout_marginBottom="144dp"
+                    android:layout_marginEnd="79dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
                     android:text="Time:"
 
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/quotaTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="142dp"
-                    android:layout_marginEnd="245dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Quota:"
-
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/locationTextView"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="110dp"
-                    android:layout_marginEnd="221dp"
-                    android:layout_marginStart="24dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Location:"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/genderPrefTextView"
-                    android:layout_width="151dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="81dp"
-                    android:layout_marginEnd="152dp"
-                    android:layout_marginStart="19dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Preferred Gender:"
                     android:textSize="18sp" />
 
                 <TextView
@@ -200,11 +117,27 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginBottom="310dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginBottom="286dp"
+                    android:layout_marginStart="46dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
                     android:text="Filter"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="43dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="134dp"
+                    android:layout_marginEnd="260dp"
+                    android:layout_marginStart="19dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Date:"
+
                     android:textSize="18sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -214,8 +147,8 @@
                     android:layout_height="19dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="245dp"
-                    android:layout_marginEnd="187dp"
+                    android:layout_marginBottom="218dp"
+                    android:layout_marginEnd="188dp"
                     android:background="@drawable/tag_button_template"
                     android:backgroundTint="#EA2A31"
                     android:fontFamily="@font/myriad_pro_regular"
@@ -235,18 +168,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.512" />
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="30dp"
-                    android:layout_height="34dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginEnd="146dp"
-                    android:layout_marginStart="146dp"
-                    app:srcCompat="@drawable/search_icon" />
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
