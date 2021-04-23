@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         //init List
         userList = new ArrayList<>();
 
+
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -559,3 +560,5 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+//String[] strings = getResources().getStringArray(R.array.stack_tags); / tagleri arraye yerleştirme kodu
