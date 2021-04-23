@@ -81,7 +81,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         //cardView.setLayoutParams(new RelativeLayout.LayoutParams(20, 20));
 
 
-        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog = new ProgressDialog(CreateAnAccountActivity.this);
         progressDialog.setTitle("Registering User...");
 
         tw_name = findViewById(R.id.nameTextView);
@@ -283,17 +283,24 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 //Get user email and uid from auth.
                                 String email = user.getEmail();
                                 String uid = user.getUid();
+                                assert email != null;
+                                String username = createUsername(email);
 
                                 // when user is registered store user info in firebase realtime database too
                                 // using hashmap
-                                HashMap<Object, String> hashMap = new HashMap<>();
+                                HashMap<String, String> hashMap = new HashMap<>();
                                 // put info in hashmap
                                 hashMap.put("email", email);
                                 hashMap.put("uid", uid);
                                 // will add later!
-                                hashMap.put("name", "");
-                                hashMap.put("phone", "");
-                                hashMap.put("image", "");
+                                hashMap.put("username", username);
+                                hashMap.put("pp", "drawable-v24/profile_icon.png");
+                                hashMap.put("accountType", "0"); // 0 regular user, 1 club
+                                hashMap.put("tags", "1,2,3");
+                                hashMap.put("accountState", "0"); // 0 active, 1 banned, 2 frozen, 3 deleted
+                                hashMap.put("achievements", "1");
+
+
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data
                                 DatabaseReference reference = database.getReference("Users");
@@ -318,6 +325,11 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private String createUsername(String email) {
+        String[] pieces = email.split("@");
+        return pieces[0].replace(".","_");
     }
 
 

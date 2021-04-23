@@ -12,6 +12,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     Dialog myDialog;
     ImageView popUpButton;
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
+
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
     private static final int IMAGE_PICK__GALLERY_CODE = 300;
@@ -162,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    builder.show();
-                }
+                    builder.create().show();
+                  }
             });
 
 
@@ -216,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
             case CAMERA_REQUEST_CODE: {
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
                     System.out.println("şurada");
-                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                     System.out.println(writeStorageAccepted);
                     if (writeStorageAccepted) {
                         pickFromGallery();
@@ -251,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             break;
 
         }
-
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -270,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
                 image_uri = data.getData();
                 uploadProfilePhoto(image_uri);
             }
+
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -322,13 +324,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pickFromCamera() {
+
         //Intent of picking image from device camera
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Temp Pic");
         values.put(MediaStore.Images.Media.DESCRIPTION, "Temp Description");
         //put image uri
         image_uri = this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
         // intent to start camera
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
