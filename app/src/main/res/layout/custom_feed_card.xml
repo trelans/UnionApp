@@ -45,7 +45,7 @@
                     android:layout_height="22dp"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/tag_button_template"
                     android:backgroundTint="#FF9800"
                     android:text="#study"
@@ -72,14 +72,14 @@
 
                 <TextView
                     android:id="@+id/textViewContent"
-                    android:layout_width="287dp"
-                    android:layout_height="54dp"
+                    android:layout_width="283dp"
+                    android:layout_height="64dp"
                     android:layout_below="@+id/textViewAuthor"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="0dp"
                     android:layout_marginEnd="20dp"
-                    android:background="@drawable/bbg_only_bottom_rounded"
+                    android:background="@drawable/bg_only_bottom_rounded"
                     android:text="bla bla bla bla"
                     android:textSize="12sp" />
 
@@ -106,7 +106,7 @@
                     android:layout_marginEnd="0dp"
                     android:layout_marginBottom="0dp"
                     android:layout_toStartOf="@+id/textViewZoomLink"
-                    android:background="@drawable/bbg_only_top_left_rounded"
+                    android:background="@drawable/bg_only_top_left_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="   23/04/2020   19.06"
                     android:textSize="12sp" />
@@ -118,7 +118,7 @@
                     android:layout_above="@+id/textViewQuota"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
-                    android:background="@drawable/bbg_only_top_right_rounded"
+                    android:background="@drawable/bg_only_top_right_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="   Zoom link deuufdhgdg"
                     android:textSize="12sp" />
@@ -131,7 +131,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="60dp"
-                    android:background="@drawable/bbg_only_bottom_right_rounded"
+                    android:background="@drawable/bg_only_bottom_right_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="   Quota: 15"
                     android:textSize="12sp" />
@@ -145,7 +145,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="60dp"
                     android:layout_toStartOf="@+id/textViewQuota"
-                    android:background="@drawable/bbg_only_bottom_left_rounded"
+                    android:background="@drawable/bg_only_bottom_left_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="   Gender: optional"
                     android:textSize="12sp" />
