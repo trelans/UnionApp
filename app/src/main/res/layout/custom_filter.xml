@@ -324,6 +324,20 @@
                     android:textAlignment="textStart"
                     android:textSize="18sp" />
 
+                <TextView
+                    android:id="@+id/quotaTextView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="235dp"
+                    android:layout_marginEnd="236dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Location:"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sampleTag3"
 
