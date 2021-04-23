@@ -38,6 +38,124 @@
                 android:layout_height="match_parent"
                 android:background="#FCF7F4">
 
+                <EditText
+                    android:id="@+id/currentPasswordPlainText"
+                    android:layout_width="144dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="169dp"
+                    android:layout_marginEnd="167dp"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/password_text_template"
+                    android:ems="10"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:hint="Current Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="5dp"
+                    android:textSize="13sp" />
+
+                <EditText
+                    android:id="@+id/newPasswordPlainText"
+                    android:layout_width="144dp"
+                    android:layout_height="29dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="169dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="166dp"
+                    android:background="@drawable/password_text_template"
+                    android:ems="10"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:hint="New Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="5dp"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="403dp"
+                    android:layout_marginEnd="232dp"
+                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+                <SearchView
+                    android:id="@+id/tagSearchBar"
+                    android:layout_width="278dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="371dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="55dp"
+                    android:background="@drawable/edittext_border_template"
+                    app:defaultQueryHint="Select a relevant tag" />
+
+                <TextView
+                    android:id="@+id/filterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="410dp"
+                    android:layout_marginStart="25dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Filter"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="296dp"
+                    android:layout_marginEnd="266dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Date:"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/quotaTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="237dp"
+                    android:layout_marginEnd="236dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Location:"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/quotaTextView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="296dp"
+                    android:layout_marginEnd="57dp"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:gravity="center"
+                    android:text="Quota:"
+                    android:textAlignment="textStart"
+                    android:textSize="18sp" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sampleTag1"
 
@@ -97,58 +215,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.512" />
-
-                <SearchView
-                    android:id="@+id/tagSearchBar"
-                    android:layout_width="278dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="371dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="55dp"
-                    android:background="@drawable/edittext_border_template"
-                    app:defaultQueryHint="Select a relevant tag" />
-
-                <EditText
-                    android:id="@+id/currentPasswordPlainText"
-                    android:layout_width="144dp"
-                    android:layout_height="29dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="169dp"
-                    android:layout_marginEnd="167dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@drawable/password_text_template"
-                    android:ems="10"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:hint="Current Password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="5dp"
-                    android:textSize="13sp" />
-
-                <EditText
-                    android:id="@+id/newPasswordPlainText"
-                    android:layout_width="144dp"
-                    android:layout_height="29dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="169dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginStart="166dp"
-                    android:background="@drawable/password_text_template"
-                    android:ems="10"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:hint="New Password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="5dp"
-                    android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/changePasswordButton"
@@ -282,48 +348,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.512" />
 
-                <TextView
-                    android:id="@+id/filterTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="410dp"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Filter"
-                    android:textAlignment="textStart"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/dateTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="296dp"
-                    android:layout_marginEnd="266dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Date:"
-                    android:textAlignment="textStart"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/quotaTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="296dp"
-                    android:layout_marginEnd="57dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Quota:"
-                    android:textAlignment="textStart"
-                    android:textSize="18sp" />
-
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sampleTag3"
 
@@ -347,16 +371,6 @@
                     android:textAllCaps="false"
                     android:textColor="#00291D"
                     android:textSize="13sp" />
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="22dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="403dp"
-                    android:layout_marginEnd="232dp"
-                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
             </RelativeLayout>
 
