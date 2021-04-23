@@ -30,13 +30,13 @@ public class MessageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_stack, container, false);
-            recyclerView = view.findViewsWithText(R.id.chat_recyclerView);
+        View view = inflater.inflate(R.layout.fragment_message, container, false);
+            /*recyclerView = view.findViewsWithText(R.id.chat_recyclerView);
             tw_status = view.findViewById(R.id.userStatus);
             tw_username = view.findViewById(R.id.userNameTextView);
             messageEt = view.findViewById(R.id.editTextChat);
             profileIw = view.findViewsWithText(R.id.profilePhoto);
-            send_bt = view.findViewById(R.id.send);
+            send_bt = view.findViewById(R.id.send);*/
         return view;
     }
 }
