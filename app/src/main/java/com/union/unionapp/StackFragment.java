@@ -28,7 +28,7 @@ public class StackFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_stack, container, false);
 
 
-
+        ImageView filterImageView = (ImageView) view.findViewById(R.id.showStackFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         stackDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
@@ -49,6 +49,19 @@ public class StackFragment extends Fragment {
             }
         });
 
+        filterImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stackDialog.setContentView(R.layout.custom_stack_filter);
+
+                stackTagSpinner = stackDialog.findViewById(R.id.tagSpinner);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
+                tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                stackTagSpinner.setAdapter(tagAdapter);
+
+                stackDialog.show();
+            }
+        });
 
 
         return view;
