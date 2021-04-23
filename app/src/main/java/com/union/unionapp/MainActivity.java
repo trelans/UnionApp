@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     Dialog myDialog;
     ImageView popUpButton;
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
-    ProgressDialog pd;
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
     private static final int IMAGE_PICK__GALLERY_CODE = 300;
@@ -91,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        pd = new ProgressDialog(this);
-
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -125,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             myDialog.setContentView(R.layout.custom_settings);
 
             Button logout = myDialog.findViewById(R.id.logOutButton);
-            ImageView changePhotoIW = findViewById(R.id.changePhotoIW);
+            ImageView changePp = myDialog.findViewById(R.id.changePp);
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,12 +134,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            changePhotoIW.setOnClickListener(new View.OnClickListener() {
+            changePp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     String options[] = {"Camera", "Gallery"};
                     Context context;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     // set items to dialog
                     builder.setTitle("Pick Image From");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -165,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    builder.show();
                 }
             });
 
@@ -199,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestStoragePermission() {
         // request runtime storage permission
-        requestPermissions(storagePermissions, STORAGE_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
     }
 
     private boolean checkCameraPermission() {
@@ -212,42 +210,52 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestCameraPermission() {
         // request runtime storage permission
-        requestPermissions(cameraPermissions, CAMERA_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         switch (requestCode) {
-            case CAMERA_REQUEST_CODE:
+            case CAMERA_REQUEST_CODE: {
                 if (grantResults.length > 0) {
+                    System.out.println("burada");
+                    System.out.println(grantResults.length);
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    System.out.println(cameraAccepted);
                     boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    System.out.println(writeStorageAccepted);
                     if (cameraAccepted && writeStorageAccepted) {
+                        System.out.println("dadsda");
                         pickFromCamera();
                     } else {
                         Toast.makeText(this, "Please enable camera & storage permission", Toast.LENGTH_SHORT).show();
                     }
                 }
-                break;
-            case STORAGE_REQUEST_CODE:
+            }
+            break;
+            case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    System.out.println("şurada");
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    System.out.println(writeStorageAccepted);
                     if (writeStorageAccepted) {
                         pickFromGallery();
                     } else {
                         Toast.makeText(this, "Please enable storage permission", Toast.LENGTH_SHORT).show();
                     }
                 }
-                break;
+            }
+            break;
 
         }
 
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)  {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         //This method will be called after picking image from camera or gallery
         if (resultCode == RESULT_OK) {
@@ -258,6 +266,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (requestCode == IMAGE_PICK_CAMERA_CODE) {
                 //image is picked from camera, get uri of image
+                
                 image_uri = data.getData();
                 uploadProfilePhoto(image_uri);
             }
@@ -270,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
         //path and name of the image to be stored in firebase storage
         String filePathAndName = storagePath + "images/" + mAuth.getCurrentUser().getUid();
         StorageReference storageReference2nd = storageReference.child(filePathAndName);
+        System.out.println("geldi");
         storageReference2nd.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -287,32 +297,29 @@ public class MainActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    pd.dismiss();
                                     Toast.makeText(MainActivity.this, "Image Updated...", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            pd.dismiss();
                             Toast.makeText(MainActivity.this, "Error Updating Image...", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
                     //error
-                    pd.dismiss();
                     Toast.makeText(MainActivity.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
                 }
             }
-    }).addOnFailureListener(new OnFailureListener() {
-        @Override
-        public void onFailure (@NonNull Exception e){
-            //there were some error(s), get and show error message dismis progress dialog
-            pd.dismiss();
-            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    });
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //there were some error(s), get and show error message dismis progress dialog
+                System.out.println("burada2");
+                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
-}
+    }
 
     private void pickFromCamera() {
         //Intent of picking image from device camera
