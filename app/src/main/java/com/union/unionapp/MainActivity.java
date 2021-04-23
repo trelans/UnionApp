@@ -6,7 +6,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -26,7 +29,10 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView popUpButton;
     AdapterUsers adapterUsers;
     List<ModelUsers> userList;
+    RecyclerView recyclerView;
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -121,6 +128,13 @@ public class MainActivity extends AppCompatActivity {
             bottomNav.setSelectedItemId(R.id.nav_club);
         }
 
+        // usersearch fragment
+
+        recyclerView = findViewById(R.id.users_recyclerView);
+        // Settings its properties
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         // searchView
         searchView = findViewById(R.id.searchTool);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -132,10 +146,11 @@ public class MainActivity extends AppCompatActivity {
                     searchUsers(query);
                 }
                 else {
-                    // search text empty, get all users
+                    // search text empty
                 }
                 return false;
             }
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -148,6 +163,20 @@ public class MainActivity extends AppCompatActivity {
                     // search text empty, get all users
                 }
                 return false;
+            }
+        });
+            // visibility ayarları
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                recyclerView.setVisibility(View.GONE);
+                return false;
+            }
+        });
+        searchView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                recyclerView.setVisibility(View.VISIBLE);
             }
         });
 
@@ -192,7 +221,8 @@ public class MainActivity extends AppCompatActivity {
                     // reflesh adapter
                     adapterUsers.notifyDataSetChanged();
                     // set adapter to recyler view
-
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView.setAdapter(adapterUsers);
 
                 }
             }
@@ -242,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
         Dialog dialog;
         // Settings için olan kodlar
         if (currentActivity == 5) {
+            // Setings codu buraya
             myDialog.setContentView(R.layout.custom_settings);
 
             Button logout = myDialog.findViewById(R.id.logOutButton);
@@ -289,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                   }
             });
 
-
+            // Setings code bitimi
         }
         // notification için olan kodlar
         else {
@@ -443,6 +474,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+        //TODO Ekranda herhang biyere basıldığında SearchView focus kapama
+    // Geriye basıldığında searchü kapatır
+    @Override
+    public void onBackPressed() {
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+        } else {
+            super.onBackPressed();
+        } }
 
     private void pickFromCamera() {
 
