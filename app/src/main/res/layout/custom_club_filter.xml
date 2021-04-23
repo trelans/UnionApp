@@ -109,17 +109,6 @@
                     android:layout_marginTop="48dp"
                     android:background="@drawable/edittext_border_template" />
 
-                <Spinner
-                    android:id="@+id/genderPrefPlainText"
-                    android:layout_width="124dp"
-                    android:layout_height="21dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="82dp"
-                    android:layout_marginEnd="28dp"
-                    android:background="@drawable/text_view_comment_template"
-                    android:paddingLeft="5dp" />
-
                 <TextView
                     android:id="@+id/dateTextView"
                     android:layout_width="43dp"
@@ -177,21 +166,6 @@
                     android:fontFamily="@font/myriad_pro_regular"
                     android:gravity="center"
                     android:text="Location:"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/genderPrefTextView"
-                    android:layout_width="151dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="81dp"
-                    android:layout_marginEnd="152dp"
-                    android:layout_marginStart="19dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Preferred Gender:"
                     android:textSize="18sp" />
 
                 <TextView
