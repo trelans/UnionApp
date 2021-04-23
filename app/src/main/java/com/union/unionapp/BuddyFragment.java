@@ -29,7 +29,7 @@ public class BuddyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buddy, container, false);
 
-        ImageView filterImageView = (ImageView) view.findViewById(R.id.showBuddyFilterPopUp);
+        ImageView filterImageView = (ImageView) view.findViewById(R.id.showBuddyFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         buddyDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
