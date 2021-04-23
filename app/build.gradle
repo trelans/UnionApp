@@ -43,9 +43,7 @@ dependencies {
     implementation files('..\\libs\\activation.jar')
     implementation files('..\\libs\\additionnal.jar')
     implementation files('..\\libs\\mail.jar')
-    implementation files('../libs/mail.jar')
-    implementation files('../libs/additionnal.jar')
-    implementation files('../libs/activation.jar')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-storage:19.2.2'
     implementation 'com.google.firebase:firebase-database:19.7.0'
     implementation 'com.squareup.picasso:picasso:2.71828'

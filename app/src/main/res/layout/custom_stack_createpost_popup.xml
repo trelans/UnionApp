@@ -45,7 +45,7 @@
                 android:textSize="10dp" />
 
             <EditText
-                android:id="@+id/editTextQuestion"
+                android:id="@+id/editTextChat"
                 android:layout_width="302dp"
                 android:layout_height="243dp"
                 android:layout_marginLeft="10dp"
@@ -58,7 +58,7 @@
                 android:textSize="12sp" />
 
             <ImageButton
-                android:id="@+id/imageButton3"
+                android:id="@+id/imageButtonSendButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
 
@@ -77,14 +77,18 @@
                 android:layout_marginTop="120dp"
                 android:src="@drawable/ic_baseline_add_a_photo_24" />
 
-            <SearchView
-                android:layout_width="match_parent"
-                android:layout_height="17dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="55dp"
-                android:layout_marginRight="20dp"
-                android:background="@drawable/edittext_border_template"
-                app:defaultQueryHint="Select a relevant tag"/>
+            <Spinner
+                android:id="@+id/tagSpinner"
+                android:layout_width="253dp"
+                android:layout_height="26dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="44dp"
+                android:layout_marginLeft="28dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="44dp"
+                android:layout_marginRight="28dp"
+                android:background="@drawable/edittext_border_template"/>
 
             <TextView
                 android:id="@+id/textViewCreateQuestion"
