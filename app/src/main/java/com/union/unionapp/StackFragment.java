@@ -81,6 +81,7 @@ public class StackFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stack, container, false);
 
+        firebaseAuth = FirebaseAuth.getInstance();
 
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showStackFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
@@ -99,6 +100,9 @@ public class StackFragment extends Fragment {
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 stackTagSpinner.setAdapter(tagAdapter);
 
+                //init views
+                sendButtonIv = stackDialog.findViewById(R.id.sendButtonImageView);
+                addPhotoIv = stackDialog.findViewById(R.id.uploadPhotoImageView);
                 postDetailsEt = stackDialog.findViewById(R.id.postDetailsEt);
                 anonym = stackDialog.findViewById(R.id.anonymCheckBox);
 
@@ -118,7 +122,7 @@ public class StackFragment extends Fragment {
 
 
                         postDetails = postDetailsEt.getText().toString().trim();
-                        if (anonym.hasSelection()) {
+                        if (true) {
                             postAnonymously = "1";
                         }
                         else {
@@ -279,10 +283,12 @@ public class StackFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in
+
             email = user.getEmail();
+            username = email.split("@")[0].replace(".","_");
             uid = user.getUid();
 
-        }
+        } //TODO else navigate to login
     }
 
     private void uploadData(String postDetails, String uri, String postAnonymously) {
@@ -308,16 +314,18 @@ public class StackFragment extends Fragment {
 
                                 HashMap<Object,String> hashMap = new HashMap<>();
                                 //put post info
+                                checkUserStatus();
                                 hashMap.put("uid",uid); //çekememiş
                                 hashMap.put("username",username); //çekmemiş
                                 //hashMap.put("uEmail",email);
-                                hashMap.put("uDp",dp);
+                                hashMap.put("uDp",dp); // ?
                                 hashMap.put("pId",timeStamp);
                                 hashMap.put("pAnon",postAnonymously);
                                 hashMap.put("pDetails",postDetails);
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pTags","1"); //TODO tagler için değişicek
+
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
@@ -358,6 +366,7 @@ public class StackFragment extends Fragment {
 
             HashMap<Object,String> hashMap = new HashMap<>();
             //put post info
+            checkUserStatus();
             hashMap.put("uid",uid);
             hashMap.put("username",username);
             hashMap.put("uEmail",email);

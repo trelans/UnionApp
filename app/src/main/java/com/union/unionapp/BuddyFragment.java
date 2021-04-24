@@ -366,7 +366,9 @@ public class BuddyFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in
+
             email = user.getEmail();
+            username = email.split("@")[0].replace(".","_");
             uid = user.getUid();
 
         }
