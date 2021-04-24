@@ -125,7 +125,7 @@ public class MessageFragment extends Fragment {
     }
 
     private void sendMessage (String message) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("BilkentUniversity");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myUid);
         hashMap.put("receiver",hisUid);
