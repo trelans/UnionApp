@@ -2,14 +2,17 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +25,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -33,9 +38,16 @@ public class ChatActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference usersDbRef;
+// for checking message is seen
+    ValueEventListener seenListener;
+    DatabaseReference userRefForSeen;
+
+    List<ModelChat> chatList;
+    AdapterChat adapterChat;
 
     String hisUid;
     String myUid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +61,22 @@ public class ChatActivity extends AppCompatActivity {
         profileIw = findViewById(R.id.profilePhoto);
         send_bt = findViewById(R.id.send);
 
+        // Layour for recycler view
+        Context context;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        // recycler view properties
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         // firebase
         firebaseAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-        String hisuid = intent.getStringExtra("Hisuid");
+         hisUid = intent.getStringExtra("Hisuid");
 
 
-        firebaseDatabase = firebaseDatabase.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         usersDbRef = firebaseDatabase.getReference("Users");
         // search user to get that users' info
         Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
@@ -67,6 +87,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // check until requitrf info is received
                 for (DataSnapshot ds : snapshot.getChildren()) {
+
                     // get data
                     String username ="" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
@@ -91,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
         send_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tw_username.setText(hisuid);
+
                 // get message text from edit text
                 String message = messageEt.getText().toString().trim();
                 // check if text if empty
@@ -104,15 +125,69 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        readMessages();
+        seenMessage();
 
+    }
+    private  void seenMessage () {
+        userRefForSeen = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = userRefForSeen.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ModelChat chat = ds.getValue(ModelChat.class);
+                    if (chat.getReceiver().equals(myUid) && chat.getSender().equals(hisUid)) {
+                        HashMap<String, Object> hasSeenHasmap = new HashMap<>();
+                        hasSeenHasmap.put("isSeen",true);
+                        ds.getRef().updateChildren(hasSeenHasmap);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void readMessages() {
+        chatList = new ArrayList<>();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Chats");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatList.clear();
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    ModelChat chat = ds.getValue(ModelChat.class);
+                    if (chat.getReceiver().equals(myUid) && chat.getSender().equals(hisUid)
+                     || chat.getReceiver().equals(hisUid) && chat.getSender().equals(myUid)  ) {
+                        chatList.add(chat);
+                    }
+                    // adapter
+                    adapterChat = new AdapterChat(ChatActivity.this, chatList );
+                    adapterChat.notifyDataSetChanged();
+                    // set adapter to recycler view
+                    recyclerView.setAdapter(adapterChat);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     private void sendMessage (String message) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        String timestamp = String.valueOf(System.currentTimeMillis()); //TODO zamanı serverden cek
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myUid);
         hashMap.put("receiver",hisUid);
         hashMap.put("message", message);
+        hashMap.put("timestamp", timestamp);
+        hashMap.put("isSeem", false);
+
         databaseReference.child("Chats").push().setValue(hashMap);
 
         // reset editText after sending message
@@ -140,5 +215,11 @@ public class ChatActivity extends AppCompatActivity {
     public void onStart() {
         checkUserStatus();
         super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        userRefForSeen.removeEventListener(seenListener);
     }
 }
