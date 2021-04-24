@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-        String hisuid = intent.getStringExtra("hisUid");
+        String hisuid = intent.getStringExtra("Hisuid");
 
 
         firebaseDatabase = firebaseDatabase.getInstance();
@@ -91,6 +91,7 @@ public class ChatActivity extends AppCompatActivity {
         send_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tw_username.setText(hisuid);
                 // get message text from edit text
                 String message = messageEt.getText().toString().trim();
                 // check if text if empty
