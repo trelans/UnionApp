@@ -3,8 +3,11 @@ package com.union.unionapp;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,11 +65,8 @@ public class MessageFragment extends Fragment {
 
             // firebase
             firebaseAuth = FirebaseAuth.getInstance();
-
-          //  AdapterUsers adapterUsers = (AdapterUsers) getActivity();
-          //  Intent intent = getActivity().getIntent();
-            hisUid =  "";
-                    //getArguments().getString("hisUid");
+        Intent intent = getActivity().getIntent();
+        String hisuid = intent.getStringExtra("hisUid");
 
         firebaseDatabase = firebaseDatabase.getInstance();
             usersDbRef = firebaseDatabase.getReference("Users");
@@ -103,6 +103,7 @@ public class MessageFragment extends Fragment {
             send_bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    tw_username.setText(hisUid);
                     // get message text from edit text
                     String message = messageEt.getText().toString().trim();
                     // check if text if empty
@@ -121,7 +122,7 @@ public class MessageFragment extends Fragment {
     }
 
     private void sendMessage (String message) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("BilkentUniversity");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myUid);
         hashMap.put("receiver",hisUid);

@@ -34,7 +34,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -99,9 +98,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Offline support, uygulama bitince düşün
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
@@ -181,21 +177,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 recyclerView.setVisibility(View.VISIBLE);
-            }
-        });
-
-        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
-        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (getCurrentFocus() != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    searchView.clearFocus();
-                    return true;
-                }
-
-                return false;
             }
         });
 
@@ -303,19 +284,19 @@ public class MainActivity extends AppCompatActivity {
             changePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString().trim()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            String password = newPassword.getText().toString().trim();
+                            String password = newPassword.getText().toString();
                             System.out.println(password.length());
-                            if (password.equals(currentPassword.getText().toString().trim())) {
+                            if (password.equals(currentPassword.getText().toString())){
                                 Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
-                            } else if (password.length() >= 6) {
+                            }else if (password.length() >= 6) {
                                 mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
                                 Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
                                 currentPassword.setText("");
                                 newPassword.setText("");
-                            } else {
+                            }else{
                                 Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
                             }
 

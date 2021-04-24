@@ -182,7 +182,7 @@
                     android:textSize="18sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sampleTag2"
+                    android:id="@+id/sampleTag1"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"

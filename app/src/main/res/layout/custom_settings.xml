@@ -39,7 +39,7 @@
                 android:background="#FCF7F4">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sampleTag1"
+                    android:id="@+id/sampleTag3"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"
@@ -69,7 +69,7 @@
                     app:layout_constraintVertical_bias="0.512" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sampleTag2"
+                    android:id="@+id/sampleTag1"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"
@@ -98,8 +98,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.512" />
 
-                <SearchView
-                    android:id="@+id/tagSearchBar"
+                <Spinner
+                    android:id="@+id/tagSpinner"
                     android:layout_width="278dp"
                     android:layout_height="22dp"
                     android:layout_alignParentBottom="true"
@@ -111,6 +111,8 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="55dp"
+                    android:prompt="@string/all_tags_prompt"
+                    android:entries="@array/all_tags"
                     android:background="@drawable/edittext_border_template"
                     app:defaultQueryHint="Select a relevant tag" />
 
@@ -382,7 +384,7 @@
                     android:text="New Password" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sampleTag3"
+                    android:id="@+id/sampleTag2"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"

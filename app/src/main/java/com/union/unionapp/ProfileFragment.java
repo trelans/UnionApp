@@ -3,14 +3,13 @@ package com.union.unionapp;
 
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,10 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
@@ -42,8 +38,11 @@ public class ProfileFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
+
     boolean lastActsIsActive = true;
     boolean achsIsActive = false;
+    // = getResources().getStringArray(R.array.user_achievements);
+    String[] allAchs = {"a","b","c"};
     TextView lastActsTextView;
     TextView achsTextView;
     ListView lastActsList;
@@ -63,6 +62,31 @@ public class ProfileFragment extends Fragment {
     long dateServer;
     SimpleDateFormat dateFormat;
 
+    /*class CustomAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return allAchs.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = getLayoutInflater().inflate(R.layout.achs_list_layout, null);
+            TextView textView = (TextView) convertView.findViewById(R.id.achsItem);
+            textView.setText(allAchs[position]);
+            return null;
+        }
+    }*/
 
     @Nullable
     @Override
@@ -133,6 +157,12 @@ public class ProfileFragment extends Fragment {
         openCalendar = (ImageView) view.findViewById(R.id.openCalendar);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
+
+
+        /*Achievements için listview kısmı
+        achsListView = (ListView) view.findViewById(R.id.achsList);
+        CustomAdapter customAdapter = new CustomAdapter();
+        achsListView.setAdapter(customAdapter);*/
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override

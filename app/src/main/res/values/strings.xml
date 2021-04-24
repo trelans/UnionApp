@@ -1,11 +1,40 @@
 <resources>
     <string name="app_name">UnionApp</string>
     <string name="buddy_search_promt">find buddy</string>
+    <string name="all_tags_prompt">all tags</string>
     <string-array name="gender_preferences">
         <item>None</item>
         <item>Female</item>
         <item>Male</item>
         <item>Other</item>
+    </string-array>
+    <string-array name="all_tags">
+        <item>Choose a Tag</item>
+        <item>#walk</item>
+        <item>#study</item>
+        <item>#gym</item>
+        <item>#basketball</item>
+        <item>#chat</item>
+        <item>#football</item>
+        <item>#running</item>
+        <item>#design</item>
+        <item>#flatmate</item>
+        <item>#MATH101</item>
+        <item>#MATH102</item>
+        <item>#MATH132</item>
+        <item>#CS101</item>
+        <item>#CS102</item>
+        <item>#ENG101</item>
+        <item>#ENG102</item>
+        <item>#TURK101</item>
+        <item>#BusinessWeek</item>
+        <item>#TDPToddler</item>
+        <item>#BilkentOR</item>
+        <item>#PIDay</item>
+        <item>#QuantumWeek</item>
+        <item>#HACKATHOR</item>
+        <item>#23APRIL</item>
+        <item>#SCI-FIBOOKREADING</item>
     </string-array>
     <string-array name="buddy_tags">
         <item>#walk</item>
@@ -27,5 +56,26 @@
         <item>#ENG101</item>
         <item>#ENG102</item>
         <item>#TURK101</item>
+    </string-array>
+    <string-array name="club_tags">
+        <item>#BusinessWeek</item>
+        <item>#TDPToddler</item>
+        <item>#BilkentOR</item>
+        <item>#PIDay</item>
+        <item>#QuantumWeek</item>
+        <item>#HACKATHOR</item>
+        <item>#23APRIL</item>
+        <item>#SCI-FIBOOKREADING</item>
+    </string-array>
+
+    <string-array name="user_achievements">
+        <item>MATH101 Pro</item>
+        <item>MATH102 Titan</item>
+        <item>MATH132 Rookie</item>
+        <item>CS101 Slayer</item>
+        <item>CS102 Slayer</item>
+        <item>ENG101 Master</item>
+        <item>ENG102 Slayer</item>
+        <item>TURK101 Pro</item>
     </string-array>
 </resources>
