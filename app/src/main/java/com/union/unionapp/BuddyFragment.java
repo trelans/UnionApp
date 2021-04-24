@@ -25,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -62,9 +63,10 @@ public class BuddyFragment extends Fragment {
 
     EditText postDetailsEt,
              postQuotaEt,
-             postDateEt,
              postTimeEt,
              postLocationEt;
+
+    TextView postDateEt;
 
     ImageView imageIv,
               sendButtonIv,

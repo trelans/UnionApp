@@ -1,5 +1,6 @@
 package com.union.unionapp;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -64,9 +65,11 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
             public void onClick(View v) {
 
                 Intent i = new Intent( context, ChatActivity.class);
-                i.putExtra("Hisuid",hisUID);
+                i.putExtra("Hisuid","hisUID");
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
+
+
 
             }
         });
