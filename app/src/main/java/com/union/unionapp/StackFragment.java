@@ -122,7 +122,7 @@ public class StackFragment extends Fragment {
 
 
                         postDetails = postDetailsEt.getText().toString().trim();
-                        if (anonym.hasSelection()) {
+                        if (anonym.isChecked()) {
                             postAnonymously = "1";
                         }
                         else {
