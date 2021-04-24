@@ -21,6 +21,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -68,7 +69,10 @@ public class BuddyFragment extends Fragment {
              postLocationEt;
 
     TextView postDateEt,
-             postTimeEt;
+             postTimeEt,
+             tag1,
+             tag2,
+             tag3;       
 
     ImageView imageIv,
               sendButtonIv,
@@ -79,10 +83,13 @@ public class BuddyFragment extends Fragment {
     Uri image_uri;
 
     String date;
-
+    String[] allTags;
+    TextView[] textViewTags;
     DatePickerDialog.OnDateSetListener setListener;
     TimePickerDialog.OnTimeSetListener timeSetListener;
-
+    boolean[] tagsStatue = { false, false, false };
+    int[] tagTextsIndexArray = new int[ 3 ];
+    int[] i = new int[ 1 ];
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -100,7 +107,6 @@ public class BuddyFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_buddy, container, false);
-
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showBuddyFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         buddyDialog = new Dialog(getActivity());
@@ -108,7 +114,9 @@ public class BuddyFragment extends Fragment {
         buddyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         //genderSpinner.setOnItemSelectedListener(this);
-
+        
+        allTags = getResources().getStringArray( R.array.all_tags );
+        
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -161,7 +169,10 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
-
+                tag1 = buddyDialog.findViewById( R.id.textViewTag1 );
+                tag2 = buddyDialog.findViewById( R.id.textViewTag2 );
+                tag3 = buddyDialog.findViewById( R.id.textViewTag3 );
+                textViewTags = new TextView[]{ tag1, tag2, tag3 };
                 //set the postDateEt to current date for default
                 Calendar defaultCalendar = Calendar.getInstance();
                 calendarToString(defaultCalendar);
@@ -516,4 +527,58 @@ public class BuddyFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         date = dateFormat.format(calendar.getTime());
     }
+
+    /*
+    i[ 0 ] = 0;
+    if( !getTagsSaved() ) {
+        setAllSettingsTagsInvisible();
+    }
+
+
+            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    {
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position > 0) {
+            String selectedItem = parent.getItemAtPosition(position).toString();
+            while (i[ 0 ] < tagsStatue.length) {
+                if (!tagsStatue[ i[ 0 ] ] ) {
+                    tagsStatue[ i[ 0 ] ] = true;
+                    tagsArray[ i[ 0 ] ].setText( selectedItem );
+                    tagsArray[ i[ 0 ] ].setVisibility( View.VISIBLE );
+                    i[ 0 ]++;
+                    break;
+                }
+            }
+        }
+
+        if( i[ 0 ] == tagsStatue.length ) {
+            Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+            tagSpinner.setEnabled( false );
+            //tagSpinner.setClickable( false );
+            //tagSpinner.setTop( 1 );
+            //setTagsSaved( true );
+        }
+    }
+
+        public void onNothingSelected (AdapterView < ? > parent) {
+        //TODO
+    }
+    });
+
+    private void setAllSettingsTagsInvisible() {
+        for ( int i = 0; i < textViewTags.length; i++ ) {
+            textViewTags[ i ].setVisibility( View.INVISIBLE );
+        }
+    }
+
+    private boolean settingsTagsSavedCondition;
+
+    private void setTagsSaved( boolean boo ) {
+        settingsTagsSavedCondition = boo;
+    }
+    private boolean getTagsSaved() {
+        return settingsTagsSavedCondition;
+    }*/
+}
+
 }
