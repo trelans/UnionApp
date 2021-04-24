@@ -6,6 +6,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,10 +61,10 @@ public class ClubsFragment extends Fragment {
 
     EditText postDetailsEt,
             postQuotaEt,
-            postTimeEt,
             postLocationEt;
 
-    TextView postDateEt;
+    TextView postDateEt,
+             postTimeEt;
 
     ImageView imageIv,
             sendButtonIv,
@@ -75,6 +77,7 @@ public class ClubsFragment extends Fragment {
     String date;
 
     DatePickerDialog.OnDateSetListener setListener;
+    TimePickerDialog.OnTimeSetListener timeSetListener;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -157,6 +160,8 @@ public class ClubsFragment extends Fragment {
                 final int year = calendar.get(Calendar.YEAR);
                 final int month = calendar.get(Calendar.MONTH);
                 final int day = calendar.get(Calendar.DAY_OF_MONTH);
+                final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+                final int minute = calendar.get(Calendar.MINUTE);
 
                 postDateEt.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -166,6 +171,17 @@ public class ClubsFragment extends Fragment {
                         );
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         datePickerDialog.show();
+                    }
+                });
+
+                postTimeEt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                        );
+                        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        timePickerDialog.show();
                     }
                 });
 
@@ -179,6 +195,13 @@ public class ClubsFragment extends Fragment {
                     }
                 };
 
+                timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String time = hourOfDay + ":" + minute;
+                        postTimeEt.setText(time);
+                    }
+                };
 
 
                 addPhotoIv.setOnClickListener(new View.OnClickListener() {

@@ -319,7 +319,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("uid",uid); //çekememiş
                                 hashMap.put("username",username); //çekmemiş
                                 //hashMap.put("uEmail",email);
-                                hashMap.put("uDp",dp); // ?
+                                //hashMap.put("uDp",dp); // ?
                                 hashMap.put("pId",timeStamp);
                                 hashMap.put("pAnon",postAnonymously);
                                 hashMap.put("pDetails",postDetails);
@@ -327,6 +327,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pTags","1"); //TODO tagler için değişicek
                                 hashMap.put("pUpvoteNumber","0");
+                                hashMap.put("pTitle","MATH101 question");
 
 
                                 //path to store post data
@@ -379,6 +380,7 @@ public class StackFragment extends Fragment {
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pUpvoteNumber","0");
+            hashMap.put("pTitle","MATH101 question");
 
 
 

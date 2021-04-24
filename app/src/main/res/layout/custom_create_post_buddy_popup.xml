@@ -141,23 +141,27 @@
 
                 <TextView
                     android:id="@+id/editTextDate"
-                    android:layout_width="115dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="114dp"
+                    android:layout_height="27dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
+                    android:textAlignment="center"
                     android:layout_marginStart="43dp"
                     android:layout_marginBottom="253dp"
+                    android:background="@drawable/edittext_border_template"
                     android:ems="10"
                     android:inputType="date" />
 
-                <EditText
+                <TextView
                     android:id="@+id/editTextTime"
-                    android:layout_width="73dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="72dp"
+                    android:textAlignment="center"
+                    android:layout_height="27dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginBottom="254dp"
+                    android:background="@drawable/edittext_border_template"
                     android:ems="10"
                     android:inputType="time" />
 
