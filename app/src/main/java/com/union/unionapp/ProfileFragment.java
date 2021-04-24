@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
@@ -59,6 +60,7 @@ public class ProfileFragment extends Fragment {
     ImageView backwardDateImageView;
     TextView dateTextView;
     String date;
+    long dateServer;
     SimpleDateFormat dateFormat;
 
 
@@ -77,6 +79,22 @@ public class ProfileFragment extends Fragment {
         tagButton1 = view.findViewById(R.id.tagButton1);
         tagButton2 = view.findViewById(R.id.tagButton2);
         tagButton3 = view.findViewById(R.id.tagButton3);
+
+
+        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
+        offsetRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                double offset = snapshot.getValue(Double.class);
+                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
+                dateServer = (long) estimatedServerTimeMs;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
 
 
 
@@ -161,7 +179,8 @@ public class ProfileFragment extends Fragment {
                 backwardDateImageView = calendarDialog.findViewById(R.id.backwardsImageView);
                 dateTextView = calendarDialog.findViewById(R.id.dateTextView);
 
-                calendar = Calendar.getInstance(); // TODO tarih sistemden çekiyor ama serverdan çekicek
+                calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(dateServer); // retrieve the date from the server
                 calendarToString(calendar);
 
 
@@ -177,8 +196,6 @@ public class ProfileFragment extends Fragment {
                         calendarToString(calendar);
                         dateTextView.setText(date);
                         getCurrentDateActivities(calendar);
-
-
 
                     }
                 });

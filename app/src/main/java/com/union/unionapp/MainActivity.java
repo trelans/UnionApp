@@ -15,7 +15,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -45,9 +45,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         popUpButton.setImageResource(R.drawable.notif);
 
         //clubtan başlatıyor
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_club);
         }
 
@@ -140,12 +142,11 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-            // user bastıgında cagrılıo
-            // if search query is not empty then search
+                // user bastıgında cagrılıo
+                // if search query is not empty then search
                 if (!TextUtils.isEmpty(query.trim())) {
                     searchUsers(query);
-                }
-                else {
+                } else {
                     // search text empty
                 }
                 return false;
@@ -158,14 +159,13 @@ public class MainActivity extends AppCompatActivity {
                 // if search query is not empty then search
                 if (!TextUtils.isEmpty(newText.trim())) {
                     searchUsers(newText);
-                }
-                else {
+                } else {
                     // search text empty, get all users
                 }
                 return false;
             }
         });
-            // visibility ayarları
+        // visibility ayarları
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -179,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.setVisibility(View.VISIBLE);
             }
         });
-
 
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -196,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void  searchUsers(String query) {
+    private void searchUsers(String query) {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!modelUser.getUid().equals(fUser.getUid())) {
                         if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
                             userList.add(modelUser);
-                            Toast.makeText(getApplicationContext(), modelUser.getEmail(),Toast.LENGTH_SHORT ).show();
+                            Toast.makeText(getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -275,8 +274,42 @@ public class MainActivity extends AppCompatActivity {
             // Setings codu buraya
             myDialog.setContentView(R.layout.custom_settings);
 
+            EditText currentPassword = myDialog.findViewById(R.id.currentPasswordPT);
+            EditText newPassword = myDialog.findViewById(R.id.newPasswordPT);
             Button logout = myDialog.findViewById(R.id.logOutButton);
+            Button changePassword = myDialog.findViewById(R.id.changePasswordButton);
+
             ImageView changePp = myDialog.findViewById(R.id.changePp);
+
+            changePassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            String password = newPassword.getText().toString();
+                            System.out.println(password.length());
+                            if (password.equals(currentPassword.getText().toString())){
+                                Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
+                            }else if (password.length() >= 6) {
+                                mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
+                                Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
+                                currentPassword.setText("");
+                                newPassword.setText("");
+                            }else{
+                                Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity.this, "Current password is wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -316,8 +349,8 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    builder.create().show();
-                  }
+                    builder.show();
+                }
             });
 
             // Setings code bitimi
@@ -370,6 +403,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
             case CAMERA_REQUEST_CODE: {
@@ -392,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
             case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
                     System.out.println("şurada");
-                    boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     System.out.println(writeStorageAccepted);
                     if (writeStorageAccepted) {
                         pickFromGallery();
@@ -404,7 +438,7 @@ public class MainActivity extends AppCompatActivity {
             break;
 
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
     }
 
     @Override
@@ -419,11 +453,10 @@ public class MainActivity extends AppCompatActivity {
             }
             if (requestCode == IMAGE_PICK_CAMERA_CODE) {
                 //image is picked from camera, get uri of image
-                
+
                 image_uri = data.getData();
                 uploadProfilePhoto(image_uri);
             }
-
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -474,7 +507,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-        //TODO Ekranda herhang biyere basıldığında SearchView focus kapama
+
+    //TODO Ekranda herhang biyere basıldığında SearchView focus kapama
     // Geriye basıldığında searchü kapatır
     @Override
     public void onBackPressed() {
@@ -482,20 +516,23 @@ public class MainActivity extends AppCompatActivity {
             searchView.setIconified(true);
         } else {
             super.onBackPressed();
-        } }
+        }
+    }
 
     private void pickFromCamera() {
-
         //Intent of picking image from device camera
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Temp Pic");
         values.put(MediaStore.Images.Media.DESCRIPTION, "Temp Description");
         //put image uri
         image_uri = this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
         // intent to start camera
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
         startActivityForResult(cameraIntent, IMAGE_PICK_CAMERA_CODE);
+
+
     }
 
     private void pickFromGallery() {
