@@ -142,6 +142,7 @@ public class StackFragment extends Fragment {
                             //post with image
                             uploadData(postDetails,String.valueOf(image_uri),postAnonymously);
                         }
+                        stackDialog.dismiss();
                     }
                 });
 
@@ -325,6 +326,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pTags","1"); //TODO tagler için değişicek
+                                hashMap.put("pUpvoteNumber","0");
 
 
                                 //path to store post data
@@ -376,6 +378,8 @@ public class StackFragment extends Fragment {
             hashMap.put("pDetails",postDetails);
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
+            hashMap.put("pUpvoteNumber","0");
+
 
 
             //path to store post data

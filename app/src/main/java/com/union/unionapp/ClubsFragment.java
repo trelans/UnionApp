@@ -140,7 +140,7 @@ public class ClubsFragment extends Fragment {
 
                 //init views
                 postDetailsEt = clubDialog.findViewById(R.id.editTextPostDetails);
-                postDateEt = clubDialog.findViewById(R.id.editTextDate);
+                postDateEt = clubDialog.findViewById(R.id.dateTextView);
                 postQuotaEt = clubDialog.findViewById(R.id.editTextQuota);
                 postTimeEt = clubDialog.findViewById(R.id.editTextTime);
                 sendButtonIv = clubDialog.findViewById(R.id.imageViewSendButton);
@@ -212,6 +212,8 @@ public class ClubsFragment extends Fragment {
                             //post with image
                             uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation);
                         }
+                        clubDialog.dismiss();
+
                     }
                 });
 

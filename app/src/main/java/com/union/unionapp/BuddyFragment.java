@@ -224,6 +224,7 @@ public class BuddyFragment extends Fragment {
                             //post with image
                             uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation);
                         }
+                        buddyDialog.dismiss();
                     }
                 });
 
