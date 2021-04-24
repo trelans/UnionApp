@@ -328,7 +328,7 @@ public class StackFragment extends Fragment {
 
 
                                 //path to store post data
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
 
                                 //put data in this ref
                                 reference.child(timeStamp).setValue(hashMap)
@@ -379,7 +379,7 @@ public class StackFragment extends Fragment {
 
 
             //path to store post data
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
 
             //put data in this ref
             reference.child(timeStamp).setValue(hashMap)

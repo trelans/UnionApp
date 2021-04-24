@@ -394,7 +394,7 @@ public class BuddyFragment extends Fragment {
 
                         if (uriTask.isSuccessful()) {
                             //uri is received upload post to firebase database
-
+                            checkUserStatus();
                             HashMap<Object,String> hashMap = new HashMap<>();
                             //put post info
                             hashMap.put("uid",uid); //çekememiş
@@ -447,7 +447,7 @@ public class BuddyFragment extends Fragment {
         }
         else {
             //post without image
-
+            checkUserStatus();
             HashMap<Object,String> hashMap = new HashMap<>();
             //put post info
             hashMap.put("uid",uid);
@@ -464,7 +464,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pLocation",postLocation);
 
             //path to store post data
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
 
             //put data in this ref
             reference.child(timeStamp).setValue(hashMap)
