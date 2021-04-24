@@ -550,6 +550,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!searchView.isIconified()) {
             searchView.setIconified(true);
+            if (recyclerView.getVisibility() == View.VISIBLE){
+                recyclerView.setVisibility(View.GONE);
+            }
         } else {
             super.onBackPressed();
         }

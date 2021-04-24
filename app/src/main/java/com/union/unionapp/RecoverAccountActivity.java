@@ -146,8 +146,11 @@ public class RecoverAccountActivity extends AppCompatActivity {
                         if (snapshot.getValue().equals(tw_enter_code.getText().toString())) {
                             tw_incorrect_code.setVisibility(View.INVISIBLE);
                             verifyButton.setText("Change Password");
+
 //                    tw_enter_code.setTransformationMethod(PasswordTransformationMethod.getInstance());
                             //                  tw_email.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            tw_email.setText("");
+                            tw_enter_code.setText("");
                             tw_email.setHint("New Password");
                             tw_enter_code.setHint("New Password");
 
