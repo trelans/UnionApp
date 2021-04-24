@@ -3,8 +3,11 @@ package com.union.unionapp;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,10 +66,11 @@ public class MessageFragment extends Fragment {
             // firebase
             firebaseAuth = FirebaseAuth.getInstance();
 
-          //  AdapterUsers adapterUsers = (AdapterUsers) getActivity();
-          //  Intent intent = getActivity().getIntent();
-            hisUid =  "";
-                    //getArguments().getString("hisUid");
+        Bundle extras = getActivity().getIntent().getExtras();
+        if (extras != null) {
+            String hisuid = extras.getString("Hisuid");
+            //The key argument here must match that used in the other activity
+        }
 
         firebaseDatabase = firebaseDatabase.getInstance();
             usersDbRef = firebaseDatabase.getReference("Users");
