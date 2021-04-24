@@ -65,12 +65,8 @@ public class MessageFragment extends Fragment {
 
             // firebase
             firebaseAuth = FirebaseAuth.getInstance();
-
-        Bundle extras = getActivity().getIntent().getExtras();
-        if (extras != null) {
-            String hisuid = extras.getString("Hisuid");
-            //The key argument here must match that used in the other activity
-        }
+        Intent intent = getActivity().getIntent();
+        String hisuid = intent.getStringExtra("hisUid");
 
         firebaseDatabase = firebaseDatabase.getInstance();
             usersDbRef = firebaseDatabase.getReference("Users");
@@ -107,6 +103,7 @@ public class MessageFragment extends Fragment {
             send_bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    tw_username.setText(hisUid);
                     // get message text from edit text
                     String message = messageEt.getText().toString().trim();
                     // check if text if empty

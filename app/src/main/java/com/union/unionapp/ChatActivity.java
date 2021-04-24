@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-        String hisuid = intent.getStringExtra("hisUid");
+        String hisuid = intent.getStringExtra("Hisuid");
 
 
         firebaseDatabase = firebaseDatabase.getInstance();

@@ -65,8 +65,9 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
             public void onClick(View v) {
 
                 Intent i = new Intent( context, ChatActivity.class);
-                i.putExtra("Hisuid","hisUID");
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("Hisuid",hisUID);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
                 context.startActivity(i);
 
 
