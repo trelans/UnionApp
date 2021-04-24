@@ -28,4 +28,15 @@
         <item>#ENG102</item>
         <item>#TURK101</item>
     </string-array>
+
+    <string-array name="user_achievements">
+        <item>MATH101 Pro</item>
+        <item>MATH102 Titan</item>
+        <item>MATH132 Rookie</item>
+        <item>CS101 Slayer</item>
+        <item>CS102 Slayer</item>
+        <item>ENG101 Master</item>
+        <item>ENG102 Slayer</item>
+        <item>TURK101 Pro</item>
+    </string-array>
 </resources>
