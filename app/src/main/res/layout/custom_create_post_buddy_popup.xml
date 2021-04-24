@@ -139,14 +139,14 @@
                     android:layout_marginEnd="84dp"
                     android:text="Time:" />
 
-                <EditText
+                <TextView
                     android:id="@+id/editTextDate"
-                    android:layout_width="137dp"
+                    android:layout_width="115dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="43dp"
-                    android:layout_marginBottom="252dp"
+                    android:layout_marginBottom="253dp"
                     android:ems="10"
                     android:inputType="date" />
 

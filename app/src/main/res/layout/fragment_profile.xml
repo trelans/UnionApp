@@ -27,14 +27,14 @@
             <ListView
                 android:id="@+id/achsList"
                 android:layout_width="match_parent"
-                android:layout_height="224dp"
+                android:layout_height="318dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <ListView
                 android:id="@+id/lastActsList"
@@ -46,102 +46,9 @@
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp"
-                android:visibility="visible">
+                android:visibility="invisible">
 
             </ListView>
-
-            <TextView
-                android:id="@+id/aText"
-
-                android:layout_width="276dp"
-                android:layout_height="wrap_content"
-
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="169dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginStart="25dp"
-                android:background="@drawable/text_view_comment_template"
-                android:fontFamily="@font/myriad_pro_regular"
-                android:gravity="center"
-                android:insetBottom="0sp"
-                android:insetTop="0sp"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="0"
-                android:text="aText"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="21sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.512" />
-
-            <TextView
-                android:id="@+id/aText3"
-
-                android:layout_width="293dp"
-                android:layout_height="wrap_content"
-
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="217dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginStart="25dp"
-                android:background="@drawable/text_view_comment_template"
-                android:fontFamily="@font/myriad_pro_regular"
-                android:gravity="center"
-                android:insetBottom="0sp"
-                android:insetTop="0sp"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="0"
-                android:text="aText"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="21sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.512" />
-
-            <TextView
-                android:id="@+id/aText2"
-
-                android:layout_width="276dp"
-                android:layout_height="wrap_content"
-
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="264dp"
-                android:layout_marginEnd="25dp"
-                android:layout_marginStart="25dp"
-                android:background="@drawable/text_view_comment_template"
-                android:fontFamily="@font/myriad_pro_regular"
-                android:gravity="center"
-                android:insetBottom="0sp"
-                android:insetTop="0sp"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="0"
-                android:text="aText"
-                android:textAlignment="center"
-                android:textColor="#000000"
-                android:textSize="21sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.512" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

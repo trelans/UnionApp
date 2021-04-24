@@ -1,8 +1,11 @@
 package com.union.unionapp;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     Context context;
     List<ModelUsers> userList;
-    String hisUID;
+
 
     //constructor
     public  AdapterUsers(Context context , List<ModelUsers> userList) {
@@ -42,7 +46,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
             // get data
-         hisUID = userList.get(position).getUid();
+        String hisUID = userList.get(position).getUid();
         String userPP = userList.get(position).getPp();
         String userName = userList.get(position).getUsername();
             // set data
@@ -60,16 +64,14 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
             @Override
             public void onClick(View v) {
 
-                Bundle bundle = new Bundle();
-                bundle.putString("hisUid", hisUID);
-// set Fragmentclass Arguments
+                Intent i = new Intent( context, ChatActivity.class);
+                i.putExtra("Hisuid",hisUID);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                MessageFragment fragobj = new MessageFragment();
-                fragobj.setArguments(bundle);
-               // UIDHolder = new UIDHolder(hisUID);
-              //  Intent intent = new Intent (context, ChatListFragment.class);
-               // intent.putExtra("hisUid", hisUID);
-                //context.startActivity(intent);
+                context.startActivity(i);
+
+
+
             }
         });
     }
@@ -90,9 +92,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
            avatar_ImageView = itemView.findViewById(R.id.userPPRow);
            username_TextView = itemView.findViewById(R.id.usernameRow);
         }
-        public  String gethisUID() {
-            return hisUID;
-        }
+
 }
 
 
