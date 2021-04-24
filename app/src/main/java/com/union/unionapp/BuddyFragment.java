@@ -57,7 +57,8 @@ public class BuddyFragment extends Fragment {
     EditText postDetailsEt,
              postQuotaEt,
              postDateEt,
-             postTimeEt;
+             postTimeEt,
+             postLocationEt;
 
     ImageView imageIv,
               sendButtonIv,
@@ -91,12 +92,7 @@ public class BuddyFragment extends Fragment {
         // Layoutu transparent yapıo
         buddyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-
         //genderSpinner.setOnItemSelectedListener(this);
-
-
-
-
 
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -112,8 +108,8 @@ public class BuddyFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()) {
                     username = "" + ds.child("username").getValue();
-                    email = "" + ds.child("email").getValue();
-                    dp = "" + ds.child("image").getValue();
+                    dp = "" + ds.child("pp").getValue();
+                    //email = "" + ds.child("email").getValue();
 
                 }
             }
@@ -149,7 +145,7 @@ public class BuddyFragment extends Fragment {
                 postTimeEt = buddyDialog.findViewById(R.id.editTextTime);
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
-
+                postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
 
                 addPhotoIv.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -167,6 +163,7 @@ public class BuddyFragment extends Fragment {
                         String postDate = postDateEt.getText().toString().trim();
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
                         String postTime = postTimeEt.getText().toString().trim();
+                        String postLocation = postLocationEt.getText().toString().trim();
 
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
@@ -175,11 +172,11 @@ public class BuddyFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage");
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri));
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation);
                         }
                     }
                 });
@@ -329,7 +326,7 @@ public class BuddyFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -352,9 +349,9 @@ public class BuddyFragment extends Fragment {
 
                             HashMap<Object,String> hashMap = new HashMap<>();
                             //put post info
-                            hashMap.put("uid",uid);
-                            hashMap.put("username",username);
-                            hashMap.put("uEmail",email);
+                            hashMap.put("uid",uid); //çekememiş
+                            hashMap.put("username",username); //çekmemiş
+                            //hashMap.put("uEmail",email);
                             hashMap.put("uDp",dp);
                             hashMap.put("pId",timeStamp);
                             hashMap.put("pDetails",postDetails);
@@ -363,6 +360,8 @@ public class BuddyFragment extends Fragment {
                             hashMap.put("pQuota",postQuotaStr);
                             hashMap.put("pImage",downloadUri);
                             hashMap.put("pTime",timeStamp);
+                            hashMap.put("pLocation",postLocation);
+                            hashMap.put("pTags","1"); //TODO tagler için değişicek
 
                             //path to store post data
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
@@ -414,6 +413,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pQuota",postQuotaStr);
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
+            hashMap.put("pLocation",postLocation);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
