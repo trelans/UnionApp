@@ -1,5 +1,7 @@
 package com.union.unionapp;
 
+import com.google.firebase.database.PropertyName;
+
 public class ModelChat {
     String message , receiver , sender , timestamp;
     boolean isSeen;
@@ -39,10 +41,11 @@ public class ModelChat {
         this.timestamp = timestamp;
     }
 
+    @PropertyName("isSeen")
     public boolean isSeen() {
         return isSeen;
     }
-
+    @PropertyName("isSeen")
     public void setSeen(boolean seen) {
         isSeen = seen;
     }
