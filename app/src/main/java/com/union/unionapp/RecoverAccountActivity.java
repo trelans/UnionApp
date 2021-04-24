@@ -1,15 +1,33 @@
 package com.union.unionapp;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.FirebaseAppLifecycleListener;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthProvider;
+import com.google.firebase.auth.FirebaseAuthRegistrar;
+import com.google.firebase.auth.FirebaseAuthSettings;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 public class RecoverAccountActivity extends AppCompatActivity {
     // Variables
@@ -19,17 +37,21 @@ public class RecoverAccountActivity extends AppCompatActivity {
     TextView tw_login;
     Button sendAgainButton;
     Button verifyButton;
-    String code ;
+    String code;
     String email = "";
+    String key;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference ref;
     private FirebaseAuth mAuth;
     final String VERIFICATION_SUBJECT = " Your UnI0n verification code";
     final String VERIFICATION_MAIL = "Your UnI0n verification code is " + code + ".";
 
 
-    public void SignUp (View view) {
+    public void SignUp(View view) {
         // Button onClick
-        Log.i("Signup" , " YESS");
+        Log.i("Signup", " YESS");
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +64,17 @@ public class RecoverAccountActivity extends AppCompatActivity {
         tw_login = findViewById(R.id.loginTextView);
         sendAgainButton = findViewById(R.id.sendAgainButton);
         verifyButton = findViewById(R.id.VerifyButton);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        ref = firebaseDatabase.getReference("verificationCodes");
+
 
         // set timer
         CountDownTimer countDownTimer = new CountDownTimer(60000, 1000) {
 
+
             @Override
             public void onTick(long millisUntilFinished) {
-                sendAgainButton.setText(Long.toString(millisUntilFinished/1000));
+                sendAgainButton.setText(Long.toString(millisUntilFinished / 1000));
             }
 
             @Override
@@ -71,24 +97,40 @@ public class RecoverAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = tw_email.getText().toString().trim();
 
-                    // generates a verif code
-                  code =  generateVerifCode();
-
-                    // Sends this code to the server
-                            //TODO
-                    // Inform user
-                    tw_incorrect_code.setVisibility(View.VISIBLE);
-                    tw_incorrect_code.setText("Code has been sent to your mail");
-                    // Starts timer
-                        countDownTimer.start();
-                    // Sends email
-                    JavaMailAPI javaMailAPI = new JavaMailAPI(RecoverAccountActivity.this , email, " Union App Password Recovery Request" , "Hi, you sent a password recovery password. Your recovery password code is" + code );
-                    javaMailAPI.execute();
-                    // wait for
-                    sendAgainButton.setEnabled(false);
-                    //mail
+                // generates a verif code and sends this code to the server
 
 
+                // Inform user
+                tw_incorrect_code.setVisibility(View.VISIBLE);
+                tw_incorrect_code.setText("Code has been sent to your mail");
+                // Starts timer
+                countDownTimer.start();
+                // Sends email
+                final Handler handler = new Handler();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        code = generateVerifCode();
+                        hashMap.put("code", code);
+                        hashMap.put("timestamp", ServerValue.TIMESTAMP);
+                        ref.child(email.replace(".", "_")).updateChildren(hashMap);
+                        JavaMailAPI javaMailAPI = new JavaMailAPI(RecoverAccountActivity.this, email, " Union App Password Recovery Request", "Hi, you sent a password recovery request. Your recovery password code is " + code);
+                        javaMailAPI.execute();
+                    }
+                });
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ref.child(email).removeValue();
+                        sendAgainButton.setEnabled(false);
+                    }
+                }, 20000);
+
+
+                // wait for
+                //mail
 
 
             }
@@ -97,21 +139,30 @@ public class RecoverAccountActivity extends AppCompatActivity {
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO currentcodu databasedekine eşitle
-                // gets current code from data base
-                String currentCode = "123";
-                if (currentCode.equals(tw_enter_code.getText())) {
-                    tw_incorrect_code.setVisibility(View.INVISIBLE);
-                    verifyButton.setText("Change Password");
-//                    tw_enter_code.setTransformationMethod(PasswordTransformationMethod.getInstance());
-  //                  tw_email.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    tw_email.setHint("New Password");
-                    tw_enter_code.setHint("New Password");
 
-                }
-                else {
-                    tw_incorrect_code.setText("Verification code is wrong");
-                }
+                // TODO currentcodu databasedekine eşitle
+                ValueEventListener checkPasswordListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.getValue().equals(tw_enter_code.getText().toString())) {
+                            tw_incorrect_code.setVisibility(View.INVISIBLE);
+                            verifyButton.setText("Change Password");
+//                    tw_enter_code.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            //                  tw_email.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            tw_email.setHint("New Password");
+                            tw_enter_code.setHint("New Password");
+
+                        } else {
+                            tw_incorrect_code.setText("Verification code is wrong");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                };
+                ref.child(email.replace(".", "_")).addListenerForSingleValueEvent(checkPasswordListener);
             }
         });
 
@@ -124,13 +175,15 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
 
     }
+
+
     public static String generateVerifCode() {
-        int code1 = (int) (Math.random() * 9) + 1 ;
-        int code2 = (int) (Math.random() * 9) + 1 ;
-        int code3 = (int) (Math.random() * 9) + 1 ;
-        int code4 = (int) (Math.random() * 9) + 1 ;
-        int code5 = (int) (Math.random() * 9) + 1 ;
-        int code6 = (int) (Math.random() * 9) + 1 ;
-        return  String.valueOf(code1) + String.valueOf(code2) + String.valueOf(code2) + String.valueOf(code3) +  String.valueOf(code4) + String.valueOf(code5) + String.valueOf(code6);
+        int code1 = (int) (Math.random() * 9) + 1;
+        int code2 = (int) (Math.random() * 9) + 1;
+        int code3 = (int) (Math.random() * 9) + 1;
+        int code4 = (int) (Math.random() * 9) + 1;
+        int code5 = (int) (Math.random() * 9) + 1;
+        int code6 = (int) (Math.random() * 9) + 1;
+        return "" + code1 + code2 + code3 + code4 + code5 + code6;
     }
 }

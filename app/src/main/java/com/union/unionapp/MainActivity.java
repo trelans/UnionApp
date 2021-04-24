@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Offline support, uygulama bitince düşün
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -284,12 +287,12 @@ public class MainActivity extends AppCompatActivity {
             changePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString().trim()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            String password = newPassword.getText().toString();
+                            String password = newPassword.getText().toString().trim();
                             System.out.println(password.length());
-                            if (password.equals(currentPassword.getText().toString())){
+                            if (password.equals(currentPassword.getText().toString().trim())){
                                 Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
                             }else if (password.length() >= 6) {
                                 mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
