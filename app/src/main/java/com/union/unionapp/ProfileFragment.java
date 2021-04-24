@@ -62,7 +62,7 @@ public class ProfileFragment extends Fragment {
     long dateServer;
     SimpleDateFormat dateFormat;
 
-    class CustomAdapter extends BaseAdapter{
+    /*class CustomAdapter extends BaseAdapter{
 
         @Override
         public int getCount() {
@@ -86,7 +86,7 @@ public class ProfileFragment extends Fragment {
             textView.setText(allAchs[position]);
             return null;
         }
-    }
+    }*/
 
     @Nullable
     @Override
@@ -159,10 +159,10 @@ public class ProfileFragment extends Fragment {
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
 
 
-        //Achievements için listview kısmı
+        /*Achievements için listview kısmı
         achsListView = (ListView) view.findViewById(R.id.achsList);
         CustomAdapter customAdapter = new CustomAdapter();
-        achsListView.setAdapter(customAdapter);
+        achsListView.setAdapter(customAdapter);*/
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
