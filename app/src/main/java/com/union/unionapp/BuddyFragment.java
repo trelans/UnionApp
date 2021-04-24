@@ -49,7 +49,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class BuddyFragment extends Fragment {
@@ -71,6 +73,8 @@ public class BuddyFragment extends Fragment {
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
+
+    String date;
 
     DatePickerDialog.OnDateSetListener setListener;
 
@@ -152,6 +156,11 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
+
+                //set the postDateEt to current date for default
+                Calendar defaultCalendar = Calendar.getInstance();
+                calendarToString(defaultCalendar);
+                postDateEt.setText(date);
 
                 //setting up the calendar dialog
                 Calendar calendar = Calendar.getInstance();
@@ -476,4 +485,9 @@ public class BuddyFragment extends Fragment {
             }
 
         }
+
+        public void calendarToString(Calendar calendar) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        date = dateFormat.format(calendar.getTime());
+    }
 }
