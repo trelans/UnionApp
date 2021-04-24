@@ -107,27 +107,25 @@ public class RecoverAccountActivity extends AppCompatActivity {
                 countDownTimer.start();
                 // Sends email
                 final Handler handler = new Handler();
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        HashMap<String, Object> hashMap = new HashMap<>();
-                        code = generateVerifCode();
-                        hashMap.put("code", code);
-                        hashMap.put("timestamp", ServerValue.TIMESTAMP);
-                        ref.child(email.replace(".", "_")).updateChildren(hashMap);
-                        JavaMailAPI javaMailAPI = new JavaMailAPI(RecoverAccountActivity.this, email, " Union App Password Recovery Request", "Hi, you sent a password recovery request. Your recovery password code is " + code);
-                        javaMailAPI.execute();
-                    }
-                });
 
+                HashMap<String, Object> hashMap = new HashMap<>();
+                code = generateVerifCode();
+                key = ref.push().getKey();
+                hashMap.put("code", code);
+                hashMap.put("timeStamp", ServerValue.TIMESTAMP);
+                ref.child(key).updateChildren(hashMap);
+                //JavaMailAPI javaMailAPI = new JavaMailAPI(RecoverAccountActivity.this, email, " Union App Password Recovery Request", "Hi, you sent a password recovery request. Your recovery password code is " + code);
+                //javaMailAPI.execute();
+
+                /*
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ref.child(email).removeValue();
+                        ref.child(key).removeValue();
                         sendAgainButton.setEnabled(false);
                     }
                 }, 20000);
-
+*/
 
                 // wait for
                 //mail
@@ -140,6 +138,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                System.out.println(ServerValue.TIMESTAMP.toString());
                 // TODO currentcodu databasedekine eşitle
                 ValueEventListener checkPasswordListener = new ValueEventListener() {
                     @Override
@@ -162,7 +161,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
                     }
                 };
-                ref.child(email.replace(".", "_")).addListenerForSingleValueEvent(checkPasswordListener);
+                ref.child(key).child("code").addListenerForSingleValueEvent(checkPasswordListener);
             }
         });
 

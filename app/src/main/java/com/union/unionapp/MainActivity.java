@@ -34,6 +34,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -183,6 +184,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getCurrentFocus() != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    searchView.clearFocus();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -292,14 +308,14 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             String password = newPassword.getText().toString().trim();
                             System.out.println(password.length());
-                            if (password.equals(currentPassword.getText().toString().trim())){
+                            if (password.equals(currentPassword.getText().toString().trim())) {
                                 Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
-                            }else if (password.length() >= 6) {
+                            } else if (password.length() >= 6) {
                                 mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
                                 Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
                                 currentPassword.setText("");
                                 newPassword.setText("");
-                            }else{
+                            } else {
                                 Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
                             }
 
