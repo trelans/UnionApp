@@ -364,7 +364,7 @@ public class BuddyFragment extends Fragment {
                             hashMap.put("pTags","1"); //TODO tagler için değişicek
 
                             //path to store post data
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
 
                             //put data in this ref
                             reference.child(timeStamp).setValue(hashMap)
