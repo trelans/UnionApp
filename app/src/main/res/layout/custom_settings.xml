@@ -115,7 +115,7 @@
                     app:defaultQueryHint="Select a relevant tag" />
 
                 <EditText
-                    android:id="@+id/currentPasswordPlainText"
+                    android:id="@+id/currentPasswordPT"
                     android:layout_width="144dp"
                     android:layout_height="29dp"
                     android:layout_alignParentBottom="true"
@@ -133,7 +133,7 @@
                     android:textSize="13sp" />
 
                 <EditText
-                    android:id="@+id/newPasswordPlainText"
+                    android:id="@+id/newPasswordPT"
                     android:layout_width="144dp"
                     android:layout_height="29dp"
                     android:layout_alignParentBottom="true"
