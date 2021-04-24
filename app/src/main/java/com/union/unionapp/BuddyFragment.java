@@ -96,13 +96,7 @@ public class BuddyFragment extends Fragment {
 
 
 
-        //init views
-        postDetailsEt = view.findViewById(R.id.editTextPostDetails);
-        postDateEt = view.findViewById(R.id.editTextDate);
-        postQuotaEt = view.findViewById(R.id.editTextQuota);
-        postTimeEt = view.findViewById(R.id.editTextTime);
-        sendButtonIv = view.findViewById(R.id.imageViewSendButton);
-        addPhotoIv = view.findViewById(R.id.uploadPhotoImageView);
+
 
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -148,6 +142,15 @@ public class BuddyFragment extends Fragment {
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
+                //init views
+                postDetailsEt = buddyDialog.findViewById(R.id.editTextPostDetails);
+                postDateEt = buddyDialog.findViewById(R.id.editTextDate);
+                postQuotaEt = buddyDialog.findViewById(R.id.editTextQuota);
+                postTimeEt = buddyDialog.findViewById(R.id.editTextTime);
+                sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
+                addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
+
+
                 addPhotoIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -159,10 +162,10 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         String postDetails = postDetailsEt.getText().toString().trim();
                         String postDate = postDateEt.getText().toString().trim();
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
-                        int postQuota = Integer.valueOf(postQuotaStr);
                         String postTime = postTimeEt.getText().toString().trim();
 
                         if (TextUtils.isEmpty(postDetails)) {
@@ -180,8 +183,6 @@ public class BuddyFragment extends Fragment {
                         }
                     }
                 });
-
-
 
 
                 buddyDialog.show();
