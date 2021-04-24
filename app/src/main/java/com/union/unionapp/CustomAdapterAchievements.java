@@ -5,6 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +39,15 @@ public class CustomAdapterAchievements extends ArrayAdapter<String> {
             inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.achs_list_layout, null);
         }
-        return super.getView(position, convertView, parent);
+
+        //Initializations
+        TextView achsTexts = (TextView) convertView.findViewById(R.id.achsItem);
+
+        //Set Text
+        achsTexts.setText(achs[position]);
+        //image varsa setImageResource();
+
+        return convertView;
 
     }
 }

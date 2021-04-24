@@ -159,10 +159,10 @@ public class ProfileFragment extends Fragment {
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
 
 
-        /*Achievements için listview kısmı
+        /*Achievements için listview kısmı*/
         achsListView = (ListView) view.findViewById(R.id.achsList);
-        CustomAdapter customAdapter = new CustomAdapter();
-        achsListView.setAdapter(customAdapter);*/
+        CustomAdapterAchievements customAdapter = new CustomAdapterAchievements(getActivity(), allAchs);
+        achsListView.setAdapter(customAdapter);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
