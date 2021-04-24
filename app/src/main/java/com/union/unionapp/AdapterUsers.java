@@ -1,6 +1,8 @@
 package com.union.unionapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import java.util.List;
 public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     Context context;
     List<ModelUsers> userList;
+    String hisUID;
 
     //constructor
     public  AdapterUsers(Context context , List<ModelUsers> userList) {
@@ -39,6 +42,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
             // get data
+         hisUID = userList.get(position).getUid();
         String userPP = userList.get(position).getPp();
         String userName = userList.get(position).getUsername();
             // set data
@@ -55,7 +59,17 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"Tıklandıı" , Toast.LENGTH_SHORT).show();
+
+                Bundle bundle = new Bundle();
+                bundle.putString("hisUid", hisUID);
+// set Fragmentclass Arguments
+
+                MessageFragment fragobj = new MessageFragment();
+                fragobj.setArguments(bundle);
+               // UIDHolder = new UIDHolder(hisUID);
+              //  Intent intent = new Intent (context, ChatListFragment.class);
+               // intent.putExtra("hisUid", hisUID);
+                //context.startActivity(intent);
             }
         });
     }
@@ -75,6 +89,9 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
             // init views
            avatar_ImageView = itemView.findViewById(R.id.userPPRow);
            username_TextView = itemView.findViewById(R.id.usernameRow);
+        }
+        public  String gethisUID() {
+            return hisUID;
         }
 }
 
