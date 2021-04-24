@@ -4,12 +4,14 @@ package com.union.unionapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -46,6 +49,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 public class BuddyFragment extends Fragment {
@@ -57,7 +63,8 @@ public class BuddyFragment extends Fragment {
     EditText postDetailsEt,
              postQuotaEt,
              postDateEt,
-             postTimeEt;
+             postTimeEt,
+             postLocationEt;
 
     ImageView imageIv,
               sendButtonIv,
@@ -66,6 +73,10 @@ public class BuddyFragment extends Fragment {
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
+
+    String date;
+
+    DatePickerDialog.OnDateSetListener setListener;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -91,12 +102,7 @@ public class BuddyFragment extends Fragment {
         // Layoutu transparent yapıo
         buddyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-
         //genderSpinner.setOnItemSelectedListener(this);
-
-
-
-
 
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -112,8 +118,8 @@ public class BuddyFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()) {
                     username = "" + ds.child("username").getValue();
-                    email = "" + ds.child("email").getValue();
-                    dp = "" + ds.child("image").getValue();
+                    dp = "" + ds.child("pp").getValue();
+                    //email = "" + ds.child("email").getValue();
 
                 }
             }
@@ -149,6 +155,40 @@ public class BuddyFragment extends Fragment {
                 postTimeEt = buddyDialog.findViewById(R.id.editTextTime);
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
+                postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
+
+                //set the postDateEt to current date for default
+                Calendar defaultCalendar = Calendar.getInstance();
+                calendarToString(defaultCalendar);
+                postDateEt.setText(date);
+
+                //setting up the calendar dialog
+                Calendar calendar = Calendar.getInstance();
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                postDateEt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                        );
+                    datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    datePickerDialog.show();
+                    }
+                });
+
+                setListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month = month + 1;
+                        String date = dayOfMonth + "/" + month + "/" + year;
+                        postDateEt.setText(date);
+
+                    }
+                };
+
 
 
                 addPhotoIv.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +207,7 @@ public class BuddyFragment extends Fragment {
                         String postDate = postDateEt.getText().toString().trim();
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
                         String postTime = postTimeEt.getText().toString().trim();
+                        String postLocation = postLocationEt.getText().toString().trim();
 
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
@@ -175,11 +216,11 @@ public class BuddyFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage");
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri));
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation);
                         }
                     }
                 });
@@ -329,7 +370,7 @@ public class BuddyFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -352,9 +393,9 @@ public class BuddyFragment extends Fragment {
 
                             HashMap<Object,String> hashMap = new HashMap<>();
                             //put post info
-                            hashMap.put("uid",uid);
-                            hashMap.put("username",username);
-                            hashMap.put("uEmail",email);
+                            hashMap.put("uid",uid); //çekememiş
+                            hashMap.put("username",username); //çekmemiş
+                            //hashMap.put("uEmail",email);
                             hashMap.put("uDp",dp);
                             hashMap.put("pId",timeStamp);
                             hashMap.put("pDetails",postDetails);
@@ -363,9 +404,11 @@ public class BuddyFragment extends Fragment {
                             hashMap.put("pQuota",postQuotaStr);
                             hashMap.put("pImage",downloadUri);
                             hashMap.put("pTime",timeStamp);
+                            hashMap.put("pLocation",postLocation);
+                            hashMap.put("pTags","1"); //TODO tagler için değişicek
 
                             //path to store post data
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
 
                             //put data in this ref
                             reference.child(timeStamp).setValue(hashMap)
@@ -414,6 +457,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pQuota",postQuotaStr);
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
+            hashMap.put("pLocation",postLocation);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
@@ -441,4 +485,9 @@ public class BuddyFragment extends Fragment {
             }
 
         }
+
+        public void calendarToString(Calendar calendar) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        date = dateFormat.format(calendar.getTime());
+    }
 }
