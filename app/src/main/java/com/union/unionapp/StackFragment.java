@@ -104,7 +104,7 @@ public class StackFragment extends Fragment {
                 sendButtonIv = stackDialog.findViewById(R.id.sendButtonImageView);
                 addPhotoIv = stackDialog.findViewById(R.id.uploadPhotoImageView);
                 postDetailsEt = stackDialog.findViewById(R.id.postDetailsEt);
-                anonym = stackDialog.findViewById(R.id.anonymCheckBox);
+                anonym = stackDialog.findViewById(R.id.checkBoxAnonymous);
 
 
 
@@ -122,7 +122,7 @@ public class StackFragment extends Fragment {
 
 
                         postDetails = postDetailsEt.getText().toString().trim();
-                        if (true) {
+                        if (anonym.hasSelection()) {
                             postAnonymously = "1";
                         }
                         else {
