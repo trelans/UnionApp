@@ -4,12 +4,14 @@ package com.union.unionapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -46,6 +49,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class BuddyFragment extends Fragment {
@@ -67,6 +71,8 @@ public class BuddyFragment extends Fragment {
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
+
+    DatePickerDialog.OnDateSetListener setListener;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -146,6 +152,35 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
+
+                //setting up the calendar dialog
+                Calendar calendar = Calendar.getInstance();
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                postDateEt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                        );
+                    datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    datePickerDialog.show();
+                    }
+                });
+
+                setListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month = month + 1;
+                        String date = dayOfMonth + "/" + month + "/" + year;
+                        postDateEt.setText(date);
+
+                    }
+                };
+
+
 
                 addPhotoIv.setOnClickListener(new View.OnClickListener() {
                     @Override
