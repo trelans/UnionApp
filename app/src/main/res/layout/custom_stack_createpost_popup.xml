@@ -79,6 +79,8 @@
 
             <Spinner
                 android:id="@+id/tagSpinner"
+                android:prompt="@string/all_tags_prompt"
+                android:entries="@array/all_tags"
                 android:layout_width="253dp"
                 android:layout_height="26dp"
                 android:layout_alignParentStart="true"

@@ -52,7 +52,10 @@ public class StackFragment extends Fragment {
     EditText postDetailsEt;
     String postAnonymously;
     String postDetails;
+    String tagToUpload;
     CheckBox anonym;
+
+    int tagTextIndex;
 
     ImageView sendButtonIv,
               addPhotoIv;
@@ -95,10 +98,19 @@ public class StackFragment extends Fragment {
 
                 stackDialog.setContentView(R.layout.custom_stack_createpost_popup);
 
+                String[] allTags = getResources().getStringArray( R.array.all_tags );
+
+
+
                 stackTagSpinner = stackDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 stackTagSpinner.setAdapter(tagAdapter);
+
+
+
+
+
 
                 //init views
                 sendButtonIv = stackDialog.findViewById(R.id.sendButtonImageView);
@@ -120,6 +132,15 @@ public class StackFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        String selectedTag = stackTagSpinner.getSelectedItem().toString();
+                        for ( int k = 1; k < allTags.length; k++ ) {
+                            if ( allTags[ k ].equals( selectedTag ) ) {
+                                tagTextIndex = k;
+                                break;
+                            }
+                        }
+
+                        tagToUpload = tagTextIndex+"";
 
                         postDetails = postDetailsEt.getText().toString().trim();
                         if (anonym.isChecked()) {
@@ -136,11 +157,11 @@ public class StackFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,"noImage",postAnonymously);
+                            uploadData(postDetails,"noImage",postAnonymously,tagToUpload);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,String.valueOf(image_uri),postAnonymously);
+                            uploadData(postDetails,String.valueOf(image_uri),postAnonymously,tagToUpload);
                         }
                         stackDialog.dismiss();
                     }
@@ -292,7 +313,7 @@ public class StackFragment extends Fragment {
         } //TODO else navigate to login
     }
 
-    private void uploadData(String postDetails, String uri, String postAnonymously) {
+    private void uploadData(String postDetails, String uri, String postAnonymously, String tagToUpload) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -328,6 +349,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pTags","1"); //TODO tagler için değişicek
                                 hashMap.put("pUpvoteNumber","0");
                                 hashMap.put("pTitle","MATH101 question");
+                                hashMap.put("pTagIndex",tagToUpload);
 
 
                                 //path to store post data
@@ -381,6 +403,7 @@ public class StackFragment extends Fragment {
             hashMap.put("pTime",timeStamp);
             hashMap.put("pUpvoteNumber","0");
             hashMap.put("pTitle","MATH101 question");
+            hashMap.put("pTagIndex",tagToUpload);
 
 
 
