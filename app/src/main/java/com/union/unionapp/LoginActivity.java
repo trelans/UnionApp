@@ -7,7 +7,9 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -97,6 +99,19 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
+        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getCurrentFocus() != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         // Focus Listeners
         tw_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -181,28 +196,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                //Get user email and uid from auth.
-                                String email = user.getEmail();
-                                String uid = user.getUid();
-
-                                // when user is registered store user info in firebase realtime database too
-                                // using hashmap
-                                HashMap<Object, String> hashMap = new HashMap<>();
-                                // put info in hashmap
-                                hashMap.put("email", email);
-                                hashMap.put("uid", uid);
-                                // will add later!
-                                hashMap.put("name", "");
-                                hashMap.put("phone", "");
-                                hashMap.put("image", "");
-                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                //path to store user data
-                                DatabaseReference reference = database.getReference("Users");
-                                // put data within hashmap in database
-                                reference.child(uid).setValue(hashMap);
-
-
                                 Toast.makeText(LoginActivity.this, "Giriş yapıldı", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 finish();

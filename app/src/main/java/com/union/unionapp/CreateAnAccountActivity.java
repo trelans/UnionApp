@@ -102,13 +102,16 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tickIcon.setBounds(0, 0, tickIcon.getIntrinsicWidth(), tickIcon.getIntrinsicHeight());
         Pattern pattern = Pattern.compile(regexStr);
 
-        // klavyeyi dışarı tıklayınca kapatmaya yarıyor  //TO DO boş yollayınca uygulama çöküyor
+        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
         findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                return true;
+                if (getCurrentFocus() != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -304,7 +307,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data
-                                DatabaseReference reference = database.getReference("Users");
+                                DatabaseReference reference = database.getReference("BilkentUniversity").child("Users");
                                 // put data within hashmap in database
                                 reference.child(uid).setValue(hashMap);
 

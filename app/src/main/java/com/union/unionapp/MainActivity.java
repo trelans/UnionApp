@@ -2,10 +2,11 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,24 +14,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +49,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     TextView selectedOptionTextView;
     Dialog myDialog;
+    Boolean searchBarEmpty;
     SearchView searchView;
     ImageView popUpButton;
     AdapterUsers adapterUsers;
@@ -84,12 +95,6 @@ public class MainActivity extends AppCompatActivity {
     // uri of picked images
     Uri image_uri;
 
-    // settigns
-    AppCompatButton tagButton1;
-    AppCompatButton tagButton2;
-    AppCompatButton tagButton3;
-    AppCompatButton[] tagsArray;
-    boolean[] tagsStatue = { false, false, false };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-
+        searchBarEmpty = true;
         //init List
         userList = new ArrayList<>();
 
@@ -143,8 +148,10 @@ public class MainActivity extends AppCompatActivity {
                 // if search query is not empty then search
                 if (!TextUtils.isEmpty(query.trim())) {
                     searchUsers(query);
+                    searchBarEmpty = false;
                 } else {
                     // search text empty
+                    searchBarEmpty = true;
                 }
                 return false;
             }
@@ -156,8 +163,10 @@ public class MainActivity extends AppCompatActivity {
                 // if search query is not empty then search
                 if (!TextUtils.isEmpty(newText.trim())) {
                     searchUsers(newText);
+                    searchBarEmpty = false;
                 } else {
                     // search text empty, get all users
+                    searchBarEmpty = true;
                 }
                 return false;
             }
@@ -177,6 +186,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
+        final int[] clickCount = {0};
+        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (getCurrentFocus() != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    searchView.clearFocus();
+                    if (searchBarEmpty){
+                        searchView.setIconified(true);
+                    }
+                    clickCount[0]++;
+                    return true;
+                }else if(recyclerView.getVisibility() == View.VISIBLE){
+                    if (clickCount[0] > 1){
+                        recyclerView.setVisibility(View.GONE);
+                        clickCount[0] = 0;
+                    }else {
+                        clickCount[0]++;
+                    }
+                }
+                System.out.println("clicked!");
+                return false;
+            }
+        });
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -267,50 +308,16 @@ public class MainActivity extends AppCompatActivity {
     public void showPopup(View view) {
         Dialog dialog;
         // Settings için olan kodlar
-        final int[] i = new int[1];
         if (currentActivity == 5) {
             // Setings codu buraya
-            i[0] = 0;
             myDialog.setContentView(R.layout.custom_settings);
 
             EditText currentPassword = myDialog.findViewById(R.id.currentPasswordPT);
             EditText newPassword = myDialog.findViewById(R.id.newPasswordPT);
             Button logout = myDialog.findViewById(R.id.logOutButton);
             Button changePassword = myDialog.findViewById(R.id.changePasswordButton);
-            tagButton1 = myDialog.findViewById( R.id.sampleTag1 );
-            tagButton2 = myDialog.findViewById( R.id.sampleTag2 );
-            tagButton3 = myDialog.findViewById( R.id.sampleTag3 );
-            tagsArray = new AppCompatButton[]{tagButton1, tagButton2, tagButton3};
-            Spinner tagSpinner = myDialog.findViewById( R.id.tagSpinner);
+
             ImageView changePp = myDialog.findViewById(R.id.changePp);
-
-            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-            {
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position > 0) {
-                        String selectedItem = parent.getItemAtPosition(position).toString();
-                        while (i[ 0 ] < tagsStatue.length) {
-                            if (!tagsStatue[ i[ 0 ] ] ) {
-                                tagsStatue[ i[ 0 ] ] = true;
-                                tagsArray[ i[ 0 ] ].setText( selectedItem );
-                                i[ 0 ]++;
-                                break;
-                            }
-                        }
-                    }
-
-                    if( i[ 0 ] == tagsStatue.length ) {
-                        Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-                        tagSpinner.setEnabled( false );
-                        tagSpinner.setClickable( false );
-                        tagSpinner.setTop( 0 );
-                    }
-                }
-
-                public void onNothingSelected (AdapterView < ? > parent) {
-
-                }
-            });
 
             changePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -320,14 +327,14 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(AuthResult authResult) {
                             String password = newPassword.getText().toString();
                             System.out.println(password.length());
-                            if (password.equals(currentPassword.getText().toString())){
+                            if (password.equals(currentPassword.getText().toString())) {
                                 Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
-                            }else if (password.length() >= 6) {
+                            } else if (password.length() >= 6) {
                                 mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
                                 Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
                                 currentPassword.setText("");
                                 newPassword.setText("");
-                            }else{
+                            } else {
                                 Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
                             }
 
@@ -539,12 +546,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //TODO Ekranda herhang biyere basıldığında SearchView focus kapama
-    // Geriye basıldığında searchü kapatır
     @Override
     public void onBackPressed() {
         if (!searchView.isIconified()) {
             searchView.setIconified(true);
+            if (recyclerView.getVisibility() == View.VISIBLE){
+                recyclerView.setVisibility(View.GONE);
+            }
         } else {
             super.onBackPressed();
         }
