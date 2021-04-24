@@ -53,10 +53,10 @@ public class ChatActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-        String hisuid = intent.getStringExtra("Hisuid");
+         hisUid = intent.getStringExtra("Hisuid");
 
 
-        firebaseDatabase = firebaseDatabase.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         usersDbRef = firebaseDatabase.getReference("Users");
         // search user to get that users' info
         Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // check until requitrf info is received
                 for (DataSnapshot ds : snapshot.getChildren()) {
+
                     // get data
                     String username ="" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
@@ -91,7 +92,7 @@ public class ChatActivity extends AppCompatActivity {
         send_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tw_username.setText(hisuid);
+
                 // get message text from edit text
                 String message = messageEt.getText().toString().trim();
                 // check if text if empty
