@@ -228,20 +228,54 @@ public class BuddyFragment extends Fragment {
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
 
+                //init tags
                 tag1 = buddyDialog.findViewById(R.id.textViewTag1);
                 tag2 = buddyDialog.findViewById(R.id.textViewTag2);
                 tag3 = buddyDialog.findViewById(R.id.textViewTag3);
 
+                //set tags to invisible
                 tag1.setVisibility(View.INVISIBLE);
                 tag2.setVisibility(View.INVISIBLE);
                 tag3.setVisibility(View.INVISIBLE);
 
+                //set tags to disabled -- not needed
+                //tag1.setEnabled(false);
+                //tag2.setEnabled(false);
+                //tag3.setEnabled(false);
+
                 textViewTags = new TextView[]{tag1, tag2, tag3};
                 tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
 
+                //set onClickListeners for tags
+                tag1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tag1.setVisibility(View.INVISIBLE);
+                        tagsStatus[0] = false;
+                        tagSpinner.setEnabled( true );
+                    }
+                });
+
+                tag2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tag2.setVisibility(View.INVISIBLE);
+                        tagsStatus[1] = false;
+                        tagSpinner.setEnabled( true );
+                    }
+                });
+
+                tag3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tag3.setVisibility(View.INVISIBLE);
+                        tagsStatus[2] = false;
+                        tagSpinner.setEnabled( true );
+                    }
+                });
+
 
                 //set the postDateEt to current date for default
-
                 Calendar defaultCalendar = Calendar.getInstance();
                 calendarToString(defaultCalendar);
                 postDateEt.setText(date);
