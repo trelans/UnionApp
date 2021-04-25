@@ -86,7 +86,6 @@ public class BuddyFragment extends Fragment {
     List<ModelBuddyAndClubPost> postList;
     AdapterBuddyPosts adapterBuddyPosts;
 
-    String time;
     String date;
     String[] allTags;
     TextView[] textViewTags;
@@ -191,14 +190,13 @@ public class BuddyFragment extends Fragment {
                 tag2 = buddyDialog.findViewById(R.id.textViewTag2);
                 tag3 = buddyDialog.findViewById(R.id.textViewTag3);
                 textViewTags = new TextView[]{tag1, tag2, tag3};
-
                 //set the postDateEt to current date for default
+                Calendar defaultCalendar = Calendar.getInstance();
+                calendarToString(defaultCalendar);
+                postDateEt.setText(date);
+
                 //setting up the calendar dialog
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(MainActivity.getServerDate());
-                calendarToString(calendar);
-                postDateEt.setText(date);
-                postTimeEt.setText(time);
                 final int year = calendar.get(Calendar.YEAR);
                 final int month = calendar.get(Calendar.MONTH);
                 final int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -212,7 +210,6 @@ public class BuddyFragment extends Fragment {
                                 getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        datePickerDialog.updateDate(year,month,day);
                         datePickerDialog.show();
                     }
                 });
@@ -566,9 +563,6 @@ public class BuddyFragment extends Fragment {
 
     public void calendarToString(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        calendar.setTimeInMillis(MainActivity.getServerDate());
-        time = timeFormat.format(calendar.getTime());
         date = dateFormat.format(calendar.getTime());
     }
 

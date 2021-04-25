@@ -6,37 +6,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -54,8 +47,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -83,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     SearchView searchView;
     ImageView popUpButton;
     AdapterUsers adapterUsers;
+    AdapterSearchProfile adapterSearchProfile;
     List<ModelUsers> userList;
     RecyclerView recyclerView;
     final Fragment messageFragment = new MessageFragment();
@@ -181,50 +173,27 @@ public class MainActivity extends AppCompatActivity {
         popUpButton.setBackground(null);
         popUpButton.setImageResource(R.drawable.notif);
 
+        // searchView
+        searchView = findViewById(R.id.searchTool);
+
         //clubtan başlatıyor
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_club);
+
+
         }
 
         // usersearch fragment
+
 
         recyclerView = findViewById(R.id.users_recyclerView);
         // Settings its properties
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // searchView
-        searchView = findViewById(R.id.searchTool);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // user bastıgında cagrılıo
-                // if search query is not empty then search
-                if (!TextUtils.isEmpty(query.trim())) {
-                    searchUsers(query);
-                    searchBarEmpty = false;
-                } else {
-                    // search text empty
-                    searchBarEmpty = true;
-                }
-                return false;
-            }
 
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // user yazı yazdıgında cagrılıyor
-                // if search query is not empty then search
-                if (!TextUtils.isEmpty(newText.trim())) {
-                    searchUsers(newText);
-                    searchBarEmpty = false;
-                } else {
-                    // search text empty, get all users
-                    searchBarEmpty = true;
-                }
-                return false;
-            }
-        });
+
         // visibility ayarları
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -283,7 +252,48 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void searchUsers(String query) {
+    private void searchUsersForProfile(String query) {
+        Log.i("BASILIYORUMM", " IM YEH");
+        //get current user
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        //get path of database named "Users" containing user info
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        // get all data from path
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ModelUsers modelUser = ds.getValue(ModelUsers.class);
+                    // get all searched users except currently signed in user
+                    if (!modelUser.getUid().equals(fUser.getUid())) {
+                        if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
+                            userList.add(modelUser);
+                            // silincek
+                            Toast.makeText(getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    // adapter
+                    adapterSearchProfile = new AdapterSearchProfile(getApplicationContext(), userList);
+                    // reflesh adapter
+                    adapterSearchProfile.notifyDataSetChanged();
+                    // set adapter to recyler view
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView.setAdapter(adapterSearchProfile);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void searchUsersForMessage(String query) {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
@@ -715,6 +725,39 @@ public class MainActivity extends AppCompatActivity {
                             active = messageFragment;
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Yeni mesaj için search için
+
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForMessage(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForMessage(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                         case R.id.nav_buddy:
                             if (fm.findFragmentByTag("2") == null) {
@@ -724,12 +767,78 @@ public class MainActivity extends AppCompatActivity {
                             active = buddyFragment;
                             currentActivity = 2;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
+
+
                             return true;
                         case R.id.nav_club:
                             fm.beginTransaction().hide(active).show(clubFragment).commit();
                             active = clubFragment;
                             currentActivity = 3;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                         case R.id.nav_stack:
                             if (fm.findFragmentByTag("4") == null) {
@@ -739,6 +848,38 @@ public class MainActivity extends AppCompatActivity {
                             active = stackFragment;
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                         case R.id.nav_profile:
                             if (fm.findFragmentByTag("5") == null) {
@@ -748,6 +889,38 @@ public class MainActivity extends AppCompatActivity {
                             active = profileFragment;
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                     }
                     return false;
