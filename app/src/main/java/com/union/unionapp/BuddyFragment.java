@@ -84,7 +84,7 @@ public class BuddyFragment extends Fragment {
 
     RecyclerView recyclerView;
     List<ModelBuddyAndClubPost> postList;
-    AdapterBuddyAndClubPosts adapterBuddyPosts;
+    AdapterBuddyPosts adapterBuddyPosts;
 
     String date;
     String[] allTags;
@@ -146,6 +146,7 @@ public class BuddyFragment extends Fragment {
 
             }
         });
+
 
         //recycler view and its properties
         recyclerView = view.findViewById(R.id.buddyPostsRecyclerView);
@@ -306,12 +307,11 @@ public class BuddyFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    System.out.println(ds);
                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
                     postList.add(modelBuddyPost);
 
                     // adapter
-                    adapterBuddyPosts = new AdapterBuddyAndClubPosts(getActivity(), postList);
+                    adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }
@@ -386,14 +386,9 @@ public class BuddyFragment extends Fragment {
         switch (requestCode) {
             case CAMERA_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    System.out.println("burada");
-                    System.out.println(grantResults.length);
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(cameraAccepted);
                     boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
                     if (cameraAccepted && writeStorageAccepted) {
-                        System.out.println("dadsda");
                         pickFromCamera();
                     } else {
                         Toast.makeText(getActivity(), "Please enable camera & storage permission", Toast.LENGTH_SHORT).show();
@@ -403,9 +398,7 @@ public class BuddyFragment extends Fragment {
             break;
             case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    System.out.println("şurada");
                     boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
                     if (writeStorageAccepted) {
                         pickFromGallery();
                     } else {

@@ -1,22 +1,18 @@
 package com.union.unionapp;
 
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ProfileFragment extends Fragment {
+public class OtherProfile extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDatabase firebaseDatabase;
@@ -43,7 +39,6 @@ public class ProfileFragment extends Fragment {
     boolean achsIsActive;
     String[] allAchs;
     String[] userAchs;
-    String[] userActs;
     String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
@@ -53,7 +48,9 @@ public class ProfileFragment extends Fragment {
     Dialog calendarDialog;
     TextView usernameTW;
     ImageView userPP;
+    String hisUid;
 
+    ImageView back_bt;
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
@@ -64,10 +61,15 @@ public class ProfileFragment extends Fragment {
     SimpleDateFormat dateFormat;
 
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_other_profile);
+
+        Intent intent = getIntent();
+        hisUid = intent.getStringExtra("Hisuid");
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseDatabase = firebaseDatabase.getInstance();
@@ -77,11 +79,13 @@ public class ProfileFragment extends Fragment {
         achsIsActive = false;
 
         //init views
-        usernameTW = view.findViewById(R.id.userNameTextView);
-        userPP = view.findViewById(R.id.userPp);
-        tagButton1 = view.findViewById(R.id.tagButton1);
-        tagButton2 = view.findViewById(R.id.tagButton2);
-        tagButton3 = view.findViewById(R.id.tagButton3);
+        usernameTW = findViewById(R.id.userNameTextView);
+        userPP = findViewById(R.id.userPp);
+        tagButton1 = findViewById(R.id.tagButton1);
+        tagButton2 = findViewById(R.id.tagButton2);
+        tagButton3 = findViewById(R.id.tagButton3);
+        back_bt = findViewById(R.id.backButtonn);
+
 
         allAchs = getResources().getStringArray(R.array.user_achievements);
         achievementLocationsWComma = "1,3,5".replace(",", "");
@@ -91,27 +95,8 @@ public class ProfileFragment extends Fragment {
             userAchs[i] = allAchs[Integer.parseInt(String.valueOf(achievementLocationsWComma.charAt(i)))];
         }
 
-        userActs = new String[]{"asdasd", "asdadd", "asdadad", "sadasdasdads", "asdadasdasdads"};
 
-
-        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
-        offsetRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                double offset = snapshot.getValue(Double.class);
-                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
-                dateServer = (long) estimatedServerTimeMs;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Listener was cancelled");
-            }
-        });
-
-
-
-        Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
+        Query query = databaseReference.orderByChild("uid").equalTo(hisUid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -139,31 +124,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        calendarDialog = new Dialog(getActivity());
+        calendarDialog = new Dialog(getApplicationContext());
         // Layoutu transparent yapıo
         calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        openCalendar = (ImageView) view.findViewById(R.id.directMessage);
-        lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
-        achsTextView = (TextView) view.findViewById(R.id.achsTextView);
+        openCalendar = (ImageView) findViewById(R.id.directMessage);
+        lastActsTextView = (TextView) findViewById(R.id.lastActsTextView);
+        achsTextView = (TextView) findViewById(R.id.achsTextView);
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
         achsTextView.setBackgroundTintList(null);
 
-
         /*Achievements için listview kısmı*/
-        achsListView = (ListView) view.findViewById(R.id.achsList);
-        lastActsList = (ListView) view.findViewById(R.id.lastActsList);
-
-        CustomAdapterLastActs customAdapterLastActs = new CustomAdapterLastActs(getActivity(), userActs);
-        CustomAdapterAchievements customAdapterAchs = new CustomAdapterAchievements(getActivity(), userAchs);
-
-        lastActsList.setAdapter(customAdapterLastActs);
-        achsListView.setAdapter(customAdapterAchs);
-
-        lastActsList.setVisibility(View.VISIBLE);
-        lastActsList.setEnabled(true);
-        achsListView.setVisibility(View.INVISIBLE);
-        achsListView.setEnabled(false);
+        achsListView = (ListView) findViewById(R.id.achsList);
+        CustomAdapterAchievements customAdapter = new CustomAdapterAchievements(getApplicationContext(), userAchs);
+        achsListView.setAdapter(customAdapter);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,13 +146,9 @@ public class ProfileFragment extends Fragment {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    lastActsList.setVisibility(View.VISIBLE);
-                    lastActsList.setEnabled(true);
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
-                    achsListView.setVisibility(View.INVISIBLE);
-                    achsListView.setEnabled(false);
                     achsIsActive = false;
 
                 }
@@ -193,13 +163,9 @@ public class ProfileFragment extends Fragment {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    achsListView.setVisibility(View.VISIBLE);
-                    achsListView.setEnabled(true);
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
-                    lastActsList.setVisibility(View.INVISIBLE);
-                    lastActsList.setEnabled(false);
                     lastActsIsActive = false;
                 }
             }
@@ -220,7 +186,7 @@ public class ProfileFragment extends Fragment {
                 dateTextView = calendarDialog.findViewById(R.id.dateTextView);
 
                 calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(MainActivity.getServerDate()); // retrieve the date from the server
+               // calendar.setTimeInMillis(MainActivity.dateServer); // retrieve the date from the server
                 calendarToString(calendar);
 
 
@@ -256,9 +222,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        return view;
 
-
+        // Back button
+        back_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void getCurrentDateActivities(Calendar calendar) {

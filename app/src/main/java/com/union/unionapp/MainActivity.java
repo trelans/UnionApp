@@ -6,36 +6,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -53,12 +47,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -71,6 +64,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
+    private static long dateServer;
     FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -80,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     SearchView searchView;
     ImageView popUpButton;
     AdapterUsers adapterUsers;
+    AdapterSearchProfile adapterSearchProfile;
     List<ModelUsers> userList;
     RecyclerView recyclerView;
     final Fragment messageFragment = new MessageFragment();
@@ -88,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment clubFragment = new ClubsFragment();
     final Fragment profileFragment = new ProfileFragment();
     final FragmentManager fm = getSupportFragmentManager();
+    final int[] clickCount = {0};
     Fragment active;
 
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
@@ -108,14 +104,15 @@ public class MainActivity extends AppCompatActivity {
     Uri image_uri;
 
 
-    // settigns
+    // settings
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
-    int[] tagTextsIndexArray = new int[ 3 ];
+    int[] tagTextsIndexArray = new int[3];
     AppCompatButton[] tagsArray;
     String[] allTags;
-    boolean[] tagsStatue = { false, false, false };
+    boolean[] tagsStatue = {false, false, false};
+
     // String[] allTags = getResources().getStringArray( R.array.all_tags );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +122,22 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.fragment_container, clubFragment, "3").commit();
 
         active = clubFragment;
+
+        // server time listener attached
+        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
+        offsetRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println(snapshot);
+                double offset = snapshot.getValue(Double.class);
+                dateServer = ((long) offset) + System.currentTimeMillis() - SystemClock.elapsedRealtime();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -137,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         //for settings - ege
         //*
-        allTags = getResources().getStringArray( R.array.all_tags );
+        allTags = getResources().getStringArray(R.array.all_tags);
         //*
 
         searchBarEmpty = true;
@@ -154,55 +167,33 @@ public class MainActivity extends AppCompatActivity {
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
+        myDialog = new Dialog(this);
 
         //initial popup icon
         popUpButton.setBackground(null);
         popUpButton.setImageResource(R.drawable.notif);
 
+        // searchView
+        searchView = findViewById(R.id.searchTool);
+
         //clubtan başlatıyor
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_club);
+
+
         }
 
         // usersearch fragment
+
 
         recyclerView = findViewById(R.id.users_recyclerView);
         // Settings its properties
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // searchView
-        searchView = findViewById(R.id.searchTool);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // user bastıgında cagrılıo
-                // if search query is not empty then search
-                if (!TextUtils.isEmpty(query.trim())) {
-                    searchUsers(query);
-                    searchBarEmpty = false;
-                } else {
-                    // search text empty
-                    searchBarEmpty = true;
-                }
-                return false;
-            }
 
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // user yazı yazdıgında cagrılıyor
-                // if search query is not empty then search
-                if (!TextUtils.isEmpty(newText.trim())) {
-                    searchUsers(newText);
-                    searchBarEmpty = false;
-                } else {
-                    // search text empty, get all users
-                    searchBarEmpty = true;
-                }
-                return false;
-            }
-        });
+
         // visibility ayarları
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -224,33 +215,6 @@ public class MainActivity extends AppCompatActivity {
                 searchView.setIconified(false);
             }
         });
-        final int[] clickCount = {0};
-        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
-        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (getCurrentFocus() != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    searchView.clearFocus();
-                    if (searchBarEmpty){
-                        searchView.setIconified(true);
-                    }
-                    clickCount[0]++;
-                    return true;
-                }else if(recyclerView.getVisibility() == View.VISIBLE){
-                    if (clickCount[0] > 1){
-                        recyclerView.setVisibility(View.GONE);
-                        clickCount[0] = 0;
-                    }else {
-                        clickCount[0]++;
-                    }
-                }
-                System.out.println("clicked!");
-                return false;
-            }
-        });
-        
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -266,7 +230,70 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void searchUsers(String query) {
+    // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            searchView.clearFocus();
+            if (searchBarEmpty) {
+                searchView.setIconified(true);
+            }
+            clickCount[0]++;
+        } else if (recyclerView.getVisibility() == View.VISIBLE) {
+            if (clickCount[0] > 1) {
+                recyclerView.setVisibility(View.GONE);
+                clickCount[0] = 0;
+            } else {
+                clickCount[0]++;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private void searchUsersForProfile(String query) {
+        Log.i("BASILIYORUMM", " IM YEH");
+        //get current user
+        FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        //get path of database named "Users" containing user info
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        // get all data from path
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ModelUsers modelUser = ds.getValue(ModelUsers.class);
+                    // get all searched users except currently signed in user
+                    if (!modelUser.getUid().equals(fUser.getUid())) {
+                        if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
+                            userList.add(modelUser);
+                            // silincek
+                            Toast.makeText(getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    // adapter
+                    adapterSearchProfile = new AdapterSearchProfile(getApplicationContext(), userList);
+                    // reflesh adapter
+                    adapterSearchProfile.notifyDataSetChanged();
+                    // set adapter to recyler view
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView.setAdapter(adapterSearchProfile);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void searchUsersForMessage(String query) {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
@@ -344,55 +371,54 @@ public class MainActivity extends AppCompatActivity {
         // Settings için olan kodlar
         if (currentActivity == 5) {
             // Setings codu buraya
-            int[] i  = new int[ 1 ];
+            int[] i = new int[1];
             myDialog.setContentView(R.layout.custom_settings);
 
             EditText currentPassword = myDialog.findViewById(R.id.currentPasswordPT);
             EditText newPassword = myDialog.findViewById(R.id.newPasswordPT);
             Button logout = myDialog.findViewById(R.id.logOutButton);
             Button changePassword = myDialog.findViewById(R.id.changePasswordButton);
-            AppCompatButton clearTagsButton = myDialog.findViewById( R.id.clearTagsButton );
-            AppCompatButton saveTagsButton = myDialog.findViewById( R.id.saveTagsButton );
-            tagButton1 = myDialog.findViewById( R.id.sampleTag1 );
-            tagButton2 = myDialog.findViewById( R.id.sampleTag2 );
-            tagButton3 = myDialog.findViewById( R.id.sampleTag3 );
+            AppCompatButton clearTagsButton = myDialog.findViewById(R.id.clearTagsButton);
+            AppCompatButton saveTagsButton = myDialog.findViewById(R.id.saveTagsButton);
+            tagButton1 = myDialog.findViewById(R.id.sampleTag1);
+            tagButton2 = myDialog.findViewById(R.id.sampleTag2);
+            tagButton3 = myDialog.findViewById(R.id.sampleTag3);
 
             tagsArray = new AppCompatButton[]{tagButton1, tagButton2, tagButton3};
-            Spinner tagSpinner = myDialog.findViewById( R.id.tagSpinner);
+            Spinner tagSpinner = myDialog.findViewById(R.id.tagSpinner);
 
             ImageView changePp = myDialog.findViewById(R.id.changePp);
 
-            if( !getTagsSaved() ) {
+            if (!getTagsSaved()) {
                 setAllSettingsTagsInvisible();
             }
 
 
-            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-            {
+            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position > 0) {
                         String selectedItem = parent.getItemAtPosition(position).toString();
-                        while (i[ 0 ] < tagsStatue.length) {
-                            if (!tagsStatue[ i[ 0 ] ] ) {
-                                tagsStatue[ i[ 0 ] ] = true;
-                                tagsArray[ i[ 0 ] ].setText( selectedItem );
-                                tagsArray[ i[ 0 ] ].setVisibility( View.VISIBLE );
-                                i[ 0 ]++;
+                        while (i[0] < tagsStatue.length) {
+                            if (!tagsStatue[i[0]]) {
+                                tagsStatue[i[0]] = true;
+                                tagsArray[i[0]].setText(selectedItem);
+                                tagsArray[i[0]].setVisibility(View.VISIBLE);
+                                i[0]++;
                                 break;
                             }
                         }
                     }
 
-                    if( i[ 0 ] == tagsStatue.length ) {
-                        Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-                        tagSpinner.setEnabled( false );
+                    if (i[0] == tagsStatue.length) {
+                        Toast.makeText(getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG).show();
+                        tagSpinner.setEnabled(false);
                         //tagSpinner.setClickable( false );
                         //tagSpinner.setTop( 1 );
                         //setTagsSaved( true );
                     }
                 }
 
-                public void onNothingSelected (AdapterView < ? > parent) {
+                public void onNothingSelected(AdapterView<?> parent) {
                     //TODO
                 }
             });
@@ -400,15 +426,15 @@ public class MainActivity extends AppCompatActivity {
             clearTagsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    i[ 0 ] = 0;
-                    tagSpinner.setEnabled( true );
-                    for ( int i = 0; i < tagsStatue.length; i++ ) {
-                        tagsStatue[ i ] = false;
+                    i[0] = 0;
+                    tagSpinner.setEnabled(true);
+                    for (int i = 0; i < tagsStatue.length; i++) {
+                        tagsStatue[i] = false;
                     }
                     //tagSpinner.setClickable( true );
                     setAllSettingsTagsInvisible();
-                    setTagsSaved( false );
-                    Toast.makeText( getApplicationContext(), "All tags are cleared", Toast.LENGTH_LONG ).show();
+                    setTagsSaved(false);
+                    Toast.makeText(getApplicationContext(), "All tags are cleared", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -416,20 +442,20 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    for ( int j = 0; j < tagsArray.length; j++ ) {
-                        for ( int k = 1; k < allTags.length; k++ ) {
-                            if ( allTags[ k ].equals( tagsArray[ j ].getText().toString() ) ) {
-                                tagTextsIndexArray[ j ] = k;
+                    for (int j = 0; j < tagsArray.length; j++) {
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(tagsArray[j].getText().toString())) {
+                                tagTextsIndexArray[j] = k;
 
                                 break;
                             }
                         }
                     }
                     String tagIndexes = "";
-                    for( int l = 0; l < tagTextsIndexArray.length; l++ ) {
-                        tagIndexes += " " + tagTextsIndexArray[ l ];
+                    for (int l = 0; l < tagTextsIndexArray.length; l++) {
+                        tagIndexes += " " + tagTextsIndexArray[l];
                     }
-                    Toast.makeText( getApplicationContext(), tagIndexes, Toast.LENGTH_LONG ).show();
+                    Toast.makeText(getApplicationContext(), tagIndexes, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -440,7 +466,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             String password = newPassword.getText().toString();
-                            System.out.println(password.length());
                             if (password.equals(currentPassword.getText().toString())) {
                                 Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
                             } else if (password.length() >= 6) {
@@ -560,14 +585,9 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    System.out.println("burada");
-                    System.out.println(grantResults.length);
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(cameraAccepted);
                     boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
                     if (cameraAccepted && writeStorageAccepted) {
-                        System.out.println("dadsda");
                         pickFromCamera();
                     } else {
                         Toast.makeText(this, "Please enable camera & storage permission", Toast.LENGTH_SHORT).show();
@@ -577,9 +597,7 @@ public class MainActivity extends AppCompatActivity {
             break;
             case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    System.out.println("şurada");
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
                     if (writeStorageAccepted) {
                         pickFromGallery();
                     } else {
@@ -618,7 +636,6 @@ public class MainActivity extends AppCompatActivity {
         //path and name of the image to be stored in firebase storage
         String filePathAndName = storagePath + "images/" + mAuth.getCurrentUser().getUid();
         StorageReference storageReference2nd = storageReference.child(filePathAndName);
-        System.out.println("geldi");
         storageReference2nd.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -653,7 +670,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //there were some error(s), get and show error message dismis progress dialog
-                System.out.println("burada2");
                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -664,7 +680,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!searchView.isIconified()) {
             searchView.setIconified(true);
-            if (recyclerView.getVisibility() == View.VISIBLE){
+            if (recyclerView.getVisibility() == View.VISIBLE) {
                 recyclerView.setVisibility(View.GONE);
             }
         } else {
@@ -702,46 +718,209 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_message:
-                            if (fm.findFragmentByTag("1") == null){
+                            if (fm.findFragmentByTag("1") == null) {
                                 fm.beginTransaction().add(R.id.fragment_container, messageFragment, "1").hide(messageFragment).commit();
                             }
                             fm.beginTransaction().hide(active).show(messageFragment).commit();
                             active = messageFragment;
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Yeni mesaj için search için
+
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForMessage(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForMessage(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                         case R.id.nav_buddy:
-                            if (fm.findFragmentByTag("2") == null){
+                            if (fm.findFragmentByTag("2") == null) {
                                 fm.beginTransaction().add(R.id.fragment_container, buddyFragment, "2").hide(buddyFragment).commit();
                             }
                             fm.beginTransaction().hide(active).show(buddyFragment).commit();
                             active = buddyFragment;
                             currentActivity = 2;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
+
+
                             return true;
                         case R.id.nav_club:
                             fm.beginTransaction().hide(active).show(clubFragment).commit();
                             active = clubFragment;
                             currentActivity = 3;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                         case R.id.nav_stack:
-                            if (fm.findFragmentByTag("4") == null){
+                            if (fm.findFragmentByTag("4") == null) {
                                 fm.beginTransaction().add(R.id.fragment_container, stackFragment, "4").hide(stackFragment).commit();
                             }
                             fm.beginTransaction().hide(active).show(stackFragment).commit();
                             active = stackFragment;
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                         case R.id.nav_profile:
-                            if (fm.findFragmentByTag("5") == null){
+                            if (fm.findFragmentByTag("5") == null) {
                                 fm.beginTransaction().add(R.id.fragment_container, profileFragment, "5").hide(profileFragment).commit();
                             }
                             fm.beginTransaction().hide(active).show(profileFragment).commit();
                             active = profileFragment;
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
+
+                            // Profile search için
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    // user bastıgında cagrılıo
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(query.trim())) {
+                                        searchUsersForProfile(query);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+
+
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    // user yazı yazdıgında cagrılıyor
+                                    // if search query is not empty then search
+                                    if (!TextUtils.isEmpty(newText.trim())) {
+                                        searchUsersForProfile(newText);
+                                        searchBarEmpty = false;
+                                    } else {
+                                        // search text empty, get all users
+                                        searchBarEmpty = true;
+                                    }
+                                    return false;
+                                }
+                            });
                             return true;
                     }
                     return false;
@@ -762,21 +941,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     // setttings additional  methods
     private void setAllSettingsTagsInvisible() {
-        for ( int i = 0; i < tagsArray.length; i++ ) {
-            tagsArray[ i ].setVisibility( View.INVISIBLE );
+        for (int i = 0; i < tagsArray.length; i++) {
+            tagsArray[i].setVisibility(View.INVISIBLE);
         }
     }
 
     private boolean settingsTagsSavedCondition;
 
-    private void setTagsSaved( boolean boo ) {
+    private void setTagsSaved(boolean boo) {
         settingsTagsSavedCondition = boo;
     }
+
     private boolean getTagsSaved() {
         return settingsTagsSavedCondition;
     }
+
+    public static long getServerDate(){
+        return dateServer + SystemClock.elapsedRealtime();
+    }
+
 }
 
 //String[] strings = getResources().getStringArray(R.array.stack_tags); / tagleri arraye yerleştirme kodu

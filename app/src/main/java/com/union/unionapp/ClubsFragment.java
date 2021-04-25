@@ -79,13 +79,14 @@ public class ClubsFragment extends Fragment {
     Uri image_uri;
 
     String date;
+    String time;
 
     DatePickerDialog.OnDateSetListener setListener;
     TimePickerDialog.OnTimeSetListener timeSetListener;
 
     RecyclerView recyclerView;
     List<ModelBuddyAndClubPost> postList;
-    AdapterBuddyAndClubPosts adapterBuddyPosts;
+    AdapterClubPosts adapterBuddyPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -172,12 +173,13 @@ public class ClubsFragment extends Fragment {
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
 
                 //set the postDateEt to current date for default
-                Calendar defaultCalendar = Calendar.getInstance();
-                calendarToString(defaultCalendar);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(MainActivity.getServerDate());
+                calendarToString(calendar);
                 postDateEt.setText(date);
+                postTimeEt.setText(time);
 
                 //setting up the calendar dialog
-                Calendar calendar = Calendar.getInstance();
                 final int year = calendar.get(Calendar.YEAR);
                 final int month = calendar.get(Calendar.MONTH);
                 final int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -191,6 +193,7 @@ public class ClubsFragment extends Fragment {
                                 getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
                         );
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.updateDate(year,month,day);
                         datePickerDialog.show();
                     }
                 });
@@ -291,12 +294,11 @@ checkUserStatus();
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    System.out.println(ds);
                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
                     postList.add(modelBuddyPost);
 
                     // adapter
-                    adapterBuddyPosts = new AdapterBuddyAndClubPosts(getActivity(), postList);
+                    adapterBuddyPosts = new AdapterClubPosts(getActivity(), postList);
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }
@@ -559,6 +561,9 @@ checkUserStatus();
 
     public void calendarToString(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        calendar.setTimeInMillis(MainActivity.getServerDate());
+        time = timeFormat.format(calendar.getTime());
         date = dateFormat.format(calendar.getTime());
     }
 }
