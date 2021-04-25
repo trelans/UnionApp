@@ -123,7 +123,7 @@ public class ProfileFragment extends Fragment {
         // Layoutu transparent yapıo
         calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        openCalendar = (ImageView) view.findViewById(R.id.openCalendar);
+        openCalendar = (ImageView) view.findViewById(R.id.directMessage);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
