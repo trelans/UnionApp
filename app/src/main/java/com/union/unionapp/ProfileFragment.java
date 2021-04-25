@@ -54,6 +54,10 @@ public class ProfileFragment extends Fragment {
     TextView usernameTW;
     ImageView userPP;
 
+    TextView tagTextView1;
+    TextView tagTextView2;
+    TextView tagTextView3;
+
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;

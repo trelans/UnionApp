@@ -375,7 +375,7 @@ public class BuddyFragment extends Fragment {
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
-
+                        String postGender = genderSpinner.getSelectedItem().toString();
                         String tagsToUpload = "";
 
                         for ( int k = 1; k < allTags.length; k++ ) {
@@ -396,10 +396,10 @@ public class BuddyFragment extends Fragment {
 
                         if (image_uri == null) {
                             //post without image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender);
                         } else {
                             //post with image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
                         }
                         buddyDialog.dismiss();
                     }
@@ -598,7 +598,7 @@ public class BuddyFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -634,7 +634,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pTime", timeStamp);
                                 hashMap.put("pLocation", postLocation);
                                 hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek
-
+                                hashMap.put("pGender", postGender);
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
@@ -687,6 +687,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pTime", timeStamp);
             hashMap.put("pLocation", postLocation);
             hashMap.put("pTags", tagsToUpload);
+            hashMap.put("pGender", postGender);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");

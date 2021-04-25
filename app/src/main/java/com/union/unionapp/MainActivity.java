@@ -450,6 +450,9 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             }
                         }
+
+
+
                     }
                     String tagIndexes = "";
                     for (int l = 0; l < tagTextsIndexArray.length; l++) {
