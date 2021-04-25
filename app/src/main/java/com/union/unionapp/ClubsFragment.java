@@ -34,6 +34,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,8 +53,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClubsFragment extends Fragment {
 
@@ -78,6 +82,10 @@ public class ClubsFragment extends Fragment {
 
     DatePickerDialog.OnDateSetListener setListener;
     TimePickerDialog.OnTimeSetListener timeSetListener;
+
+    RecyclerView recyclerView;
+    List<ModelBuddyPost> postList;
+    AdapterBuddyPosts adapterBuddyPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -129,6 +137,19 @@ public class ClubsFragment extends Fragment {
 
             }
         });
+
+        //recycler view and its properties
+        recyclerView = view.findViewById(R.id.clubPostsRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //show newest post first, for this load from last
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        //set layout to recyclerview
+        recyclerView.setLayoutManager(layoutManager);
+
+        //init post list
+        postList = new ArrayList<>();
+        loadPosts();
 
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,6 +282,38 @@ checkUserStatus();
 
         return view;
     }
+
+    private void loadPosts() {
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/ClubPosts");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    System.out.println(ds);
+                    ModelBuddyPost modelBuddyPost = ds.getValue(ModelBuddyPost.class);
+                    postList.add(modelBuddyPost);
+
+                    // adapter
+                    adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
+                    // set adapter to recyclerView
+                    recyclerView.setAdapter(adapterBuddyPosts);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // in case of error
+                Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void searchPosts(String searchQuery) {
+
+    }
+
 
     private void showImagePickDialog() {
         //options (camera, gallery) to show in dialog

@@ -3,7 +3,6 @@ package com.union.unionapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,18 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
-public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
+public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.MyHolder> {
 
     Context context;
-    List<ModelPost> postList;
+    List<ModelStackPost> postList;
 
-    public AdapterPosts(Context context, List<ModelPost> postList) {
+    public AdapterStackPosts(Context context, List<ModelStackPost> postList) {
         this.context = context;
         this.postList = postList;
     }
@@ -45,23 +40,24 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         //get data
         String uid = postList.get(position).getUid();
         String uEmail = postList.get(position).getuEmail();
-        String uName = postList.get(position).getUsername();
+        String username = postList.get(position).getUsername();
         String pAnon = postList.get(position).getpAnon();
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();
-        String pDescription = postList.get(position).getpDetails();
+        String pDetails = postList.get(position).getpDetails();
         String pImage = postList.get(position).getpImage();
-        String pTimeStamp = postList.get(position).getpTime();
+        String pTime = postList.get(position).getpTime();
         final String[] upVoteNumber = {postList.get(position).getpUpvoteNumber()};
 
-
+        /*
         //Convert timestamp to dd//mm/yyyy hh:mm am/pm
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(pTimeStamp));
         String pTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
+         */
 
         //set data
-        holder.contentTextView.setText(pDescription);
+        holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
         holder.upNumber.setText(upVoteNumber[0]);
         //holder.upNumber.setText("1");
@@ -99,7 +95,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                 dialog.show();
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-
+                //TODO tanımlamaları yap
                 return false;
             }
         });
@@ -127,10 +123,10 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
             //init views
             upButton = itemView.findViewById(R.id.upButtonImageView);
-            contentTextView = itemView.findViewById(R.id.contentTextView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
+            contentTextView = itemView.findViewById(R.id.contentTW);
+            titleTextView = itemView.findViewById(R.id.titleTW);
             upNumber = itemView.findViewById(R.id.editTextUpNumber);
-            topicTag = itemView.findViewById(R.id.topicTag);
+            topicTag = itemView.findViewById(R.id.topicTagTW);
             cardView = itemView.findViewById(R.id.card);
 
         }

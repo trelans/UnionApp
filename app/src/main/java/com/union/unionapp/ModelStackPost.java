@@ -1,13 +1,13 @@
 package com.union.unionapp;
 
-public class ModelPost {
+public class ModelStackPost {
     // use same name as we given while uploading posts
     String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon , username, pUpvoteNumber;
 
-    public ModelPost() {
+    public ModelStackPost() {
     }
 
-    public ModelPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, String pUpvoteNumber) {
+    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, String pUpvoteNumber) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDetails = pDetails;

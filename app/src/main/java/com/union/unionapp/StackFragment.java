@@ -6,7 +6,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,19 +29,26 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class StackFragment extends Fragment {
 
@@ -63,6 +69,10 @@ public class StackFragment extends Fragment {
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
+
+    RecyclerView recyclerView;
+    List<ModelStackPost> postList;
+    AdapterStackPosts adapterStackPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -91,6 +101,20 @@ public class StackFragment extends Fragment {
         stackDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
         stackDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        //recycler view and its properties
+        recyclerView = view.findViewById(R.id.stackPostsRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //show newest post first, for this load from last
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        //set layout to recyclerview
+        recyclerView.setLayoutManager(layoutManager);
+
+        //init post list
+        postList = new ArrayList<>();
+        loadPosts();
+
 
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,6 +213,37 @@ public class StackFragment extends Fragment {
         return view;
     }
 
+    private void loadPosts() {
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    System.out.println(ds);
+                    ModelStackPost modelStackPost = ds.getValue(ModelStackPost.class);
+                    postList.add(modelStackPost);
+
+                    // adapter
+                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                    // set adapter to recyclerView
+                    recyclerView.setAdapter(adapterStackPosts);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // in case of error
+                Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void searchPosts( String searchQuery ) {
+
+    }
+
     private void showImagePickDialog() {
         //options (camera, gallery) to show in dialog
         String[] options = {"Camera", "Gallery"};
@@ -202,11 +257,11 @@ public class StackFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //item click handle
-                if (which==0) {
+                if (which == 0) {
                     //camera clicked
 
                 }
-                if (which==1) {
+                if (which == 1) {
                     //gallery clicked
                 }
             }

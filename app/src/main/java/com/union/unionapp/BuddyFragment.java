@@ -1,14 +1,12 @@
 package com.union.unionapp;
 
 
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,7 +19,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -37,6 +34,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,9 +53,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public class BuddyFragment extends Fragment {
 
@@ -65,31 +65,35 @@ public class BuddyFragment extends Fragment {
     Spinner tagSpinner;
 
     EditText postDetailsEt,
-             postQuotaEt,
-             postLocationEt;
+            postQuotaEt,
+            postLocationEt;
 
     TextView postDateEt,
-             postTimeEt,
-             tag1,
-             tag2,
-             tag3;       
+            postTimeEt,
+            tag1,
+            tag2,
+            tag3;
 
     ImageView imageIv,
-              sendButtonIv,
-              addPhotoIv;
+            sendButtonIv,
+            addPhotoIv;
 
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
+
+    RecyclerView recyclerView;
+    List<ModelBuddyPost> postList;
+    AdapterBuddyPosts adapterBuddyPosts;
 
     String date;
     String[] allTags;
     TextView[] textViewTags;
     DatePickerDialog.OnDateSetListener setListener;
     TimePickerDialog.OnTimeSetListener timeSetListener;
-    boolean[] tagsStatue = { false, false, false };
-    int[] tagTextsIndexArray = new int[ 3 ];
-    int[] i = new int[ 1 ];
+    boolean[] tagsStatue = {false, false, false};
+    int[] tagTextsIndexArray = new int[3];
+    int[] i = new int[1];
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -114,9 +118,9 @@ public class BuddyFragment extends Fragment {
         buddyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         //genderSpinner.setOnItemSelectedListener(this);
-        
-        allTags = getResources().getStringArray( R.array.all_tags );
-        
+
+        allTags = getResources().getStringArray(R.array.all_tags);
+
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -129,7 +133,7 @@ public class BuddyFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds: snapshot.getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     username = "" + ds.child("username").getValue();
                     dp = "" + ds.child("pp").getValue();
                     //email = "" + ds.child("email").getValue();
@@ -143,6 +147,18 @@ public class BuddyFragment extends Fragment {
             }
         });
 
+        //recycler view and its properties
+        recyclerView = view.findViewById(R.id.buddyPostsRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //show newest post first, for this load from last
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        //set layout to recyclerview
+        recyclerView.setLayoutManager(layoutManager);
+
+        //init post list
+        postList = new ArrayList<>();
+        loadPosts();
 
 
         createPost.setOnClickListener(new View.OnClickListener() {
@@ -152,12 +168,12 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
-                ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.gender_preferences, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
                 genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 genderSpinner.setAdapter(genderAdapter);
 
                 tagSpinner = buddyDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
@@ -169,10 +185,10 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
-                tag1 = buddyDialog.findViewById( R.id.textViewTag1 );
-                tag2 = buddyDialog.findViewById( R.id.textViewTag2 );
-                tag3 = buddyDialog.findViewById( R.id.textViewTag3 );
-                textViewTags = new TextView[]{ tag1, tag2, tag3 };
+                tag1 = buddyDialog.findViewById(R.id.textViewTag1);
+                tag2 = buddyDialog.findViewById(R.id.textViewTag2);
+                tag3 = buddyDialog.findViewById(R.id.textViewTag3);
+                textViewTags = new TextView[]{tag1, tag2, tag3};
                 //set the postDateEt to current date for default
                 Calendar defaultCalendar = Calendar.getInstance();
                 calendarToString(defaultCalendar);
@@ -190,10 +206,10 @@ public class BuddyFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
-                    datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    datePickerDialog.show();
+                        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.show();
                     }
                 });
 
@@ -201,10 +217,10 @@ public class BuddyFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hourOfDay, minute, true
                         );
-                    timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    timePickerDialog.show();
+                        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        timePickerDialog.show();
                     }
                 });
                 setListener = new DatePickerDialog.OnDateSetListener() {
@@ -244,17 +260,16 @@ public class BuddyFragment extends Fragment {
                         String postLocation = postLocationEt.getText().toString().trim();
 
                         if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
                             return;
                         }
 
-                        if (image_uri==null) {
+                        if (image_uri == null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation);
-                        }
-                        else {
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation);
+                        } else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation);
                         }
                         buddyDialog.dismiss();
                     }
@@ -271,7 +286,7 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
 
                 tagSpinner = buddyDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
@@ -280,6 +295,37 @@ public class BuddyFragment extends Fragment {
         });
 
         return view;
+
+    }
+
+    private void loadPosts() {
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    System.out.println(ds);
+                    ModelBuddyPost modelBuddyPost = ds.getValue(ModelBuddyPost.class);
+                    postList.add(modelBuddyPost);
+
+                    // adapter
+                    adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
+                    // set adapter to recyclerView
+                    recyclerView.setAdapter(adapterBuddyPosts);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // in case of error
+                Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void searchPosts(String searchQuery) {
 
     }
 
@@ -296,11 +342,11 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //item click handle
-                if (which==0) {
+                if (which == 0) {
                     //camera clicked
 
                 }
-                if (which==1) {
+                if (which == 1) {
                     //gallery clicked
                 }
             }
@@ -401,7 +447,7 @@ public class BuddyFragment extends Fragment {
             //user is signed in
 
             email = user.getEmail();
-            username = email.split("@")[0].replace(".","_");
+            username = email.split("@")[0].replace(".", "_");
             uid = user.getUid();
 
         }
@@ -416,85 +462,84 @@ public class BuddyFragment extends Fragment {
             //post with image
             StorageReference ref = FirebaseStorage.getInstance().getReference().child(filePathAndName);
             ref.putFile(Uri.parse(uri))
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //image is uploaded to firebase, now get its uri
-                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!uriTask.isSuccessful());
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //image is uploaded to firebase, now get its uri
+                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uriTask.isSuccessful()) ;
 
-                        String downloadUri = uriTask.getResult().toString();
+                            String downloadUri = uriTask.getResult().toString();
 
-                        if (uriTask.isSuccessful()) {
-                            //uri is received upload post to firebase database
-                            checkUserStatus();
-                            HashMap<Object,String> hashMap = new HashMap<>();
-                            //put post info
-                            hashMap.put("uid",uid); //çekememiş
-                            hashMap.put("username",username); //çekmemiş
-                            //hashMap.put("uEmail",email);
-                            hashMap.put("uDp",dp);
-                            hashMap.put("pId",timeStamp);
-                            hashMap.put("pDetails",postDetails);
-                            hashMap.put("pDate",postDate);
-                            hashMap.put("pHour",postTime);
-                            hashMap.put("pQuota",postQuotaStr);
-                            hashMap.put("pImage",downloadUri);
-                            hashMap.put("pTime",timeStamp);
-                            hashMap.put("pLocation",postLocation);
-                            hashMap.put("pTags","1"); //TODO tagler için değişicek
+                            if (uriTask.isSuccessful()) {
+                                //uri is received upload post to firebase database
+                                checkUserStatus();
+                                HashMap<Object, String> hashMap = new HashMap<>();
+                                //put post info
+                                hashMap.put("uid", uid); //çekememiş
+                                hashMap.put("username", username); //çekmemiş
+                                //hashMap.put("uEmail",email);
+                                hashMap.put("uDp", dp);
+                                hashMap.put("pId", timeStamp);
+                                hashMap.put("pDetails", postDetails);
+                                hashMap.put("pDate", postDate);
+                                hashMap.put("pHour", postTime);
+                                hashMap.put("pQuota", postQuotaStr);
+                                hashMap.put("pImage", downloadUri);
+                                hashMap.put("pTime", timeStamp);
+                                hashMap.put("pLocation", postLocation);
+                                hashMap.put("pTags", "1"); //TODO tagler için değişicek
 
-                            //path to store post data
-                            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
+                                //path to store post data
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
 
-                            //put data in this ref
-                            reference.child(timeStamp).setValue(hashMap)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            //added in database
-                                            Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
-                                            //TODO reset views
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            //failed adding post in database
-                                            Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
-                                        }
-                                    });
+                                //put data in this ref
+                                reference.child(timeStamp).setValue(hashMap)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                //added in database
+                                                Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
+                                                //TODO reset views
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                //failed adding post in database
+                                                Toast.makeText(getActivity(), "Failed publishing post", Toast.LENGTH_SHORT);
+                                            }
+                                        });
 
 
+                            }
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //failed uploading image
-                        Toast.makeText(getActivity(),"Failed uploading image",Toast.LENGTH_SHORT);
-                    }
-                });
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //failed uploading image
+                            Toast.makeText(getActivity(), "Failed uploading image", Toast.LENGTH_SHORT);
+                        }
+                    });
 
-        }
-        else {
+        } else {
             //post without image
             checkUserStatus();
-            HashMap<Object,String> hashMap = new HashMap<>();
+            HashMap<Object, String> hashMap = new HashMap<>();
             //put post info
-            hashMap.put("uid",uid);
-            hashMap.put("username",username);
-            hashMap.put("uEmail",email);
-            hashMap.put("uDp",dp);
-            hashMap.put("pId",timeStamp);
-            hashMap.put("pDetails",postDetails);
-            hashMap.put("pDate",postDate);
-            hashMap.put("pHour",postTime);
-            hashMap.put("pQuota",postQuotaStr);
-            hashMap.put("pImage","noImage");
-            hashMap.put("pTime",timeStamp);
-            hashMap.put("pLocation",postLocation);
+            hashMap.put("uid", uid);
+            hashMap.put("username", username);
+            hashMap.put("uEmail", email);
+            hashMap.put("uDp", dp);
+            hashMap.put("pId", timeStamp);
+            hashMap.put("pDetails", postDetails);
+            hashMap.put("pDate", postDate);
+            hashMap.put("pHour", postTime);
+            hashMap.put("pQuota", postQuotaStr);
+            hashMap.put("pImage", "noImage");
+            hashMap.put("pTime", timeStamp);
+            hashMap.put("pLocation", postLocation);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
@@ -505,7 +550,7 @@ public class BuddyFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             //added in database
-                            Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
 
                         }
@@ -514,16 +559,16 @@ public class BuddyFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             //failed adding post in database
-                            Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Failed publishing post", Toast.LENGTH_SHORT);
                         }
                     });
 
 
-            }
-
         }
 
-        public void calendarToString(Calendar calendar) {
+    }
+
+    public void calendarToString(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         date = dateFormat.format(calendar.getTime());
     }
@@ -581,4 +626,4 @@ public class BuddyFragment extends Fragment {
     }*/
 }
 
-}
+

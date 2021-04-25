@@ -51,12 +51,11 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Club Activity"
-        android:textSize="30px" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/clubPostsRecyclerView"
+        android:layout_below="@id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
 </RelativeLayout>
