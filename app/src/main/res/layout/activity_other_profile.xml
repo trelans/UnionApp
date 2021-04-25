@@ -54,15 +54,15 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="483dp"
+                android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="492dp"
                 app:cardCornerRadius="25dp">
 
                 <RelativeLayout
@@ -72,14 +72,14 @@
 
                     <ImageView
                         android:id="@+id/backButtonn"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
+                        android:layout_width="45dp"
+                        android:layout_height="37dp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginBottom="194dp"
-                        android:layout_marginEnd="360dp"
+                        android:layout_marginBottom="183dp"
+                        android:layout_marginEnd="341dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="9dp"
                         android:background="@drawable/back"
@@ -98,9 +98,9 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginBottom="228dp"
-                        android:layout_marginEnd="27dp"
+                        android:layout_marginEnd="18dp"
                         android:layout_marginStart="308dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="15dp"
                         android:background="@drawable/send_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -111,17 +111,17 @@
                     <ImageView
                         android:id="@+id/userPp"
 
-                        android:layout_width="125dp"
-                        android:layout_height="125dp"
+                        android:layout_width="127dp"
+                        android:layout_height="122dp"
 
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginBottom="63dp"
-                        android:layout_marginEnd="233dp"
+                        android:layout_marginEnd="236dp"
                         android:layout_marginStart="39dp"
-                        android:layout_marginTop="36dp"
+                        android:layout_marginTop="53dp"
                         android:background="@drawable/user_pp_template"
                         android:shadowColor="#A8A8A8"
                         android:shadowDx="0"
@@ -137,15 +137,15 @@
                     <TextView
                         android:id="@+id/achsTextView"
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="37dp"
+                        android:layout_width="207dp"
+                        android:layout_height="50dp"
 
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="0dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginStart="191dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginStart="193dp"
                         android:background="@drawable/text_view_right_template"
                         android:fontFamily="@font/myriad_pro_regular"
                         android:gravity="center"
@@ -158,7 +158,7 @@
                         android:text="Achievements"
                         android:textAlignment="center"
                         android:textColor="#5F5E5D"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.497"
@@ -169,14 +169,14 @@
                     <TextView
                         android:id="@+id/lastActsTextView"
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="37dp"
+                        android:layout_width="213dp"
+                        android:layout_height="50dp"
 
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentStart="true"
                         android:layout_marginBottom="0dp"
-                        android:layout_marginEnd="192dp"
+                        android:layout_marginEnd="189dp"
                         android:layout_marginStart="0dp"
                         android:background="@drawable/text_view_left_template"
                         android:backgroundTint="#4D4D4D"
@@ -191,7 +191,7 @@
                         android:text="Last Activities"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp"
+                        android:textSize="25sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.497"
@@ -201,26 +201,27 @@
 
                     <TextView
                         android:id="@+id/userNameTextView"
-                        android:layout_width="125dp"
-                        android:layout_height="19dp"
+                        android:layout_width="159dp"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="149dp"
-                        android:layout_marginEnd="101dp"
+                        android:layout_marginBottom="152dp"
+                        android:layout_marginEnd="65dp"
                         android:layout_marginStart="0dp"
                         android:layout_marginTop="0dp"
-                        android:text="\@____________________" />
+                        android:text="\@_______________"
+                        android:textSize="18sp" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tagButton3"
 
-                        android:layout_width="78dp"
-                        android:layout_height="19dp"
+                        android:layout_width="84dp"
+                        android:layout_height="24dp"
 
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="87dp"
-                        android:layout_marginEnd="105dp"
+                        android:layout_marginBottom="77dp"
+                        android:layout_marginEnd="92dp"
                         android:background="@drawable/tag_button_template"
                         android:backgroundTint="#5FE8A1"
                         android:fontFamily="@font/myriad_pro_regular"
@@ -244,13 +245,13 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tagButton2"
 
-                        android:layout_width="78dp"
-                        android:layout_height="19dp"
+                        android:layout_width="86dp"
+                        android:layout_height="23dp"
 
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="118dp"
-                        android:layout_marginEnd="61dp"
+                        android:layout_marginBottom="113dp"
+                        android:layout_marginEnd="41dp"
                         android:background="@drawable/tag_button_template"
                         android:backgroundTint="#5FC1E8"
                         android:fontFamily="@font/myriad_pro_regular"
@@ -274,15 +275,15 @@
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tagButton1"
 
-                        android:layout_width="78dp"
-                        android:layout_height="19dp"
+                        android:layout_width="88dp"
+                        android:layout_height="23dp"
 
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="117dp"
-                        android:layout_marginEnd="147dp"
+                        android:layout_marginBottom="113dp"
+                        android:layout_marginEnd="138dp"
                         android:background="@drawable/tag_button_template"
-                        android:backgroundTint="#EA2A31"
+                        android:backgroundTint="#F14D53"
                         android:fontFamily="@font/myriad_pro_regular"
                         android:insetBottom="0sp"
                         android:insetTop="0sp"
