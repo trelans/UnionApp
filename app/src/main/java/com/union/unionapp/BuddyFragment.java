@@ -123,10 +123,14 @@ public class BuddyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_buddy, container, false);
+
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showBuddyFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
+
         buddyDialog = new Dialog(getActivity());
+
         // Layoutu transparent yapıo
         buddyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -179,8 +183,7 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
-                i[0] = 0;
+
 
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
@@ -302,6 +305,7 @@ public class BuddyFragment extends Fragment {
                 });
 
 
+
                 //set the postDateEt to current date for default
                 Calendar defaultCalendar = Calendar.getInstance();
                 calendarToString(defaultCalendar);
@@ -393,6 +397,7 @@ public class BuddyFragment extends Fragment {
             }
         });
 
+
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -406,6 +411,28 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.show();
             }
         });
+
+        //dialog dismiss listener
+        buddyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
+                i[0] = 0;
+
+                //set tags to empty strings
+                tag1.setText("");
+                tag2.setText("");
+                tag3.setText("");
+
+                //set boolean array to false only
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
+            }
+        });
+
 
         return view;
 

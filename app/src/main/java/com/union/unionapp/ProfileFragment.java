@@ -100,7 +100,7 @@ public class ProfileFragment extends Fragment {
             public void onDataChange(DataSnapshot snapshot) {
                 double offset = snapshot.getValue(Double.class);
                 double estimatedServerTimeMs = System.currentTimeMillis() + offset;
-                dateServer = (long) estimatedServerTimeMs;
+                //dateServer = (long) estimatedServerTimeMs; TODO ömer toodo bura
             }
 
             @Override
