@@ -94,23 +94,6 @@ public class ProfileFragment extends Fragment {
         userActs = new String[]{"asdasd", "asdadd", "asdadad", "sadasdasdads", "asdadasdasdads"};
 
 
-        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
-        offsetRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                double offset = snapshot.getValue(Double.class);
-                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
-                //dateServer = (long) estimatedServerTimeMs; TODO ömer toodo bura
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Listener was cancelled");
-            }
-        });
-
-
-
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -154,11 +137,11 @@ public class ProfileFragment extends Fragment {
         achsListView = (ListView) view.findViewById(R.id.achsList);
         lastActsList = (ListView) view.findViewById(R.id.lastActsList);
 
-        CustomAdapterLastActs customAdapterLastActs = new CustomAdapterLastActs(getActivity(), userActs);
         CustomAdapterAchievements customAdapterAchs = new CustomAdapterAchievements(getActivity(), userAchs);
+        CustomAdapterLastActs customAdapterLastActs = new CustomAdapterLastActs(getActivity(), userActs);
 
-        lastActsList.setAdapter(customAdapterLastActs);
         achsListView.setAdapter(customAdapterAchs);
+        lastActsList.setAdapter(customAdapterLastActs);
 
         lastActsList.setVisibility(View.VISIBLE);
         lastActsList.setEnabled(true);

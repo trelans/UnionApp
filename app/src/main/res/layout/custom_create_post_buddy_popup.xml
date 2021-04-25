@@ -37,25 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textViewTag3"
-                    android:layout_width="80dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="43dp"
-                    android:layout_marginBottom="342dp"
-                    android:layout_toEndOf="@+id/textViewTag2"
-                    android:background="@drawable/tag_button_template"
-                    android:backgroundTint="#EC2F51"
-                    android:text="#dancing"
-                    android:textAlignment="center"
-                    android:textSize="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.281" />
+
 
                 <TextView
                     android:id="@+id/textViewCreateQuestion"
@@ -253,6 +235,26 @@
                     android:layout_marginEnd="145dp"
                     android:layout_marginBottom="0dp"
                     android:background="@drawable/send_icon" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textViewTag3"
+                    android:layout_width="80dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginEnd="43dp"
+                    android:layout_marginBottom="342dp"
+                    android:layout_toEndOf="@+id/textViewTag2"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="#EC2F51"
+                    android:text="#dancing"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.281" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/textViewTag2"

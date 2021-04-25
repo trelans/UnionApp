@@ -376,6 +376,19 @@ public class BuddyFragment extends Fragment {
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
 
+                        String tagsToUpload = "";
+
+                        for ( int k = 1; k < allTags.length; k++ ) {
+                            if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
+                                tagsToUpload = tagsToUpload + k + ",";
+                            }
+                        }
+
+                        //tags to upload'un sonundaki virgülü atıyor
+                        StringBuilder tempString = new StringBuilder(tagsToUpload);
+                        tempString.deleteCharAt(tempString.length()-1);
+                        tagsToUpload = tempString.toString();
+
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
                             return;
@@ -383,10 +396,10 @@ public class BuddyFragment extends Fragment {
 
                         if (image_uri == null) {
                             //post without image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload);
                         } else {
                             //post with image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload);
                         }
                         buddyDialog.dismiss();
                     }
@@ -585,7 +598,7 @@ public class BuddyFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -620,7 +633,8 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pImage", downloadUri);
                                 hashMap.put("pTime", timeStamp);
                                 hashMap.put("pLocation", postLocation);
-                                hashMap.put("pTags", "1"); //TODO tagler için değişicek
+                                hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek
+
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
@@ -672,6 +686,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pImage", "noImage");
             hashMap.put("pTime", timeStamp);
             hashMap.put("pLocation", postLocation);
+            hashMap.put("pTags", tagsToUpload);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
