@@ -9,15 +9,19 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="343dp"
-        android:layout_height="503dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         app:cardCornerRadius="25dp"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.846" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,67 +32,85 @@
                 android:id="@+id/achsList"
                 android:layout_width="match_parent"
                 android:layout_height="318dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="0dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="0dp" />
+                android:layout_marginBottom="0dp" />
 
             <ListView
                 android:id="@+id/lastActsList"
                 android:layout_width="match_parent"
-                android:layout_height="317dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:layout_marginBottom="0dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginStart="0dp">
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="-1dp"
+                android:layout_marginBottom="0dp">
 
             </ListView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="199dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
+                android:layout_height="175dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="319dp"
-                android:layout_marginEnd="0dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="492dp"
                 app:cardCornerRadius="25dp">
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/relativeLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/openCalendar"
-                        android:layout_width="36dp"
-                        android:layout_height="32dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="139dp"
-                        android:layout_marginEnd="23dp"
-                        android:background="@drawable/calender_icon" />
+                        android:id="@+id/backButtonn"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="360dp"
+                        android:layout_marginBottom="312dp"
+                        android:background="@drawable/back"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <ImageView
+                        android:id="@+id/directMessage"
+                        android:layout_width="44dp"
+                        android:layout_height="41dp"
+                        android:layout_marginStart="308dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="228dp"
+                        android:background="@drawable/send_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/backButtonn"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.088" />
 
                     <ImageView
                         android:id="@+id/userPp"
 
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="107dp"
+                        android:layout_height="106dp"
 
-                        android:layout_alignParentBottom="false"
-                        android:layout_alignParentEnd="false"
-                        android:layout_alignParentStart="false"
-                        android:layout_alignParentTop="false"
-                        android:layout_marginBottom="64dp"
+                        android:layout_marginStart="51dp"
+                        android:layout_marginTop="57dp"
                         android:layout_marginEnd="204dp"
-                        android:layout_marginStart="31dp"
-                        android:layout_marginTop="27dp"
+                        android:layout_marginBottom="64dp"
                         android:background="@drawable/user_pp_template"
                         android:shadowColor="#A8A8A8"
                         android:shadowDx="0"
@@ -96,28 +118,24 @@
                         android:shadowRadius="5"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         app:srcCompat="@drawable/ic_baseline_person_24"
                         tools:ignore="MissingConstraints" />
 
                     <TextView
                         android:id="@+id/achsTextView"
 
-                        android:layout_width="171dp"
-                        android:layout_height="37dp"
+                        android:layout_width="211dp"
+                        android:layout_height="46dp"
 
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginEnd="0dp"
-                        android:layout_marginStart="172dp"
                         android:background="@drawable/text_view_right_template"
                         android:fontFamily="@font/myriad_pro_regular"
                         android:gravity="center"
-                        android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:insetBottom="0sp"
                         android:onClick="Achs"
                         android:shadowDx="0"
                         android:shadowDy="0"
@@ -128,29 +146,24 @@
                         android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/lastActsTextView"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.512" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                     <TextView
                         android:id="@+id/lastActsTextView"
 
-                        android:layout_width="170dp"
-                        android:layout_height="37dp"
+                        android:layout_width="211dp"
+                        android:layout_height="46dp"
 
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginBottom="0dp"
-                        android:layout_marginEnd="171dp"
-                        android:layout_marginStart="0dp"
+                        android:layout_marginEnd="202dp"
                         android:background="@drawable/text_view_left_template"
                         android:backgroundTint="#4D4D4D"
                         android:fontFamily="@font/myriad_pro_regular"
                         android:gravity="center"
-                        android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:insetBottom="0sp"
                         android:onClick="lastActs"
                         android:shadowDx="0"
                         android:shadowDy="0"
@@ -159,40 +172,42 @@
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
+
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.512" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                     <TextView
                         android:id="@+id/userNameTextView"
-                        android:layout_width="125dp"
-                        android:layout_height="19dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="133dp"
-                        android:layout_marginEnd="67dp"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginTop="0dp"
-                        android:text="\@____________________" />
+                        android:layout_width="174dp"
+                        android:layout_height="41dp"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="85dp"
+                        android:layout_marginEnd="52dp"
+                        android:layout_marginBottom="220dp"
+                        android:text="\@____________________"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/userPp"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tagButton3"
 
-                        android:layout_width="78dp"
-                        android:layout_height="19dp"
+                        android:layout_width="92dp"
+                        android:layout_height="24dp"
 
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="60dp"
-                        android:layout_marginEnd="67dp"
+                        android:layout_marginEnd="92dp"
+                        android:layout_marginBottom="67dp"
                         android:background="@drawable/tag_button_template"
                         android:backgroundTint="#5FE8A1"
                         android:fontFamily="@font/myriad_pro_regular"
-                        android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:insetBottom="0sp"
                         android:shadowDx="0"
                         android:shadowDy="0"
                         android:shadowRadius="5"
@@ -203,26 +218,24 @@
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.512" />
+                        app:layout_constraintVertical_bias="0.839" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tagButton2"
 
-                        android:layout_width="78dp"
-                        android:layout_height="19dp"
+                        android:layout_width="92dp"
+                        android:layout_height="24dp"
 
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="97dp"
-                        android:layout_marginEnd="22dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginBottom="106dp"
                         android:background="@drawable/tag_button_template"
                         android:backgroundTint="#5FC1E8"
                         android:fontFamily="@font/myriad_pro_regular"
-                        android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:insetBottom="0sp"
                         android:shadowDx="0"
                         android:shadowDy="0"
                         android:shadowRadius="5"
@@ -233,26 +246,24 @@
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.512" />
+                        app:layout_constraintVertical_bias="0.801" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tagButton1"
 
-                        android:layout_width="78dp"
-                        android:layout_height="19dp"
+                        android:layout_width="92dp"
+                        android:layout_height="24dp"
 
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginBottom="96dp"
-                        android:layout_marginEnd="109dp"
+                        android:layout_marginEnd="145dp"
+                        android:layout_marginBottom="107dp"
                         android:background="@drawable/tag_button_template"
                         android:backgroundTint="#EA2A31"
                         android:fontFamily="@font/myriad_pro_regular"
-                        android:insetBottom="0sp"
                         android:insetTop="0sp"
+                        android:insetBottom="0sp"
                         android:shadowDx="0"
                         android:shadowDy="0"
                         android:shadowRadius="5"
@@ -263,12 +274,12 @@
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.497"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.512" />
+                        app:layout_constraintVertical_bias="0.81" />
 
-                </RelativeLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 

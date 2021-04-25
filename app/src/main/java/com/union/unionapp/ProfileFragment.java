@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment {
     boolean achsIsActive;
     String[] allAchs;
     String[] userAchs;
+    String[] userActs;
     String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
@@ -90,6 +91,25 @@ public class ProfileFragment extends Fragment {
             userAchs[i] = allAchs[Integer.parseInt(String.valueOf(achievementLocationsWComma.charAt(i)))];
         }
 
+        userActs = new String[]{"asdasd", "asdadd", "asdadad", "sadasdasdads", "asdadasdasdads"};
+
+
+        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
+        offsetRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                double offset = snapshot.getValue(Double.class);
+                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
+                dateServer = (long) estimatedServerTimeMs;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
+
+
 
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
@@ -123,16 +143,27 @@ public class ProfileFragment extends Fragment {
         // Layoutu transparent yapıo
         calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        openCalendar = (ImageView) view.findViewById(R.id.openCalendar);
+        openCalendar = (ImageView) view.findViewById(R.id.directMessage);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
         achsTextView.setBackgroundTintList(null);
 
+
         /*Achievements için listview kısmı*/
         achsListView = (ListView) view.findViewById(R.id.achsList);
-        CustomAdapterAchievements customAdapter = new CustomAdapterAchievements(getActivity(), userAchs);
-        achsListView.setAdapter(customAdapter);
+        lastActsList = (ListView) view.findViewById(R.id.lastActsList);
+
+        CustomAdapterLastActs customAdapterLastActs = new CustomAdapterLastActs(getActivity(), userActs);
+        CustomAdapterAchievements customAdapterAchs = new CustomAdapterAchievements(getActivity(), userAchs);
+
+        lastActsList.setAdapter(customAdapterLastActs);
+        achsListView.setAdapter(customAdapterAchs);
+
+        lastActsList.setVisibility(View.VISIBLE);
+        lastActsList.setEnabled(true);
+        achsListView.setVisibility(View.INVISIBLE);
+        achsListView.setEnabled(false);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,9 +172,13 @@ public class ProfileFragment extends Fragment {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+                    lastActsList.setVisibility(View.VISIBLE);
+                    lastActsList.setEnabled(true);
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
+                    achsListView.setVisibility(View.INVISIBLE);
+                    achsListView.setEnabled(false);
                     achsIsActive = false;
 
                 }
@@ -158,9 +193,13 @@ public class ProfileFragment extends Fragment {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+                    achsListView.setVisibility(View.VISIBLE);
+                    achsListView.setEnabled(true);
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
+                    lastActsList.setVisibility(View.INVISIBLE);
+                    lastActsList.setEnabled(false);
                     lastActsIsActive = false;
                 }
             }

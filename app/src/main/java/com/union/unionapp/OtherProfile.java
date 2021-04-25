@@ -50,6 +50,7 @@ public class OtherProfile extends AppCompatActivity {
     ImageView userPP;
     String hisUid;
 
+    ImageView back_bt;
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
@@ -83,6 +84,8 @@ public class OtherProfile extends AppCompatActivity {
         tagButton1 = findViewById(R.id.tagButton1);
         tagButton2 = findViewById(R.id.tagButton2);
         tagButton3 = findViewById(R.id.tagButton3);
+        back_bt = findViewById(R.id.backButtonn);
+
 
         allAchs = getResources().getStringArray(R.array.user_achievements);
         achievementLocationsWComma = "1,3,5".replace(",", "");
@@ -125,7 +128,7 @@ public class OtherProfile extends AppCompatActivity {
         // Layoutu transparent yapıo
         calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        openCalendar = (ImageView) findViewById(R.id.openCalendar);
+        openCalendar = (ImageView) findViewById(R.id.directMessage);
         lastActsTextView = (TextView) findViewById(R.id.lastActsTextView);
         achsTextView = (TextView) findViewById(R.id.achsTextView);
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
@@ -183,7 +186,7 @@ public class OtherProfile extends AppCompatActivity {
                 dateTextView = calendarDialog.findViewById(R.id.dateTextView);
 
                 calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(MainActivity.dateServer); // retrieve the date from the server
+               // calendar.setTimeInMillis(MainActivity.dateServer); // retrieve the date from the server
                 calendarToString(calendar);
 
 
@@ -220,6 +223,13 @@ public class OtherProfile extends AppCompatActivity {
         });
 
 
+        // Back button
+        back_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void getCurrentDateActivities(Calendar calendar) {

@@ -55,6 +55,8 @@
                 android:gravity="start|top"
                 android:hint=" Write your question here..."
                 android:inputType="textMultiLine"
+                android:paddingLeft="3dp"
+                android:paddingTop="2dp"
                 android:textSize="12sp" />
 
             <ImageView
