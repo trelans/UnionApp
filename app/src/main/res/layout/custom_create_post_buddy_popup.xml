@@ -122,8 +122,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
                     android:textAlignment="center"
-                    android:layout_marginStart="43dp"
-                    android:layout_marginBottom="253dp"
+                    android:layout_marginStart="44dp"
+                    android:layout_marginBottom="259dp"
                     android:background="@drawable/edittext_border_template"
                     android:ems="10"
                     android:inputType="date" />
