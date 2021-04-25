@@ -92,11 +92,12 @@ public class AdapterBuddyAndClubPosts extends RecyclerView.Adapter<AdapterBuddyA
                 Dialog dialog;
                 dialog = new Dialog(context);
                 dialog.setContentView(R.layout.custom_view_club_post_popup);
-                dialog.show();
+                dialog.setCanceledOnTouchOutside(true);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.show();
 
                 //TODO tanımlamaları yap
-                return false;
+                return true;
             }
         });
 
