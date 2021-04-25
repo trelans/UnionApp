@@ -89,56 +89,7 @@ public class MessageFragment extends Fragment {
         });
 
 
-/*
-            usersDbRef = firebaseDatabase.getReference("Users");
-            // search user to get that users' info
-            Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
-            // get user picture and username
 
-            userQuery.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    // check until requitrf info is received
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        // get data
-                        String username ="" + ds.child("username").getValue();
-                        String pp = "" + ds.child("pp").getValue();
-                        // set data
-                        tw_username.setText(username);
-                        try {
-                            Picasso.get().load(pp).placeholder(R.drawable.profile_icon).into(profileIw);
-                        }
-                        catch (Exception e) {
-                            Picasso.get().load(R.drawable.profile_icon).into(profileIw);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-
-            send_bt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tw_username.setText(hisUid);
-                    // get message text from edit text
-                    String message = messageEt.getText().toString().trim();
-                    // check if text if empty
-                    if (TextUtils.isEmpty(message)) {
-                        // empty text
-                    }
-                    else {
-                        sendMessage(message);
-                    }
-                }
-            });
-
-
-*/
         return view;
     }
 
