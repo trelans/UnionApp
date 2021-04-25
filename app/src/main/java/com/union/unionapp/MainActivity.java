@@ -71,6 +71,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
+    public static long dateServer;
     FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     Uri image_uri;
 
 
-    // settigns
+    // settings
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
@@ -126,6 +127,22 @@ public class MainActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.fragment_container, clubFragment, "3").commit();
 
         active = clubFragment;
+
+        // server time listener attached
+        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
+        offsetRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                double offset = snapshot.getValue(Double.class);
+                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
+                dateServer = (long) estimatedServerTimeMs;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -154,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
+        myDialog = new Dialog(this);
         myDialog = new Dialog(this);
 
         //initial popup icon

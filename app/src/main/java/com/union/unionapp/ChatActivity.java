@@ -192,7 +192,7 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage (String message) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        String timestamp = String.valueOf(System.currentTimeMillis()); //TODO zamanı serverden cek
+        String timestamp = String.valueOf(MainActivity.dateServer);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", myUid);
         hashMap.put("receiver",hisUid);
