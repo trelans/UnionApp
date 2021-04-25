@@ -68,7 +68,8 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
             public void onClick(View v) {
                 // start chat activity
                 Intent intent = new Intent (context , ChatActivity.class);
-                intent.putExtra("hisUid" , hisUid);
+                intent.putExtra("Hisuid" , hisUid);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
 
             }
