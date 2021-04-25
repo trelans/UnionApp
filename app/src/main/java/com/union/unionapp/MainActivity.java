@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,27 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -53,8 +44,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -198,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 // user bastıgında cagrılıo
                 // if search query is not empty then search
                 if (!TextUtils.isEmpty(query.trim())) {
-                    searchUsers(query);
+                    searchUsersForMessage(query);
                     searchBarEmpty = false;
                 } else {
                     // search text empty
@@ -213,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 // user yazı yazdıgında cagrılıyor
                 // if search query is not empty then search
                 if (!TextUtils.isEmpty(newText.trim())) {
-                    searchUsers(newText);
+                    searchUsersForMessage(newText);
                     searchBarEmpty = false;
                 } else {
                     // search text empty, get all users
@@ -280,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void searchUsers(String query) {
+    private void searchUsersForMessage(String query) {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
