@@ -16,10 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".ChatActivity"></activity>
-        <activity android:name=".MainActivity"
+        <activity android:name=".OtherProfile"></activity>
+        <activity android:name=".ChatActivity" />
+        <activity
+            android:name=".MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".CreateAnAccountActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
