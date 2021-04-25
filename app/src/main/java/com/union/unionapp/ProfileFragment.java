@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -182,7 +181,7 @@ public class ProfileFragment extends Fragment {
                 dateTextView = calendarDialog.findViewById(R.id.dateTextView);
 
                 calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(MainActivity.dateServer); // retrieve the date from the server
+                calendar.setTimeInMillis(MainActivity.getServerDate()); // retrieve the date from the server
                 calendarToString(calendar);
 
 
