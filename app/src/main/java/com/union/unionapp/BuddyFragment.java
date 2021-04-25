@@ -85,6 +85,8 @@ public class BuddyFragment extends Fragment {
     int[] tagTextsIndexArray = new int[3];
     int[] i = new int[1];
 
+    int lastDeletedtag = 0;
+
     ImageView imageIv,
             sendButtonIv,
             addPhotoIv;
@@ -177,6 +179,9 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
+                i[0] = 0;
+
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
@@ -194,13 +199,17 @@ public class BuddyFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position > 0) {
                             String selectedItem = parent.getItemAtPosition(position).toString();
-                            while (i[ 0 ] < tagsStatus.length) {
-                                if (!tagsStatus[ i[ 0 ] ] ) {
-                                    tagsStatus[ i[ 0 ] ] = true;
-                                    tagsArray[ i[ 0 ] ].setText( selectedItem );
-                                    tagsArray[ i[ 0 ] ].setVisibility( View.VISIBLE );
-                                    i[ 0 ]++;
-                                    break;
+                            if (i[ 0 ] < tagsStatus.length) {
+
+                                for (int j = 0; j < 3; j++) {
+
+                                    if (!tagsStatus[j]) {
+                                        tagsStatus[j] = true;
+                                        tagsArray[j].setText(selectedItem);
+                                        tagsArray[j].setVisibility(View.VISIBLE);
+                                        i[0]++;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -253,6 +262,8 @@ public class BuddyFragment extends Fragment {
                         tag1.setVisibility(View.INVISIBLE);
                         tagsStatus[0] = false;
                         tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 0;
                     }
                 });
 
@@ -262,6 +273,8 @@ public class BuddyFragment extends Fragment {
                         tag2.setVisibility(View.INVISIBLE);
                         tagsStatus[1] = false;
                         tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 1;
                     }
                 });
 
@@ -271,6 +284,8 @@ public class BuddyFragment extends Fragment {
                         tag3.setVisibility(View.INVISIBLE);
                         tagsStatus[2] = false;
                         tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 2;
                     }
                 });
 
