@@ -109,6 +109,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+
         send_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +177,9 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+
+
     }
     private void sendMessage (String message) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -193,6 +197,37 @@ public class ChatActivity extends AppCompatActivity {
         // reset editText after sending message
 
         messageEt.setText("");
+        // create chatList node/child in firebase database
+        final DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("Chatlist").child(myUid).child(hisUid);
+
+        chatRef1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    chatRef1.child("id").setValue(hisUid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        final  DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("Chatlist").child(hisUid).child(myUid);
+        chatRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    chatRef2.child("id").setValue(myUid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 

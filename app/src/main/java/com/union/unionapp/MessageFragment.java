@@ -22,7 +22,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,21 +36,23 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MessageFragment extends Fragment {
 
     RecyclerView recyclerView;
-    ImageView profileIw , send_bt;
-    TextView tw_username , tw_status;
-    EditText messageEt;
+    List<ModelChatlist> chatlistList;
+    List<ModelUsers> usersList;
+    FirebaseUser currentUser;
     FirebaseAuth firebaseAuth;
+    AdapterChatlist adapterChatlist;
 
+    // firebase
     FirebaseDatabase firebaseDatabase;
-    DatabaseReference usersDbRef;
+    DatabaseReference reference;
 
-    String hisUid;
-    String myUid;
 
 
 
@@ -56,104 +60,109 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message, container, false);
-            recyclerView = view.findViewById(R.id.chat_recyclerView);
-            tw_status = view.findViewById(R.id.userStatus);
-            tw_username = view.findViewById(R.id.userNameTextView);
-            messageEt = view.findViewById(R.id.editTextChat);
-            profileIw = view.findViewById(R.id.profilePhoto);
-            send_bt = view.findViewById(R.id.send);
+        recyclerView = view.findViewById(R.id.recyclerView);
+
 
             // firebase
-            firebaseAuth = FirebaseAuth.getInstance();
-        Intent intent = getActivity().getIntent();
-        String hisuid = intent.getStringExtra("hisUid");
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        firebaseDatabase = firebaseDatabase.getInstance();
-            usersDbRef = firebaseDatabase.getReference("Users");
-            // search user to get that users' info
-            Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
-            // get user picture and username
+        chatlistList = new ArrayList<>();
 
-            userQuery.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    // check until requitrf info is received
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        // get data
-                        String username ="" + ds.child("username").getValue();
-                        String pp = "" + ds.child("pp").getValue();
-                        // set data
-                        tw_username.setText(username);
-                        try {
-                            Picasso.get().load(pp).placeholder(R.drawable.profile_icon).into(profileIw);
-                        }
-                        catch (Exception e) {
-                            Picasso.get().load(R.drawable.profile_icon).into(profileIw);
-                        }
-                    }
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(currentUser.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatlistList.clear();
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    ModelChatlist chatlist = ds.getValue(ModelChatlist.class);
+                    chatlistList.add(chatlist);
                 }
+                loadChats();
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-
-            send_bt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tw_username.setText(hisUid);
-                    // get message text from edit text
-                    String message = messageEt.getText().toString().trim();
-                    // check if text if empty
-                    if (TextUtils.isEmpty(message)) {
-                        // empty text
-                    }
-                    else {
-                        sendMessage(message);
-                    }
-                }
-            });
+            }
+        });
 
 
 
         return view;
     }
 
-    private void sendMessage (String message) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("BilkentUniversity");
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", myUid);
-        hashMap.put("receiver",hisUid);
-        hashMap.put("message", message);
-        databaseReference.child("Chats").push().setValue(hashMap);
+    private void loadChats() {
+        usersList = new ArrayList<>();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usersList.clear();
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    ModelUsers user = ds.getValue(ModelUsers.class);
+                    for (ModelChatlist chatlist: chatlistList ) {
+                        if (user.getUid() != null && user.getUid().equals(chatlist.getId())) {
+                            usersList.add(user);
+                            break;
+                        }
+                    }
+                    // adapter
+                    adapterChatlist = new AdapterChatlist(getContext(), usersList);
+                    // set adapter
+                    recyclerView.setAdapter(adapterChatlist);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    // set last message
+                    for (int i = 0 ; i <usersList.size(); i++ ) {
+                        lastMessage(usersList.get(i).getUid());
+                    }
+                }
+            }
 
-        // reset editText after sending message
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        messageEt.setText("");
-
+            }
+        });
     }
 
-    private void  checkUserStatus() {
-        //get current user
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            //user is signed stay
-            // set email of logged in user
-          myUid = user.getUid();
-        }
-        else  {
-            //go back to login
+    private void lastMessage (String userId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String theLastMessage = "default";
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        ModelChat chat = ds.getValue(ModelChat.class);
+                        if (chat==null) {
+                            continue;
+                        }
+                        String sender = chat.getSender();
+                        String receiver = chat.getReceiver();
+                        if (sender == null || receiver == null) {
+                            continue;
+                        }
+                        if (chat.getReceiver().equals(currentUser.getUid()) &&
+                        chat.getSender().equals(userId) || chat.getReceiver().equals(userId) &&
+                        chat.getSender().equals(currentUser.getUid())) {
+                            theLastMessage = chat.getMessage();
 
-            startActivity(new Intent(getActivity() , LoginActivity.class));
-            getActivity().finish();
-        }
+                        }
+                    }
+                    adapterChatlist.setLastMessageMap(userId, theLastMessage);
+                    adapterChatlist.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
-    @Override
-    public void onStart() {
-        checkUserStatus();
-        super.onStart();
-    }
+
+
+
+
 }

@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
     AdapterUsers adapterUsers;
     List<ModelUsers> userList;
     RecyclerView recyclerView;
+    final Fragment messageFragment = new MessageFragment();
+    final Fragment buddyFragment = new BuddyFragment();
+    final Fragment stackFragment = new StackFragment();
+    final Fragment clubFragment = new ClubsFragment();
+    final Fragment profileFragment = new ProfileFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active;
+
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -113,12 +122,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fm.beginTransaction().add(R.id.fragment_container, messageFragment, "1").hide(messageFragment).commit();
+        fm.beginTransaction().add(R.id.fragment_container, buddyFragment, "2").hide(buddyFragment).commit();
+        fm.beginTransaction().add(R.id.fragment_container, clubFragment, "3").commit();
+        fm.beginTransaction().add(R.id.fragment_container, stackFragment, "4").hide(stackFragment).commit();
+        fm.beginTransaction().add(R.id.fragment_container, profileFragment, "5").hide(profileFragment).commit();
+        active = clubFragment;
+
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         storageReference = FirebaseStorage.getInstance().getReference();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
 
         //for settings - ege
         //*
@@ -682,37 +700,40 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
+
                     switch (item.getItemId()) {
                         case R.id.nav_message:
-                            selectedFragment = new MessageFragment();
+                            fm.beginTransaction().hide(active).show(messageFragment).commit();
+                            active = messageFragment;
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_buddy:
-                            selectedFragment = new BuddyFragment();
+                            fm.beginTransaction().hide(active).show(buddyFragment).commit();
+                            active = buddyFragment;
                             currentActivity = 2;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_club:
-                            selectedFragment = new ClubsFragment();
+                            fm.beginTransaction().hide(active).show(clubFragment).commit();
+                            active = clubFragment;
                             currentActivity = 3;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_stack:
-                            selectedFragment = new StackFragment();
+                            fm.beginTransaction().hide(active).show(stackFragment).commit();
+                            active = stackFragment;
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_profile:
-                            selectedFragment = new ProfileFragment();
+                            fm.beginTransaction().hide(active).show(profileFragment).commit();
+                            active = profileFragment;
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
-                            break;
+                            return true;
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
-                    return true;
+                    return false;
                 }
             };
 
