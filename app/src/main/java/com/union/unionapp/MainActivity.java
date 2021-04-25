@@ -122,11 +122,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fm.beginTransaction().add(R.id.fragment_container, messageFragment, "1").hide(messageFragment).commit();
-        fm.beginTransaction().add(R.id.fragment_container, buddyFragment, "2").hide(buddyFragment).commit();
         fm.beginTransaction().add(R.id.fragment_container, clubFragment, "3").commit();
-        fm.beginTransaction().add(R.id.fragment_container, stackFragment, "4").hide(stackFragment).commit();
-        fm.beginTransaction().add(R.id.fragment_container, profileFragment, "5").hide(profileFragment).commit();
+
         active = clubFragment;
 
 
@@ -253,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -703,12 +701,18 @@ public class MainActivity extends AppCompatActivity {
 
                     switch (item.getItemId()) {
                         case R.id.nav_message:
+                            if (fm.findFragmentByTag("1") == null){
+                                fm.beginTransaction().add(R.id.fragment_container, messageFragment, "1").hide(messageFragment).commit();
+                            }
                             fm.beginTransaction().hide(active).show(messageFragment).commit();
                             active = messageFragment;
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
                             return true;
                         case R.id.nav_buddy:
+                            if (fm.findFragmentByTag("2") == null){
+                                fm.beginTransaction().add(R.id.fragment_container, buddyFragment, "2").hide(buddyFragment).commit();
+                            }
                             fm.beginTransaction().hide(active).show(buddyFragment).commit();
                             active = buddyFragment;
                             currentActivity = 2;
@@ -721,12 +725,18 @@ public class MainActivity extends AppCompatActivity {
                             popUpButton.setImageResource(R.drawable.notif);
                             return true;
                         case R.id.nav_stack:
+                            if (fm.findFragmentByTag("4") == null){
+                                fm.beginTransaction().add(R.id.fragment_container, stackFragment, "4").hide(stackFragment).commit();
+                            }
                             fm.beginTransaction().hide(active).show(stackFragment).commit();
                             active = stackFragment;
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
                             return true;
                         case R.id.nav_profile:
+                            if (fm.findFragmentByTag("5") == null){
+                                fm.beginTransaction().add(R.id.fragment_container, profileFragment, "5").hide(profileFragment).commit();
+                            }
                             fm.beginTransaction().hide(active).show(profileFragment).commit();
                             active = profileFragment;
                             currentActivity = 5;

@@ -159,7 +159,7 @@ public class ProfileFragment extends Fragment {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    System.out.println("test");
+
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
                     achsIsActive = false;
@@ -176,7 +176,7 @@ public class ProfileFragment extends Fragment {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    System.out.println("test2");
+
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
                     lastActsIsActive = false;
