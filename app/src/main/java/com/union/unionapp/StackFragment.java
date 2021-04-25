@@ -6,7 +6,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,19 +29,26 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class StackFragment extends Fragment {
 
@@ -52,7 +58,10 @@ public class StackFragment extends Fragment {
     EditText postDetailsEt;
     String postAnonymously;
     String postDetails;
+    String tagToUpload;
     CheckBox anonym;
+
+    int tagTextIndex;
 
     ImageView sendButtonIv,
               addPhotoIv;
@@ -60,6 +69,10 @@ public class StackFragment extends Fragment {
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
+
+    RecyclerView recyclerView;
+    List<ModelStackPost> postList;
+    AdapterStackPosts adapterStackPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -89,16 +102,39 @@ public class StackFragment extends Fragment {
         // Layoutu transparent yapıo
         stackDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+        //recycler view and its properties
+        recyclerView = view.findViewById(R.id.stackPostsRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        //show newest post first, for this load from last
+        layoutManager.setStackFromEnd(true);
+        layoutManager.setReverseLayout(true);
+        //set layout to recyclerview
+        recyclerView.setLayoutManager(layoutManager);
+
+        //init post list
+        postList = new ArrayList<>();
+        loadPosts();
+
+
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 stackDialog.setContentView(R.layout.custom_stack_createpost_popup);
 
+                String[] allTags = getResources().getStringArray( R.array.all_tags );
+
+
+
                 stackTagSpinner = stackDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 stackTagSpinner.setAdapter(tagAdapter);
+
+
+
+
+
 
                 //init views
                 sendButtonIv = stackDialog.findViewById(R.id.sendButtonImageView);
@@ -120,6 +156,15 @@ public class StackFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        String selectedTag = stackTagSpinner.getSelectedItem().toString();
+                        for ( int k = 1; k < allTags.length; k++ ) {
+                            if ( allTags[ k ].equals( selectedTag ) ) {
+                                tagTextIndex = k;
+                                break;
+                            }
+                        }
+
+                        tagToUpload = tagTextIndex+"";
 
                         postDetails = postDetailsEt.getText().toString().trim();
                         if (anonym.isChecked()) {
@@ -136,12 +181,13 @@ public class StackFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,"noImage",postAnonymously);
+                            uploadData(postDetails,"noImage",postAnonymously,tagToUpload);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,String.valueOf(image_uri),postAnonymously);
+                            uploadData(postDetails,String.valueOf(image_uri),postAnonymously,tagToUpload);
                         }
+                        stackDialog.dismiss();
                     }
                 });
 
@@ -167,6 +213,37 @@ public class StackFragment extends Fragment {
         return view;
     }
 
+    private void loadPosts() {
+        // path of all posts
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    System.out.println(ds);
+                    ModelStackPost modelStackPost = ds.getValue(ModelStackPost.class);
+                    postList.add(modelStackPost);
+
+                    // adapter
+                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                    // set adapter to recyclerView
+                    recyclerView.setAdapter(adapterStackPosts);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // in case of error
+                Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void searchPosts( String searchQuery ) {
+
+    }
+
     private void showImagePickDialog() {
         //options (camera, gallery) to show in dialog
         String[] options = {"Camera", "Gallery"};
@@ -180,11 +257,11 @@ public class StackFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //item click handle
-                if (which==0) {
+                if (which == 0) {
                     //camera clicked
 
                 }
-                if (which==1) {
+                if (which == 1) {
                     //gallery clicked
                 }
             }
@@ -291,7 +368,7 @@ public class StackFragment extends Fragment {
         } //TODO else navigate to login
     }
 
-    private void uploadData(String postDetails, String uri, String postAnonymously) {
+    private void uploadData(String postDetails, String uri, String postAnonymously, String tagToUpload) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -318,17 +395,20 @@ public class StackFragment extends Fragment {
                                 hashMap.put("uid",uid); //çekememiş
                                 hashMap.put("username",username); //çekmemiş
                                 //hashMap.put("uEmail",email);
-                                hashMap.put("uDp",dp); // ?
+                                //hashMap.put("uDp",dp); // ?
                                 hashMap.put("pId",timeStamp);
                                 hashMap.put("pAnon",postAnonymously);
                                 hashMap.put("pDetails",postDetails);
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pTags","1"); //TODO tagler için değişicek
+                                hashMap.put("pUpvoteNumber","0");
+                                hashMap.put("pTitle","MATH101 question");
+                                hashMap.put("pTagIndex",tagToUpload);
 
 
                                 //path to store post data
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
 
                                 //put data in this ref
                                 reference.child(timeStamp).setValue(hashMap)
@@ -376,10 +456,14 @@ public class StackFragment extends Fragment {
             hashMap.put("pDetails",postDetails);
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
+            hashMap.put("pUpvoteNumber","0");
+            hashMap.put("pTitle","MATH101 question");
+            hashMap.put("pTagIndex",tagToUpload);
+
 
 
             //path to store post data
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
 
             //put data in this ref
             reference.child(timeStamp).setValue(hashMap)

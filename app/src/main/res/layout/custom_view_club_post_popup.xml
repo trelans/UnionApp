@@ -83,7 +83,7 @@
                     android:textSize="12sp" />
 
                 <ImageButton
-                    android:id="@+id/imageButtonSendButton"
+                    android:id="@+id/sendButtonIB"
                     android:layout_width="31dp"
                     android:layout_height="31dp"
 

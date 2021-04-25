@@ -37,12 +37,14 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    static int i = 0;
 
 
-    boolean lastActsIsActive = true;
-    boolean achsIsActive = false;
-    // = getResources().getStringArray(R.array.user_achievements);
-    String[] allAchs = {"a","b","c"};
+    boolean lastActsIsActive;
+    boolean achsIsActive;
+    String[] allAchs;
+    String[] userAchs;
+    String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
     ListView lastActsList;
@@ -62,31 +64,6 @@ public class ProfileFragment extends Fragment {
     long dateServer;
     SimpleDateFormat dateFormat;
 
-    /*class CustomAdapter extends BaseAdapter{
-
-        @Override
-        public int getCount() {
-            return allAchs.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = getLayoutInflater().inflate(R.layout.achs_list_layout, null);
-            TextView textView = (TextView) convertView.findViewById(R.id.achsItem);
-            textView.setText(allAchs[position]);
-            return null;
-        }
-    }*/
 
     @Nullable
     @Override
@@ -97,6 +74,9 @@ public class ProfileFragment extends Fragment {
         firebaseDatabase = firebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
 
+        lastActsIsActive = true;
+        achsIsActive = false;
+
         //init views
         usernameTW = view.findViewById(R.id.userNameTextView);
         userPP = view.findViewById(R.id.userPp);
@@ -104,6 +84,13 @@ public class ProfileFragment extends Fragment {
         tagButton2 = view.findViewById(R.id.tagButton2);
         tagButton3 = view.findViewById(R.id.tagButton3);
 
+        allAchs = getResources().getStringArray(R.array.user_achievements);
+        achievementLocationsWComma = "1,3,5".replace(",", "");
+        userAchs = new String[achievementLocationsWComma.length()];
+
+        for (i = 0; i < achievementLocationsWComma.length(); i++){
+            userAchs[i] = allAchs[Integer.parseInt(String.valueOf(achievementLocationsWComma.charAt(i)))];
+        }
 
         DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
         offsetRef.addValueEventListener(new ValueEventListener() {
@@ -157,24 +144,26 @@ public class ProfileFragment extends Fragment {
         openCalendar = (ImageView) view.findViewById(R.id.openCalendar);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
+        achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
+        achsTextView.setBackgroundTintList(null);
 
-
-        /*Achievements için listview kısmı
+        /*Achievements için listview kısmı*/
         achsListView = (ListView) view.findViewById(R.id.achsList);
-        CustomAdapter customAdapter = new CustomAdapter();
-        achsListView.setAdapter(customAdapter);*/
+        CustomAdapterAchievements customAdapter = new CustomAdapterAchievements(getActivity(), userAchs);
+        achsListView.setAdapter(customAdapter);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lastActsIsActive){
-                    lastActsIsActive = false;
+                if (!lastActsIsActive){
+                    lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-
+                    System.out.println("test");
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
-                    achsIsActive = true;
+                    achsIsActive = false;
+
                 }
             }
 
@@ -183,14 +172,14 @@ public class ProfileFragment extends Fragment {
         achsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (achsIsActive){
-                    achsIsActive = false;
+                if (!achsIsActive){
+                    achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-
+                    System.out.println("test2");
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
-                    lastActsIsActive = true;
+                    lastActsIsActive = false;
                 }
             }
 
@@ -260,5 +249,18 @@ public class ProfileFragment extends Fragment {
         date = dateFormat.format(calendar.getTime());
     }
 
+    public static String removeALetter(StringBuilder s, char c) {
+
+        if ( s.charAt(i) == c ) {
+            s.deleteCharAt(i);
+        }
+
+        if (i < s.length() - 1) {
+            i++;
+            removeALetter(s, c);
+        }
+
+        return s.toString();
+    }
 
 }

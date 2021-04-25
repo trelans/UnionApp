@@ -2,12 +2,13 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -35,10 +37,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
     AdapterUsers adapterUsers;
     List<ModelUsers> userList;
     RecyclerView recyclerView;
+    final Fragment messageFragment = new MessageFragment();
+    final Fragment buddyFragment = new BuddyFragment();
+    final Fragment stackFragment = new StackFragment();
+    final Fragment clubFragment = new ClubsFragment();
+    final Fragment profileFragment = new ProfileFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    Fragment active;
+
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -96,10 +108,27 @@ public class MainActivity extends AppCompatActivity {
     Uri image_uri;
 
 
+    // settigns
+    AppCompatButton tagButton1;
+    AppCompatButton tagButton2;
+    AppCompatButton tagButton3;
+    int[] tagTextsIndexArray = new int[ 3 ];
+    AppCompatButton[] tagsArray;
+    String[] allTags;
+    boolean[] tagsStatue = { false, false, false };
+    // String[] allTags = getResources().getStringArray( R.array.all_tags );
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fm.beginTransaction().add(R.id.fragment_container, messageFragment, "1").hide(messageFragment).commit();
+        fm.beginTransaction().add(R.id.fragment_container, buddyFragment, "2").hide(buddyFragment).commit();
+        fm.beginTransaction().add(R.id.fragment_container, clubFragment, "3").commit();
+        fm.beginTransaction().add(R.id.fragment_container, stackFragment, "4").hide(stackFragment).commit();
+        fm.beginTransaction().add(R.id.fragment_container, profileFragment, "5").hide(profileFragment).commit();
+        active = clubFragment;
+
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
@@ -107,6 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+
+        //for settings - ege
+        //*
+        allTags = getResources().getStringArray( R.array.all_tags );
+        //*
 
         searchBarEmpty = true;
         //init List
@@ -310,14 +345,94 @@ public class MainActivity extends AppCompatActivity {
         // Settings için olan kodlar
         if (currentActivity == 5) {
             // Setings codu buraya
+            int[] i  = new int[ 1 ];
             myDialog.setContentView(R.layout.custom_settings);
 
             EditText currentPassword = myDialog.findViewById(R.id.currentPasswordPT);
             EditText newPassword = myDialog.findViewById(R.id.newPasswordPT);
             Button logout = myDialog.findViewById(R.id.logOutButton);
             Button changePassword = myDialog.findViewById(R.id.changePasswordButton);
+            AppCompatButton clearTagsButton = myDialog.findViewById( R.id.clearTagsButton );
+            AppCompatButton saveTagsButton = myDialog.findViewById( R.id.saveTagsButton );
+            tagButton1 = myDialog.findViewById( R.id.sampleTag1 );
+            tagButton2 = myDialog.findViewById( R.id.sampleTag2 );
+            tagButton3 = myDialog.findViewById( R.id.sampleTag3 );
+
+            tagsArray = new AppCompatButton[]{tagButton1, tagButton2, tagButton3};
+            Spinner tagSpinner = myDialog.findViewById( R.id.tagSpinner);
 
             ImageView changePp = myDialog.findViewById(R.id.changePp);
+
+            if( !getTagsSaved() ) {
+                setAllSettingsTagsInvisible();
+            }
+
+
+            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position > 0) {
+                        String selectedItem = parent.getItemAtPosition(position).toString();
+                        while (i[ 0 ] < tagsStatue.length) {
+                            if (!tagsStatue[ i[ 0 ] ] ) {
+                                tagsStatue[ i[ 0 ] ] = true;
+                                tagsArray[ i[ 0 ] ].setText( selectedItem );
+                                tagsArray[ i[ 0 ] ].setVisibility( View.VISIBLE );
+                                i[ 0 ]++;
+                                break;
+                            }
+                        }
+                    }
+
+                    if( i[ 0 ] == tagsStatue.length ) {
+                        Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+                        tagSpinner.setEnabled( false );
+                        //tagSpinner.setClickable( false );
+                        //tagSpinner.setTop( 1 );
+                        //setTagsSaved( true );
+                    }
+                }
+
+                public void onNothingSelected (AdapterView < ? > parent) {
+                    //TODO
+                }
+            });
+
+            clearTagsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    i[ 0 ] = 0;
+                    tagSpinner.setEnabled( true );
+                    for ( int i = 0; i < tagsStatue.length; i++ ) {
+                        tagsStatue[ i ] = false;
+                    }
+                    //tagSpinner.setClickable( true );
+                    setAllSettingsTagsInvisible();
+                    setTagsSaved( false );
+                    Toast.makeText( getApplicationContext(), "All tags are cleared", Toast.LENGTH_LONG ).show();
+                }
+            });
+
+            saveTagsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    for ( int j = 0; j < tagsArray.length; j++ ) {
+                        for ( int k = 1; k < allTags.length; k++ ) {
+                            if ( allTags[ k ].equals( tagsArray[ j ].getText().toString() ) ) {
+                                tagTextsIndexArray[ j ] = k;
+
+                                break;
+                            }
+                        }
+                    }
+                    String tagIndexes = "";
+                    for( int l = 0; l < tagTextsIndexArray.length; l++ ) {
+                        tagIndexes += " " + tagTextsIndexArray[ l ];
+                    }
+                    Toast.makeText( getApplicationContext(), tagIndexes, Toast.LENGTH_LONG ).show();
+                }
+            });
 
             changePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -585,37 +700,40 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selectedFragment = null;
+
                     switch (item.getItemId()) {
                         case R.id.nav_message:
-                            selectedFragment = new MessageFragment();
+                            fm.beginTransaction().hide(active).show(messageFragment).commit();
+                            active = messageFragment;
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_buddy:
-                            selectedFragment = new BuddyFragment();
+                            fm.beginTransaction().hide(active).show(buddyFragment).commit();
+                            active = buddyFragment;
                             currentActivity = 2;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_club:
-                            selectedFragment = new ClubsFragment();
+                            fm.beginTransaction().hide(active).show(clubFragment).commit();
+                            active = clubFragment;
                             currentActivity = 3;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_stack:
-                            selectedFragment = new StackFragment();
+                            fm.beginTransaction().hide(active).show(stackFragment).commit();
+                            active = stackFragment;
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
-                            break;
+                            return true;
                         case R.id.nav_profile:
-                            selectedFragment = new ProfileFragment();
+                            fm.beginTransaction().hide(active).show(profileFragment).commit();
+                            active = profileFragment;
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
-                            break;
+                            return true;
                     }
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            selectedFragment).commit();
-                    return true;
+                    return false;
                 }
             };
 
@@ -633,8 +751,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    // setttings additional  methods
+    private void setAllSettingsTagsInvisible() {
+        for ( int i = 0; i < tagsArray.length; i++ ) {
+            tagsArray[ i ].setVisibility( View.INVISIBLE );
+        }
+    }
 
+    private boolean settingsTagsSavedCondition;
 
+    private void setTagsSaved( boolean boo ) {
+        settingsTagsSavedCondition = boo;
+    }
+    private boolean getTagsSaved() {
+        return settingsTagsSavedCondition;
+    }
 }
 
 //String[] strings = getResources().getStringArray(R.array.stack_tags); / tagleri arraye yerleştirme kodu

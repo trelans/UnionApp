@@ -95,7 +95,7 @@
                     android:src="@drawable/ic_baseline_add_a_photo_24" />
 
                 <ImageButton
-                    android:id="@+id/imageButtonSendButton"
+                    android:id="@+id/sendButtonIB"
                     android:layout_width="31dp"
                     android:layout_height="31dp"
 
