@@ -278,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!modelUser.getUid().equals(fUser.getUid())) {
                         if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
                             userList.add(modelUser);
+                            // silincek
                             Toast.makeText(getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT).show();
                         }
 
