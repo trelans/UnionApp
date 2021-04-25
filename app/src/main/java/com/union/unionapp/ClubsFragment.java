@@ -85,7 +85,7 @@ public class ClubsFragment extends Fragment {
 
     RecyclerView recyclerView;
     List<ModelBuddyAndClubPost> postList;
-    AdapterBuddyAndClubPosts adapterBuddyPosts;
+    AdapterClubPosts adapterBuddyPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -296,7 +296,7 @@ checkUserStatus();
                     postList.add(modelBuddyPost);
 
                     // adapter
-                    adapterBuddyPosts = new AdapterBuddyAndClubPosts(getActivity(), postList);
+                    adapterBuddyPosts = new AdapterClubPosts(getActivity(), postList);
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }

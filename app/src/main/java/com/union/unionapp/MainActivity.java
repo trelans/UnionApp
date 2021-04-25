@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     final Fragment clubFragment = new ClubsFragment();
     final Fragment profileFragment = new ProfileFragment();
     final FragmentManager fm = getSupportFragmentManager();
+    final int[] clickCount = {0};
     Fragment active;
 
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
@@ -224,33 +225,6 @@ public class MainActivity extends AppCompatActivity {
                 searchView.setIconified(false);
             }
         });
-        final int[] clickCount = {0};
-        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
-        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (getCurrentFocus() != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    searchView.clearFocus();
-                    if (searchBarEmpty){
-                        searchView.setIconified(true);
-                    }
-                    clickCount[0]++;
-                    return true;
-                }else if(recyclerView.getVisibility() == View.VISIBLE){
-                    if (clickCount[0] > 1){
-                        recyclerView.setVisibility(View.GONE);
-                        clickCount[0] = 0;
-                    }else {
-                        clickCount[0]++;
-                    }
-                }
-                System.out.println("clicked!");
-                return false;
-            }
-        });
-        
 
         myDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -264,6 +238,28 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            searchView.clearFocus();
+            if (searchBarEmpty){
+                searchView.setIconified(true);
+            }
+            clickCount[0]++;
+        }else if(recyclerView.getVisibility() == View.VISIBLE){
+            if (clickCount[0] > 1){
+                recyclerView.setVisibility(View.GONE);
+                clickCount[0] = 0;
+            }else {
+                clickCount[0]++;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     private void searchUsers(String query) {
@@ -439,7 +435,6 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             String password = newPassword.getText().toString();
-                            System.out.println(password.length());
                             if (password.equals(currentPassword.getText().toString())) {
                                 Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
                             } else if (password.length() >= 6) {
@@ -559,14 +554,9 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    System.out.println("burada");
-                    System.out.println(grantResults.length);
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(cameraAccepted);
                     boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
                     if (cameraAccepted && writeStorageAccepted) {
-                        System.out.println("dadsda");
                         pickFromCamera();
                     } else {
                         Toast.makeText(this, "Please enable camera & storage permission", Toast.LENGTH_SHORT).show();
@@ -576,9 +566,7 @@ public class MainActivity extends AppCompatActivity {
             break;
             case STORAGE_REQUEST_CODE: {
                 if (grantResults.length > 0) {
-                    System.out.println("şurada");
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
                     if (writeStorageAccepted) {
                         pickFromGallery();
                     } else {
@@ -617,7 +605,6 @@ public class MainActivity extends AppCompatActivity {
         //path and name of the image to be stored in firebase storage
         String filePathAndName = storagePath + "images/" + mAuth.getCurrentUser().getUid();
         StorageReference storageReference2nd = storageReference.child(filePathAndName);
-        System.out.println("geldi");
         storageReference2nd.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -652,7 +639,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //there were some error(s), get and show error message dismis progress dialog
-                System.out.println("burada2");
                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -761,6 +747,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     // setttings additional  methods
     private void setAllSettingsTagsInvisible() {
         for ( int i = 0; i < tagsArray.length; i++ ) {
