@@ -44,6 +44,7 @@ public class ProfileFragment extends Fragment {
     boolean achsIsActive;
     String[] allAchs;
     String[] userAchs;
+    String[] userActs;
     String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
@@ -91,6 +92,9 @@ public class ProfileFragment extends Fragment {
         for (i = 0; i < achievementLocationsWComma.length(); i++){
             userAchs[i] = allAchs[Integer.parseInt(String.valueOf(achievementLocationsWComma.charAt(i)))];
         }
+
+        userActs = new String[]{"asdasd", "asdadd", "asdadad", "sadasdasdads", "asdadasdasdads"};
+
 
         DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
         offsetRef.addValueEventListener(new ValueEventListener() {
@@ -147,10 +151,21 @@ public class ProfileFragment extends Fragment {
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
         achsTextView.setBackgroundTintList(null);
 
+
         /*Achievements için listview kısmı*/
         achsListView = (ListView) view.findViewById(R.id.achsList);
-        CustomAdapterAchievements customAdapter = new CustomAdapterAchievements(getActivity(), userAchs);
-        achsListView.setAdapter(customAdapter);
+        lastActsList = (ListView) view.findViewById(R.id.lastActsList);
+
+        CustomAdapterLastActs customAdapterLastActs = new CustomAdapterLastActs(getActivity(), userActs);
+        CustomAdapterAchievements customAdapterAchs = new CustomAdapterAchievements(getActivity(), userAchs);
+
+        lastActsList.setAdapter(customAdapterLastActs);
+        achsListView.setAdapter(customAdapterAchs);
+
+        lastActsList.setVisibility(View.VISIBLE);
+        lastActsList.setEnabled(true);
+        achsListView.setVisibility(View.INVISIBLE);
+        achsListView.setEnabled(false);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,9 +174,13 @@ public class ProfileFragment extends Fragment {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+                    lastActsList.setVisibility(View.VISIBLE);
+                    lastActsList.setEnabled(true);
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
+                    achsListView.setVisibility(View.INVISIBLE);
+                    achsListView.setEnabled(false);
                     achsIsActive = false;
 
                 }
@@ -176,9 +195,13 @@ public class ProfileFragment extends Fragment {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+                    achsListView.setVisibility(View.VISIBLE);
+                    achsListView.setEnabled(true);
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
+                    lastActsList.setVisibility(View.INVISIBLE);
+                    lastActsList.setEnabled(false);
                     lastActsIsActive = false;
                 }
             }

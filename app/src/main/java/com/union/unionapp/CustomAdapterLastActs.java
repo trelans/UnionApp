@@ -13,18 +13,18 @@ import androidx.annotation.Nullable;
 /**
  * Bu class userdaki achievemnts list view için oluşturulmuştur.
  * */
-public class CustomAdapterAchievements extends ArrayAdapter<String> {
+public class CustomAdapterLastActs extends ArrayAdapter<String> {
 
     //Properties
     Context c;
-    String[] achs;
+    String[] lastActs;
     LayoutInflater inflater;
 
     //Constructors
-    public CustomAdapterAchievements(@NonNull Context context, String[] achs) {
+    public CustomAdapterLastActs(@NonNull Context context, String[] achs) {
         super(context, R.layout.achs_list_layout, achs);
         this.c = context;
-        this.achs = achs;
+        this.lastActs = achs;
 
     }
 
@@ -35,14 +35,14 @@ public class CustomAdapterAchievements extends ArrayAdapter<String> {
 
         if ( convertView == null ){
             inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.achs_list_layout, null);
+            convertView = inflater.inflate(R.layout.last_acts_list_layout, null);
         }
 
         //Initializations
-        TextView achsTexts = (TextView) convertView.findViewById(R.id.achsItem);
+        TextView lastActsTexts = (TextView) convertView.findViewById(R.id.lastActsItem);
 
         //Set Text
-        achsTexts.setText(achs[position]);
+        lastActsTexts.setText(lastActs[position]);
         //image varsa setImageResource();
 
         return convertView;
