@@ -108,7 +108,17 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        profileIw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent( getApplicationContext(), OtherProfile.class);
+                i.putExtra("Hisuid", hisUid);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+                startActivity(i);
+
+            }
+        });
 
         tw_username.setOnClickListener(new View.OnClickListener() {
             @Override
