@@ -64,7 +64,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static long dateServer;
+    public static long dateServer; //TODO sağlıksız kod
     FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
