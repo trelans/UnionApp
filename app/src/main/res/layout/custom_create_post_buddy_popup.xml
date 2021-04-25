@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/textViewTag3"
                     android:layout_width="80dp"
                     android:layout_height="22dp"
@@ -236,7 +236,7 @@
                     android:layout_marginBottom="0dp"
                     android:background="@drawable/send_icon" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/textViewTag2"
                     android:layout_width="75dp"
                     android:layout_height="22dp"
@@ -254,7 +254,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.281" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/textViewTag1"
                     android:layout_width="80dp"
                     android:layout_height="22dp"
