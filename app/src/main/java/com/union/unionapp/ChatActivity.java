@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +30,7 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     RecyclerView recyclerView;
-    ImageView profileIw , send_bt;
+    ImageView profileIw , send_bt , back_bt;
     TextView tw_username , tw_status;
     EditText messageEt;
     FirebaseAuth firebaseAuth;
@@ -60,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
         messageEt = findViewById(R.id.editTextChat);
         profileIw = findViewById(R.id.profilePhoto);
         send_bt = findViewById(R.id.send);
+        back_bt = findViewById(R.id.backButton);
 
         // Layour for recycler view
         Context context;
@@ -128,6 +128,14 @@ public class ChatActivity extends AppCompatActivity {
 
         readMessages();
         seenMessage();
+
+        // back button
+        back_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    finish();
+            }
+        });
 
     }
     private  void seenMessage () {
