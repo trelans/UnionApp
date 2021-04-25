@@ -45,7 +45,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
         // get data
         String hisUid = userList.get(position).getUid();
         String userImage = userList.get(position).getPp();
-        String userName = userList.get(position).getUsername();
+        String userName = "@" + userList.get(position).getUsername();
         String lastMessage = lastMessageMap.get(hisUid);
 
         // set data
