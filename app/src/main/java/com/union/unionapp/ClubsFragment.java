@@ -84,8 +84,8 @@ public class ClubsFragment extends Fragment {
     TimePickerDialog.OnTimeSetListener timeSetListener;
 
     RecyclerView recyclerView;
-    List<ModelBuddyPost> postList;
-    AdapterBuddyPosts adapterBuddyPosts;
+    List<ModelBuddyAndClubPost> postList;
+    AdapterBuddyAndClubPosts adapterBuddyPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -292,11 +292,11 @@ checkUserStatus();
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     System.out.println(ds);
-                    ModelBuddyPost modelBuddyPost = ds.getValue(ModelBuddyPost.class);
+                    ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
                     postList.add(modelBuddyPost);
 
                     // adapter
-                    adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
+                    adapterBuddyPosts = new AdapterBuddyAndClubPosts(getActivity(), postList);
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }

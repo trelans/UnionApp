@@ -1,13 +1,13 @@
 package com.union.unionapp;
 
-public class ModelBuddyPost {
+public class ModelBuddyAndClubPost {
     // use same name as we given while uploading posts
     String pId, pTitle, pDate, pHour, pLocation, pQuota, pDetails, pImage, pTime, uid, uEmail, pAnon , username;
 
-    public ModelBuddyPost() {
+    public ModelBuddyAndClubPost() {
     }
 
-    public ModelBuddyPost(String pId, String pTitle, String pDate, String pHour, String pLocation, String pQuota, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username) {
+    public ModelBuddyAndClubPost(String pId, String pTitle, String pDate, String pHour, String pLocation, String pQuota, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDate = pDate;

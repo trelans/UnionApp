@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.MyHolder> {
+public class AdapterBuddyAndClubPosts extends RecyclerView.Adapter<AdapterBuddyAndClubPosts.MyHolder> {
 
     Context context;
-    List<ModelBuddyPost> postList;
+    List<ModelBuddyAndClubPost> postList;
 
-    public AdapterBuddyPosts(Context context, List<ModelBuddyPost> postList) {
+    public AdapterBuddyAndClubPosts(Context context, List<ModelBuddyAndClubPost> postList) {
         this.context = context;
         this.postList = postList;
     }
@@ -35,7 +35,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterBuddyPosts.MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterBuddyAndClubPosts.MyHolder holder, int position) {
         //get data
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();

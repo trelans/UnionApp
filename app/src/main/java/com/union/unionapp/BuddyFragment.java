@@ -83,8 +83,8 @@ public class BuddyFragment extends Fragment {
     Uri image_uri;
 
     RecyclerView recyclerView;
-    List<ModelBuddyPost> postList;
-    AdapterBuddyPosts adapterBuddyPosts;
+    List<ModelBuddyAndClubPost> postList;
+    AdapterBuddyAndClubPosts adapterBuddyPosts;
 
     String date;
     String[] allTags;
@@ -307,11 +307,11 @@ public class BuddyFragment extends Fragment {
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     System.out.println(ds);
-                    ModelBuddyPost modelBuddyPost = ds.getValue(ModelBuddyPost.class);
+                    ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
                     postList.add(modelBuddyPost);
 
                     // adapter
-                    adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
+                    adapterBuddyPosts = new AdapterBuddyAndClubPosts(getActivity(), postList);
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }
