@@ -104,6 +104,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="181dp"
                     android:background="@drawable/edittext_border_template"
+                    android:paddingLeft="4dp"
                     android:text="user1234: wow..." />
 
                 <TextView
@@ -113,6 +114,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="221dp"
                     android:background="@drawable/edittext_border_template"
+                    android:paddingLeft="4dp"
                     android:text="bilkenter123: will there be ge250 points?..." />
 
                 <TextView
@@ -122,6 +124,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="261dp"
                     android:background="@drawable/edittext_border_template"
+                    android:paddingLeft="4dp"
                     android:text="anonym: amazing!" />
 
                 <ImageView
