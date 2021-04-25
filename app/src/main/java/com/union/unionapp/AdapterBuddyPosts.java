@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class AdapterBuddyAndClubPosts extends RecyclerView.Adapter<AdapterBuddyAndClubPosts.MyHolder> {
+public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.MyHolder> {
 
     Context context;
     List<ModelBuddyAndClubPost> postList;
 
-    public AdapterBuddyAndClubPosts(Context context, List<ModelBuddyAndClubPost> postList) {
+    public AdapterBuddyPosts(Context context, List<ModelBuddyAndClubPost> postList) {
         this.context = context;
         this.postList = postList;
     }
@@ -35,7 +35,7 @@ public class AdapterBuddyAndClubPosts extends RecyclerView.Adapter<AdapterBuddyA
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterBuddyAndClubPosts.MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterBuddyPosts.MyHolder holder, int position) {
         //get data
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();
@@ -83,21 +83,6 @@ public class AdapterBuddyAndClubPosts extends RecyclerView.Adapter<AdapterBuddyA
             public void onClick(View view) {
                 //TODO mesaj kısmına iletmeyi yap
                 Toast.makeText(context, "Profile mesaj göndermeye basıldı", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Dialog dialog;
-                dialog = new Dialog(context);
-                dialog.setContentView(R.layout.custom_view_club_post_popup);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                dialog.show();
-
-                //TODO tanımlamaları yap
-                return true;
             }
         });
 

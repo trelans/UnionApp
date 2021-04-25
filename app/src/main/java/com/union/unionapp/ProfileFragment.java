@@ -61,7 +61,6 @@ public class ProfileFragment extends Fragment {
     ImageView backwardDateImageView;
     TextView dateTextView;
     String date;
-    long dateServer;
     SimpleDateFormat dateFormat;
 
 
@@ -91,22 +90,6 @@ public class ProfileFragment extends Fragment {
         for (i = 0; i < achievementLocationsWComma.length(); i++){
             userAchs[i] = allAchs[Integer.parseInt(String.valueOf(achievementLocationsWComma.charAt(i)))];
         }
-
-        DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
-        offsetRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                double offset = snapshot.getValue(Double.class);
-                double estimatedServerTimeMs = System.currentTimeMillis() + offset;
-                dateServer = (long) estimatedServerTimeMs;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                System.err.println("Listener was cancelled");
-            }
-        });
-
 
 
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
@@ -199,7 +182,7 @@ public class ProfileFragment extends Fragment {
                 dateTextView = calendarDialog.findViewById(R.id.dateTextView);
 
                 calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(dateServer); // retrieve the date from the server
+                calendar.setTimeInMillis(MainActivity.dateServer); // retrieve the date from the server
                 calendarToString(calendar);
 
 
