@@ -54,5 +54,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     compile 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.firebase:firebase-database:19.7.0'
+    implementation group: 'com.querydsl', name: 'querydsl-core', version: '4.0.8'
+
 
 }

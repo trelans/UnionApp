@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -66,18 +67,27 @@ public class BuddyFragment extends Fragment {
     Dialog buddyDialog;
     Spinner genderSpinner;
     Spinner tagSpinner;
+    Spinner preferredGenderFilterSpinner;
+    Spinner filterTagSpinner;
 
     EditText postDetailsEt,
             postQuotaEt,
-            postLocationEt;
+            postLocationEt,
+            filterQuotaEt,
+            filterLocationEt;
 
     TextView postDateEt,
-            postTimeEt;
+             postTimeEt,
+             filterDate,
+             filterTime;
 
 
     AppCompatButton tag1,
                     tag2,
-                    tag3;
+                    tag3,
+                    filterTag1,
+                    filterTag2,
+                    filterTag3;
 
     AppCompatButton[] tagsArray;
 
@@ -383,11 +393,13 @@ public class BuddyFragment extends Fragment {
                                 tagsToUpload = tagsToUpload + k + ",";
                             }
                         }
-
-                        //tags to upload'un sonundaki virgülü atıyor
+                        /*
+                        //tags to upload'un sonundaki virgülü atıyor //TODO ömerin yolu
                         StringBuilder tempString = new StringBuilder(tagsToUpload);
                         tempString.deleteCharAt(tempString.length()-1);
                         tagsToUpload = tempString.toString();
+
+                         */
 
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
@@ -411,20 +423,139 @@ public class BuddyFragment extends Fragment {
         });
 
 
+
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
 
-                tagSpinner = buddyDialog.findViewById(R.id.tagSpinner);
+                //init views
+                ImageView filterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
+                ImageView resetFiltersImageView = buddyDialog.findViewById(R.id.cancelFilterImageView);
+                TextView filterDateTv = buddyDialog.findViewById(R.id.dateFilterEditText);
+                TextView filterTimeTv = buddyDialog.findViewById(R.id.timeFilterEditText);
+                EditText filterLocationEt = buddyDialog.findViewById(R.id.locationFilterEditText);
+                EditText filterQuotaEt = buddyDialog.findViewById(R.id.quotaFilterEditText);
+
+                tag1 = buddyDialog.findViewById(R.id.filterTag1TextView);
+                tag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
+                tag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
+
+
+                tagSpinner = buddyDialog.findViewById(R.id.tagSpinnerFilter);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
+
+
+
+
+                String filterTagsToUpload = "";
+                /*
+
+                for ( int k = 1; k < allTags.length; k++ ) {
+                    if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
+                        filterTagsToUpload = filterTagsToUpload + k + ",";
+                    }
+                }
+
+                //tags to upload'un sonundaki virgülü atıyor
+                StringBuilder tempString = new StringBuilder(filterTagsToUpload);
+                tempString.deleteCharAt(tempString.length()-1);
+                filterTagsToUpload = tempString.toString();
+                */
+
+                filterImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //save the user's filter choices
+                        String filterDate = filterDateTv.getText().toString().trim();
+                        String filterQuota = filterQuotaEt.getText().toString().trim();
+                        String filterTime = filterTimeTv.getText().toString().trim();
+                        String filterLocation = filterLocationEt.getText().toString().trim();
+
+                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+                        Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Toast.makeText(getActivity(), "Oluyor buraya kadar", Toast.LENGTH_SHORT).show();
+
+                                postList.clear();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    System.out.println(filterQuota);
+                                    System.out.println(ds.getValue());
+                                    ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
+
+                                    if (modelBuddyPost.getpQuota().contains(filterQuota)) {
+                                        postList.add(modelBuddyPost);
+                                        System.out.println();
+                                    }
+                                }
+                                // adapter
+                                adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
+                                adapterBuddyPosts.notifyDataSetChanged();
+                                // set adapter to recyclerView
+                                recyclerView.setAdapter(adapterBuddyPosts);
+
+
+                                    /*
+                                    for (DataSnapshot ds : snapshot.getChildren()) {
+                                        ModelUsers modelUser = ds.getValue(ModelUsers.class);
+                                        // get all searched users except currently signed in user
+                                        if (!modelUser.getUid().equals(fUser.getUid())) {
+                                            if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
+                                                userList.add(modelUser);
+                                                // silincek
+                                                Toast.makeText(getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        }
+                                        // adapter
+                                        adapterSearchProfile = new AdapterSearchProfile(getApplicationContext(), userList);
+                                        // reflesh adapter
+                                        adapterSearchProfile.notifyDataSetChanged();
+                                        // set adapter to recyler view
+                                        recyclerView.setVisibility(View.VISIBLE);
+                                        recyclerView.setAdapter(adapterSearchProfile);
+
+                                     */
+
+
+
+                            }
+
+
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+
+
+
+
+
+
+                //set on click listener to reset filters
+                resetFiltersImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO Reset Selected filters and set the feed back to normal feed.
+                    }
+                });
+
 
                 buddyDialog.show();
             }
         });
 
+        /*
         //dialog dismiss listener
         buddyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -445,7 +576,7 @@ public class BuddyFragment extends Fragment {
 
             }
         });
-
+        */
 
         return view;
 
