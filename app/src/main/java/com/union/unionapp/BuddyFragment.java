@@ -55,6 +55,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.querydsl.core.support.QueryBase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -477,6 +478,7 @@ public class BuddyFragment extends Fragment {
 
                         DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
                         Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
+                        //QueryBase queryBase = new QueryBase() {}
                         query.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -499,35 +501,7 @@ public class BuddyFragment extends Fragment {
                                 // set adapter to recyclerView
                                 recyclerView.setAdapter(adapterBuddyPosts);
 
-
-                                    /*
-                                    for (DataSnapshot ds : snapshot.getChildren()) {
-                                        ModelUsers modelUser = ds.getValue(ModelUsers.class);
-                                        // get all searched users except currently signed in user
-                                        if (!modelUser.getUid().equals(fUser.getUid())) {
-                                            if (modelUser.getUsername().toLowerCase().contains(query.toLowerCase())) {
-                                                userList.add(modelUser);
-                                                // silincek
-                                                Toast.makeText(getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT).show();
-                                            }
-
-                                        }
-                                        // adapter
-                                        adapterSearchProfile = new AdapterSearchProfile(getApplicationContext(), userList);
-                                        // reflesh adapter
-                                        adapterSearchProfile.notifyDataSetChanged();
-                                        // set adapter to recyler view
-                                        recyclerView.setVisibility(View.VISIBLE);
-                                        recyclerView.setAdapter(adapterSearchProfile);
-
-                                     */
-
-
-
                             }
-
-
-
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
@@ -536,10 +510,6 @@ public class BuddyFragment extends Fragment {
                         });
                     }
                 });
-
-
-
-
 
 
                 //set on click listener to reset filters
