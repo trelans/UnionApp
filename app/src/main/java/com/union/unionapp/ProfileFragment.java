@@ -1,7 +1,6 @@
 package com.union.unionapp;
 
 
-
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -72,7 +71,6 @@ public class ProfileFragment extends Fragment {
         user = mAuth.getCurrentUser();
         firebaseDatabase = firebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
-
         lastActsIsActive = true;
         achsIsActive = false;
 
@@ -122,9 +120,27 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // tagleri veritabanından çekip düzeltme deneme ~ ege
+        /*databaseReference = firebaseDatabase.getReference("tags" );
+
+        databaseReference.child("tags").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Log.i("firebase tags", String.valueOf(task.getResult().getValue()));
+                    System.out.println( "tag şndexes firebase: " + String.valueOf(task.getResult().getValue()) );
+                }
+            }
+        });*/
+
+        // deneme bitişi ~ ege
+        
         calendarDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
-        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         openCalendar = (ImageView) view.findViewById(R.id.directMessage);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
