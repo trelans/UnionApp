@@ -39,12 +39,13 @@ public class OtherProfile extends AppCompatActivity {
     boolean achsIsActive;
     String[] allAchs;
     String[] userAchs;
+    String[] userActs;
     String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
     ListView lastActsList;
     ListView achsListView;
-    ImageView openCalendar;
+    ImageView directMessage;
     Dialog calendarDialog;
     TextView usernameTW;
     ImageView userPP;
@@ -95,6 +96,7 @@ public class OtherProfile extends AppCompatActivity {
             userAchs[i] = allAchs[Integer.parseInt(String.valueOf(achievementLocationsWComma.charAt(i)))];
         }
 
+        userActs = new String[]{"asdasd", "asdadd", "asdadad", "sadasdasdads", "asdadasdasdads", "asdasasd", "asdasads"};
 
         Query query = databaseReference.orderByChild("uid").equalTo(hisUid);
         query.addValueEventListener(new ValueEventListener() {
@@ -128,16 +130,26 @@ public class OtherProfile extends AppCompatActivity {
         // Layoutu transparent yapıo
         calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        openCalendar = (ImageView) findViewById(R.id.directMessage);
+        directMessage = (ImageView) findViewById(R.id.directMessage);
         lastActsTextView = (TextView) findViewById(R.id.lastActsTextView);
         achsTextView = (TextView) findViewById(R.id.achsTextView);
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
         achsTextView.setBackgroundTintList(null);
 
         /*Achievements için listview kısmı*/
-        achsListView = (ListView) findViewById(R.id.achsList);
-        CustomAdapterAchievements customAdapter = new CustomAdapterAchievements(getApplicationContext(), userAchs);
-        achsListView.setAdapter(customAdapter);
+        achsListView = (ListView) findViewById(R.id.achsListPU);
+        lastActsList = (ListView) findViewById(R.id.lastActsListPU);
+
+        CustomAdapterAchsPU customAdapterAchsPU = new CustomAdapterAchsPU(getApplicationContext(), userAchs);
+        CustomAdapterLastActsPU customAdapterLastActsPU = new CustomAdapterLastActsPU(getApplicationContext(), userActs);
+
+        achsListView.setAdapter(customAdapterAchsPU);
+        lastActsList.setAdapter(customAdapterLastActsPU);
+
+        lastActsList.setVisibility(View.VISIBLE);
+        lastActsList.setEnabled(true);
+        achsListView.setVisibility(View.INVISIBLE);
+        achsListView.setEnabled(false);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,9 +158,13 @@ public class OtherProfile extends AppCompatActivity {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+                    lastActsList.setVisibility(View.VISIBLE);
+                    lastActsList.setEnabled(true);
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
+                    achsListView.setVisibility(View.INVISIBLE);
+                    achsListView.setEnabled(false);
                     achsIsActive = false;
 
                 }
@@ -163,62 +179,27 @@ public class OtherProfile extends AppCompatActivity {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
+                    achsListView.setVisibility(View.VISIBLE);
+                    achsListView.setEnabled(true);
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
+                    lastActsList.setVisibility(View.INVISIBLE);
+                    lastActsList.setEnabled(false);
                     lastActsIsActive = false;
                 }
             }
 
         });
 
-        openCalendar.setOnClickListener(new View.OnClickListener() {
+        directMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar;
+                Intent i = new Intent( getApplicationContext(), ChatActivity.class);
+                i.putExtra("Hisuid",hisUid);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                Dialog dialog;
-
-                calendarDialog.setContentView(R.layout.custom_user_calendar_popup);
-
-                forwardDateImageView = calendarDialog.findViewById(R.id.forwardImageView);
-                backwardDateImageView = calendarDialog.findViewById(R.id.backwardsImageView);
-                dateTextView = calendarDialog.findViewById(R.id.dateTextView);
-
-                calendar = Calendar.getInstance();
-               // calendar.setTimeInMillis(MainActivity.dateServer); // retrieve the date from the server
-                calendarToString(calendar);
-
-
-                //current date - initial date
-                dateTextView.setText(date);
-                getCurrentDateActivities(calendar); // displays specified dates activities.
-
-                forwardDateImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //date 1 gün ileriye
-                        calendar.add(Calendar.DATE, 1);
-                        calendarToString(calendar);
-                        dateTextView.setText(date);
-                        getCurrentDateActivities(calendar);
-
-                    }
-                });
-
-
-                backwardDateImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //date 1 gün geriye
-                        calendar.add(Calendar.DATE, -1);
-                        calendarToString(calendar);
-                        dateTextView.setText(date);
-                        getCurrentDateActivities(calendar);
-                    }
-                });
-
-                calendarDialog.show();
+                startActivity(i);
             }
         });
 
