@@ -79,17 +79,17 @@ public class BuddyFragment extends Fragment {
             filterLocationEt;
 
     TextView postDateEt,
-             postTimeEt,
-             filterDate,
-             filterTime;
+            postTimeEt,
+            filterDate,
+            filterTime;
 
 
     AppCompatButton tag1,
-                    tag2,
-                    tag3,
-                    filterTag1,
-                    filterTag2,
-                    filterTag3;
+            tag2,
+            tag3,
+            filterTag1,
+            filterTag2,
+            filterTag3;
 
     AppCompatButton[] tagsArray;
 
@@ -100,8 +100,8 @@ public class BuddyFragment extends Fragment {
     int lastDeletedtag = 0;
 
     ImageView imageIv,
-              sendButtonIv,
-              addPhotoIv;
+            sendButtonIv,
+            addPhotoIv;
 
 
     DatabaseReference userDbRef;
@@ -118,7 +118,6 @@ public class BuddyFragment extends Fragment {
     TextView[] textViewTags;
     DatePickerDialog.OnDateSetListener setListener;
     TimePickerDialog.OnTimeSetListener timeSetListener;
-
 
 
     //permission constants
@@ -198,7 +197,6 @@ public class BuddyFragment extends Fragment {
             public void onClick(View v) {
 
 
-
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
@@ -211,43 +209,41 @@ public class BuddyFragment extends Fragment {
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
-                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position > 0) {
                             String selectedItem = parent.getItemAtPosition(position).toString();
-                            if (i[ 0 ] < tagsStatus.length) {
+                            if (i[0] < tagsStatus.length) {
 
                                 for (int j = 0; j < 3; j++) {
 
                                     if (!tagsStatus[j]) {
 
-                                            tagsArray[j].setText(selectedItem);
-                                            if (!tagHasSelectedBefore(tag1,tag2,tag3)) {
-                                                tagsArray[j].setVisibility(View.VISIBLE);
-                                                i[0]++;
-                                                tagsStatus[j] = true;
-                                            }
-                                            else {
-                                                tagsStatus[j] = false;
-                                                tagsArray[j].setText("");
-                                            }
-                                            break;
+                                        tagsArray[j].setText(selectedItem);
+                                        if (!tagHasSelectedBefore(tag1, tag2, tag3)) {
+                                            tagsArray[j].setVisibility(View.VISIBLE);
+                                            i[0]++;
+                                            tagsStatus[j] = true;
+                                        } else {
+                                            tagsStatus[j] = false;
+                                            tagsArray[j].setText("");
+                                        }
+                                        break;
                                     }
                                 }
                             }
                         }
 
-                        if( i[ 0 ] == tagsStatus.length ) {
+                        if (i[0] == tagsStatus.length) {
                             //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-                            tagSpinner.setEnabled( false );
+                            tagSpinner.setEnabled(false);
                             //tagSpinner.setClickable( false );
                             //tagSpinner.setTop( 1 );
                             //setTagsSaved( true );
                         }
                     }
 
-                    public void onNothingSelected (AdapterView < ? > parent) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                         //TODO
                     }
                 });
@@ -290,7 +286,7 @@ public class BuddyFragment extends Fragment {
                     public void onClick(View v) {
                         tag1.setVisibility(View.INVISIBLE);
                         tagsStatus[0] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 0;
                     }
@@ -301,7 +297,7 @@ public class BuddyFragment extends Fragment {
                     public void onClick(View v) {
                         tag2.setVisibility(View.INVISIBLE);
                         tagsStatus[1] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 1;
                     }
@@ -312,12 +308,11 @@ public class BuddyFragment extends Fragment {
                     public void onClick(View v) {
                         tag3.setVisibility(View.INVISIBLE);
                         tagsStatus[2] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 2;
                     }
                 });
-
 
 
                 //set the postDateEt to current date for default
@@ -340,7 +335,7 @@ public class BuddyFragment extends Fragment {
                         DatePickerDialog datePickerDialog = new DatePickerDialog(
                                 getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
-                        datePickerDialog.updateDate(year,month,day);
+                        datePickerDialog.updateDate(year, month, day);
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         datePickerDialog.show();
                     }
@@ -394,8 +389,8 @@ public class BuddyFragment extends Fragment {
                         String postGender = genderSpinner.getSelectedItem().toString();
                         String tagsToUpload = "";
 
-                        for ( int k = 1; k < allTags.length; k++ ) {
-                            if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
                                 tagsToUpload = tagsToUpload + k + ",";
                             }
                         }
@@ -429,7 +424,6 @@ public class BuddyFragment extends Fragment {
         });
 
 
-
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -453,24 +447,22 @@ public class BuddyFragment extends Fragment {
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
-                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position > 0) {
                             String selectedItem = parent.getItemAtPosition(position).toString();
-                            if (i[ 0 ] < tagsStatus.length) {
+                            if (i[0] < tagsStatus.length) {
 
                                 for (int j = 0; j < 3; j++) {
 
                                     if (!tagsStatus[j]) {
 
                                         tagsArray[j].setText(selectedItem);
-                                        if (!tagHasSelectedBefore(filterTag1,filterTag2,filterTag3)) {
+                                        if (!tagHasSelectedBefore(filterTag1, filterTag2, filterTag3)) {
                                             tagsArray[j].setVisibility(View.VISIBLE);
                                             i[0]++;
                                             tagsStatus[j] = true;
-                                        }
-                                        else {
+                                        } else {
                                             tagsStatus[j] = false;
                                             tagsArray[j].setText("");
                                         }
@@ -480,16 +472,16 @@ public class BuddyFragment extends Fragment {
                             }
                         }
 
-                        if( i[ 0 ] == tagsStatus.length ) {
+                        if (i[0] == tagsStatus.length) {
                             //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-                            tagSpinner.setEnabled( false );
+                            tagSpinner.setEnabled(false);
                             //tagSpinner.setClickable( false );
                             //tagSpinner.setTop( 1 );
                             //setTagsSaved( true );
                         }
                     }
 
-                    public void onNothingSelected (AdapterView < ? > parent) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                         //TODO
                     }
                 });
@@ -507,7 +499,7 @@ public class BuddyFragment extends Fragment {
                     public void onClick(View v) {
                         filterTag1.setVisibility(View.INVISIBLE);
                         tagsStatus[0] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 0;
                     }
@@ -518,7 +510,7 @@ public class BuddyFragment extends Fragment {
                     public void onClick(View v) {
                         filterTag2.setVisibility(View.INVISIBLE);
                         tagsStatus[1] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 1;
                     }
@@ -529,7 +521,7 @@ public class BuddyFragment extends Fragment {
                     public void onClick(View v) {
                         filterTag3.setVisibility(View.INVISIBLE);
                         tagsStatus[2] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 2;
                     }
@@ -549,8 +541,8 @@ public class BuddyFragment extends Fragment {
                         String filterTagsToUpload = "";
 
 
-                        for ( int k = 1; k < allTags.length; k++ ) {
-                            if ( allTags[ k ].equals( filterTag1.getText().toString() ) || allTags[ k ].equals( filterTag2.getText().toString() ) || allTags[ k ].equals( filterTag3.getText().toString() ) ) {
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(filterTag1.getText().toString()) || allTags[k].equals(filterTag2.getText().toString()) || allTags[k].equals(filterTag3.getText().toString())) {
                                 filterTagsToUpload = filterTagsToUpload + k + ",";
                             }
                         }
@@ -572,6 +564,7 @@ public class BuddyFragment extends Fragment {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 Toast.makeText(getActivity(), "Oluyor buraya kadar", Toast.LENGTH_SHORT).show();
 
+
                                 postList.clear();
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     System.out.println(filterQuota);
@@ -579,7 +572,27 @@ public class BuddyFragment extends Fragment {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
 
                                     if (modelBuddyPost.getpQuota().contains(filterQuota)) {
+
+                                        if (!filterDate.isEmpty()) {
+                                            if (!modelBuddyPost.getpDate().contains(filterDate)) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if (!filterTime.isEmpty()) {
+                                            if (!modelBuddyPost.getpTime().contains(filterTime)) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if (!filterLocation.isEmpty()) {
+                                            if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
+                                                continue;
+                                            }
+                                        }
+
                                         postList.add(modelBuddyPost);
+
                                         System.out.println();
                                     }
                                 }
@@ -617,7 +630,6 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-
 
 
                 //dialog dismiss listener
@@ -988,7 +1000,7 @@ public class BuddyFragment extends Fragment {
         String tag2String = tag2.getText().toString();
         String tag3String = tag3.getText().toString();
 
-        return ( tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String) );
+        return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
     }
 }
 
