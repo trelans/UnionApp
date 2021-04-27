@@ -55,6 +55,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="45dp"
                     android:layout_marginEnd="20dp"
+                    android:paddingTop="1dp"
                     android:background="@drawable/bg_only_top_rounded"
                     android:paddingLeft="4dp"
                     android:text="Yes Activity"
@@ -71,7 +72,8 @@
                     android:layout_marginTop="-1dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/bg_only_bottom_rounded"
-                    android:paddingLeft="4dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
                     android:text="bla bla bla bla"
                     android:textSize="12sp" />
 
@@ -100,7 +102,9 @@
                     android:layout_toStartOf="@+id/zoomLinkTW"
                     android:background="@drawable/bg_only_top_left_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:text="   23/04/2020   19.06"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="2dp"
+                    android:text="23/04/2020   19.06"
                     android:textSize="12sp" />
 
                 <TextView
@@ -113,7 +117,9 @@
                     android:layout_marginBottom="-1dp"
                     android:background="@drawable/bg_only_top_right_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:text="   Zoom link deuufdhgdg"
+                    android:text="Zoom link deuufdhgdg"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="2dp"
                     android:textSize="12sp" />
 
                 <TextView
@@ -126,7 +132,9 @@
                     android:layout_marginBottom="60dp"
                     android:background="@drawable/bg_only_bottom_right_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:text="   Quota: 15"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="2dp"
+                    android:text="Quota: 15"
                     android:textSize="12sp" />
 
                 <TextView
@@ -141,7 +149,9 @@
                     android:layout_toStartOf="@+id/quotaTW"
                     android:background="@drawable/bg_only_bottom_left_rounded"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:text="   Gender: optional"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="2dp"
+                    android:text="Gender: optional"
                     android:textSize="12sp" />
 
                 <ImageButton
