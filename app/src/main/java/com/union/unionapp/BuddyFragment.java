@@ -56,6 +56,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.querydsl.core.support.QueryBase;
+import com.querydsl.core.support.QueryMixin;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,8 +100,9 @@ public class BuddyFragment extends Fragment {
     int lastDeletedtag = 0;
 
     ImageView imageIv,
-            sendButtonIv,
-            addPhotoIv;
+              sendButtonIv,
+              addPhotoIv;
+
 
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
@@ -431,42 +433,113 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
 
                 //init views
-                ImageView filterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
+                ImageView searchFilterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
                 ImageView resetFiltersImageView = buddyDialog.findViewById(R.id.cancelFilterImageView);
                 TextView filterDateTv = buddyDialog.findViewById(R.id.dateFilterEditText);
                 TextView filterTimeTv = buddyDialog.findViewById(R.id.timeFilterEditText);
                 EditText filterLocationEt = buddyDialog.findViewById(R.id.locationFilterEditText);
                 EditText filterQuotaEt = buddyDialog.findViewById(R.id.quotaFilterEditText);
 
-                tag1 = buddyDialog.findViewById(R.id.filterTag1TextView);
-                tag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
-                tag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
+                filterTag1 = buddyDialog.findViewById(R.id.filterTag1TextView);
+                filterTag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
+                filterTag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
 
 
                 tagSpinner = buddyDialog.findViewById(R.id.tagSpinnerFilter);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.all_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (position > 0) {
+                            String selectedItem = parent.getItemAtPosition(position).toString();
+                            if (i[ 0 ] < tagsStatus.length) {
 
+                                for (int j = 0; j < 3; j++) {
 
+                                    if (!tagsStatus[j]) {
 
-                String filterTagsToUpload = "";
-                /*
+                                        tagsArray[j].setText(selectedItem);
+                                        if (!tagHasSelectedBefore(filterTag1,filterTag2,filterTag3)) {
+                                            tagsArray[j].setVisibility(View.VISIBLE);
+                                            i[0]++;
+                                            tagsStatus[j] = true;
+                                        }
+                                        else {
+                                            tagsStatus[j] = false;
+                                            tagsArray[j].setText("");
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
 
-                for ( int k = 1; k < allTags.length; k++ ) {
-                    if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
-                        filterTagsToUpload = filterTagsToUpload + k + ",";
+                        if( i[ 0 ] == tagsStatus.length ) {
+                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+                            tagSpinner.setEnabled( false );
+                            //tagSpinner.setClickable( false );
+                            //tagSpinner.setTop( 1 );
+                            //setTagsSaved( true );
+                        }
                     }
-                }
 
-                //tags to upload'un sonundaki virgülü atıyor
-                StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-                tempString.deleteCharAt(tempString.length()-1);
-                filterTagsToUpload = tempString.toString();
-                */
+                    public void onNothingSelected (AdapterView < ? > parent) {
+                        //TODO
+                    }
+                });
 
-                filterImageView.setOnClickListener(new View.OnClickListener() {
+                filterTag1.setVisibility(View.INVISIBLE);
+                filterTag2.setVisibility(View.INVISIBLE);
+                filterTag3.setVisibility(View.INVISIBLE);
+
+                //set tags to disabled -- not needed
+                //tag1.setEnabled(false);
+                //tag2.setEnabled(false);
+                //tag3.setEnabled(false);
+
+                textViewTags = new TextView[]{filterTag1, filterTag2, filterTag3};
+                tagsArray = new AppCompatButton[]{filterTag1, filterTag2, filterTag3};
+
+                //set onClickListeners for tags
+                filterTag1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filterTag1.setVisibility(View.INVISIBLE);
+                        tagsStatus[0] = false;
+                        tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 0;
+                    }
+                });
+
+                filterTag2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filterTag2.setVisibility(View.INVISIBLE);
+                        tagsStatus[1] = false;
+                        tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 1;
+                    }
+                });
+
+                filterTag3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filterTag3.setVisibility(View.INVISIBLE);
+                        tagsStatus[2] = false;
+                        tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 2;
+                    }
+                });
+
+
+                //set on click listener for the searching filter imageView
+                searchFilterImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -475,10 +548,39 @@ public class BuddyFragment extends Fragment {
                         String filterQuota = filterQuotaEt.getText().toString().trim();
                         String filterTime = filterTimeTv.getText().toString().trim();
                         String filterLocation = filterLocationEt.getText().toString().trim();
+                        String filterTagsToUpload = "";
+
+
+                        for ( int k = 1; k < allTags.length; k++ ) {
+                            if ( allTags[ k ].equals( filterTag1.getText().toString() ) || allTags[ k ].equals( filterTag2.getText().toString() ) || allTags[ k ].equals( filterTag3.getText().toString() ) ) {
+                                filterTagsToUpload = filterTagsToUpload + k + ",";
+                            }
+                        }
+
+                        if (filterTagsToUpload.length() != 0) {
+
+                            //tags to upload'un sonundaki virgülü atıyor
+                            StringBuilder tempString = new StringBuilder(filterTagsToUpload);
+                            tempString.deleteCharAt(tempString.length() - 1);
+                            filterTagsToUpload = tempString.toString();
+                        }
+
 
                         DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+
+                        /*
+                        QueryMixin<String> queryMixin = new QueryMixin();
+                        queryMixin.
                         Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
-                        //QueryBase queryBase = new QueryBase() {}
+                        QueryBase queryBase = new QueryBase("a") {
+                            @Override
+                            public QueryBase distinct() {
+                                return super.distinct();
+                            }
+                        }
+
+                         */
+
                         query.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -508,6 +610,8 @@ public class BuddyFragment extends Fragment {
 
                             }
                         });
+
+                        buddyDialog.dismiss();
                     }
                 });
 
@@ -520,33 +624,57 @@ public class BuddyFragment extends Fragment {
                     }
                 });
 
+                resetFiltersImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        filterDateTv.setText("");
+                        filterQuotaEt.setText("");
+                        filterTimeTv.setText("");
+                        filterLocationEt.setText("");
+
+                    }
+                });
 
                 buddyDialog.show();
+
+                //dialog dismiss listener
+                buddyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+                        //set to 0 zero in order to prevent blocking spinner due to the previous posts.
+                        i[0] = 0;
+
+                        //set tags to empty strings
+                        filterTag1.setText("");
+                        filterTag2.setText("");
+                        filterTag3.setText("");
+
+                        //set boolean array to false only
+                        tagsStatus[0] = false;
+                        tagsStatus[1] = false;
+                        tagsStatus[2] = false;
+
+                        //set previous filter values to empty string.
+                        filterDateTv.setText("");
+                        filterQuotaEt.setText("");
+                        filterTimeTv.setText("");
+                        filterLocationEt.setText("");
+
+
+                        buddyDialog.dismiss();
+
+                    }
+                });
+
             }
         });
 
-        /*
-        //dialog dismiss listener
-        buddyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
 
-                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
-                i[0] = 0;
 
-                //set tags to empty strings
-                tag1.setText("");
-                tag2.setText("");
-                tag3.setText("");
 
-                //set boolean array to false only
-                tagsStatus[0] = false;
-                tagsStatus[1] = false;
-                tagsStatus[2] = false;
 
-            }
-        });
-        */
 
         return view;
 
