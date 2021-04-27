@@ -997,6 +997,17 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
     }
+    // Tag converter example
+    public void serverToPhoneTagConverter(String tags) {
+        String[] allTags = getResources().getStringArray( R.array.all_tags );
+        String[] tagIndexes = tagNums.split( "," );
+        int index1 = Integer.parseInt(tagIndexes[0]);
+        int index2 = Integer.parseInt(tagIndexes[1]);
+        int index3 = Integer.parseInt(tagIndexes[2]);
+        String tag1 = allTags[index1];
+        String tag2 = allTags[index2];
+        String tag3 = allTags[index3];
+    }
 
     @Override
     protected void onResume() {
