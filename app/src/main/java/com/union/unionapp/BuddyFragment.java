@@ -495,11 +495,6 @@ public class BuddyFragment extends Fragment {
                 filterTag2.setVisibility(View.INVISIBLE);
                 filterTag3.setVisibility(View.INVISIBLE);
 
-                //set tags to disabled -- not needed
-                //tag1.setEnabled(false);
-                //tag2.setEnabled(false);
-                //tag3.setEnabled(false);
-
                 textViewTags = new TextView[]{filterTag1, filterTag2, filterTag3};
                 tagsArray = new AppCompatButton[]{filterTag1, filterTag2, filterTag3};
 
