@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-public class CustomAdapterAchievements extends ArrayAdapter<String> {
+public class CustomAdapterAchsPU extends ArrayAdapter<String> {
 
     //Properties
     Context c;
@@ -19,8 +19,8 @@ public class CustomAdapterAchievements extends ArrayAdapter<String> {
     LayoutInflater inflater;
 
     //Constructors
-    public CustomAdapterAchievements(@NonNull Context context, String[] achs) {
-        super(context, R.layout.achs_list_layout, achs);
+    public CustomAdapterAchsPU(@NonNull Context context, String[] achs) {
+        super(context, R.layout.achs_list_layout_pu, achs);
         this.c = context;
         this.achs = achs;
 
@@ -33,11 +33,11 @@ public class CustomAdapterAchievements extends ArrayAdapter<String> {
 
         if ( convertView == null ){
             inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.achs_list_layout, null);
+            convertView = inflater.inflate(R.layout.achs_list_layout_pu, null);
         }
 
         //Initializations
-        TextView achsTexts = (TextView) convertView.findViewById(R.id.achsItem);
+        TextView achsTexts = (TextView) convertView.findViewById(R.id.achsItemPU);
 
         //Set Text
         achsTexts.setText(achs[position]);

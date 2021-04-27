@@ -10,9 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/**
- * Bu class userdaki achievemnts list view için oluşturulmuştur.
- * */
+
 public class CustomAdapterLastActs extends ArrayAdapter<String> {
 
     //Properties
@@ -22,7 +20,7 @@ public class CustomAdapterLastActs extends ArrayAdapter<String> {
 
     //Constructors
     public CustomAdapterLastActs(@NonNull Context context, String[] achs) {
-        super(context, R.layout.achs_list_layout, achs);
+        super(context, R.layout.last_acts_list_layout, achs);
         this.c = context;
         this.lastActs = achs;
 

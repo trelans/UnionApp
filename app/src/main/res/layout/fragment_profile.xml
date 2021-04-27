@@ -249,7 +249,7 @@
                         android:layout_marginBottom="96dp"
                         android:layout_marginEnd="109dp"
                         android:background="@drawable/tag_button_template"
-                        android:backgroundTint="#EA2A31"
+                        android:backgroundTint="#F14D53"
                         android:fontFamily="@font/myriad_pro_regular"
                         android:insetBottom="0sp"
                         android:insetTop="0sp"

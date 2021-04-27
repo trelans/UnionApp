@@ -41,7 +41,7 @@
 
 
                 <EditText
-                    android:id="@+id/locationPlainText"
+                    android:id="@+id/locationFilterEditText"
                     android:layout_width="174dp"
                     android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
@@ -54,7 +54,7 @@
                     android:paddingLeft="5dp" />
 
                 <EditText
-                    android:id="@+id/dateNumberText"
+                    android:id="@+id/dateFilterEditText"
                     android:layout_width="139dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -65,7 +65,7 @@
                     android:inputType="date" />
 
                 <EditText
-                    android:id="@+id/timaNumberText"
+                    android:id="@+id/timeFilterEditText"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -76,7 +76,7 @@
                     android:inputType="number" />
 
                 <EditText
-                    android:id="@+id/quotaNumberText"
+                    android:id="@+id/quotaFilterEditText"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -87,7 +87,7 @@
                     android:inputType="number" />
 
                 <ImageView
-                    android:id="@+id/send"
+                    android:id="@+id/cancelFilterImageView"
                     android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -97,7 +97,7 @@
                     app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
                 <Spinner
-                    android:id="@+id/tagSpinner"
+                    android:id="@+id/tagSpinnerFilter"
                     android:layout_width="253dp"
                     android:layout_height="26dp"
                     android:layout_alignParentEnd="true"
@@ -110,7 +110,7 @@
                     android:background="@drawable/edittext_border_template" />
 
                 <Spinner
-                    android:id="@+id/genderPrefPlainText"
+                    android:id="@+id/prefferedGenderFilterSpinner"
                     android:layout_width="124dp"
                     android:layout_height="21dp"
                     android:layout_alignParentBottom="true"
@@ -208,19 +208,77 @@
                     android:textSize="18sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sampleTag3"
+                    android:id="@+id/filterTag1TextView"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="210dp"
                     android:layout_marginBottom="245dp"
-                    android:layout_marginEnd="187dp"
                     android:background="@drawable/tag_button_template"
                     android:backgroundTint="#EA2A31"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:insetBottom="0sp"
                     android:insetTop="0sp"
+                    android:insetBottom="0sp"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="#abcd"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="#00291D"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.512" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/filterTag3TextView"
+
+                    android:layout_width="78dp"
+                    android:layout_height="19dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="31dp"
+                    android:layout_marginBottom="245dp"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="#EA2A31"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:insetTop="0sp"
+                    android:insetBottom="0sp"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="#abcd"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="#00291D"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.512" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/filterTag2TextView"
+
+                    android:layout_width="78dp"
+                    android:layout_height="19dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="122dp"
+                    android:layout_marginBottom="245dp"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="#EA2A31"
+                    android:fontFamily="@font/myriad_pro_regular"
+                    android:insetTop="0sp"
+                    android:insetBottom="0sp"
                     android:shadowDx="0"
                     android:shadowDy="0"
                     android:shadowRadius="5"
@@ -237,7 +295,7 @@
                     app:layout_constraintVertical_bias="0.512" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/searchFiltersImageView"
                     android:layout_width="30dp"
                     android:layout_height="34dp"
                     android:layout_alignParentBottom="true"

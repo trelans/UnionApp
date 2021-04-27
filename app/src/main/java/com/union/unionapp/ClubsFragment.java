@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -61,7 +63,7 @@ import java.util.List;
 public class ClubsFragment extends Fragment {
 
     Dialog clubDialog;
-    Spinner clubTagSpinner;
+    Spinner tagSpinner;
 
     EditText postDetailsEt,
             postQuotaEt,
@@ -69,6 +71,23 @@ public class ClubsFragment extends Fragment {
 
     TextView postDateEt,
              postTimeEt;
+
+    TextView[] textViewTags;
+
+    AppCompatButton tag1,
+                    tag2,
+                    tag3;
+
+    String[] allTags;
+
+    AppCompatButton[] tagsArray;
+
+    boolean[] tagsStatus = {false, false, false};
+    int[] tagTextsIndexArray = new int[3];
+    int[] i = new int[1];
+
+    int lastDeletedtag = 0;
+
 
     ImageView imageIv,
             sendButtonIv,
@@ -112,6 +131,8 @@ public class ClubsFragment extends Fragment {
         clubDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
         clubDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        allTags = getResources().getStringArray(R.array.all_tags);
 
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -158,10 +179,52 @@ public class ClubsFragment extends Fragment {
                 Dialog dialog;
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
-                clubTagSpinner = clubDialog.findViewById(R.id.tagSpinner);
+                tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                clubTagSpinner.setAdapter(tagAdapter);
+                tagSpinner.setAdapter(tagAdapter);
+
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (position > 0) {
+                            String selectedItem = parent.getItemAtPosition(position).toString();
+                            if (i[ 0 ] < tagsStatus.length) {
+
+                                for (int j = 0; j < 3; j++) {
+
+                                    if (!tagsStatus[j]) {
+
+                                        tagsArray[j].setText(selectedItem);
+                                        if (!tagHasSelectedBefore(tag1,tag2,tag3)) {
+                                            tagsArray[j].setVisibility(View.VISIBLE);
+                                            i[0]++;
+                                            tagsStatus[j] = true;
+                                        }
+                                        else {
+                                            tagsStatus[j] = false;
+                                            tagsArray[j].setText("");
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if( i[ 0 ] == tagsStatus.length ) {
+                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+                            tagSpinner.setEnabled( false );
+                            //tagSpinner.setClickable( false );
+                            //tagSpinner.setTop( 1 );
+                            //setTagsSaved( true );
+                        }
+                    }
+
+                    public void onNothingSelected (AdapterView < ? > parent) {
+                        //TODO
+                    }
+                });
+
 
                 //init views
                 postDetailsEt = clubDialog.findViewById(R.id.editTextPostDetails);
@@ -171,6 +234,64 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv = clubDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = clubDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
+
+                //init tags
+                tag1 = clubDialog.findViewById(R.id.textViewTag1);
+                tag2 = clubDialog.findViewById(R.id.textViewTag2);
+                tag3 = clubDialog.findViewById(R.id.textViewTag3);
+
+                //set tag texts to empty string
+                tag1.setText("");
+                tag2.setText("");
+                tag3.setText("");
+
+                //set tags to invisible
+                tag1.setVisibility(View.INVISIBLE);
+                tag2.setVisibility(View.INVISIBLE);
+                tag3.setVisibility(View.INVISIBLE);
+
+                //set tags to disabled -- not needed
+                //tag1.setEnabled(false);
+                //tag2.setEnabled(false);
+                //tag3.setEnabled(false);
+
+                textViewTags = new TextView[]{tag1, tag2, tag3};
+                tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
+
+                //set onClickListeners for tags
+                tag1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tag1.setVisibility(View.INVISIBLE);
+                        tagsStatus[0] = false;
+                        tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 0;
+                    }
+                });
+
+                tag2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tag2.setVisibility(View.INVISIBLE);
+                        tagsStatus[1] = false;
+                        tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 1;
+                    }
+                });
+
+                tag3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tag3.setVisibility(View.INVISIBLE);
+                        tagsStatus[2] = false;
+                        tagSpinner.setEnabled( true );
+                        i[0]--;
+                        lastDeletedtag = 2;
+                    }
+                });
+
 
                 //set the postDateEt to current date for default
                 Calendar calendar = Calendar.getInstance();
@@ -246,6 +367,20 @@ public class ClubsFragment extends Fragment {
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
 
+                        String tagsToUpload = "";
+
+                        for ( int k = 1; k < allTags.length; k++ ) {
+                            if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
+                                tagsToUpload = tagsToUpload + k + ",";
+                            }
+                        }
+
+                        //tags to upload'un sonundaki virgülü atıyor
+                        StringBuilder tempString = new StringBuilder(tagsToUpload);
+                        tempString.deleteCharAt(tempString.length()-1);
+                        tagsToUpload = tempString.toString();
+
+
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
                             return;
@@ -253,11 +388,11 @@ public class ClubsFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation);
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation);
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload);
                         }
                         clubDialog.dismiss();
 
@@ -267,20 +402,42 @@ public class ClubsFragment extends Fragment {
                 clubDialog.show();
             }
         });
-checkUserStatus();
+        checkUserStatus();
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clubDialog.setContentView(R.layout.custom_club_filter);
 
-                clubTagSpinner = clubDialog.findViewById(R.id.tagSpinner);
+                tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                clubTagSpinner.setAdapter(tagAdapter);
+                tagSpinner.setAdapter(tagAdapter);
 
                 clubDialog.show();
             }
         });
+
+        //dialog dismiss listener
+        clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
+                i[0] = 0;
+
+                //set tags to empty strings
+                tag1.setText("");
+                tag2.setText("");
+                tag3.setText("");
+
+                //set boolean array to false only
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
+            }
+        });
+
 
 
         return view;
@@ -441,7 +598,7 @@ checkUserStatus();
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
@@ -477,7 +634,7 @@ checkUserStatus();
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pLocation",postLocation);
-                                hashMap.put("pTags","1"); //TODO tagler için değişicek
+                                hashMap.put("pTags", tagsToUpload);
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -531,6 +688,7 @@ checkUserStatus();
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pLocation",postLocation);
+            hashMap.put("pTags", tagsToUpload);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -565,5 +723,13 @@ checkUserStatus();
         calendar.setTimeInMillis(MainActivity.getServerDate());
         time = timeFormat.format(calendar.getTime());
         date = dateFormat.format(calendar.getTime());
+    }
+
+    public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
+        String tag1String = tag1.getText().toString();
+        String tag2String = tag2.getText().toString();
+        String tag3String = tag3.getText().toString();
+
+        return ( tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String) );
     }
 }
