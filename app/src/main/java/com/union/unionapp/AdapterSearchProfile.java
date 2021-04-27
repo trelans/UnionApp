@@ -67,10 +67,7 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
                 Intent i = new Intent( context, OtherProfile.class);
                 i.putExtra("Hisuid",hisUID);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
                 context.startActivity(i);
-
-
 
             }
         });
