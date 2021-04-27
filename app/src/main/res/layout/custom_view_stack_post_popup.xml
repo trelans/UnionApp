@@ -127,15 +127,15 @@
                     android:id="@+id/answerEditText"
                     android:layout_width="278dp"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:layout_above="@+id/anonymCheckBox"
 
                     android:layout_below="@+id/commentStackRecyclerView"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="7dp"
-                    android:layout_above="@+id/anonymCheckBox"
                     android:background="@drawable/edittext_border_template"
                     android:hint="Enter your answer here..."
-                    />
+                    android:paddingLeft="10dp"
+                    android:textSize="12sp" />
 
 
 

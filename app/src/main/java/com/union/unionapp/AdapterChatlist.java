@@ -70,7 +70,9 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
                 Intent intent = new Intent (context , ChatActivity.class);
                 intent.putExtra("Hisuid" , hisUid);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
                 context.startActivity(intent);
+
 
             }
         });
