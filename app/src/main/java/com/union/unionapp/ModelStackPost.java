@@ -20,43 +20,43 @@ public class ModelStackPost {
         this.pUpvoteNumber = pUpvoteNumber;
     }
 
-    public String getpId() {
+    public String getPId() {
         return pId;
     }
 
-    public void setpId(String pId) {
+    public void setPId(String pId) {
         this.pId = pId;
     }
 
-    public String getpTitle() {
+    public String getPTitle() {
         return pTitle;
     }
 
-    public void setpTitle(String pTitle) {
+    public void setPTitle(String pTitle) {
         this.pTitle = pTitle;
     }
 
-    public String getpDetails() {
+    public String getPDetails() {
         return pDetails;
     }
 
-    public void setpDetails(String pDetails) {
+    public void setPDetails(String pDetails) {
         this.pDetails = pDetails;
     }
 
-    public String getpImage() {
+    public String getPImage() {
         return pImage;
     }
 
-    public void setpImage(String pImage) {
+    public void setPImage(String pImage) {
         this.pImage = pImage;
     }
 
-    public String getpTime() {
+    public String getPTime() {
         return pTime;
     }
 
-    public void setpTime(String pTime) {
+    public void setPTime(String pTime) {
         this.pTime = pTime;
     }
 
@@ -68,27 +68,27 @@ public class ModelStackPost {
         this.uid = uid;
     }
 
-    public String getuEmail() {
+    public String getUEmail() {
         return uEmail;
     }
 
-    public void setuEmail(String uEmail) {
+    public void setUEmail(String uEmail) {
         this.uEmail = uEmail;
     }
 
-    public String getpUpvoteNumber() {
+    public String getPUpvoteNumber() {
         return pUpvoteNumber;
     }
 
-    public void setpUpvoteNumber(String pUpvoteNumber) {
+    public void setPUpvoteNumber(String pUpvoteNumber) {
         this.pUpvoteNumber = pUpvoteNumber;
     }
 
-    public String getpAnon() {
+    public String getPAnon() {
         return pAnon;
     }
 
-    public void setpAnon(String pAnon) {
+    public void setPAnon(String pAnon) {
         this.pAnon = pAnon;
     }
 

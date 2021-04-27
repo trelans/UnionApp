@@ -132,10 +132,6 @@ public class StackFragment extends Fragment {
                 stackTagSpinner.setAdapter(tagAdapter);
 
 
-
-
-
-
                 //init views
                 sendButtonIv = stackDialog.findViewById(R.id.sendButtonImageView);
                 addPhotoIv = stackDialog.findViewById(R.id.uploadPhotoImageView);
@@ -221,7 +217,6 @@ public class StackFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    System.out.println(ds);
                     ModelStackPost modelStackPost = ds.getValue(ModelStackPost.class);
                     postList.add(modelStackPost);
 

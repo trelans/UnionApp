@@ -99,6 +99,7 @@ public class BuddyFragment extends Fragment {
     List<ModelBuddyAndClubPost> postList;
     AdapterBuddyPosts adapterBuddyPosts;
 
+    String time;
     String date;
     String[] allTags;
     TextView[] textViewTags;
@@ -307,16 +308,17 @@ public class BuddyFragment extends Fragment {
 
 
                 //set the postDateEt to current date for default
-                Calendar defaultCalendar = Calendar.getInstance();
-                calendarToString(defaultCalendar);
+                Calendar calendar = Calendar.getInstance();
+                calendarToString(calendar);
                 postDateEt.setText(date);
+                postTimeEt.setText(time);
 
                 //setting up the calendar dialog
-                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(MainActivity.getServerDate());
                 final int year = calendar.get(Calendar.YEAR);
                 final int month = calendar.get(Calendar.MONTH);
                 final int day = calendar.get(Calendar.DAY_OF_MONTH);
-                final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+                final int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 final int minute = calendar.get(Calendar.MINUTE);
 
                 postDateEt.setOnClickListener(new View.OnClickListener() {
@@ -325,6 +327,7 @@ public class BuddyFragment extends Fragment {
                         DatePickerDialog datePickerDialog = new DatePickerDialog(
                                 getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
+                        datePickerDialog.updateDate(year,month,day);
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         datePickerDialog.show();
                     }
@@ -334,7 +337,7 @@ public class BuddyFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hourOfDay, minute, true
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hour, minute, true
                         );
                         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         timePickerDialog.show();
@@ -702,6 +705,9 @@ public class BuddyFragment extends Fragment {
 
     public void calendarToString(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        calendar.setTimeInMillis(MainActivity.getServerDate());
+        time = timeFormat.format(calendar.getTime());
         date = dateFormat.format(calendar.getTime());
     }
 
