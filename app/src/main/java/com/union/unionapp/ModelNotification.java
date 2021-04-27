@@ -1,19 +1,34 @@
 package com.union.unionapp;
 
-public class ModuleNotification {
-    String pId, timestamp, pUid, notification, sUid, sName, sEmail , sImage;
+public class ModelNotification {
+    String pId, timestamp, pUid, notification, sUid, sName, sEmail , sImage, sTag;
 
-    public ModuleNotification(String pId, String timestamp, String pUid, String notification, String sUid, String sName, String sEmail, String sImage) {
+    public ModelNotification(String pId, String timestamp, String pUid, String notification, String sUid, String sName,  String sImage, String sTag) {
         this.pId = pId;
         this.timestamp = timestamp;
         this.pUid = pUid;
         this.notification = notification;
         this.sUid = sUid;
         this.sName = sName;
-        this.sEmail = sEmail;
         this.sImage = sImage;
+        this.sTag = sTag;
     }
 
+    public String getsEmail() {
+        return sEmail;
+    }
+
+    public void setsEmail(String sEmail) {
+        this.sEmail = sEmail;
+    }
+
+    public String getsTag() {
+        return sTag;
+    }
+
+    public void setsTag(String sTag) {
+        this.sTag = sTag;
+    }
 
     public String getpId() {
         return pId;
@@ -61,14 +76,6 @@ public class ModuleNotification {
 
     public void setsName(String sName) {
         this.sName = sName;
-    }
-
-    public String getsEmail() {
-        return sEmail;
-    }
-
-    public void setsEmail(String sEmail) {
-        this.sEmail = sEmail;
     }
 
     public String getsImage() {
