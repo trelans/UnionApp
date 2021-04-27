@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="vertical"
-
     android:padding="5dp"
     android:textAlignment="center">
 
@@ -36,50 +35,57 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
 
-                <EditText
-                    android:id="@+id/answerEditText"
-                    android:layout_width="278dp"
-                    android:layout_height="29dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="361dp"
-                    android:background="@drawable/edittext_border_template"
-                    android:hint="  enter your answer here..." />
-
-                <ImageView
-                    android:id="@+id/upIcon3imageView"
-                    android:layout_width="28dp"
-                    android:layout_height="30dp"
+                <TextView
+                    android:id="@+id/relatedTagTextView"
+                    android:layout_width="75dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="17dp"
+                    android:background="@drawable/tag_button_template"
+                    android:text="#Math101"
+                    android:textAlignment="center" />
+                <TextView
+                    android:id="@+id/upNumberTextView"
+                    android:layout_width="33dp"
+                    android:layout_height="23dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="261dp"
-                    android:layout_marginEnd="3dp"
-                    app:srcCompat="@drawable/up_icon" />
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="23dp"
+                    android:background="@drawable/tag_button_template"
+                    android:text="14"
+                    android:textAlignment="center" />
 
-                <ImageView
-                    android:id="@+id/upIcon2imageView"
-                    android:layout_width="28dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="221dp"
-                    android:layout_marginEnd="3dp"
-                    app:srcCompat="@drawable/up_icon" />
 
                 <TextView
                     android:id="@+id/askedQuestionTextView"
                     android:layout_width="303dp"
                     android:layout_height="107dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="291dp"
+                    android:layout_marginTop="50dp"
                     android:background="@drawable/edittext_border_template"
                     android:ems="10"
                     android:gravity="center"
                     android:hint="User's question will be displayed here..."
                     android:inputType="textMultiLine"
                     android:textSize="12sp" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/commentStackRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/askedQuestionTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"/>
 
                 <ImageView
                     android:id="@+id/imageViewAddPhoto"
@@ -88,10 +94,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="269dp"
+                    android:layout_marginStart="278dp"
                     android:layout_marginLeft="115dp"
-                    android:layout_marginEnd="3dp"
-                    android:layout_marginBottom="95dp"
+                    android:layout_marginEnd="-6dp"
+                    android:layout_marginBottom="64dp"
                     android:src="@drawable/ic_baseline_add_a_photo_24" />
 
                 <ImageButton
@@ -109,46 +115,6 @@
                     android:layout_marginBottom="0dp"
                     android:background="@drawable/send_icon" />
 
-                <TextView
-                    android:id="@+id/answer1textView"
-                    android:layout_width="278dp"
-                    android:layout_height="29dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="181dp"
-                    android:background="@drawable/edittext_border_template"
-                    android:paddingLeft="4dp"
-                    android:text="user1234: you can divide x by y then..." />
-
-                <TextView
-                    android:id="@+id/answer2textView"
-                    android:layout_width="278dp"
-                    android:layout_height="29dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="221dp"
-                    android:background="@drawable/edittext_border_template"
-                    android:paddingLeft="4dp"
-                    android:text="user1234: you can divide x by y then..." />
-
-                <TextView
-                    android:id="@+id/answer3textView"
-                    android:layout_width="278dp"
-                    android:layout_height="29dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="261dp"
-                    android:background="@drawable/edittext_border_template"
-                    android:paddingLeft="4dp"
-                    android:text="user1234: you can divide x by y then..." />
-
-                <ImageView
-                    android:id="@+id/upIcon1imageView"
-                    android:layout_width="28dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="181dp"
-                    android:layout_marginEnd="3dp"
-                    app:srcCompat="@drawable/up_icon" />
-
                 <CheckBox
                     android:id="@+id/anonymCheckBox"
                     android:layout_width="117dp"
@@ -160,29 +126,36 @@
                     android:text="Ask Anonymously"
                     android:textSize="10sp" />
 
-                <TextView
-                    android:id="@+id/relatedTagTextView"
-                    android:layout_width="75dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="17dp"
-                    android:background="@drawable/tag_button_template"
-                    android:text="#Math101"
-                    android:textAlignment="center" />
+                <EditText
+                    android:id="@+id/answerEditText"
+                    android:layout_width="278dp"
+                    android:layout_height="29dp"
+                    android:layout_below="@+id/commentStackRecyclerView"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/edittext_border_template"
+                    android:hint="  enter your answer here..."
+                    android:inputType="textMultiLine" />
+
+
 
                 <TextView
-                    android:id="@+id/upNumberTextView"
-                    android:layout_width="33dp"
-                    android:layout_height="23dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="23dp"
-                    android:background="@drawable/tag_button_template"
-                    android:text="14"
-                    android:textAlignment="center" />
+                    android:id="@+id/pTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/pPostedTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/pUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
 
             </RelativeLayout>
 

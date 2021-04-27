@@ -67,7 +67,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    public static long dateServer; //TODO sağlıksız kod
+    private static long dateServer; //TODO sağlıksız kod
     FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -458,6 +458,9 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             }
                         }
+
+
+
                     }
                     String tagIndexes = "";
                     for (int l = 0; l < tagTextsIndexArray.length; l++) {
@@ -708,6 +711,7 @@ public class MainActivity extends AppCompatActivity {
         // intent to start camera
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
+        cameraIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(cameraIntent, IMAGE_PICK_CAMERA_CODE);
 
 
