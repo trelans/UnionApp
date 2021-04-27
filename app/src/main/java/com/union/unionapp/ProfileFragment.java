@@ -1,6 +1,7 @@
 package com.union.unionapp;
 
 
+
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -55,10 +56,6 @@ public class ProfileFragment extends Fragment {
     TextView usernameTW;
     ImageView userPP;
 
-    TextView tagTextView1;
-    TextView tagTextView2;
-    TextView tagTextView3;
-
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
@@ -82,6 +79,7 @@ public class ProfileFragment extends Fragment {
         user = mAuth.getCurrentUser();
         firebaseDatabase = firebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
+
         lastActsIsActive = true;
         achsIsActive = false;
         //init views
@@ -135,6 +133,7 @@ public class ProfileFragment extends Fragment {
                     }
 
 
+                    String achivements =  "" + ds.child("achievements").getValue();
 
                     //set data
                     usernameTW.setText(name);
@@ -154,10 +153,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        
+
         calendarDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
-        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         openCalendar = (ImageView) view.findViewById(R.id.directMessage);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
