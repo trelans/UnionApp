@@ -40,7 +40,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -54,11 +54,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.union.unionapp.notifications.Token;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         active = clubFragment;
 
+       checkUserStatus();
         // server time listener attached
         DatabaseReference offsetRef = FirebaseDatabase.getInstance().getReference(".info/serverTimeOffset");
         offsetRef.addValueEventListener(new ValueEventListener() {
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // update token
-        //updateToken(FirebaseInstanceId.getInstance().getToken());
+        updateToken(FirebaseInstanceId.getInstance().getToken());
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
@@ -980,10 +981,13 @@ public class MainActivity extends AppCompatActivity {
     public void updateToken(String token) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
         Token mToken = new Token(token);
+        System.out.println(" " + mUID);
         ref.child(mUID).setValue(mToken);
     }
     private void checkUserStatus() {
-        FirebaseUser user = mAuth.getCurrentUser();
+        FirebaseAuth kAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = kAuth.getCurrentUser();
+
         if (user != null) {
             mUID = user.getUid();
         }
