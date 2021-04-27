@@ -567,19 +567,7 @@ public class BuddyFragment extends Fragment {
 
 
                         DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
-
-                        /*
-                        QueryMixin<String> queryMixin = new QueryMixin();
-                        queryMixin.
                         Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
-                        QueryBase queryBase = new QueryBase("a") {
-                            @Override
-                            public QueryBase distinct() {
-                                return super.distinct();
-                            }
-                        }
-
-                         */
 
                         query.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -620,23 +608,19 @@ public class BuddyFragment extends Fragment {
                 resetFiltersImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO Reset Selected filters and set the feed back to normal feed.
-                    }
-                });
-
-                resetFiltersImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
                         filterDateTv.setText("");
                         filterQuotaEt.setText("");
                         filterTimeTv.setText("");
                         filterLocationEt.setText("");
 
+                        //TODO Reset Selected filters and set the feed back to normal feed.
+                        loadPosts();
+
                     }
                 });
 
-                buddyDialog.show();
+
 
                 //dialog dismiss listener
                 buddyDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -668,16 +652,12 @@ public class BuddyFragment extends Fragment {
                     }
                 });
 
+                buddyDialog.show();
+
             }
         });
 
-
-
-
-
-
         return view;
-
     }
 
     private void loadPosts() {
