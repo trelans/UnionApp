@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_centerVertical="true"
     android:layout_gravity="center"
     android:orientation="vertical"
-
     android:padding="5dp"
     android:textAlignment="center">
 
@@ -16,7 +14,7 @@
         android:layout_height="451dp"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
-
+        android:layout_marginTop="300dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="300dp"
         android:orientation="vertical"
