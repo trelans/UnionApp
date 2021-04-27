@@ -464,7 +464,7 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // in case of error
-                Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
         });
     }

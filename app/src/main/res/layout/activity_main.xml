@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#88ABE3"
-    android:id="@+id/mainLayout"
+    android:id="@+id/slideButtonForward"
     tools:context="com.union.unionapp.MainActivity">
 
     <androidx.cardview.widget.CardView

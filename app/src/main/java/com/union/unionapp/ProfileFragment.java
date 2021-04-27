@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class ProfileFragment extends Fragment {
 
     boolean lastActsIsActive;
     boolean achsIsActive;
+    String tagNums;
     String[] allAchs;
     String[] userAchs;
     String[] userActs;
@@ -60,6 +62,11 @@ public class ProfileFragment extends Fragment {
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
+    AppCompatButton[] tagButtons;
+    String[] tagIndexes;
+
+    String[] allTags;
+
     ImageView forwardDateImageView;
     ImageView backwardDateImageView;
     TextView dateTextView;
@@ -77,13 +84,18 @@ public class ProfileFragment extends Fragment {
         databaseReference = firebaseDatabase.getReference("Users");
         lastActsIsActive = true;
         achsIsActive = false;
-
         //init views
         usernameTW = view.findViewById(R.id.userNameTextView);
         userPP = view.findViewById(R.id.userPp);
-        tagButton1 = view.findViewById(R.id.tagButton1);
-        tagButton2 = view.findViewById(R.id.tagButton2);
-        tagButton3 = view.findViewById(R.id.tagButton3);
+        tagButton1 = view.findViewById(R.id.profileTagButton1);
+        tagButton2 = view.findViewById(R.id.profileTagButton2);
+        tagButton3 = view.findViewById(R.id.profileTagButton3);
+        tagButtons = new AppCompatButton[]{ tagButton1, tagButton2, tagButton3 };
+        allTags = getResources().getStringArray( R.array.all_tags );
+
+        tagButton1.setVisibility( View.INVISIBLE );
+        tagButton2.setVisibility( View.INVISIBLE );
+        tagButton3.setVisibility( View.INVISIBLE );
 
         allAchs = getResources().getStringArray(R.array.user_achievements);
         achievementLocationsWComma = "1,3,5".replace(",", "");
@@ -98,13 +110,31 @@ public class ProfileFragment extends Fragment {
 
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
         query.addValueEventListener(new ValueEventListener() {
+
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
                 // check until required data get
                 for (DataSnapshot ds: snapshot.getChildren()){
                     //get data
                     String name = "@" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
+                    tagNums = "" + ds.child( "tags" ).getValue();
+
+                    if( tagNums != null ) {
+                         tagIndexes = tagNums.split( "," );
+                        int[] k = new int [ 1 ] ;
+                        k [ 0 ] = 0;
+                         int temp;
+                        for ( String str: tagIndexes ) {
+                            temp = Integer.parseInt( str );
+                            tagButtons[ k[ 0 ] ].setText( allTags [ temp ] );
+                            tagButtons[ k[ 0 ] ].setVisibility( View.VISIBLE );
+                            k[ 0 ]++;
+
+                        }
+                    }
+
+
 
                     //set data
                     usernameTW.setText(name);
@@ -124,23 +154,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        // tagleri veritabanından çekip düzeltme deneme ~ ege
-        /*databaseReference = firebaseDatabase.getReference("tags" );
-
-        databaseReference.child("tags").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    Log.i("firebase tags", String.valueOf(task.getResult().getValue()));
-                    System.out.println( "tag şndexes firebase: " + String.valueOf(task.getResult().getValue()) );
-                }
-            }
-        });*/
-
-        // deneme bitişi ~ ege
         
         calendarDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
@@ -171,6 +184,7 @@ public class ProfileFragment extends Fragment {
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i( "tagler:", ""+ tagNums );
                 if (!lastActsIsActive){
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
