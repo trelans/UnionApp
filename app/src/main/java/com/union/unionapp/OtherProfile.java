@@ -82,9 +82,9 @@ public class OtherProfile extends AppCompatActivity {
         //init views
         usernameTW = findViewById(R.id.userNameTextView);
         userPP = findViewById(R.id.userPp);
-        tagButton1 = findViewById(R.id.tagButton1);
-        tagButton2 = findViewById(R.id.tagButton2);
-        tagButton3 = findViewById(R.id.tagButton3);
+        tagButton1 = findViewById(R.id.profileTagButton1);
+        tagButton2 = findViewById(R.id.profileTagButton2);
+        tagButton3 = findViewById(R.id.profileTagButton3);
         back_bt = findViewById(R.id.backButtonn);
 
 
@@ -107,6 +107,8 @@ public class OtherProfile extends AppCompatActivity {
                     //get data
                     String name = "@" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
+
+                    // burada yapılacak
 
                     //set data
                     usernameTW.setText(name);

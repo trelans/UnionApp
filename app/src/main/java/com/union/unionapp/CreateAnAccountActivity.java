@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -103,7 +102,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regexStr);
 
         // klavyeyi dışarı tıklayınca kapatmaya yarıyor
-        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
+        findViewById(R.id.slideButtonForward).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (getCurrentFocus() != null) {

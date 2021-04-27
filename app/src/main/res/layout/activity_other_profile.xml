@@ -213,7 +213,7 @@
                         android:textSize="18sp" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/tagButton3"
+                        android:id="@+id/profileTagButton3"
 
                         android:layout_width="84dp"
                         android:layout_height="24dp"
@@ -243,7 +243,7 @@
                         app:layout_constraintVertical_bias="0.512" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/tagButton2"
+                        android:id="@+id/profileTagButton2"
 
                         android:layout_width="86dp"
                         android:layout_height="23dp"
@@ -273,7 +273,7 @@
                         app:layout_constraintVertical_bias="0.512" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/tagButton1"
+                        android:id="@+id/profileTagButton1"
 
                         android:layout_width="88dp"
                         android:layout_height="23dp"

@@ -22,10 +22,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -100,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // klavyeyi dışarı tıklayınca kapatmaya yarıyor
-        findViewById(R.id.mainLayout).setOnTouchListener(new View.OnTouchListener() {
+        findViewById(R.id.slideButtonForward).setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (getCurrentFocus() != null) {

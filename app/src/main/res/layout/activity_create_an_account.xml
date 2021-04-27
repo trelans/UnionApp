@@ -17,7 +17,7 @@
             android:id="@+id/headerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/mainLayout"
+            android:layout_above="@+id/slideButtonForward"
             android:layout_alignParentTop="true">
 
             <LinearLayout
@@ -29,7 +29,7 @@
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainLayout"
+            android:id="@+id/slideButtonForward"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -322,6 +322,14 @@
                         app:layout_constraintVertical_bias="0.512" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/slideButtonBackwards"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Backwards"
+                tools:layout_editor_absoluteX="43dp"
+                tools:layout_editor_absoluteY="596dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
