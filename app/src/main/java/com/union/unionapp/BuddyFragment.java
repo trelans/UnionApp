@@ -439,6 +439,11 @@ public class BuddyFragment extends Fragment {
                 filterTag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
                 filterTag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
 
+                preferredGenderFilterSpinner = buddyDialog.findViewById(R.id.prefferedGenderFilterSpinner);
+                ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
+                genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                preferredGenderFilterSpinner.setAdapter(genderAdapter);
+
 
                 tagSpinner = buddyDialog.findViewById(R.id.tagSpinnerFilter);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.all_tags, android.R.layout.simple_spinner_item);
@@ -483,6 +488,60 @@ public class BuddyFragment extends Fragment {
                         //TODO
                     }
                 });
+
+                //set the postDateEt to current date for default
+                Calendar calendar = Calendar.getInstance();
+                calendarToString(calendar);
+                filterDateTv.setText(date);
+                filterTimeTv.setText(time);
+
+                //setting up the calendar dialog
+                calendar.setTimeInMillis(MainActivity.getServerDate());
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+                final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                final int minute = calendar.get(Calendar.MINUTE);
+
+                filterDateTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
+                        );
+                        datePickerDialog.updateDate(year, month, day);
+                        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.show();
+                    }
+                });
+
+                filterTimeTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hour, minute, true
+                        );
+                        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        timePickerDialog.show();
+                    }
+                });
+                setListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month = month + 1;
+                        String date = dayOfMonth + "/" + month + "/" + year;
+                        filterDateTv.setText(date);
+
+                    }
+                };
+
+                timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String time = hourOfDay + ":" + minute;
+                        filterTimeTv.setText(time);
+                    }
+                };
 
                 filterTag1.setVisibility(View.INVISIBLE);
                 filterTag2.setVisibility(View.INVISIBLE);
