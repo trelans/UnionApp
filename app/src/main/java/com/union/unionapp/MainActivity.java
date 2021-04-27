@@ -19,6 +19,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -53,9 +54,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.union.unionapp.notifications.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     final FragmentManager fm = getSupportFragmentManager();
     final int[] clickCount = {0};
     Fragment active;
+    String mUID;
 
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -164,6 +168,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+
+
+
+        // update token
+        //updateToken(FirebaseInstanceId.getInstance().getToken());
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
@@ -253,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void searchUsersForProfile(String query) {
-        Log.i("BASILIYORUMM", " IM YEH");
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
@@ -551,6 +559,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 
     private boolean checkStoragePermission() {
@@ -964,6 +973,34 @@ public class MainActivity extends AppCompatActivity {
         return dateServer + SystemClock.elapsedRealtime();
     }
 
+    public void updateToken(String token) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token mToken = new Token(token);
+        ref.child(mUID).setValue(mToken);
+    }
+    private void checkUserStatus() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            mUID = user.getUid();
+        }
+        else {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+
+        // save uid of currently signed in user in shared preferences
+        checkUserStatus();
+        SharedPreferences sp = getSharedPreferences("SP_USER",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("Current_USERID", mUID);
+        editor.apply();
+        super.onResume();
+    }
 }
 
 //String[] strings = getResources().getStringArray(R.array.stack_tags); / tagleri arraye yerleştirme kodu

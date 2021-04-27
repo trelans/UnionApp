@@ -120,6 +120,7 @@ public class ProfileFragment extends Fragment {
                     //get data
                     String name = "@" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
+                    String achivements =  "" + ds.child("achievements").getValue();
 
                     //set data
                     usernameTW.setText(name);
