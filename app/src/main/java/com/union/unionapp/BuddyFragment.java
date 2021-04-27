@@ -55,8 +55,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.querydsl.core.support.QueryBase;
-import com.querydsl.core.support.QueryMixin;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -691,7 +689,7 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // in case of error
-                Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
         });
     }
