@@ -548,6 +548,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             myDialog.setContentView(R.layout.custom_notification_popup);
 
+            RecyclerView notificationsRv;
+
+            notificationsRv = myDialog.findViewById(R.id.notificationsRv);
+
         }
 
         myDialog.show();
