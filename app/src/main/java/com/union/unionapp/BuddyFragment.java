@@ -116,7 +116,9 @@ public class BuddyFragment extends Fragment {
     AdapterBuddyPosts adapterBuddyPosts;
 
     String time;
+    String timestamp;
     String date;
+    String tagsToUpload;
     String[] allTags;
     TextView[] textViewTags;
     DatePickerDialog.OnDateSetListener setListener;
@@ -201,7 +203,7 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-
+                timestamp = String.valueOf(MainActivity.getServerDate());
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
@@ -394,7 +396,7 @@ public class BuddyFragment extends Fragment {
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
                         String postGender = genderSpinner.getSelectedItem().toString();
-                        String tagsToUpload = "";
+                               tagsToUpload = "";
 
                         for (int k = 1; k < allTags.length; k++) {
                             if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
@@ -913,26 +915,27 @@ public class BuddyFragment extends Fragment {
                             if (uriTask.isSuccessful()) {
                                 //uri is received upload post to firebase database
                                 checkUserStatus();
-                                HashMap<Object, String> hashMap = new HashMap<>();
+                                HashMap<String, String> hashMap = new HashMap<>();
                                 //put post info
                                 hashMap.put("uid", uid); //çekememiş
                                 hashMap.put("username", username); //çekmemiş
                                 //hashMap.put("uEmail",email);
                                 hashMap.put("uDp", dp);
-                                hashMap.put("pId", timeStamp);
                                 hashMap.put("pDetails", postDetails);
                                 hashMap.put("pDate", postDate);
                                 hashMap.put("pHour", postTime);
                                 hashMap.put("pQuota", postQuotaStr);
                                 hashMap.put("pImage", downloadUri);
-                                hashMap.put("pTime", timeStamp);
+                                hashMap.put("pTime", String.valueOf(timeStamp));
                                 hashMap.put("pLocation", postLocation);
-                                hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek
+                                hashMap.put("pTags", "1,2,3"); //TODO tagler için değişicek TAGS TO UPLOAD
                                 hashMap.put("pGender", postGender);
                                 hashMap.put("pTitle",postTitle);
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+                                String pUid = reference.push().getKey();
+                                hashMap.put("pId", pUid);
 
                                 //put data in this ref
                                 reference.child(timeStamp).setValue(hashMap)
@@ -942,6 +945,34 @@ public class BuddyFragment extends Fragment {
                                                 //added in database
                                                 Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
+
+                                                // Sends notification to people who have same tag numbers with this post
+
+                                                //getting users who have that spesific tag
+                                                // for now notification will send for first tag //TODO
+                                                String firstTag = tagSplitter(tagsToUpload)[0];
+                                                userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                                                Query query = userDbRef.orderByChild("tags").equalTo(firstTag);
+                                                query.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        for (DataSnapshot ds : snapshot.getChildren()) {
+
+                                                            String notifUid = "" + ds.child("uid").getValue();
+                                                            if (!notifUid.equals(uid)) {
+                                                                addToHisNotifications("" + notifUid, "" + pUid, tagIndexToString(firstTag) + " Someone looking for new buddy!");
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -978,9 +1009,9 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pHour", postTime);
             hashMap.put("pQuota", postQuotaStr);
             hashMap.put("pImage", "noImage");
-            hashMap.put("pTime", timeStamp);
+            hashMap.put("pTime", String.valueOf(timeStamp));
             hashMap.put("pLocation", postLocation);
-            hashMap.put("pTags", tagsToUpload);
+            hashMap.put("pTags", "1,2,3"); // tagsToUpload
             hashMap.put("pGender", postGender);
             hashMap.put("pTitle",postTitle);
 
@@ -998,6 +1029,35 @@ public class BuddyFragment extends Fragment {
                             Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
 
+
+                            // Sends notification to people who have same tag numbers with this post
+
+                            //getting users who have that spesific tag
+                            // for now notification will send for first tag //TODO
+                            String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
+                            System.out.println(firstTag + "HAA");
+                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                            Query query = userDbRef.orderByChild("tags").equalTo(firstTag);
+                            query.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot ds : snapshot.getChildren()) {
+                                        System.out.println("ÇALIŞIYOM");
+                                        String notifUid = "" + ds.child("uid").getValue();
+                                        addToHisNotifications("" + notifUid, ""+ pUid, "tagIndexToString(firstTag)" + " Someone looking for new buddy!");
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+
+
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -1011,6 +1071,38 @@ public class BuddyFragment extends Fragment {
 
         }
 
+    }
+    private void addToHisNotifications(String hisUid, String pId , String notification) {
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timestamp );
+        hashMap.put("pUid" , hisUid);
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagsToUpload);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+        ref.child(hisUid).child("Notifications").child(uid).setValue(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
+
+    // input 1,2,3  -> output  array { 1 , 2 , 3}
+    public String[] tagSplitter(String tags) {
+        return tags.split(",");
     }
 
     public void calendarToString(Calendar calendar) {
@@ -1092,6 +1184,12 @@ public class BuddyFragment extends Fragment {
             }
         }
         return returnTags.toString();
+    }
+    //input 1 -> output #Party
+    public String tagIndexToString(String indexString) {
+        int index = Integer.parseInt(indexString);
+        String[] allTags = getResources().getStringArray( R.array.all_tags );
+        return "#" + allTags[index];
     }
 }
 
