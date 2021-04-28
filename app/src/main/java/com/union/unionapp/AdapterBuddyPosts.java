@@ -47,6 +47,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pImage = postList.get(position).getpImage();
         String pTime = postList.get(position).getpTime();
 
+
         //set data
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);

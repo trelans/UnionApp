@@ -53,7 +53,6 @@
                 android:inputType="textMultiLine"
                 android:paddingLeft="3dp"
                 android:paddingTop="2dp"
-                android:textAlignment="center"
                 android:textSize="12sp" />
 
             <ImageView
@@ -102,7 +101,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/editTextTextHeadLine"
+                android:id="@+id/editTextHeadLine"
                 android:layout_width="302dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"

@@ -892,7 +892,7 @@ public class BuddyFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postHeadline, String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
+    private void uploadData(String postTitle, String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "";
@@ -929,7 +929,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pLocation", postLocation);
                                 hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek
                                 hashMap.put("pGender", postGender);
-                                hashMap.put("pHeadline",postHeadline);
+                                hashMap.put("pTitle",postTitle);
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -982,7 +982,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pLocation", postLocation);
             hashMap.put("pTags", tagsToUpload);
             hashMap.put("pGender", postGender);
-            hashMap.put("pHeadline",postHeadline);
+            hashMap.put("pTitle",postTitle);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
