@@ -78,7 +78,7 @@ public class ProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseDatabase = firebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Users");
+        databaseReference = firebaseDatabase.getReference("BilkentUniversity/Users");
 
         lastActsIsActive = true;
         achsIsActive = false;
@@ -157,6 +157,7 @@ public class ProfileFragment extends Fragment {
         calendarDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
         calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        calendarDialog.setCanceledOnTouchOutside(true);
 
         openCalendar = (ImageView) view.findViewById(R.id.directMessage);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
@@ -271,7 +272,6 @@ public class ProfileFragment extends Fragment {
                 calendarDialog.show();
             }
         });
-
         return view;
 
 

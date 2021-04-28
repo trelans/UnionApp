@@ -27,6 +27,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -59,7 +61,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     Button bt_signUp;
     Drawable tickIcon;
     private FirebaseAuth mAuth;
-
+    private SlidrInterface slidr;
 
     // yükleme metodu yazınca progress barı üste al, arkayı blur yap .....
 
@@ -68,12 +70,14 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_an_account);
+        slidr = Slidr.attach( this );
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+
         // card denemesi : fail daskjddfdsf
         // RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
         // CardView cardView = findViewById(R.id.cardView);
@@ -306,7 +310,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data
-                                DatabaseReference reference = database.getReference("BilkentUniversity").child("Users");
+                                DatabaseReference reference = database.getReference("BilkentUniversity/Users/");
                                 // put data within hashmap in database
                                 reference.child(uid).setValue(hashMap);
 
@@ -342,7 +346,13 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         finish();
     }
 
+    public void openLoginActivity( View view ) {
+        Intent intent = new Intent( this, LoginActivity.class );
+        startActivity( intent );
+    }
     public void previewTerms(View view) {
 
     }
+
+
 }

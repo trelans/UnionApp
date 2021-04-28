@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -68,6 +69,8 @@ public class ClubsFragment extends Fragment {
     EditText postDetailsEt,
             postQuotaEt,
             postLocationEt;
+
+    ProgressBar pb;
 
     TextView postDateEt,
              postTimeEt;
@@ -125,6 +128,7 @@ public class ClubsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_clubs, container, false);
 
+        pb = view.findViewById(R.id.progressBar);
 
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showClubFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
@@ -159,6 +163,8 @@ public class ClubsFragment extends Fragment {
 
             }
         });
+
+
 
         //recycler view and its properties
         recyclerView = view.findViewById(R.id.clubPostsRecyclerView);
@@ -403,10 +409,12 @@ public class ClubsFragment extends Fragment {
             }
         });
         checkUserStatus();
+
         filterImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clubDialog.setContentView(R.layout.custom_club_filter);
+                clubDialog.setCanceledOnTouchOutside(true);
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
@@ -416,6 +424,7 @@ public class ClubsFragment extends Fragment {
                 clubDialog.show();
             }
         });
+
 
         //dialog dismiss listener
         clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -443,6 +452,9 @@ public class ClubsFragment extends Fragment {
         return view;
     }
 
+
+
+
     private void loadPosts() {
         // path of all posts
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/ClubPosts");
@@ -459,6 +471,7 @@ public class ClubsFragment extends Fragment {
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }
+                pb.setVisibility(View.GONE);
             }
 
             @Override
@@ -466,6 +479,8 @@ public class ClubsFragment extends Fragment {
                 // in case of error
                // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
+
+
         });
     }
 

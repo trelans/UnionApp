@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -81,6 +82,7 @@ public class BuddyFragment extends Fragment {
             filterDate,
             filterTime;
 
+    ProgressBar pb;
 
     AppCompatButton tag1,
             tag2,
@@ -148,6 +150,8 @@ public class BuddyFragment extends Fragment {
         //genderSpinner.setOnItemSelectedListener(this);
 
         allTags = getResources().getStringArray(R.array.all_tags);
+
+        pb = view.findViewById(R.id.progressBar);
 
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -426,6 +430,7 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
+                buddyDialog.setCanceledOnTouchOutside(true);
 
                 //init views
                 ImageView searchFilterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
@@ -608,8 +613,8 @@ public class BuddyFragment extends Fragment {
 
                             //tags to upload'un sonundaki virgülü atıyor
                             StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-                            tempString.deleteCharAt(tempString.length() - 1);
-                            filterTagsToUpload = tempString.toString();
+
+                            filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
                         }
 
 
@@ -743,6 +748,8 @@ public class BuddyFragment extends Fragment {
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }
+                pb.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -913,7 +920,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pGender", postGender);
 
                                 //path to store post data
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
 
                                 //put data in this ref
                                 reference.child(timeStamp).setValue(hashMap)

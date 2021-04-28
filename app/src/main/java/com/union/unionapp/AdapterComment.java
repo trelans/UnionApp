@@ -11,15 +11,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder> {
     Context context;
     List<ModelComment> commentList;
+    String postId;
+    String commentId;
+    DatabaseReference ref;
 
-    public AdapterComment(Context context, List<ModelComment> commentList) {
+    public AdapterComment(Context context, List<ModelComment> commentList, String postId, String commentId) {
         this.context = context;
         this.commentList = commentList;
+        this.postId = postId;
+        this.commentId = commentId;
     }
 
     @NonNull
@@ -27,6 +36,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
     public AdapterComment.MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflate layout custom_stack_over_flow_feed_cards.xml
         View view = LayoutInflater.from(context).inflate(R.layout.row_comment, parent, false);
+        ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Comments/").child(postId);
         return new MyHolder(view);
     }
 
@@ -38,12 +48,16 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         String anonymous = commentList.get(position).getCAnon();
         String upNumber = commentList.get(position).getUpNumber();
 
+
         //set data
         holder.answerTV.setText(getShortComment(uName, comment, anonymous));
         holder.upIconIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO: 4/26/21 burayı ve üstüne basıldığında yeni diyalog olarak commentin büyük halinin açılmasını yap
+                HashMap<String, Object> updateUpNumber = new HashMap<>();
+                updateUpNumber.put("upNumber", Integer.valueOf(commentList.get(position).getUpNumber()) + 1 + "");
+                ref.child(commentList.get(position).getCId()).updateChildren(updateUpNumber);
             }
         });
     }
@@ -51,14 +65,13 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
     private String getShortComment(String uName, String comment, String anonymous) {
         String name;
         String shortComment;
-        /*
+
         if (anonymous.equals("1")){
             name = "anonymous_user:";
         }else{
             name = uName + ":";
         }
-         */
-        name = uName + ":";
+
         shortComment = name + comment;
         if (shortComment.length() > 40){
             return shortComment.substring(0,40) + "...";

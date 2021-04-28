@@ -67,7 +67,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static long dateServer; //TODO sağlıksız kod
+    private static long dateServer;
     FirebaseAuth mAuth;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Users");
+        databaseReference = firebaseDatabase.getReference("BilkentUniversity/Users");
         storageReference = FirebaseStorage.getInstance().getReference();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
-        myDialog = new Dialog(this);
+        myDialog.setCanceledOnTouchOutside(true);
 
         //initial popup icon
         popUpButton.setBackground(null);
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
         // get all data from path
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         //get path of database named "Users" containing user info
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
         // get all data from path
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -382,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
             // Setings codu buraya
             int[] i = new int[1];
             myDialog.setContentView(R.layout.custom_settings);
+
 
             EditText currentPassword = myDialog.findViewById(R.id.currentPasswordPT);
             EditText newPassword = myDialog.findViewById(R.id.newPasswordPT);
@@ -1006,10 +1007,14 @@ public class MainActivity extends AppCompatActivity {
     public String serverToPhoneTagConverter(String tags) {
         String[] allTags = getResources().getStringArray( R.array.all_tags );
         String[] tagIndexes = tags.split( "," );
-        int index1 = Integer.parseInt(tagIndexes[0]);
-        int index2 = Integer.parseInt(tagIndexes[1]);
-        int index3 = Integer.parseInt(tagIndexes[2]);
-        return allTags[index1] + "," +allTags[index2] +"," + allTags[index3];
+        StringBuilder returnTags = new StringBuilder();
+        for (int i = 0; i < tagIndexes.length; i++) {
+            returnTags.append(Integer.parseInt(tagIndexes[i]));
+            if (i != returnTags.length() - 1){
+                returnTags.append(",");
+            }
+        }
+        return returnTags.toString();
     }
 
     @Override
