@@ -250,7 +250,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         // in case of error
-                        Toast.makeText(context, "Error on load comments 248. line", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "Error on load comments 248. line", Toast.LENGTH_SHORT).show();
                     }
                 });
 

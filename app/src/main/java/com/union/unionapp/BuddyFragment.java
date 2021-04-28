@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -81,6 +82,7 @@ public class BuddyFragment extends Fragment {
             filterDate,
             filterTime;
 
+    ProgressBar pb;
 
     AppCompatButton tag1,
             tag2,
@@ -148,6 +150,8 @@ public class BuddyFragment extends Fragment {
         //genderSpinner.setOnItemSelectedListener(this);
 
         allTags = getResources().getStringArray(R.array.all_tags);
+
+        pb = view.findViewById(R.id.progressBar);
 
         //inits arrays of permissions
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -743,6 +747,8 @@ public class BuddyFragment extends Fragment {
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterBuddyPosts);
                 }
+                pb.setVisibility(View.GONE);
+
             }
 
             @Override

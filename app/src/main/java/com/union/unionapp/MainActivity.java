@@ -1005,7 +1005,7 @@ public class MainActivity extends AppCompatActivity {
      //input 1,2,3 -> output dance,music,party (inş yani uykuluyken yazdım denemedim)
     public String serverToPhoneTagConverter(String tags) {
         String[] allTags = getResources().getStringArray( R.array.all_tags );
-        String[] tagIndexes = tagNums.split( "," );
+        String[] tagIndexes = tags.split( "," );
         int index1 = Integer.parseInt(tagIndexes[0]);
         int index2 = Integer.parseInt(tagIndexes[1]);
         int index3 = Integer.parseInt(tagIndexes[2]);
