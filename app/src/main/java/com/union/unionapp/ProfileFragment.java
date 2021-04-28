@@ -135,7 +135,6 @@ public class ProfileFragment extends Fragment {
                         }
                     }
 
-
                     String achivements =  "" + ds.child("achievements").getValue();
 
                     //set data
