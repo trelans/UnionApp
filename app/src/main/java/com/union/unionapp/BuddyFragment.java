@@ -84,6 +84,8 @@ public class BuddyFragment extends Fragment {
 
     ProgressBar pb;
 
+    String filterTagsToUpload;
+
     AppCompatButton tag1,
             tag2,
             tag3,
@@ -600,7 +602,7 @@ public class BuddyFragment extends Fragment {
                         String filterQuota = filterQuotaEt.getText().toString().trim();
                         String filterTime = filterTimeTv.getText().toString().trim();
                         String filterLocation = filterLocationEt.getText().toString().trim();
-                        String filterTagsToUpload = "";
+                        filterTagsToUpload = "";
 
 
                         for (int k = 1; k < allTags.length; k++) {
@@ -629,7 +631,6 @@ public class BuddyFragment extends Fragment {
 
                                 postList.clear();
                                 for (DataSnapshot ds : snapshot.getChildren()) {
-                                    System.out.println(filterQuota);
                                     System.out.println(ds.getValue());
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
 
@@ -649,6 +650,12 @@ public class BuddyFragment extends Fragment {
 
                                         if (!filterLocation.isEmpty()) {
                                             if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if (!filterTagsToUpload.isEmpty()) {
+                                            if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).contains(filterTagsToUpload)) {
                                                 continue;
                                             }
                                         }
@@ -1066,6 +1073,19 @@ public class BuddyFragment extends Fragment {
         String tag3String = tag3.getText().toString();
 
         return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+    }
+
+    public String serverToPhoneTagConverter(String tags) {
+        String[] allTags = getResources().getStringArray( R.array.all_tags );
+        String[] tagIndexes = tags.split( "," );
+        StringBuilder returnTags = new StringBuilder();
+        for (int i = 0; i < tagIndexes.length; i++) {
+            returnTags.append(Integer.parseInt(tagIndexes[i]));
+            if (i != returnTags.length() - 1){
+                returnTags.append(",");
+            }
+        }
+        return returnTags.toString();
     }
 }
 

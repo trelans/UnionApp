@@ -82,12 +82,15 @@ public class ProfileFragment extends Fragment {
 
         lastActsIsActive = true;
         achsIsActive = false;
+
         //init views
         usernameTW = view.findViewById(R.id.userNameTextView);
         userPP = view.findViewById(R.id.userPp);
+
         tagButton1 = view.findViewById(R.id.profileTagButton1);
         tagButton2 = view.findViewById(R.id.profileTagButton2);
         tagButton3 = view.findViewById(R.id.profileTagButton3);
+
         tagButtons = new AppCompatButton[]{ tagButton1, tagButton2, tagButton3 };
         allTags = getResources().getStringArray( R.array.all_tags );
 
@@ -161,6 +164,7 @@ public class ProfileFragment extends Fragment {
 
         openCalendar = (ImageView) view.findViewById(R.id.directMessage);
         lastActsTextView = (TextView) view.findViewById(R.id.lastActsTextView);
+
         achsTextView = (TextView) view.findViewById(R.id.achsTextView);
         achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
         achsTextView.setBackgroundTintList(null);
@@ -178,6 +182,7 @@ public class ProfileFragment extends Fragment {
 
         lastActsList.setVisibility(View.VISIBLE);
         lastActsList.setEnabled(true);
+
         achsListView.setVisibility(View.INVISIBLE);
         achsListView.setEnabled(false);
 
