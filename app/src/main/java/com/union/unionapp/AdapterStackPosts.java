@@ -202,6 +202,9 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             hashMap.put("cPhoto", "noImage"); //TODO resim butonunun işlevi
                             hashMap.put("uName", user.getEmail().split("@")[0].replace(".", "_"));
 
+                            //reset commentEditText
+                            commentET.setText("");
+
                             // put this data into db
                             ref.child(timeStamp).setValue(hashMap)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {

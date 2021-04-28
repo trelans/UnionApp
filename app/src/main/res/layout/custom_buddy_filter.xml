@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
 
     android:layout_gravity="center"
-    android:background="@drawable/text_view_comment_template"
     android:orientation="vertical"
     android:padding="5dp">
 

@@ -138,24 +138,26 @@
                     android:textSize="12sp" />
 
 
-
                 <TextView
                     android:id="@+id/pTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/pPostedTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/pUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:visibility="invisible" />
 
             </RelativeLayout>
 

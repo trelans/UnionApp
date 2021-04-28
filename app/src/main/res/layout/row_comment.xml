@@ -11,15 +11,19 @@
         android:layout_width="278dp"
         android:layout_height="29dp"
         android:background="@drawable/edittext_border_template"
-        android:paddingLeft="2dp"
-        android:textSize="12sp"
         android:gravity="center_vertical"
-        android:text="user1234: you can divide x by y then..." />
+        android:paddingLeft="2dp"
+        android:text="user1234: you can divide x by y then..."
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp"/>
 
     <ImageView
         android:id="@+id/upIconIV"
         android:layout_width="28dp"
         android:layout_height="30dp"
-        app:srcCompat="@drawable/up_icon"/>
+        app:srcCompat="@drawable/up_icon"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp"/>
 
 </LinearLayout>
