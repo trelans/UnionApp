@@ -74,6 +74,7 @@ public class BuddyFragment extends Fragment {
     EditText postDetailsEt,
             postQuotaEt,
             postLocationEt,
+            postHeadlineEt,
             filterQuotaEt,
             filterLocationEt;
 
@@ -253,6 +254,7 @@ public class BuddyFragment extends Fragment {
                 });
 
                 //init views
+                postHeadlineEt = buddyDialog.findViewById(R.id.editTextHeadLine);
                 postDetailsEt = buddyDialog.findViewById(R.id.editTextPostDetails);
                 postDateEt = buddyDialog.findViewById(R.id.editTextDate);
                 postQuotaEt = buddyDialog.findViewById(R.id.editTextQuota);
@@ -385,6 +387,7 @@ public class BuddyFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        String postHeadline = postHeadlineEt.getText().toString().trim();
                         String postDetails = postDetailsEt.getText().toString().trim();
                         String postDate = postDateEt.getText().toString().trim();
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
@@ -398,13 +401,14 @@ public class BuddyFragment extends Fragment {
                                 tagsToUpload = tagsToUpload + k + ",";
                             }
                         }
-                        /*
-                        //tags to upload'un sonundaki virgülü atıyor //TODO ömerin yolu
-                        StringBuilder tempString = new StringBuilder(tagsToUpload);
-                        tempString.deleteCharAt(tempString.length()-1);
-                        tagsToUpload = tempString.toString();
 
-                         */
+                        //tags to upload'un sonundaki virgülü atıyor //TODO ömerin yolu
+                        if (tagsToUpload.length() > 0) {
+                            StringBuilder tempString = new StringBuilder(tagsToUpload);
+                            tempString.deleteCharAt(tempString.length() - 1);
+                            tagsToUpload = tempString.toString();
+                        }
+
 
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
@@ -413,10 +417,10 @@ public class BuddyFragment extends Fragment {
 
                         if (image_uri == null) {
                             //post without image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender);
+                            uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender);
                         } else {
                             //post with image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
+                            uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
                         }
                         buddyDialog.dismiss();
                     }
@@ -635,7 +639,7 @@ public class BuddyFragment extends Fragment {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
 
                                     if (modelBuddyPost.getpQuota().contains(filterQuota)) {
-
+                                        /*
                                         if (!filterDate.isEmpty()) {
                                             if (!modelBuddyPost.getpDate().contains(filterDate)) {
                                                 continue;
@@ -647,15 +651,15 @@ public class BuddyFragment extends Fragment {
                                                 continue;
                                             }
                                         }
-
+                                        */
                                         if (!filterLocation.isEmpty()) {
-                                            if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
+                                            if (modelBuddyPost.getpLocation().contains(filterLocation)) {
                                                 continue;
                                             }
                                         }
 
                                         if (!filterTagsToUpload.isEmpty()) {
-                                            if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).contains(filterTagsToUpload)) {
+                                            if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
                                                 continue;
                                             }
                                         }
@@ -888,7 +892,7 @@ public class BuddyFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
+    private void uploadData(String postHeadline, String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "";
@@ -925,6 +929,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pLocation", postLocation);
                                 hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek
                                 hashMap.put("pGender", postGender);
+                                hashMap.put("pHeadline",postHeadline);
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -977,6 +982,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pLocation", postLocation);
             hashMap.put("pTags", tagsToUpload);
             hashMap.put("pGender", postGender);
+            hashMap.put("pHeadline",postHeadline);
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -1081,7 +1087,7 @@ public class BuddyFragment extends Fragment {
         StringBuilder returnTags = new StringBuilder();
         for (int i = 0; i < tagIndexes.length; i++) {
             returnTags.append(Integer.parseInt(tagIndexes[i]));
-            if (i != returnTags.length() - 1){
+            if (i < returnTags.length() - 1){
                 returnTags.append(",");
             }
         }
