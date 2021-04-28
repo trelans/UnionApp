@@ -88,13 +88,9 @@
                     android:id="@+id/imageViewAddPhoto"
                     android:layout_width="52dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="282dp"
-                    android:layout_marginLeft="115dp"
-                    android:layout_marginEnd="-10dp"
-                    android:layout_marginBottom="61dp"
+                    android:layout_below="@id/commentStackRecyclerView"
+                    android:layout_toRightOf="@id/answerEditText"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/ic_baseline_add_a_photo_24" />
 
                 <ImageButton
@@ -128,9 +124,8 @@
                     android:layout_width="278dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/anonymCheckBox"
-
                     android:layout_below="@+id/commentStackRecyclerView"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/edittext_border_template"
                     android:hint="Enter your answer here..."

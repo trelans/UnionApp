@@ -81,8 +81,8 @@
                 android:text="bla bla bla bla"
                 android:textSize="12sp" />
 
-            <EditText
-                android:id="@+id/editTextUpNumber"
+            <TextView
+                android:id="@+id/textViewUpNumber"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentStart="true"
@@ -90,12 +90,11 @@
                 android:layout_marginStart="280dp"
                 android:layout_marginTop="6dp"
                 android:background="@drawable/bg_up_number_round"
-                android:ems="10"
                 android:fontFamily="@font/myriad_pro_regular"
-                android:inputType="number"
                 android:text="21"
+                android:paddingTop="5dp"
                 android:textAlignment="center"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/upButtonImageView"

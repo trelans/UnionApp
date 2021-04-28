@@ -32,6 +32,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
     Context context;
     List<ModelStackPost> postList;
+    DatabaseReference ref;
 
     public AdapterStackPosts(Context context, List<ModelStackPost> postList) {
         this.context = context;
@@ -103,9 +105,13 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                upVoteNumber[0] = Integer.valueOf(upVoteNumber[0]) + 1 + "";
+                ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts").child(postList.get(position).pId);
+                HashMap<String, Object> updateUpNumber = new HashMap<>();
+                System.out.println(postList.get(position).getPId());
+                updateUpNumber.put("pUpvoteNumber", Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "");
+                ref.updateChildren(updateUpNumber);
+                upVoteNumber[0] = Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "";
                 holder.upNumber.setText(upVoteNumber[0]);
-                Toast.makeText(context, "up +1", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -172,6 +178,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 sendButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        String timeStamp;
                         FirebaseUser user;
                         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                             user = FirebaseAuth.getInstance().getCurrentUser();
@@ -186,10 +193,9 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             //no value is entered
                             Toast.makeText(context, "Comment is empty...", Toast.LENGTH_SHORT).show();
                         } else {
-                            String timeStamp = String.valueOf(MainActivity.getServerDate());
+                            timeStamp = String.valueOf(MainActivity.getServerDate());
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Comments").child(pId);
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Users").child(user.getUid()).child("comments");
-
                             HashMap<String, Object> hashMap = new HashMap<>();
                             //put info in hashmap
                             hashMap.put("cId", timeStamp);
@@ -197,7 +203,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             hashMap.put("timeStamp", timeStamp);
                             hashMap.put("upNumber", "0");
                             hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            hashMap.put("cAnon", "0");
+                            hashMap.put("cAnon", isAnonCB.isChecked() ? "1" : "0");
                             //isAnonCB.isChecked() ? "1" : "0")
                             hashMap.put("cPhoto", "noImage"); //TODO resim butonunun işlevi
                             hashMap.put("uName", user.getEmail().split("@")[0].replace(".", "_"));
@@ -235,7 +241,8 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
                 // path of all comments
                 DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Comments/" + pId);
-                ref.addValueEventListener(new ValueEventListener() {
+                Query query = ref.orderByChild("upNumber");
+                query.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         commentList.clear();
@@ -244,7 +251,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             commentList.add(modelComment);
 
                             // adapter
-                            adapterComment[0] = new AdapterComment(context, commentList);
+                            adapterComment[0] = new AdapterComment(context, commentList,pId, modelComment.getCId());
                             // set adapter to recyclerView
                             recyclerView.setAdapter(adapterComment[0]);
                         }
@@ -279,7 +286,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         //views from custom_stack_over_flow_feed_cards.xml
         ImageButton upButton;
         TextView contentTextView, titleTextView;
-        EditText upNumber;
+        TextView upNumber;
         TextView topicTag;
         CardView cardView;
 
@@ -290,7 +297,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             upButton = itemView.findViewById(R.id.upButtonImageView);
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
-            upNumber = itemView.findViewById(R.id.editTextUpNumber);
+            upNumber = itemView.findViewById(R.id.textViewUpNumber);
             topicTag = itemView.findViewById(R.id.topicTagTW);
             cardView = itemView.findViewById(R.id.card);
         }
