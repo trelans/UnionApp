@@ -382,10 +382,11 @@ public class ClubsFragment extends Fragment {
                         }
 
                         //tags to upload'un sonundaki virgülü atıyor
-                        StringBuilder tempString = new StringBuilder(tagsToUpload);
-                        tempString.deleteCharAt(tempString.length()-1);
-                        tagsToUpload = tempString.toString();
-
+                        if (tagsToUpload.length() > 0) {
+                            StringBuilder tempString = new StringBuilder(tagsToUpload);
+                            tempString.deleteCharAt(tempString.length() - 1);
+                            tagsToUpload = tempString.toString();
+                        }
 
                         if (TextUtils.isEmpty(postDetails)) {
                             Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);

@@ -48,6 +48,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
     Context context;
     List<ModelStackPost> postList;
     DatabaseReference ref1;
+    String[] allTags;
 
     public AdapterStackPosts(Context context, List<ModelStackPost> postList) {
         this.context = context;
@@ -74,6 +75,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         String pDetails = postList.get(position).getPDetails();
         String pImage = postList.get(position).getPImage();
         String pTime = postList.get(position).getPTime();
+        String pTag = postList.get(position).getpTags();
         final String[] upVoteNumber = {postList.get(position).getPUpvoteNumber()};
 
         /*
@@ -88,7 +90,12 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         holder.titleTextView.setText(pTitle);
         holder.upNumber.setText(upVoteNumber[0]);
         //holder.upNumber.setText("1");
-        holder.topicTag.setText("Math-101");
+
+
+        //allTags = getResources.getStringArray(R.array.all_tags); !!!!! getResources metodu fragment classı için var.
+        allTags = MainActivity.getAllTags();
+        System.out.println();
+        holder.topicTag.setText("Math-101"); //TODO
 
         //if there is no image
         if (pImage.equals("noImage")) {
@@ -130,6 +137,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 dialog.setContentView(R.layout.custom_view_stack_post_popup);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+                System.out.println(allTags[1]);
 
                 //recycler view and its properties
                 recyclerView = dialog.findViewById(R.id.commentStackRecyclerView);
@@ -156,6 +164,8 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 EditText commentET = dialog.findViewById(R.id.answerEditText);
                 CheckBox isAnonCB = dialog.findViewById(R.id.anonymCheckBox);
                 ImageButton sendButton = dialog.findViewById(R.id.sendButtonIB);
+
+
 
                 //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
                 Calendar calendar = Calendar.getInstance();
@@ -200,7 +210,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             HashMap<String, Object> hashMap = new HashMap<>();
                             //put info in hashmap
                             hashMap.put("cId", timeStamp);
-                            hashMap.put("comment", "değiştirdim");
+                            hashMap.put("comment", comment);
                             hashMap.put("timeStamp", timeStamp);
                             hashMap.put("upNumber", "0");
                             hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());

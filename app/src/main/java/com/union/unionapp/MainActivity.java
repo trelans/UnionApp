@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
     Fragment active;
     String mUID;
 
+    private static String[] allTagz;
+
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -178,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
         //for settings - ege
         //*
         allTags = getResources().getStringArray(R.array.all_tags);
+        allTagz = allTags;
+
         //*
 
         searchBarEmpty = true;
@@ -1081,6 +1085,10 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("Current_USERID", mUID);
         editor.apply();
         super.onResume();
+    }
+
+    public static String[] getAllTags() {
+        return allTagz;
     }
 }
 
