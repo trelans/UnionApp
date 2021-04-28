@@ -422,6 +422,8 @@ public class ClubsFragment extends Fragment {
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
+
+
                 clubDialog.show();
             }
         });

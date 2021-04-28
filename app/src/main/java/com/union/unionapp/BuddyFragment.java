@@ -88,11 +88,11 @@ public class BuddyFragment extends Fragment {
     String filterTagsToUpload;
 
     AppCompatButton tag1,
-            tag2,
-            tag3,
-            filterTag1,
-            filterTag2,
-            filterTag3;
+                    tag2,
+                    tag3,
+                    filterTag1,
+                    filterTag2,
+                    filterTag3;
 
     AppCompatButton[] tagsArray;
 
@@ -655,7 +655,7 @@ public class BuddyFragment extends Fragment {
                                         }
                                         */
                                         if (!filterLocation.isEmpty()) {
-                                            if (modelBuddyPost.getpLocation().contains(filterLocation)) {
+                                            if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
                                                 continue;
                                             }
                                         }

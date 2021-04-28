@@ -212,6 +212,8 @@ public class StackFragment extends Fragment {
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 stackTagSpinner.setAdapter(tagAdapter);
 
+
+
                 stackDialog.show();
             }
         });
