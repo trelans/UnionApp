@@ -109,15 +109,9 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             public void onClick(View view) {
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 // Checking the background and do the increment or decrement accordingly
-                if (Objects.equals(holder.upButton.getBackground().getConstantState(), ContextCompat.getDrawable(context,R.drawable.up_icon).getConstantState())) {
-                    updateUpNumber.put("pUpvoteNumber", Integer.parseInt(postList.get(position).getPUpvoteNumber()) + 1 + "");
-                    holder.upButton.setBackgroundResource(R.drawable.down_icon);
-                    System.out.println(true);
-                }else if (Objects.equals(holder.upButton.getBackground().getConstantState(), ContextCompat.getDrawable(context,R.drawable.down_icon).getConstantState())){
-                    updateUpNumber.put("pUpvoteNumber", Integer.parseInt(postList.get(position).getPUpvoteNumber()) - 1 + "");
-                    holder.upButton.setBackgroundResource(R.drawable.up_icon);
-                    System.out.println(false);
-                }
+                //if (Objects.equals(holder.upButton.getBackground().getConstantState(), ContextCompat.getDrawable(context,R.drawable.up_icon).getConstantState())) {
+                updateUpNumber.put("pUpvoteNumber", Integer.parseInt(postList.get(position).getPUpvoteNumber()) + 1 + "");
+                //}
                 ref1.updateChildren(updateUpNumber);
                 holder.upNumber.setText(upVoteNumber[0]);
             }
@@ -258,7 +252,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             commentList.add(modelComment);
 
                             // adapter
-                            adapterComment[0] = new AdapterComment(context, commentList,pId, modelComment.getCId());
+                            adapterComment[0] = new AdapterComment(context, commentList, pId, modelComment.getCId());
                             // set adapter to recyclerView
                             recyclerView.setAdapter(adapterComment[0]);
                         }
@@ -279,7 +273,6 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
 
     }
-
 
 
     @Override

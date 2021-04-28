@@ -1,7 +1,6 @@
 package com.union.unionapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -11,14 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.firebase.FirebaseAppLifecycleListener;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthProvider;
-import com.google.firebase.auth.FirebaseAuthRegistrar;
-import com.google.firebase.auth.FirebaseAuthSettings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +20,6 @@ import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class RecoverAccountActivity extends AppCompatActivity {
     // Variables
@@ -59,7 +51,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         tw_email = findViewById(R.id.emailTextView);
-        tw_enter_code = findViewById(R.id.EnterCodeTextView);
+        tw_enter_code = findViewById(R.id.enterCodeTextView);
         tw_incorrect_code = findViewById(R.id.incorrectCodeTextView);
         tw_login = findViewById(R.id.loginTextView);
         sendAgainButton = findViewById(R.id.sendAgainButton);
@@ -145,6 +137,8 @@ public class RecoverAccountActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.getValue().equals(tw_enter_code.getText().toString())) {
                             tw_incorrect_code.setVisibility(View.INVISIBLE);
+                            countDownTimer.cancel();
+                            sendAgainButton.setVisibility(View.GONE);
                             verifyButton.setText("Change Password");
 
 //                    tw_enter_code.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -153,7 +147,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
                             tw_enter_code.setText("");
                             tw_email.setHint("New Password");
                             tw_enter_code.setHint("New Password");
-
+                            changePassword();
                         } else {
                             tw_incorrect_code.setText("Verification code is wrong");
                         }
@@ -176,6 +170,17 @@ public class RecoverAccountActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void changePassword() {
+        sendAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tw_email = view.findViewById(R.id.emailTextView);
+                tw_enter_code = view.findViewById(R.id.enterCodeTextView);
+                
+            }
+        });
     }
 
 
