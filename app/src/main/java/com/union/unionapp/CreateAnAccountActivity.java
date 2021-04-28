@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -70,7 +71,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_an_account);
-        slidr = Slidr.attach( this );
+        slidr = Slidr.attach(this);
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
@@ -286,6 +287,16 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
 
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.i("Success", "Yes");
+                                        } else {
+                                            Log.i("Success", "No");
+                                        }
+                                    }
+                                });
                                 //Get user email and uid from auth.
                                 String email = user.getEmail();
                                 String uid = user.getUid();
@@ -320,6 +331,8 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
                             }
+
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -336,7 +349,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
     private String createUsername(String email) {
         String[] pieces = email.split("@");
-        return pieces[0].replace(".","_");
+        return pieces[0].replace(".", "_");
     }
 
 
@@ -344,6 +357,11 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void openLoginActivity(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     public void previewTerms(View view) {

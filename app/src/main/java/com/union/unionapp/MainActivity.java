@@ -149,6 +149,24 @@ public class MainActivity extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference("BilkentUniversity/Users");
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        /* firebaseden bir şey silme kodu
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                    FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + modelUsers.getUid() + "/Notifications").removeValue();
+                    System.out.println("oluyor");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+         */
+
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 

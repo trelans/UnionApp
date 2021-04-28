@@ -382,9 +382,9 @@ public class ClubsFragment extends Fragment {
                         }
 
                         //tags to upload'un sonundaki virgülü atıyor
-              //          StringBuilder tempString = new StringBuilder(tagsToUpload);
-          //   -hatalı           tempString.deleteCharAt(tempString.length()-1);
-            //            tagsToUpload = tempString.toString();
+                        StringBuilder tempString = new StringBuilder(tagsToUpload);
+                        tempString.deleteCharAt(tempString.length()-1);
+                        tagsToUpload = tempString.toString();
 
 
                         if (TextUtils.isEmpty(postDetails)) {

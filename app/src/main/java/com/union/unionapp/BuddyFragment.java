@@ -891,11 +891,11 @@ public class BuddyFragment extends Fragment {
     private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
-        String filePathAndName = "Posts/" + "post_" + timeStamp;
+        String filePathAndName = "Posts/" + "";
 
         if (!uri.equals("noImage")) {
             //post with image
-            StorageReference ref = FirebaseStorage.getInstance().getReference().child(filePathAndName);
+            StorageReference ref = FirebaseStorage.getInstance().getReference("BilkentUniversity/" + filePathAndName);
             ref.putFile(Uri.parse(uri))
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -968,7 +968,6 @@ public class BuddyFragment extends Fragment {
             hashMap.put("username", username);
             hashMap.put("uEmail", email);
             hashMap.put("uDp", dp);
-            hashMap.put("pId", timeStamp);
             hashMap.put("pDetails", postDetails);
             hashMap.put("pDate", postDate);
             hashMap.put("pHour", postTime);
@@ -980,10 +979,12 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pGender", postGender);
 
             //path to store post data
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+            String pUid = reference.push().getKey();
+            hashMap.put("pId", pUid);
 
             //put data in this ref
-            reference.child(timeStamp).setValue(hashMap)
+            reference.child(pUid).setValue(hashMap)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
