@@ -984,7 +984,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateToken(String token) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Tokens");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Tokens");
         Token mToken = new Token(token);
         System.out.println(" " + mUID);
         ref.child(mUID).setValue(mToken);

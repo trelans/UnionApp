@@ -53,7 +53,7 @@ public class MessageFragment extends Fragment {
 
         chatlistList = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(currentUser.getUid());
+        reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chatlist").child(currentUser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -79,7 +79,7 @@ public class MessageFragment extends Fragment {
 
     private void loadChats() {
         usersList = new ArrayList<>();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -112,7 +112,7 @@ public class MessageFragment extends Fragment {
     }
 
     private void lastMessage (String userId) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chats");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

@@ -2,12 +2,12 @@ package com.union.unionapp;
 
 public class ModelBuddyAndClubPost {
     // use same name as we given while uploading posts
-    String pId, pTitle, pDate, pHour, pLocation, pQuota, pDetails, pImage, pTime, uid, uEmail, pAnon , username;
+    String pId, pTitle, pDate, pHour, pLocation, pQuota, pDetails, pImage, pTime, uid, uEmail, pAnon , username , pTags;
 
     public ModelBuddyAndClubPost() {
     }
 
-    public ModelBuddyAndClubPost(String pId, String pTitle, String pDate, String pHour, String pLocation, String pQuota, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username) {
+    public ModelBuddyAndClubPost(String pId, String pTitle, String pDate, String pHour, String pLocation, String pQuota, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username , String pTags) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDate = pDate;
@@ -21,6 +21,7 @@ public class ModelBuddyAndClubPost {
         this.uEmail = uEmail;
         this.pAnon = pAnon;
         this.username = username;
+        this.pTags = pTags;
     }
 
     public String getpId() {
@@ -122,6 +123,10 @@ public class ModelBuddyAndClubPost {
     public String getUsername() {
         return username;
     }
+
+    public String getpTags() { return pTags; }
+
+    public void setpTags(String pTags) { this.pTags = pTags; }
 
     public void setUsername(String username) {
         this.username = username;
