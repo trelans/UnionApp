@@ -74,7 +74,7 @@ public class OtherProfile extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseDatabase = firebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Users");
+        databaseReference = firebaseDatabase.getReference("BilkentUniversity/Users");
 
         lastActsIsActive = true;
         achsIsActive = false;

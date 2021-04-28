@@ -160,7 +160,7 @@ public class BuddyFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
 
         //get some info of the current user to include in the post
-        userDbRef = FirebaseDatabase.getInstance().getReference("Users");
+        userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
         Query query = userDbRef.orderByChild("email").equalTo(email);
         query.addValueEventListener(new ValueEventListener() {
             @Override

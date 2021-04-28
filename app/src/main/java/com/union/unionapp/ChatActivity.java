@@ -93,7 +93,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        usersDbRef = firebaseDatabase.getReference("Users");
+        usersDbRef = firebaseDatabase.getReference("BilkentUniversity/Users");
         // search user to get that users' info
         Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
         // get user picture and username
@@ -176,7 +176,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
     private  void seenMessage () {
-        userRefForSeen = FirebaseDatabase.getInstance().getReference("Chats");
+        userRefForSeen = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chats/");
         seenListener = userRefForSeen.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -198,7 +198,7 @@ public class ChatActivity extends AppCompatActivity {
     }
     private void readMessages() {
         chatList = new ArrayList<>();
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Chats");
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chats/");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -237,7 +237,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("timestamp", timestamp);
         hashMap.put("isSeem", false);
 
-        databaseReference.child("Chats").push().setValue(hashMap);
+        databaseReference.child("BilkentUniversity/Chats").push().setValue(hashMap);
 
         // reset editText after sending message
 
@@ -245,7 +245,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         String msg = message;
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("Users").child(myUid);
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/").child(myUid);
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -263,7 +263,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         // create chatList node/child in firebase database
-        final DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("Chatlist").child(myUid).child(hisUid);
+        final DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chatlist/").child(myUid).child(hisUid);
 
         chatRef1.addValueEventListener(new ValueEventListener() {
             @Override
@@ -279,7 +279,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        final  DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("Chatlist").child(hisUid).child(myUid);
+        final  DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chatlist/").child(hisUid).child(myUid);
         chatRef2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -297,7 +297,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendNotification(final String hisUid, final String name , final  String message) {
-        DatabaseReference allTokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        DatabaseReference allTokens = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Tokens/");
         Query query = allTokens.orderByKey().equalTo(hisUid);
         query.addValueEventListener(new ValueEventListener() {
             @Override
