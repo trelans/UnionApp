@@ -22,7 +22,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        <activity android:name=".CreateAnAccountActivity"
+        <activity android:name=".LoginActivity"
             android:theme="@style/AppTheme.SlidrActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,8 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.SlidrActivityTheme"/>
         <activity android:name=".TestActivity" />
         <activity android:name=".RecoverAccountActivity" />
         <service android:name=".notifications.FirebaseService"
@@ -41,6 +39,8 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_SERVICE"/>
             </intent-filter>
         </service>
+        <activity android:name=".CreateAnAccountActivity"
+            android:theme="@style/AppTheme.SlidrActivityTheme"/>
 
         <service android:name=".notifications.FirebaseMessaging"
             android:enabled="true"

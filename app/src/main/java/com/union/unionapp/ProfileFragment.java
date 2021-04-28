@@ -272,7 +272,6 @@ public class ProfileFragment extends Fragment {
                 calendarDialog.show();
             }
         });
-
         return view;
 
 

@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -44,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     boolean isThereError = false;
 
 
-
+    private SlidrInterface slidr;
 
     public void ForgotPassword(View view) {
         // Button onClick
@@ -55,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        slidr = Slidr.attach( this );
+
         tw_email = findViewById(R.id.nameTextView);
         tw_password = findViewById(R.id.passwordTextView);
         tw_forgot_password = findViewById(R.id.loginTextView);
@@ -207,5 +212,13 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+    //setContentView( R.layout.activity_main );
+
+    }
+
+    public void openCreateAnAccountActivity( View view ) {
+        Intent intent = new Intent( this, CreateAnAccountActivity.class );
+        startActivity( intent );
     }
 }
