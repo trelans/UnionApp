@@ -414,6 +414,7 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 clubDialog.setContentView(R.layout.custom_club_filter);
+                clubDialog.setCanceledOnTouchOutside(true);
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);

@@ -430,6 +430,7 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
+                buddyDialog.setCanceledOnTouchOutside(true);
 
                 //init views
                 ImageView searchFilterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);

@@ -125,6 +125,7 @@ public class StackFragment extends Fragment {
             public void onClick(View v) {
 
                 stackDialog.setContentView(R.layout.custom_stack_createpost_popup);
+                stackDialog.setCanceledOnTouchOutside(true);
 
                 String[] allTags = getResources().getStringArray( R.array.all_tags );
 
