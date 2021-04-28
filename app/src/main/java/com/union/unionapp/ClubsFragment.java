@@ -1,7 +1,6 @@
 package com.union.unionapp;
 
 
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -73,13 +72,13 @@ public class ClubsFragment extends Fragment {
     ProgressBar pb;
 
     TextView postDateEt,
-             postTimeEt;
+            postTimeEt;
 
     TextView[] textViewTags;
 
     AppCompatButton tag1,
-                    tag2,
-                    tag3;
+            tag2,
+            tag3;
 
     String[] allTags;
 
@@ -150,7 +149,7 @@ public class ClubsFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds: snapshot.getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     username = "" + ds.child("username").getValue();
                     dp = "" + ds.child("pp").getValue();
                     //email = "" + ds.child("email").getValue();
@@ -163,7 +162,6 @@ public class ClubsFragment extends Fragment {
 
             }
         });
-
 
 
         //recycler view and its properties
@@ -186,28 +184,26 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.stack_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
-                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position > 0) {
                             String selectedItem = parent.getItemAtPosition(position).toString();
-                            if (i[ 0 ] < tagsStatus.length) {
+                            if (i[0] < tagsStatus.length) {
 
                                 for (int j = 0; j < 3; j++) {
 
                                     if (!tagsStatus[j]) {
 
                                         tagsArray[j].setText(selectedItem);
-                                        if (!tagHasSelectedBefore(tag1,tag2,tag3)) {
+                                        if (!tagHasSelectedBefore(tag1, tag2, tag3)) {
                                             tagsArray[j].setVisibility(View.VISIBLE);
                                             i[0]++;
                                             tagsStatus[j] = true;
-                                        }
-                                        else {
+                                        } else {
                                             tagsStatus[j] = false;
                                             tagsArray[j].setText("");
                                         }
@@ -217,16 +213,16 @@ public class ClubsFragment extends Fragment {
                             }
                         }
 
-                        if( i[ 0 ] == tagsStatus.length ) {
+                        if (i[0] == tagsStatus.length) {
                             //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-                            tagSpinner.setEnabled( false );
+                            tagSpinner.setEnabled(false);
                             //tagSpinner.setClickable( false );
                             //tagSpinner.setTop( 1 );
                             //setTagsSaved( true );
                         }
                     }
 
-                    public void onNothingSelected (AdapterView < ? > parent) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                         //TODO
                     }
                 });
@@ -270,7 +266,7 @@ public class ClubsFragment extends Fragment {
                     public void onClick(View v) {
                         tag1.setVisibility(View.INVISIBLE);
                         tagsStatus[0] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 0;
                     }
@@ -281,7 +277,7 @@ public class ClubsFragment extends Fragment {
                     public void onClick(View v) {
                         tag2.setVisibility(View.INVISIBLE);
                         tagsStatus[1] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 1;
                     }
@@ -292,7 +288,7 @@ public class ClubsFragment extends Fragment {
                     public void onClick(View v) {
                         tag3.setVisibility(View.INVISIBLE);
                         tagsStatus[2] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 2;
                     }
@@ -317,10 +313,10 @@ public class ClubsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        datePickerDialog.updateDate(year,month,day);
+                        datePickerDialog.updateDate(year, month, day);
                         datePickerDialog.show();
                     }
                 });
@@ -329,7 +325,7 @@ public class ClubsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hourOfDay, minute, true
                         );
                         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         timePickerDialog.show();
@@ -375,30 +371,29 @@ public class ClubsFragment extends Fragment {
 
                         String tagsToUpload = "";
 
-                        for ( int k = 1; k < allTags.length; k++ ) {
-                            if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
                                 tagsToUpload = tagsToUpload + k + ",";
                             }
                         }
 
                         //tags to upload'un sonundaki virgülü atıyor
                         StringBuilder tempString = new StringBuilder(tagsToUpload);
-                        tempString.deleteCharAt(tempString.length()-1);
+                        tempString.deleteCharAt(tempString.length() - 1);
                         tagsToUpload = tempString.toString();
 
 
                         if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
                             return;
                         }
 
-                        if (image_uri==null) {
+                        if (image_uri == null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload);
-                        }
-                        else {
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload);
+                        } else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload);
                         }
                         clubDialog.dismiss();
 
@@ -417,7 +412,7 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setCanceledOnTouchOutside(true);
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
@@ -435,9 +430,11 @@ public class ClubsFragment extends Fragment {
                 i[0] = 0;
 
                 //set tags to empty strings
+                /* burayı koymamanız gerekiyor zaten tuşa basıldığı anda tagleri sıfırla demişsiniz, bu kapandıktan sonra denediği için hata veriyor
                 tag1.setText("");
                 tag2.setText("");
                 tag3.setText("");
+                 */
 
                 //set boolean array to false only
                 tagsStatus[0] = false;
@@ -448,11 +445,8 @@ public class ClubsFragment extends Fragment {
         });
 
 
-
         return view;
     }
-
-
 
 
     private void loadPosts() {
@@ -477,7 +471,7 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // in case of error
-               // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -502,11 +496,11 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //item click handle
-                if (which==0) {
+                if (which == 0) {
                     //camera clicked
 
                 }
-                if (which==1) {
+                if (which == 1) {
                     //gallery clicked
                 }
             }
@@ -607,7 +601,7 @@ public class ClubsFragment extends Fragment {
             //user is signed in
 
             email = user.getEmail();
-            username = email.split("@")[0].replace(".","_");
+            username = email.split("@")[0].replace(".", "_");
             uid = user.getUid();
 
         }
@@ -627,7 +621,7 @@ public class ClubsFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             //image is uploaded to firebase, now get its uri
                             Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!uriTask.isSuccessful());
+                            while (!uriTask.isSuccessful()) ;
 
                             String downloadUri = uriTask.getResult().toString();
 
@@ -635,20 +629,20 @@ public class ClubsFragment extends Fragment {
                                 //uri is received upload post to firebase database
 
                                 checkUserStatus();
-                                HashMap<Object,String> hashMap = new HashMap<>();
+                                HashMap<Object, String> hashMap = new HashMap<>();
                                 //put post info
-                                hashMap.put("uid",uid); //çekememiş
-                                hashMap.put("username",username); //çekmemiş
+                                hashMap.put("uid", uid); //çekememiş
+                                hashMap.put("username", username); //çekmemiş
                                 //hashMap.put("uEmail",email);
-                                hashMap.put("uDp",dp);
-                                hashMap.put("pId",timeStamp);
-                                hashMap.put("pDetails",postDetails);
-                                hashMap.put("pDate",postDate);
-                                hashMap.put("pHour",postTime);
-                                hashMap.put("pQuota",postQuotaStr);
-                                hashMap.put("pImage",downloadUri);
-                                hashMap.put("pTime",timeStamp);
-                                hashMap.put("pLocation",postLocation);
+                                hashMap.put("uDp", dp);
+                                hashMap.put("pId", timeStamp);
+                                hashMap.put("pDetails", postDetails);
+                                hashMap.put("pDate", postDate);
+                                hashMap.put("pHour", postTime);
+                                hashMap.put("pQuota", postQuotaStr);
+                                hashMap.put("pImage", downloadUri);
+                                hashMap.put("pTime", timeStamp);
+                                hashMap.put("pLocation", postLocation);
                                 hashMap.put("pTags", tagsToUpload);
 
                                 //path to store post data
@@ -660,7 +654,7 @@ public class ClubsFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 //added in database
-                                                Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                                                Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
                                             }
                                         })
@@ -668,7 +662,7 @@ public class ClubsFragment extends Fragment {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 //failed adding post in database
-                                                Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
+                                                Toast.makeText(getActivity(), "Failed publishing post", Toast.LENGTH_SHORT);
                                             }
                                         });
 
@@ -680,29 +674,28 @@ public class ClubsFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             //failed uploading image
-                            Toast.makeText(getActivity(),"Failed uploading image",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Failed uploading image", Toast.LENGTH_SHORT);
                         }
                     });
 
-        }
-        else {
+        } else {
             //post without image
 
             checkUserStatus();
-            HashMap<Object,String> hashMap = new HashMap<>();
+            HashMap<Object, String> hashMap = new HashMap<>();
             //put post info
-            hashMap.put("uid",uid);
-            hashMap.put("username",username);
-            hashMap.put("uEmail",email);
-            hashMap.put("uDp",dp);
-            hashMap.put("pId",timeStamp);
-            hashMap.put("pDetails",postDetails);
-            hashMap.put("pDate",postDate);
-            hashMap.put("pHour",postTime);
-            hashMap.put("pQuota",postQuotaStr);
-            hashMap.put("pImage","noImage");
-            hashMap.put("pTime",timeStamp);
-            hashMap.put("pLocation",postLocation);
+            hashMap.put("uid", uid);
+            hashMap.put("username", username);
+            hashMap.put("uEmail", email);
+            hashMap.put("uDp", dp);
+            hashMap.put("pId", timeStamp);
+            hashMap.put("pDetails", postDetails);
+            hashMap.put("pDate", postDate);
+            hashMap.put("pHour", postTime);
+            hashMap.put("pQuota", postQuotaStr);
+            hashMap.put("pImage", "noImage");
+            hashMap.put("pTime", timeStamp);
+            hashMap.put("pLocation", postLocation);
             hashMap.put("pTags", tagsToUpload);
 
             //path to store post data
@@ -714,7 +707,7 @@ public class ClubsFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             //added in database
-                            Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
 
                         }
@@ -723,7 +716,7 @@ public class ClubsFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             //failed adding post in database
-                            Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Failed publishing post", Toast.LENGTH_SHORT);
                         }
                     });
 
@@ -745,6 +738,6 @@ public class ClubsFragment extends Fragment {
         String tag2String = tag2.getText().toString();
         String tag3String = tag3.getText().toString();
 
-        return ( tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String) );
+        return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
     }
 }

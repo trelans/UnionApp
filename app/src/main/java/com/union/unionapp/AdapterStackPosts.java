@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,12 +41,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.MyHolder> {
 
     Context context;
     List<ModelStackPost> postList;
-    DatabaseReference ref;
+    DatabaseReference ref1;
 
     public AdapterStackPosts(Context context, List<ModelStackPost> postList) {
         this.context = context;
@@ -101,16 +103,22 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             e.printStackTrace();
         }
          */
-
+        ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts/" + postList.get(position).pId);
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts").child(postList.get(position).pId);
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
-                System.out.println(postList.get(position).getPId());
-                updateUpNumber.put("pUpvoteNumber", Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "");
-                ref.updateChildren(updateUpNumber);
-                upVoteNumber[0] = Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "";
+                // Checking the background and do the increment or decrement accordingly
+                if (Objects.equals(holder.upButton.getBackground().getConstantState(), ContextCompat.getDrawable(context,R.drawable.up_icon).getConstantState())) {
+                    updateUpNumber.put("pUpvoteNumber", Integer.parseInt(postList.get(position).getPUpvoteNumber()) + 1 + "");
+                    holder.upButton.setBackgroundResource(R.drawable.down_icon);
+                    System.out.println(true);
+                }else if (Objects.equals(holder.upButton.getBackground().getConstantState(), ContextCompat.getDrawable(context,R.drawable.down_icon).getConstantState())){
+                    updateUpNumber.put("pUpvoteNumber", Integer.parseInt(postList.get(position).getPUpvoteNumber()) - 1 + "");
+                    holder.upButton.setBackgroundResource(R.drawable.up_icon);
+                    System.out.println(false);
+                }
+                ref1.updateChildren(updateUpNumber);
                 holder.upNumber.setText(upVoteNumber[0]);
             }
         });
