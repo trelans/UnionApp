@@ -346,10 +346,6 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         finish();
     }
 
-    public void openLoginActivity( View view ) {
-        Intent intent = new Intent( this, LoginActivity.class );
-        startActivity( intent );
-    }
     public void previewTerms(View view) {
 
     }
