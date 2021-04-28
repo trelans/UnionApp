@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
         popUpButton = (ImageView) findViewById(R.id.showPopUpCreate);
         myDialog = new Dialog(this);
-        myDialog = new Dialog(this);
+        myDialog.setCanceledOnTouchOutside(true);
 
         //initial popup icon
         popUpButton.setBackground(null);
@@ -382,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
             // Setings codu buraya
             int[] i = new int[1];
             myDialog.setContentView(R.layout.custom_settings);
+
 
             EditText currentPassword = myDialog.findViewById(R.id.currentPasswordPT);
             EditText newPassword = myDialog.findViewById(R.id.newPasswordPT);

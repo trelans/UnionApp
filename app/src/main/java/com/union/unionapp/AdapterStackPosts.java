@@ -125,7 +125,6 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 final AdapterComment[] adapterComment = new AdapterComment[1];
                 dialog = new Dialog(context);
                 dialog.setCanceledOnTouchOutside(true);
-                dialog.setCancelable(true);
                 dialog.setContentView(R.layout.custom_view_stack_post_popup);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
