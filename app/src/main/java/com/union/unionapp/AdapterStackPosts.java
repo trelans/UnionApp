@@ -201,7 +201,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             //isAnonCB.isChecked() ? "1" : "0")
                             hashMap.put("cPhoto", "noImage"); //TODO resim butonunun işlevi
                             hashMap.put("uName", user.getEmail().split("@")[0].replace(".", "_"));
-
+                            hashMap.put("pTags","1,2,3");
                             // put this data into db
                             ref.child(timeStamp).setValue(hashMap)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -292,4 +292,17 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             cardView = itemView.findViewById(R.id.card);
         }
     }
+
+  /*  // slm bi uğrayım dedim -kty
+    private void addToHisNotifications(String hisUid, String pId, String message) {
+        String timestamp = ""+ MainActivity.getServerDate();
+        HashMap<String, Object> hashMapNotif = new HashMap<>();
+        hashMapNotif.put("pId", pId);
+        hashMapNotif.put("timestamp",timestamp);
+        hashMapNotif.put("pUid" , hisUid);
+        hashMapNotif.put("sUid", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        hashMapNotif.put("sName",user.getEmail().split("@")[0].replace(".", "_"))
+        hashMapNotif.put("sName",)
+
+    }*/
 }

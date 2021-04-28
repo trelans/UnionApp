@@ -2,12 +2,12 @@ package com.union.unionapp;
 
 public class ModelStackPost {
     // use same name as we given while uploading posts
-    String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon , username, pUpvoteNumber;
+    String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon , username, pUpvoteNumber, pTags;
 
     public ModelStackPost() {
     }
 
-    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, String pUpvoteNumber) {
+    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, String pUpvoteNumber , String pTags) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDetails = pDetails;
@@ -18,6 +18,7 @@ public class ModelStackPost {
         this.pAnon = pAnon;
         this.username = username;
         this.pUpvoteNumber = pUpvoteNumber;
+        this.pTags = pTags;
     }
 
     public String getPId() {
@@ -99,4 +100,8 @@ public class ModelStackPost {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getpTags() { return pTags; }
+
+    public void setpTags(String pTags) { this.pTags = pTags; }
 }
