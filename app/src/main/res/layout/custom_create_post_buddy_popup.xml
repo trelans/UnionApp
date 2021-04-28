@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-
     android:padding="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -612,8 +612,8 @@ public class BuddyFragment extends Fragment {
 
                             //tags to upload'un sonundaki virgülü atıyor
                             StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-                            tempString.deleteCharAt(tempString.length() - 1);
-                            filterTagsToUpload = tempString.toString();
+
+                            filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
                         }
 
 
@@ -919,7 +919,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pGender", postGender);
 
                                 //path to store post data
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("BuddyPosts");
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
 
                                 //put data in this ref
                                 reference.child(timeStamp).setValue(hashMap)

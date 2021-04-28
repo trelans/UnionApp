@@ -198,7 +198,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                             HashMap<String, Object> hashMap = new HashMap<>();
                             //put info in hashmap
                             hashMap.put("cId", timeStamp);
-                            hashMap.put("comment", comment);
+                            hashMap.put("comment", "değiştirdim");
                             hashMap.put("timeStamp", timeStamp);
                             hashMap.put("upNumber", "0");
                             hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());

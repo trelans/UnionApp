@@ -18,12 +18,12 @@
         android:windowSoftInputMode="adjustResize">
         <activity android:name=".OtherProfile"></activity>
         <activity android:name=".ChatActivity" />
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppTheme.SlidrActivityTheme" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme.SlidrActivityTheme">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

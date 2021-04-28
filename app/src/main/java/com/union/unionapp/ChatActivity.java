@@ -74,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
         send_bt = findViewById(R.id.send);
         back_bt = findViewById(R.id.backButton);
 
-        // Layour for recycler view
+        // Layout for recycler view
         Context context;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);

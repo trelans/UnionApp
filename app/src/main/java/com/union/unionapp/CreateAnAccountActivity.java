@@ -310,7 +310,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data
-                                DatabaseReference reference = database.getReference("BilkentUniversity").child("Users");
+                                DatabaseReference reference = database.getReference("BilkentUniversity/Users/");
                                 // put data within hashmap in database
                                 reference.child(uid).setValue(hashMap);
 
