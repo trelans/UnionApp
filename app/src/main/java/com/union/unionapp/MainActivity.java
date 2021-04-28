@@ -548,6 +548,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             myDialog.setContentView(R.layout.custom_notification_popup);
 
+            RecyclerView notificationsRv;
+
+            notificationsRv = myDialog.findViewById(R.id.notificationsRv);
+
         }
 
         myDialog.show();
@@ -996,6 +1000,16 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+    // Tag converter example
+     //input 1,2,3 -> output dance,music,party (inş yani uykuluyken yazdım denemedim)
+    public String serverToPhoneTagConverter(String tags) {
+        String[] allTags = getResources().getStringArray( R.array.all_tags );
+        String[] tagIndexes = tags.split( "," );
+        int index1 = Integer.parseInt(tagIndexes[0]);
+        int index2 = Integer.parseInt(tagIndexes[1]);
+        int index3 = Integer.parseInt(tagIndexes[2]);
+        return allTags[index1] + "," +allTags[index2] +"," + allTags[index3];
     }
 
     @Override

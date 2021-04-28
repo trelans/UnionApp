@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -63,6 +64,8 @@ public class StackFragment extends Fragment {
 
     int tagTextIndex;
 
+    ProgressBar pb;
+
     ImageView sendButtonIv,
               addPhotoIv;
 
@@ -101,6 +104,7 @@ public class StackFragment extends Fragment {
         stackDialog = new Dialog(getActivity());
         // Layoutu transparent yapıo
         stackDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pb = view.findViewById(R.id.progressBar);
 
         //recycler view and its properties
         recyclerView = view.findViewById(R.id.stackPostsRecyclerView);
@@ -225,6 +229,7 @@ public class StackFragment extends Fragment {
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterStackPosts);
                 }
+                pb.setVisibility(View.GONE);
             }
 
             @Override
