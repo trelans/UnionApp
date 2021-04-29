@@ -22,9 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-import com.union.unionapp.notifications.Data;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -68,8 +66,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
         // we will get the name, e mail image of notif
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/");
+            //TODO burası yanlıs foto çekerken hata olur düzeltilcek
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/");
         reference.orderByChild("uid").equalTo(senderUid)
                 .addValueEventListener(new ValueEventListener() {
                     @Override

@@ -35,18 +35,19 @@
                 android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp" />
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lastActsList"
                 android:layout_width="match_parent"
                 android:layout_height="317dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
+                tools:listitem="@layout/row_lastachi"
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginStart="0dp">
 
-            </ListView>
+            </androidx.recyclerview.widget.RecyclerView>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

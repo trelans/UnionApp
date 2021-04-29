@@ -769,6 +769,7 @@ public class ClubsFragment extends Fragment {
                         public void onSuccess(Void aVoid) {
                             //added in database
                             Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
+                            addToHisLastActivities(pUid,"Published an announcement");
                             //TODO reset views
 
 
@@ -849,6 +850,37 @@ public class ClubsFragment extends Fragment {
         String nUid = ref.push().getKey();
         hashMap.put("nId", nUid);
         ref.child(nUid).setValue(hashMap)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
+
+    private void addToHisLastActivities( String pId , String notification) {
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timestamp );
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagsToUpload);
+        hashMap.put("type", "2");  // 1 buddy 2 club 3 stack
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
+        String laUid = ref.push().getKey();
+        hashMap.put("nId", laUid);
+        ref.child(laUid).setValue(hashMap)
 
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

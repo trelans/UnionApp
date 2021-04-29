@@ -487,6 +487,36 @@ public class StackFragment extends Fragment {
                 });
 
     }
+    private void addToHisLastActivities( String pId , String notification) {
+        String timeStamp = String.valueOf( MainActivity.getServerDate());
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timeStamp );
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagToUpload);
+        hashMap.put("type", "3");  // 1 buddy 2 club 3 stack
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
+        String laUid = ref.push().getKey();
+        hashMap.put("nId", laUid);
+        ref.child(laUid).setValue(hashMap)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
 
     private void checkUserStatus() {
         //get curremt user
@@ -553,6 +583,10 @@ public class StackFragment extends Fragment {
                                                 //added in database
                                                 Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
+                                                // anonim değilse yollar
+                                                if (postAnonymously.equals("0")) {
+                                                    addToHisLastActivities(pUid,"Asked a question");
+                                                }
 
 
                                                 // Sends notification to people who have same tag numbers with this post
@@ -650,7 +684,10 @@ public class StackFragment extends Fragment {
                             //added in database
                             Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
-
+                            // anonim değilse yollar
+                            if (postAnonymously.equals("0")) {
+                                addToHisLastActivities(pUid,"Asked a question");
+                            }
 
                             // Sends notification to people who have same tag numbers with this post
 
