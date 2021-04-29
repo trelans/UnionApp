@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -66,6 +67,7 @@ public class ClubsFragment extends Fragment {
     Dialog clubDialog;
     DatabaseReference userDbRefPosts;
     Spinner tagSpinner;
+
 
     EditText postDetailsEt,
             postQuotaEt,
@@ -129,6 +131,7 @@ public class ClubsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_clubs, container, false);
 
         pb = view.findViewById(R.id.progressBar);
@@ -136,6 +139,8 @@ public class ClubsFragment extends Fragment {
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showClubFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         clubDialog = new Dialog(getActivity());
+
+
         // Layoutu transparent yapıo
         clubDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
