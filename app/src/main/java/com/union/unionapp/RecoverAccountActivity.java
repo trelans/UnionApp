@@ -3,14 +3,20 @@ package com.union.unionapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,8 +33,11 @@ public class RecoverAccountActivity extends AppCompatActivity {
     TextView tw_enter_code;
     TextView tw_incorrect_code;
     TextView tw_login;
+    TextView tw_password;
+    TextView tw_password_verify;
     Button sendAgainButton;
     Button verifyButton;
+    Button changePasswordButton;
     String code;
     String email = "";
     String key;
@@ -38,11 +47,6 @@ public class RecoverAccountActivity extends AppCompatActivity {
     final String VERIFICATION_SUBJECT = " Your UnI0n verification code";
     final String VERIFICATION_MAIL = "Your UnI0n verification code is " + code + ".";
 
-
-    public void SignUp(View view) {
-        // Button onClick
-        Log.i("Signup", " YESS");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,11 @@ public class RecoverAccountActivity extends AppCompatActivity {
         tw_login = findViewById(R.id.loginTextView);
         sendAgainButton = findViewById(R.id.sendAgainButton);
         verifyButton = findViewById(R.id.VerifyButton);
+        tw_password = findViewById(R.id.passwordTextView);
+        tw_password_verify = findViewById(R.id.verifyPasswordTextView);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        ref = firebaseDatabase.getReference("verificationCodes");
+        changePasswordButton = findViewById(R.id.changePasswordButton);
+        ref = firebaseDatabase.getReference("VerificationCodes");
 
 
         // set timer
@@ -89,14 +96,12 @@ public class RecoverAccountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 email = tw_email.getText().toString().trim();
 
-                // generates a verif code and sends this code to the server
-
-
                 // Inform user
                 tw_incorrect_code.setVisibility(View.VISIBLE);
                 tw_incorrect_code.setText("Code has been sent to your mail");
                 // Starts timer
                 countDownTimer.start();
+                sendAgainButton.setEnabled(false);
                 // Sends email
                 final Handler handler = new Handler();
 
@@ -106,48 +111,38 @@ public class RecoverAccountActivity extends AppCompatActivity {
                 hashMap.put("code", code);
                 hashMap.put("timeStamp", ServerValue.TIMESTAMP);
                 ref.child(key).updateChildren(hashMap);
-                //JavaMailAPI javaMailAPI = new JavaMailAPI(RecoverAccountActivity.this, email, " Union App Password Recovery Request", "Hi, you sent a password recovery request. Your recovery password code is " + code);
-                //javaMailAPI.execute();
-
-                /*
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ref.child(key).removeValue();
-                        sendAgainButton.setEnabled(false);
-                    }
-                }, 20000);
-*/
-
-                // wait for
-                //mail
-
-
+                JavaMailAPI javaMailAPI = new JavaMailAPI(RecoverAccountActivity.this, email, " Union App Password Recovery Request", "Hi, you sent a password recovery request. Your recovery password code is " + code);
+                javaMailAPI.execute();
             }
         });
 
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                System.out.println(ServerValue.TIMESTAMP.toString());
-                // TODO currentcodu databasedekine eşitle
                 ValueEventListener checkPasswordListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.getValue().equals(tw_enter_code.getText().toString())) {
-                            tw_incorrect_code.setVisibility(View.INVISIBLE);
+                            tw_incorrect_code.setText("");
                             countDownTimer.cancel();
                             sendAgainButton.setVisibility(View.GONE);
                             verifyButton.setText("Change Password");
 
 //                    tw_enter_code.setTransformationMethod(PasswordTransformationMethod.getInstance());
                             //                  tw_email.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                            tw_email.setText("");
-                            tw_enter_code.setText("");
-                            tw_email.setHint("New Password");
-                            tw_enter_code.setHint("New Password");
-                            changePassword();
+                            tw_password.setVisibility(View.VISIBLE);
+                            tw_password_verify.setVisibility(View.VISIBLE);
+                            tw_email.setVisibility(View.GONE);
+                            tw_enter_code.setVisibility(View.GONE);
+
+                            changePasswordButton.setVisibility(View.VISIBLE);
+                            verifyButton.setVisibility(View.GONE);
+                            changePasswordButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    changePassword();
+                                }
+                            });
                         } else {
                             tw_incorrect_code.setText("Verification code is wrong");
                         }
@@ -155,7 +150,8 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        tw_incorrect_code.setText("The code is invalid");
+                        ref.child(key).removeValue();
                     }
                 };
                 ref.child(key).child("code").addListenerForSingleValueEvent(checkPasswordListener);
@@ -173,14 +169,42 @@ public class RecoverAccountActivity extends AppCompatActivity {
     }
 
     private void changePassword() {
-        sendAgainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                tw_email = view.findViewById(R.id.emailTextView);
-                tw_enter_code = view.findViewById(R.id.enterCodeTextView);
-                
-            }
-        });
+        if (tw_email.getText().toString().equals(tw_enter_code.getText().toString()) && tw_email.getText().toString().length() >= 6) {
+            tw_incorrect_code.setText("");
+            DatabaseReference tokenRef = FirebaseDatabase.getInstance().getReference("AuthTokens/" + email.replace(".", "_") + "/token");
+            tokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String token = snapshot.getValue(String.class);
+                    if (token != null) {
+                        mAuth.signInWithEmailAndPassword(email, token).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                String newToken = CreateAnAccountActivity.computeMD5Hash(tw_email.getText().toString());
+                                mAuth.getCurrentUser().updatePassword(newToken);
+                                tokenRef.setValue(newToken);
+                                mAuth.signOut();
+                                ref.child(key).removeValue();
+                                startActivity(new Intent(RecoverAccountActivity.this, LoginActivity.class));
+                            }
+                        });
+                    } else {
+                        ref.child(key).removeValue();
+                        tw_incorrect_code.setText("This email is not registered in database");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } else {
+            tw_incorrect_code.setText("Passwords does not match or too short!");
+            tw_password.setText("");
+            tw_password_verify.setText("");
+        }
+
     }
 
 

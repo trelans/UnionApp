@@ -33,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     AdapterSearchProfile adapterSearchProfile;
     List<ModelUsers> userList;
     RecyclerView recyclerView;
+    RecyclerView notificationsRv;
+    private ArrayList<ModelNotification> notificationsList;
+    private AdapterNotification adapterNotification;
     final Fragment messageFragment = new MessageFragment();
     final Fragment buddyFragment = new BuddyFragment();
     final Fragment stackFragment = new StackFragment();
@@ -89,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
     final int[] clickCount = {0};
     Fragment active;
     String mUID;
+
+    private static String[] allTagz;
 
     int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Toast.makeText(this, "Main activity", Toast.LENGTH_SHORT).show();
         fm.beginTransaction().add(R.id.fragment_container, clubFragment, "3").commit();
 
         active = clubFragment;
@@ -174,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
         //for settings - ege
         //*
         allTags = getResources().getStringArray(R.array.all_tags);
+        allTagz = allTags;
+
         //*
 
         searchBarEmpty = true;
@@ -567,9 +575,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             myDialog.setContentView(R.layout.custom_notification_popup);
 
-            RecyclerView notificationsRv;
+
 
             notificationsRv = myDialog.findViewById(R.id.notificationsRv);
+            getAllnotificiations();
 
         }
 
@@ -1022,8 +1031,7 @@ public class MainActivity extends AppCompatActivity {
     }
     // Tag converter example
      //input 1,2,3 -> output dance,music,party (inş yani uykuluyken yazdım denemedim)
-    public String serverToPhoneTagConverter(String tags) {
-        String[] allTags = getResources().getStringArray( R.array.all_tags );
+    public static String serverToPhoneTagConverter(String tags) {
         String[] tagIndexes = tags.split( "," );
         StringBuilder returnTags = new StringBuilder();
         for (int i = 0; i < tagIndexes.length; i++) {
@@ -1035,6 +1043,39 @@ public class MainActivity extends AppCompatActivity {
         return returnTags.toString();
     }
 
+    //input 1 -> output #Party
+    public String tagIndexToString(String indexString) {
+        int index = Integer.parseInt(indexString);
+        return "#" + allTags[index];
+    }
+
+    private void getAllnotificiations() {
+        notificationsList = new ArrayList<>();
+       DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Notifications/");
+        databaseReferenceNotif.child(mAuth.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        notificationsList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            // get data
+                            ModelNotification model = ds.getValue(ModelNotification.class);
+                            // add to list
+                            notificationsList.add(model);
+                        }
+                        // adapter
+                        adapterNotification = new AdapterNotification(getApplicationContext() , notificationsList);
+                        // set to recycler view
+                        notificationsRv.setAdapter(adapterNotification);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
     @Override
     protected void onResume() {
 
@@ -1045,6 +1086,10 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("Current_USERID", mUID);
         editor.apply();
         super.onResume();
+    }
+
+    public static String[] getAllTags() {
+        return allTagz;
     }
 }
 

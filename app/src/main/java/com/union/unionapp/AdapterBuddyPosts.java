@@ -2,6 +2,7 @@ package com.union.unionapp;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,8 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pDetails = postList.get(position).getpDetails();
         String pImage = postList.get(position).getpImage();
         String pTime = postList.get(position).getpTime();
+        String hisUid = postList.get(position).getUid();
+
 
         //set data
         holder.contentTextView.setText(pDetails);
@@ -83,6 +86,11 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             public void onClick(View view) {
                 //TODO mesaj kısmına iletmeyi yap
                 Toast.makeText(context, "Profile mesaj göndermeye basıldı", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent( context, ChatActivity.class);
+                i.putExtra("Hisuid", hisUid);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                context.startActivity(i);
             }
         });
 

@@ -33,28 +33,6 @@
                 android:background="#FCF7F4">
 
 
-                <EditText
-                    android:id="@+id/dateNumberText"
-                    android:layout_width="139dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="64dp"
-                    android:layout_marginTop="140dp"
-                    android:ems="10"
-                    android:inputType="date" />
-
-                <EditText
-                    android:id="@+id/timaNumberText"
-                    android:layout_width="65dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginEnd="11dp"
-                    android:layout_marginTop="138dp"
-                    android:ems="10"
-                    android:inputType="number" />
-
                 <ImageView
                     android:id="@+id/send"
                     android:layout_width="22dp"
@@ -66,7 +44,7 @@
                     app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/searchFilterImageView"
                     android:layout_width="48dp"
                     android:layout_height="52dp"
                     android:layout_alignParentBottom="true"
@@ -91,20 +69,6 @@
                     android:background="@drawable/edittext_border_template" />
 
                 <TextView
-                    android:id="@+id/timeTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="144dp"
-                    android:layout_marginEnd="79dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Time:"
-
-                    android:textSize="18sp" />
-
-                <TextView
                     android:id="@+id/filterTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,36 +81,21 @@
                     android:text="Filter"
                     android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/dateTextView"
-                    android:layout_width="43dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginBottom="134dp"
-                    android:layout_marginEnd="260dp"
-                    android:layout_marginStart="19dp"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:gravity="center"
-                    android:text="Date:"
-
-                    android:textSize="18sp" />
-
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/sampleTag1"
 
-                    android:layout_width="78dp"
-                    android:layout_height="19dp"
-                    android:layout_alignParentBottom="true"
+                    android:layout_width="118dp"
+                    android:layout_height="29dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="218dp"
-                    android:layout_marginEnd="188dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="105dp"
+                    android:layout_marginBottom="153dp"
                     android:background="@drawable/tag_button_template"
                     android:backgroundTint="#EA2A31"
                     android:fontFamily="@font/myriad_pro_regular"
-                    android:insetBottom="0sp"
+                    android:gravity="center"
                     android:insetTop="0sp"
+                    android:insetBottom="0sp"
                     android:shadowDx="0"
                     android:shadowDy="0"
                     android:shadowRadius="5"

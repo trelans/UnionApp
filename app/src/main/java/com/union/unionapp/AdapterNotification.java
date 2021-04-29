@@ -1,6 +1,8 @@
 package com.union.unionapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +13,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.union.unionapp.notifications.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -21,10 +33,12 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
     private Context context;
     private ArrayList<ModelNotification> notificationsList;
+    private FirebaseAuth firebaseAuth;
 
     public AdapterNotification(Context context, ArrayList<ModelNotification> notificationsList) {
         this.context = context;
         this.notificationsList = notificationsList;
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
@@ -40,17 +54,46 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         // get and set data to views
 
         // get data
-        ModelNotification modelNotification = notificationsList.get(position);
+        final  ModelNotification modelNotification = notificationsList.get(position);
         String name = modelNotification.getsName();
         String notification = modelNotification.getNotification();
         String image = modelNotification.getsImage();
         String timestamp = modelNotification.getTimestamp();
+        String senderUid = modelNotification.getsUid();
+        String pId = modelNotification.getpId();
         // conver timestamp to dd//mm/yyyy hh:mm
 
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-      //  cal.setTimeInMillis(Long.parseLong(MainActivity.getServerDate()));
+        cal.setTimeInMillis(Long.parseLong(timestamp));
         String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
+        // we will get the name, e mail image of notif
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/");
+        reference.orderByChild("uid").equalTo(senderUid)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String username = "" + ds.child("username").getValue();
+                            String image = "" + ds.child("image").getValue();
+                            String email = "" + ds.child("email").getValue(); // gereksiz gibi
+
+                            // set to views
+                            holder.nameTv.setText("@" + username);
+                            try {
+                                Picasso.get().load(image).placeholder(R.drawable.profile_icon).into(holder.avatarIv);
+                            } catch (Exception e) {
+                                holder.avatarIv.setImageResource(R.drawable.profile_icon);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
         // set to views
         holder.nameTv.setText(name);
@@ -62,6 +105,48 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         catch (Exception e) {
          holder.avatarIv.setImageResource(R.drawable.profile_icon);
         }
+        //TODO Tıklandığında postu acıcak
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        // long press to delete
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // show conf dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Delete");
+                builder.setMessage("Are you sure to delete this notification?");
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // delete notif
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                        ref.child(firebaseAuth.getUid()).child("Notifications").child(senderUid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                //deleted
+                            }
+                        }). addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // failed
+                            }
+                        });
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // cancel
+                        dialog.dismiss();
+                    }
+                });
+                return false;
+            }
+        });
 
     }
 
@@ -81,7 +166,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
 
             //init views
             avatarIv = itemView.findViewById(R.id.avatarIv);
-            nameTv = itemView.findViewById(R.id.nameTv);
+            nameTv = itemView.findViewById(R.id.usernameTv);
             notificationTv = itemView.findViewById(R.id.notificationTv);
             timeTv = itemView.findViewById(R.id.timeTv);
 

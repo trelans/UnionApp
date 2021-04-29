@@ -31,7 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +53,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
     ImageView tick3;
     ImageView tick4;
     ImageView tick5;
+    private String token;
     String email;
     String name;
     String surname;
@@ -280,7 +284,8 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     pb_waiting.setVisibility(View.VISIBLE);
 
                     progressDialog.show();
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    token = computeMD5Hash(password);
+                    mAuth.createUserWithEmailAndPassword(email, token).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -318,12 +323,17 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 hashMap.put("accountState", "0"); // 0 active, 1 banned, 2 frozen, 3 deleted
                                 hashMap.put("achievements", "1");
 
-
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data
                                 DatabaseReference reference = database.getReference("BilkentUniversity/Users/");
                                 // put data within hashmap in database
                                 reference.child(uid).setValue(hashMap);
+
+                                //put token
+                                reference = database.getReference("AuthTokens/" + email.replace(".","_"));
+                                hashMap.clear();
+                                hashMap.put("token", token);
+                                reference.setValue(hashMap);
 
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 finish();
@@ -366,6 +376,27 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
     public void previewTerms(View view) {
 
+    }
+
+    public static String computeMD5Hash(String password){ //TODO loginle ilgili olan her şeyi bir package e koyup bunu da default seviyesinde accessor yap
+        try {
+            // Create MD5 hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(password.getBytes());
+            byte[] messageDigest = digest.digest();
+            StringBuilder MD5Hash = new StringBuilder();
+            for (int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while(h.length() < 2){
+                    h = "0" + h;
+                }
+                MD5Hash.append(h);
+            }
+            return MD5Hash.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return password;
+        }
     }
 
 
