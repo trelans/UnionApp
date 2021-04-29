@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -67,6 +68,7 @@ public class ClubsFragment extends Fragment {
     DatabaseReference userDbRefPosts;
     Spinner tagSpinner;
 
+
     EditText postDetailsEt,
             postQuotaEt,
             postLocationEt;
@@ -74,7 +76,9 @@ public class ClubsFragment extends Fragment {
     ProgressBar pb;
 
     TextView postDateEt,
-             postTimeEt;
+             postTimeEt,
+             filterDateTv,
+             filterTimeTv;
 
     TextView[] textViewTags;
 
@@ -129,6 +133,7 @@ public class ClubsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_clubs, container, false);
 
         pb = view.findViewById(R.id.progressBar);
@@ -136,6 +141,8 @@ public class ClubsFragment extends Fragment {
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showClubFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         clubDialog = new Dialog(getActivity());
+
+
         // Layoutu transparent yapıo
         clubDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -420,11 +427,74 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_club_filter);
                 clubDialog.setCanceledOnTouchOutside(true);
 
+                tag1 = clubDialog.findViewById(R.id.filterTag1TextView);
+                tag2 = clubDialog.findViewById(R.id.filterTag2TextView);
+                tag3 = clubDialog.findViewById(R.id.filterTag3TextView);
+
+                filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
+                filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
+
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
+                //set the postDateEt to current date for default
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(MainActivity.getServerDate());
+                calendarToString(calendar);
+                filterDateTv.setText(date);
+                filterTimeTv.setText(time);
+
+                //setting up the calendar dialog
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+                final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+                final int minute = calendar.get(Calendar.MINUTE);
+
+
+
+                filterDateTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                        );
+                        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.updateDate(year,month,day);
+                        datePickerDialog.show();
+                    }
+                });
+
+                filterTimeTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                        );
+                        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        timePickerDialog.show();
+                    }
+                });
+
+                setListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month = month + 1;
+                        String date = dayOfMonth + "/" + month + "/" + year;
+                        filterDateTv.setText(date);
+
+                    }
+                };
+
+                timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String time = hourOfDay + ":" + minute;
+                        filterTimeTv.setText(time);
+                    }
+                };
 
 
                 clubDialog.show();
@@ -906,10 +976,20 @@ public class ClubsFragment extends Fragment {
     }
 
     public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
+
+        boolean boo;
+
         String tag1String = tag1.getText().toString();
         String tag2String = tag2.getText().toString();
         String tag3String = tag3.getText().toString();
 
-        return ( tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String) );
+        if (!tag1String.equals("") && !tag2String.equals("") && !tag3String.equals("")) {
+
+            return (tag1String.equals(tag2String) || tag2String.equals(tag3String) || tag1String.equals(tag3String));
+        } else {
+            return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        }
     }
+
+
 }

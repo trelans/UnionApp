@@ -302,6 +302,7 @@ public class BuddyFragment extends Fragment {
                         tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 0;
+                        tag1.setText("");
                     }
                 });
 
@@ -313,6 +314,7 @@ public class BuddyFragment extends Fragment {
                         tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 1;
+                        tag2.setText("");
                     }
                 });
 
@@ -324,6 +326,7 @@ public class BuddyFragment extends Fragment {
                         tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 2;
+                        tag3.setText("");
                     }
                 });
 
@@ -1244,11 +1247,24 @@ public class BuddyFragment extends Fragment {
 
     }
     public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
+
+        boolean boo;
+
         String tag1String = tag1.getText().toString();
         String tag2String = tag2.getText().toString();
         String tag3String = tag3.getText().toString();
 
-        return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        if (!tag1String.equals("") && !tag2String.equals("") && !tag3String.equals("")) {
+
+            return (  tag1String.equals(tag2String) || tag2String.equals(tag3String) || tag1String.equals(tag3String));
+        }
+        else {
+            return (  tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        }
+
+
+
+
     }
 
     public String serverToPhoneTagConverter(String tags) {
