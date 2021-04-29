@@ -75,7 +75,8 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         String pDetails = postList.get(position).getPDetails();
         String pImage = postList.get(position).getPImage();
         String pTime = postList.get(position).getPTime();
-        String pTag = postList.get(position).getpTags();
+        String pTag = postList.get(position).getpTagIndex();
+
         final String[] upVoteNumber = {postList.get(position).getPUpvoteNumber()};
 
         /*
@@ -95,8 +96,13 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         //allTags = getResources.getStringArray(R.array.all_tags); !!!!! getResources metodu fragment classı için var.
         allTags = MainActivity.getAllTags();
         System.out.println();
-        holder.topicTag.setText("Math-101"); //TODO
 
+        if (Integer.valueOf(pTag) != 0) {
+            holder.topicTag.setText(allTags[Integer.valueOf(pTag)]); //TODO
+        }
+        else {
+            holder.topicTag.setText("No Tag");
+        }
         //if there is no image
         if (pImage.equals("noImage")) {
             //hide imageView
