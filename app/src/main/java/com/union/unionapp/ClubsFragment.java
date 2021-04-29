@@ -64,6 +64,7 @@ import java.util.List;
 public class ClubsFragment extends Fragment {
 
     Dialog clubDialog;
+    DatabaseReference userDbRefPosts;
     Spinner tagSpinner;
 
     EditText postDetailsEt,
@@ -102,6 +103,8 @@ public class ClubsFragment extends Fragment {
 
     String date;
     String time;
+    String timestamp;
+    String tagsToUpload;
 
     DatePickerDialog.OnDateSetListener setListener;
     TimePickerDialog.OnTimeSetListener timeSetListener;
@@ -186,7 +189,7 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.club_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
@@ -366,14 +369,14 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        timestamp = String.valueOf(MainActivity.getServerDate());
                         String postDetails = postDetailsEt.getText().toString().trim();
                         String postDate = postDateEt.getText().toString().trim();
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
 
-                        String tagsToUpload = "";
+                         tagsToUpload = "";
 
                         for ( int k = 1; k < allTags.length; k++ ) {
                             if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
@@ -619,7 +622,7 @@ public class ClubsFragment extends Fragment {
     private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
-        String filePathAndName = "Posts/" + "post_" + timeStamp;
+        String filePathAndName = "Posts/" + "post_";
 
         if (!uri.equals("noImage")) {
             //post with image
@@ -644,7 +647,6 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("username",username); //çekmemiş
                                 //hashMap.put("uEmail",email);
                                 hashMap.put("uDp",dp);
-                                hashMap.put("pId",timeStamp);
                                 hashMap.put("pDetails",postDetails);
                                 hashMap.put("pDate",postDate);
                                 hashMap.put("pHour",postTime);
@@ -656,15 +658,63 @@ public class ClubsFragment extends Fragment {
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
+                                String pUid = reference.push().getKey();
+                                hashMap.put("pId", pUid);
 
                                 //put data in this ref
-                                reference.child(timeStamp).setValue(hashMap)
+                                reference.child(pUid).setValue(hashMap)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 //added in database
-                                                Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                                                Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
+
+
+                                                // Sends notification to people who have same tag numbers with this post
+
+                                                //getting users who have that spesific tag
+                                                // for now notification will send for random tag
+                                                String completeTag = tagsToUpload;
+                                                String[] partialTag = completeTag.split(",");
+                                                int randomIndex = (int)  Math.random() *  (partialTag.length-1);
+                                                final String luckyOnesToBeSendNotification = partialTag[randomIndex];
+
+                                                userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                                                //   final String luckyOnesToBeSendNotification = "2";
+                                                System.out.println(luckyOnesToBeSendNotification);
+
+
+                                                userDbRef.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        for (DataSnapshot ds: snapshot.getChildren()){
+                                                            System.out.println("User arıyorum");
+                                                            ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                                            String[] userTags = modelUsers.getTags().split(",");
+                                                            String firstTag = userTags[0];
+                                                            String secondTag = userTags[1];
+                                                            String thirdTag = userTags[2];
+                                                            String userUI = modelUsers.getUid();
+                                                            String[] alltags = MainActivity.getAllTags();
+                                                            System.out.println("ssdsdf");
+                                                            if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                                                if (!userUI.equals(uid)) {
+                                                                    addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                                    //TODO telefonuna burda notif yolla
+                                                                }
+                                                            }
+
+                                                            System.out.println("oluyor");
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -698,7 +748,6 @@ public class ClubsFragment extends Fragment {
             hashMap.put("username",username);
             hashMap.put("uEmail",email);
             hashMap.put("uDp",dp);
-            hashMap.put("pId",timeStamp);
             hashMap.put("pDetails",postDetails);
             hashMap.put("pDate",postDate);
             hashMap.put("pHour",postTime);
@@ -710,15 +759,65 @@ public class ClubsFragment extends Fragment {
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
+            String pUid = reference.push().getKey();
+            hashMap.put("pId", pUid);
 
             //put data in this ref
-            reference.child(timeStamp).setValue(hashMap)
+            reference.child(pUid).setValue(hashMap)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             //added in database
-                            Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
+
+
+                            // Sends notification to people who have same tag numbers with this post
+
+                            //getting users who have that spesific tag
+                            // for now notification will send for random tag
+                            String completeTag = tagsToUpload;
+                            String[] partialTag = completeTag.split(",");
+                            int randomIndex = (int)  Math.random() *  (partialTag.length-1);
+                            final String luckyOnesToBeSendNotification = partialTag[randomIndex];
+                            String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
+                            System.out.println(firstTag + "HAA");
+                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                            //   final String luckyOnesToBeSendNotification = "2";
+                            System.out.println(luckyOnesToBeSendNotification);
+
+
+                            userDbRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot ds: snapshot.getChildren()){
+
+                                        ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                        String[] userTags = modelUsers.getTags().split(",");
+                                        String firstTag = userTags[0];
+                                        String secondTag = userTags[1];
+                                        String thirdTag = userTags[2];
+                                        String userUI = modelUsers.getUid();
+                                        String[] alltags = MainActivity.getAllTags();
+                                        System.out.println("ssdsdf");
+                                        System.out.println(luckyOnesToBeSendNotification);
+                                        if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                            if (!userUI.equals(uid)) {
+                                                addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                //TODO telefonuna burda notif yolla
+                                            }
+                                        }
+
+                                        System.out.println("oluyor");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
 
                         }
                     })
@@ -735,6 +834,37 @@ public class ClubsFragment extends Fragment {
 
     }
 
+    private void addToHisNotifications(String hisUid, String pId , String notification) {
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timestamp );
+        hashMap.put("pUid" , hisUid);
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagsToUpload);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
+        String nUid = ref.push().getKey();
+        hashMap.put("nId", nUid);
+        ref.child(nUid).setValue(hashMap)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
+
     public void calendarToString(Calendar calendar) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -744,10 +874,20 @@ public class ClubsFragment extends Fragment {
     }
 
     public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
+
+        boolean boo;
+
         String tag1String = tag1.getText().toString();
         String tag2String = tag2.getText().toString();
         String tag3String = tag3.getText().toString();
 
-        return ( tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String) );
+        if (!tag1String.equals("") && !tag2String.equals("") && !tag3String.equals("")) {
+
+            return (tag1String.equals(tag2String) || tag2String.equals(tag3String) || tag1String.equals(tag3String));
+        } else {
+            return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        }
     }
+
+
 }

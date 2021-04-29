@@ -108,6 +108,7 @@ public class BuddyFragment extends Fragment {
 
 
     DatabaseReference userDbRef;
+    DatabaseReference userDbRefPosts;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
 
@@ -203,8 +204,12 @@ public class BuddyFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                timestamp = String.valueOf(MainActivity.getServerDate());
+
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
+
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
@@ -297,6 +302,7 @@ public class BuddyFragment extends Fragment {
                         tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 0;
+                        tag1.setText("");
                     }
                 });
 
@@ -308,6 +314,7 @@ public class BuddyFragment extends Fragment {
                         tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 1;
+                        tag2.setText("");
                     }
                 });
 
@@ -319,6 +326,7 @@ public class BuddyFragment extends Fragment {
                         tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 2;
+                        tag3.setText("");
                     }
                 });
 
@@ -388,7 +396,7 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        timestamp = String.valueOf(MainActivity.getServerDate());
                         String postHeadline = postHeadlineEt.getText().toString().trim();
                         String postDetails = postDetailsEt.getText().toString().trim();
                         String postDate = postDateEt.getText().toString().trim();
@@ -425,6 +433,10 @@ public class BuddyFragment extends Fragment {
                             uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
                         }
                         buddyDialog.dismiss();
+
+                        tagsStatus[0] = false;
+                        tagsStatus[1] = false;
+                        tagsStatus[2] = false;
                     }
                 });
 
@@ -896,7 +908,7 @@ public class BuddyFragment extends Fragment {
 
     private void uploadData(String postTitle, String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
-        String timeStamp = String.valueOf(System.currentTimeMillis());
+      final String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "";
 
         if (!uri.equals("noImage")) {
@@ -928,7 +940,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pImage", downloadUri);
                                 hashMap.put("pTime", String.valueOf(timeStamp));
                                 hashMap.put("pLocation", postLocation);
-                                hashMap.put("pTags", "1,2,3"); //TODO tagler için değişicek TAGS TO UPLOAD
+                                hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek TAGS TO UPLOAD
                                 hashMap.put("pGender", postGender);
                                 hashMap.put("pTitle",postTitle);
 
@@ -946,23 +958,43 @@ public class BuddyFragment extends Fragment {
                                                 Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
 
+
                                                 // Sends notification to people who have same tag numbers with this post
 
                                                 //getting users who have that spesific tag
-                                                // for now notification will send for first tag //TODO
-                                                String firstTag = tagSplitter(tagsToUpload)[0];
-                                                userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-                                                Query query = userDbRef.orderByChild("tags").equalTo(firstTag);
-                                                query.addValueEventListener(new ValueEventListener() {
+                                                // for now notification will send for random tag
+                                                String completeTag = tagsToUpload;
+                                                String[] partialTag = completeTag.split(",");
+                                                int randomIndex = (int)  Math.random() *  (partialTag.length-1);
+                                                final String luckyOnesToBeSendNotification = partialTag[randomIndex];
+                                                String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
+                                                System.out.println(firstTag + "HAA");
+                                                userDbRefPosts = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                                                //   final String luckyOnesToBeSendNotification = "2";
+                                                System.out.println(luckyOnesToBeSendNotification);
+
+
+                                                userDbRef.addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        for (DataSnapshot ds : snapshot.getChildren()) {
+                                                        for (DataSnapshot ds: snapshot.getChildren()){
 
-                                                            String notifUid = "" + ds.child("uid").getValue();
-                                                            if (!notifUid.equals(uid)) {
-                                                                addToHisNotifications("" + notifUid, "" + pUid, tagIndexToString(firstTag) + " Someone looking for new buddy!");
+                                                            ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                                            String[] userTags = modelUsers.getTags().split(",");
+                                                            String firstTag = userTags[0];
+                                                            String secondTag = userTags[1];
+                                                            String thirdTag = userTags[2];
+                                                            String userUI = modelUsers.getUid();
+                                                            String[] alltags = MainActivity.getAllTags();
+                                                            System.out.println("ssdsdf");
+                                                            if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                                                if (!userUI.equals(uid)) {
+                                                                    addToHisNotifications("" + userUI, "" + pUid, " Someone looking for new buddy!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                                    //TODO telefonuna burda notif yolla
+                                                                }
                                                             }
 
+                                                            System.out.println("oluyor");
                                                         }
                                                     }
 
@@ -971,8 +1003,6 @@ public class BuddyFragment extends Fragment {
 
                                                     }
                                                 });
-
-
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -1011,7 +1041,7 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pImage", "noImage");
             hashMap.put("pTime", String.valueOf(timeStamp));
             hashMap.put("pLocation", postLocation);
-            hashMap.put("pTags", "1,2,3"); // tagsToUpload
+            hashMap.put("pTags", tagsToUpload); // tagsToUpload
             hashMap.put("pGender", postGender);
             hashMap.put("pTitle",postTitle);
 
@@ -1033,19 +1063,39 @@ public class BuddyFragment extends Fragment {
                             // Sends notification to people who have same tag numbers with this post
 
                             //getting users who have that spesific tag
-                            // for now notification will send for first tag //TODO
+                            // for now notification will send for random tag
+                            String completeTag = tagsToUpload;
+                            String[] partialTag = completeTag.split(",");
+                            int randomIndex = (int)  Math.random() *  (partialTag.length-1);
+                            final String luckyOnesToBeSendNotification = partialTag[randomIndex];
                             String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
                             System.out.println(firstTag + "HAA");
-                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-                            Query query = userDbRef.orderByChild("tags").equalTo(firstTag);
-                            query.addValueEventListener(new ValueEventListener() {
+                            userDbRefPosts = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                        //   final String luckyOnesToBeSendNotification = "2";
+                            System.out.println(luckyOnesToBeSendNotification);
+
+
+                            userDbRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    for (DataSnapshot ds : snapshot.getChildren()) {
-                                        System.out.println("ÇALIŞIYOM");
-                                        String notifUid = "" + ds.child("uid").getValue();
-                                        addToHisNotifications("" + notifUid, ""+ pUid, "tagIndexToString(firstTag)" + " Someone looking for new buddy!");
+                                    for (DataSnapshot ds: snapshot.getChildren()){
 
+                                        ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                        String[] userTags = modelUsers.getTags().split(",");
+                                        String firstTag = userTags[0];
+                                        String secondTag = userTags[1];
+                                        String thirdTag = userTags[2];
+                                        String userUI = modelUsers.getUid();
+                                        String[] alltags = MainActivity.getAllTags();
+                                        System.out.println("ssdsdf");
+                                        if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                            if (!userUI.equals(uid)) {
+                                                addToHisNotifications("" + userUI, "" + pUid, " Someone looking for new buddy!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                //TODO telefonuna burda notif yolla
+                                            }
+                                        }
+
+                                        System.out.println("oluyor");
                                     }
                                 }
 
@@ -1054,8 +1104,6 @@ public class BuddyFragment extends Fragment {
 
                                 }
                             });
-
-
 
 
                         }
@@ -1083,8 +1131,11 @@ public class BuddyFragment extends Fragment {
         hashMap.put("sName" , username);
         hashMap.put("sTag", tagsToUpload);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-        ref.child(hisUid).child("Notifications").child(uid).setValue(hashMap)
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
+        String nUid = ref.push().getKey();
+        hashMap.put("nId", nUid);
+        ref.child(nUid).setValue(hashMap)
+
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -1166,11 +1217,24 @@ public class BuddyFragment extends Fragment {
     }*/
 
     public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
+
+        boolean boo;
+
         String tag1String = tag1.getText().toString();
         String tag2String = tag2.getText().toString();
         String tag3String = tag3.getText().toString();
 
-        return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        if (!tag1String.equals("") && !tag2String.equals("") && !tag3String.equals("")) {
+
+            return (  tag1String.equals(tag2String) || tag2String.equals(tag3String) || tag1String.equals(tag3String));
+        }
+        else {
+            return (  tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        }
+
+
+
+
     }
 
     public String serverToPhoneTagConverter(String tags) {

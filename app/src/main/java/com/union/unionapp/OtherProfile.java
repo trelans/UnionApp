@@ -1,9 +1,5 @@
 package com.union.unionapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +9,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,6 +55,10 @@ public class OtherProfile extends AppCompatActivity {
     AppCompatButton tagButton1;
     AppCompatButton tagButton2;
     AppCompatButton tagButton3;
+    AppCompatButton[] tagButtons;
+    String[] tagIndexes;
+    String[] allTags;
+    String tagNums;
     ImageView forwardDateImageView;
     ImageView backwardDateImageView;
     TextView dateTextView;
@@ -87,6 +91,13 @@ public class OtherProfile extends AppCompatActivity {
         tagButton3 = findViewById(R.id.profileTagButton3);
         back_bt = findViewById(R.id.backButtonn);
 
+        tagButtons = new AppCompatButton[]{ tagButton1, tagButton2, tagButton3 };
+        allTags = getResources().getStringArray( R.array.all_tags );
+
+        tagButton1.setVisibility( View.INVISIBLE );
+        tagButton2.setVisibility( View.INVISIBLE );
+        tagButton3.setVisibility( View.INVISIBLE );
+
 
         allAchs = getResources().getStringArray(R.array.user_achievements);
         achievementLocationsWComma = "1,3,5".replace(",", "");
@@ -107,7 +118,21 @@ public class OtherProfile extends AppCompatActivity {
                     //get data
                     String name = "@" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
+                    tagNums = "" + ds.child( "tags" ).getValue();
 
+                    if( tagNums != null ) {
+                        tagIndexes = tagNums.split( "," );
+                        int[] k = new int [ 1 ] ;
+                        k [ 0 ] = 0;
+                        int temp;
+                        for ( String str: tagIndexes ) {
+                            temp = Integer.parseInt( str );
+                            tagButtons[ k[ 0 ] ].setText( allTags [ temp ] );
+                            tagButtons[ k[ 0 ] ].setVisibility( View.VISIBLE );
+                            k[ 0 ]++;
+
+                        }
+                    }
                     // burada yapılacak
 
                     //set data
