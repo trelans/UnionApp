@@ -700,7 +700,7 @@ public class ClubsFragment extends Fragment {
                                                             System.out.println("ssdsdf");
                                                             if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
                                                                 if (!userUI.equals(uid)) {
-                                                                    addToHisNotifications("" + userUI, "" + pUid, " Someone looking for new buddy!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                                    addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
                                                                     //TODO telefonuna burda notif yolla
                                                                 }
                                                             }
