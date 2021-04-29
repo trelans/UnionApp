@@ -35,6 +35,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
     @Override
     public void onBindViewHolder(@NonNull AdapterBuddyPosts.MyHolder holder, int position) {
+
         //get data
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();
