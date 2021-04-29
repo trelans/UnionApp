@@ -1051,7 +1051,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void getAllnotificiations() {
         notificationsList = new ArrayList<>();
-        databaseReference.child(mAuth.getUid()).child("Notifications")
+       DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Notifications/");
+        databaseReferenceNotif.child(mAuth.getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

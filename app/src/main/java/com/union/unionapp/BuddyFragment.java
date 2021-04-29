@@ -108,6 +108,7 @@ public class BuddyFragment extends Fragment {
 
 
     DatabaseReference userDbRef;
+    DatabaseReference userDbRefPosts;
     FirebaseAuth firebaseAuth;
     Uri image_uri;
 
@@ -1033,19 +1034,39 @@ public class BuddyFragment extends Fragment {
                             // Sends notification to people who have same tag numbers with this post
 
                             //getting users who have that spesific tag
-                            // for now notification will send for first tag //TODO
+                            // for now notification will send for random tag
+                            String completeTag = "1,2,3";
+                            String[] partialTag = completeTag.split(",");
+                            int randomIndex = (int)  Math.random() *  (partialTag.length-1);
+                            final String luckyOnesToBeSendNotification = partialTag[randomIndex];
                             String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
                             System.out.println(firstTag + "HAA");
-                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-                            Query query = userDbRef.orderByChild("tags").equalTo(firstTag);
-                            query.addValueEventListener(new ValueEventListener() {
+                            userDbRefPosts = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                        //   final String luckyOnesToBeSendNotification = "2";
+                            System.out.println(luckyOnesToBeSendNotification);
+
+
+                            userDbRef.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    for (DataSnapshot ds : snapshot.getChildren()) {
-                                        System.out.println("ÇALIŞIYOM");
-                                        String notifUid = "" + ds.child("uid").getValue();
-                                        addToHisNotifications("" + notifUid, ""+ pUid, "tagIndexToString(firstTag)" + " Someone looking for new buddy!");
+                                    for (DataSnapshot ds: snapshot.getChildren()){
 
+                                        ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                        String[] userTags = modelUsers.getTags().split(",");
+                                        String firstTag = userTags[0];
+                                        String secondTag = userTags[1];
+                                        String thirdTag = userTags[2];
+                                        String userUI = modelUsers.getUid();
+                                        String[] alltags = MainActivity.getAllTags();
+                                        System.out.println("ssdsdf");
+                                        if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                            if (!userUI.equals(uid)) {
+                                                addToHisNotifications("" + userUI, "" + pUid, " Someone looking for new buddy!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                //TODO telefonuna burda notif yolla
+                                            }
+                                        }
+
+                                        System.out.println("oluyor");
                                     }
                                 }
 
@@ -1054,8 +1075,6 @@ public class BuddyFragment extends Fragment {
 
                                 }
                             });
-
-
 
 
                         }
@@ -1083,8 +1102,11 @@ public class BuddyFragment extends Fragment {
         hashMap.put("sName" , username);
         hashMap.put("sTag", tagsToUpload);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-        ref.child(hisUid).child("Notifications").child(uid).setValue(hashMap)
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
+        String nUid = ref.push().getKey();
+        hashMap.put("nId", nUid);
+        ref.child(nUid).setValue(hashMap)
+
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

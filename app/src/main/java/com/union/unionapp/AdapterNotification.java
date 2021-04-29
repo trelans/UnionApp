@@ -64,7 +64,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         // conver timestamp to dd//mm/yyyy hh:mm
 
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        //  cal.setTimeInMillis(Long.parseLong(MainActivity.getServerDate()));
+        cal.setTimeInMillis(Long.parseLong(timestamp));
         String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
         // we will get the name, e mail image of notif
@@ -125,7 +125,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
                     public void onClick(DialogInterface dialog, int which) {
                         // delete notif
                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-                        ref.child(firebaseAuth.getUid()).child("Notifications").child(timestamp).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        ref.child(firebaseAuth.getUid()).child("Notifications").child(senderUid).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 //deleted
