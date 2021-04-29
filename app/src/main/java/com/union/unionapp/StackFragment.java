@@ -66,6 +66,7 @@ public class StackFragment extends Fragment {
     String postDetails;
     String tagToUpload;
     String postTitle;
+    String timestamp;
     String filterTagsToUpload;
 
 
@@ -496,7 +497,6 @@ public class StackFragment extends Fragment {
                                 hashMap.put("username",username); //çekmemiş
                                 //hashMap.put("uEmail",email);
                                 //hashMap.put("uDp",dp); // ?
-                                hashMap.put("pId",timeStamp);
                                 hashMap.put("pAnon",postAnonymously);
                                 hashMap.put("pDetails",postDetails);
                                 hashMap.put("pImage",downloadUri);
@@ -509,9 +509,11 @@ public class StackFragment extends Fragment {
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
+                                String pUid = reference.push().getKey();
+                                hashMap.put("pId", pUid);
 
                                 //put data in this ref
-                                reference.child(timeStamp).setValue(hashMap)
+                                reference.child(pUid).setValue(hashMap)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -551,7 +553,6 @@ public class StackFragment extends Fragment {
             hashMap.put("username",username);
             hashMap.put("uEmail",email);
             hashMap.put("uDp",dp);
-            hashMap.put("pId",timeStamp);
             hashMap.put("pAnon",postAnonymously);
             hashMap.put("pDetails",postDetails);
             hashMap.put("pImage","noImage");
@@ -564,9 +565,11 @@ public class StackFragment extends Fragment {
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
+            String pUid = reference.push().getKey();
+            hashMap.put("pId", pUid);
 
             //put data in this ref
-            reference.child(timeStamp).setValue(hashMap)
+            reference.child(pUid).setValue(hashMap)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
