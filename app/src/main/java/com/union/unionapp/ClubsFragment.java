@@ -186,7 +186,7 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.club_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 

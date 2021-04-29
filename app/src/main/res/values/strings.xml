@@ -10,6 +10,14 @@
     </string-array>
     <string-array name="all_tags">
         <item>Choose a Tag</item>
+        <item>#MATH101</item>
+        <item>#MATH102</item>
+        <item>#MATH132</item>
+        <item>#CS101</item>
+        <item>#CS102</item>
+        <item>#ENG101</item>
+        <item>#ENG102</item>
+        <item>#TURK101</item>
         <item>#walk</item>
         <item>#study</item>
         <item>#gym</item>
@@ -19,14 +27,6 @@
         <item>#running</item>
         <item>#design</item>
         <item>#flatmate</item>
-        <item>#MATH101</item>
-        <item>#MATH102</item>
-        <item>#MATH132</item>
-        <item>#CS101</item>
-        <item>#CS102</item>
-        <item>#ENG101</item>
-        <item>#ENG102</item>
-        <item>#TURK101</item>
         <item>#BusinessWeek</item>
         <item>#TDPToddler</item>
         <item>#BilkentOR</item>
