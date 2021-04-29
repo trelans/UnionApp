@@ -44,7 +44,7 @@
                     app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/searchFilterImageView"
                     android:layout_width="48dp"
                     android:layout_height="52dp"
                     android:layout_alignParentBottom="true"

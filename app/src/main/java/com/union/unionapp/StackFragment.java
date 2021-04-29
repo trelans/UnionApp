@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -42,6 +44,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -63,6 +66,11 @@ public class StackFragment extends Fragment {
     String postDetails;
     String tagToUpload;
     String postTitle;
+    String filterTagsToUpload;
+
+
+
+    AppCompatButton stackTag;
 
     CheckBox anonym;
 
@@ -141,6 +149,8 @@ public class StackFragment extends Fragment {
                 stackTagSpinner.setAdapter(tagAdapter);
 
 
+
+
                 //init views
                 sendButtonIv = stackDialog.findViewById(R.id.sendButtonImageView);
                 addPhotoIv = stackDialog.findViewById(R.id.uploadPhotoImageView);
@@ -207,10 +217,91 @@ public class StackFragment extends Fragment {
             public void onClick(View v) {
                 stackDialog.setContentView(R.layout.custom_stack_filter);
 
+                ImageView searchFilter = stackDialog.findViewById(R.id.searchFilterImageView);
+                stackTag = stackDialog.findViewById(R.id.sampleTag1);
+
+                stackTag.setVisibility(View.INVISIBLE);
+                searchFilter.setVisibility(View.INVISIBLE);
+
                 stackTagSpinner = stackDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.stack_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 stackTagSpinner.setAdapter(tagAdapter);
+
+                stackTagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (position > 0) {
+                            String selectedItem = parent.getItemAtPosition(position).toString();
+                            stackTag.setText(selectedItem);
+                            stackTag.setVisibility(View.VISIBLE);
+                            searchFilter.setVisibility(View.VISIBLE);
+                            stackTagSpinner.setEnabled(false);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                stackTag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        stackTag.setText("");
+                        stackTagSpinner.setEnabled(true);
+                        stackTag.setVisibility(View.INVISIBLE);
+                        searchFilter.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+                searchFilter.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String[] allTags = getResources().getStringArray( R.array.all_tags );
+                        String filterTag = stackTag.getText().toString().trim();
+                        filterTagsToUpload = "";
+
+                        for (int i = 0; i < allTags.length; i++) {
+                            if (filterTag.equals(allTags[i])) {
+                                filterTagsToUpload = i + "";
+                            }
+                        }
+
+                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
+                        Query query = queryRef.orderByChild("pTags").equalTo(filterTagsToUpload);
+
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                postList.clear();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    System.out.println(ds.getValue());
+                                    ModelStackPost ModelStackPost = ds.getValue(ModelStackPost.class);
+                                    postList.add(ModelStackPost);
+                                }
+
+                                // adapter
+                                adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                                adapterStackPosts.notifyDataSetChanged();
+                                // set adapter to recyclerView
+                                recyclerView.setAdapter(adapterStackPosts);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+
+                        });
+
+                        stackTag.setText("");
+                        stackDialog.dismiss();
+                    }
+                });
 
 
 
