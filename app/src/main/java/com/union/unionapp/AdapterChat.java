@@ -96,7 +96,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             messageTv = itemView.findViewById(R.id.messageTv);
-            timeTv = itemView.findViewById(R.id.timeTv);
+            timeTv = itemView.findViewById(R.id.AchtimeTv);
             isSeenTv = itemView.findViewById(R.id.isSeenTv);
 
         }
