@@ -160,7 +160,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
-            topicTagTW = itemView.findViewById(R.id.topicTagTW);
+            topicTagTW = itemView.findViewById(R.id.topicTagTW1);
 
         }
 

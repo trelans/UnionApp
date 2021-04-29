@@ -633,7 +633,6 @@ public class BuddyFragment extends Fragment {
 
                             //tags to upload'un sonundaki virgülü atıyor
                             StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-
                             filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
                         }
 
