@@ -3,10 +3,12 @@ package com.union.unionapp;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,10 +23,15 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
 
     Context context;
     List<ModelBuddyAndClubPost> postList;
+    private static boolean isBackgroundBlurred = false;
 
     public AdapterClubPosts(Context context, List<ModelBuddyAndClubPost> postList) {
         this.context = context;
         this.postList = postList;
+    }
+
+    public static boolean isBlurred() {
+        return isBackgroundBlurred ;
     }
 
     @NonNull
@@ -102,8 +109,21 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 dialog = new Dialog(context);
                 dialog.setContentView(R.layout.custom_view_club_post_popup);
                 dialog.setCanceledOnTouchOutside(true);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
+                isBackgroundBlurred = true;
+                if(AdapterClubPosts.isBlurred()){
+                    WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                     lp.dimAmount=0.0f;
+                     dialog.getWindow().setAttributes(lp);
+                     dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+
+                    /*
+                     //WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                    lp.alpha=0;
+                    dialog.getWindow().setAttributes(lp);
+                     */
+                }
 
                 //TODO tanımlamaları yap
                 return true;
@@ -143,5 +163,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             topicTagTW = itemView.findViewById(R.id.topicTagTW);
 
         }
+
+
     }
 }
