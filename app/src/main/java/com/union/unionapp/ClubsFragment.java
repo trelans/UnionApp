@@ -422,6 +422,10 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_club_filter);
                 clubDialog.setCanceledOnTouchOutside(true);
 
+                tag1 = clubDialog.findViewById(R.id.filterTag1TextView);
+                tag2 = clubDialog.findViewById(R.id.filterTag2TextView);
+                tag3 = clubDialog.findViewById(R.id.filterTag3TextView);
+
                 filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
                 filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
 
