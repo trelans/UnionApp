@@ -13,7 +13,7 @@ public class ModelNotification {
         this.sImage = sImage;
         this.sTag = sTag;
     }
-
+    public  ModelNotification() {}
     public String getsEmail() {
         return sEmail;
     }

@@ -83,8 +83,8 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and if there is a user go to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-        //    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          //  startActivity(intent);
+          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
         }
 
         // Klavye açık mı kapalı mı onu dinlio
@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                     pb_waiting.setVisibility(View.VISIBLE);
 
                     // authenticate user
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(email, CreateAnAccountActivity.computeMD5Hash(password)).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -207,9 +207,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-
-
-
             }
         });
 
