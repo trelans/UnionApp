@@ -83,7 +83,12 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             holder.topicTagTW1.setVisibility(View.INVISIBLE);
         }
         else {
-            holder.topicTagTW1.setText(newTags[0]);
+            if (tags[0].equals("0")) {
+                holder.topicTagTW1.setVisibility(View.INVISIBLE);
+            }
+            else {
+                holder.topicTagTW1.setText(newTags[0]);
+            }
         }
 
         if( newTags[1].equals("")) {
