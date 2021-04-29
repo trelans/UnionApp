@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -22,6 +23,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -48,17 +55,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private SlidrInterface slidr;
 
-    public void ForgotPassword(View view) {
-        // Button onClick
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        slidr = Slidr.attach( this );
+        slidr = Slidr.attach(this);
 
         tw_email = findViewById(R.id.nameTextView);
         tw_password = findViewById(R.id.passwordTextView);
@@ -78,22 +80,23 @@ public class LoginActivity extends AppCompatActivity {
         pb_waiting = findViewById(R.id.waitingProgressBar);
         tick1 = findViewById(R.id.tickView1);
         tick2 = findViewById(R.id.tickView2);
+        final Activity activity = this;
 
         mAuth = FirebaseAuth.getInstance();
         // Check if user is signed in (non-null) and if there is a user go to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if (currentUser != null) {
-        //    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          //  startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
 
+
         // Klavye açık mı kapalı mı onu dinlio
-        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener()
-        {
+        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
-            public void onToggleSoftKeyboard(boolean isVisible)
-            {
-                if (!isVisible && !isThereError ) {
+            public void onToggleSoftKeyboard(boolean isVisible) {
+                if (!isVisible && !isThereError) {
                     button_login.setEnabled(true);
                 }
             }
@@ -160,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-            // click listeners
+        // click listeners
         tw_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,8 +201,32 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Giriş yapıldı", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
+                                System.out.println("burada");
+                                System.out.println(mAuth.getCurrentUser().getUid());
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + mAuth.getCurrentUser().getUid());
+                                System.out.println("sadasda");
+                                reference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for (DataSnapshot ds : snapshot.getChildren()
+                                        ) {
+                                            if (ds.getKey().equals("accountType")) {
+                                                System.out.println("burada");
+                                                if (ds.getValue().equals("-1")) {
+                                                    startActivity(new Intent(LoginActivity.this, VerifyAccountActivity.class));
+                                                } else {
+                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                }
+                                                finish();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                             } else {
                                 tw_error.setText(task.getException().getMessage());
                                 tw_error.setVisibility(View.VISIBLE);
@@ -210,12 +237,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-    //setContentView( R.layout.activity_main );
+        //setContentView( R.layout.activity_main );
 
     }
 
-    public void openCreateAnAccountActivity( View view ) {
-        Intent intent = new Intent( this, CreateAnAccountActivity.class );
-        startActivity( intent );
+    public void openCreateAnAccountActivity(View view) {
+        Intent intent = new Intent(this, CreateAnAccountActivity.class);
+        startActivity(intent);
     }
 }

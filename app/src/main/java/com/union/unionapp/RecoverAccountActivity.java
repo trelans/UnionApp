@@ -7,12 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,7 +52,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         tw_email = findViewById(R.id.emailTextView);
-        tw_enter_code = findViewById(R.id.enterCodeTextView);
+        tw_enter_code = findViewById(R.id.enterCodeET);
         tw_incorrect_code = findViewById(R.id.incorrectCodeTextView);
         tw_login = findViewById(R.id.loginTextView);
         sendAgainButton = findViewById(R.id.sendAgainButton);
@@ -103,7 +100,6 @@ public class RecoverAccountActivity extends AppCompatActivity {
                 countDownTimer.start();
                 sendAgainButton.setEnabled(false);
                 // Sends email
-                final Handler handler = new Handler();
 
                 HashMap<String, Object> hashMap = new HashMap<>();
                 code = generateVerifCode();
