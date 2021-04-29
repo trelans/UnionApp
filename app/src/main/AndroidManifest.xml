@@ -16,16 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".VerifyAccountActivity"></activity>
         <activity android:name=".OtherProfile" />
         <activity android:name=".ChatActivity" />
         <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.SlidrActivityTheme" />
-        <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.SlidrActivityTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
