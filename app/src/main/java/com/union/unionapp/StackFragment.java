@@ -612,7 +612,7 @@ public class StackFragment extends Fragment {
                                                             String[] alltags = MainActivity.getAllTags();
                                                             System.out.println("ssdsdf");
                                                             if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
-                                                                if (!userUI.equals(uid) && postAnonymously.equals("0")) {
+                                                                if (!userUI.equals(uid)) {
                                                                     addToHisNotifications("" + userUI, "" + pUid, " Someone looking for a pro!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
                                                                     //TODO telefonuna burda notif yolla
                                                                 }
@@ -714,7 +714,7 @@ public class StackFragment extends Fragment {
                                         String[] alltags = MainActivity.getAllTags();
                                         System.out.println("ssdsdf");
                                         if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
-                                            if (!userUI.equals(uid) && postAnonymously.equals("0") ) {
+                                            if (!userUI.equals(uid) ) {
                                                 addToHisNotifications("" + userUI, "" + pUid, " Someone looking for a pro!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
                                                 //TODO telefonuna burda notif yolla
                                             }
