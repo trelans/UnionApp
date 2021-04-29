@@ -69,7 +69,7 @@ public class StackFragment extends Fragment {
     String timestamp;
     String filterTagsToUpload;
 
-
+    DatabaseReference userDbRefPosts;
 
     AppCompatButton stackTag;
 
@@ -456,6 +456,38 @@ public class StackFragment extends Fragment {
         startActivityForResult(galleryIntent, IMAGE_PICK__GALLERY_CODE);
     }
 
+    private void addToHisNotifications(String hisUid, String pId , String notification) {
+        timestamp = String.valueOf(MainActivity.getServerDate());
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timestamp );
+        hashMap.put("pUid" , hisUid);
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagToUpload);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
+        String nUid = ref.push().getKey();
+        hashMap.put("nId", nUid);
+        ref.child(nUid).setValue(hashMap)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
+
     private void checkUserStatus() {
         //get curremt user
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -471,8 +503,9 @@ public class StackFragment extends Fragment {
 
     private void uploadData(String postTitle, String postDetails, String uri, String postAnonymously, String tagToUpload) {
         //for post-image name, post-id, post-publish-time
-        String timeStamp = String.valueOf(System.currentTimeMillis());
+        String timeStamp = String.valueOf( MainActivity.getServerDate());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
+
 
         if (!uri.equals("noImage")) {
             //post with image
@@ -501,7 +534,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pDetails",postDetails);
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
-                                hashMap.put("pTags","1"); //TODO tagler için değişicek
+                                hashMap.put("pTags", tagToUpload); //TODO tagler için değişicek
                                 hashMap.put("pUpvoteNumber","0");
                                 hashMap.put("pTitle", postTitle);
                                 hashMap.put("pTagIndex",tagToUpload);
@@ -518,8 +551,49 @@ public class StackFragment extends Fragment {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 //added in database
-                                                Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                                                Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
+
+
+                                                // Sends notification to people who have same tag numbers with this post
+
+                                                //getting users who have that spesific tag
+                                                // for now notification will send for random tag
+                                                final String luckyOnesToBeSendNotification = tagToUpload;
+                                                //   final String luckyOnesToBeSendNotification = "2";
+                                                System.out.println(luckyOnesToBeSendNotification);
+
+                                                userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                                                userDbRef.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        for (DataSnapshot ds: snapshot.getChildren()){
+
+                                                            ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                                            String[] userTags = modelUsers.getTags().split(",");
+                                                            String firstTag = userTags[0];
+                                                            String secondTag = userTags[1];
+                                                            String thirdTag = userTags[2];
+                                                            String userUI = modelUsers.getUid();
+                                                            String[] alltags = MainActivity.getAllTags();
+                                                            System.out.println("ssdsdf");
+                                                            if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                                                if (!userUI.equals(uid)) {
+                                                                    addToHisNotifications("" + userUI, "" + pUid, " Someone looking for new buddy!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                                    //TODO telefonuna burda notif yolla
+                                                                }
+                                                            }
+
+                                                            System.out.println("oluyor");
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
@@ -574,8 +648,51 @@ public class StackFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             //added in database
-                            Toast.makeText(getActivity(),"Added",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
+
+
+                            // Sends notification to people who have same tag numbers with this post
+
+                            //getting users who have that spesific tag
+                            final String luckyOnesToBeSendNotification = tagToUpload;
+                            String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
+                            System.out.println(firstTag + "HAA");
+                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                            //   final String luckyOnesToBeSendNotification = "2";
+                            System.out.println(luckyOnesToBeSendNotification);
+
+
+                            userDbRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot ds: snapshot.getChildren()){
+
+                                        ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                        String[] userTags = modelUsers.getTags().split(",");
+                                        String firstTag = userTags[0];
+                                        String secondTag = userTags[1];
+                                        String thirdTag = userTags[2];
+                                        String userUI = modelUsers.getUid();
+                                        String[] alltags = MainActivity.getAllTags();
+                                        System.out.println("ssdsdf");
+                                        if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
+                                            if (!userUI.equals(uid)) {
+                                                addToHisNotifications("" + userUI, "" + pUid, " Someone looking for new buddy!" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                                //TODO telefonuna burda notif yolla
+                                            }
+                                        }
+
+                                        System.out.println("oluyor");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
 
                         }
                     })

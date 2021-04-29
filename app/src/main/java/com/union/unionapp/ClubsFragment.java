@@ -679,9 +679,8 @@ public class ClubsFragment extends Fragment {
                                                 String[] partialTag = completeTag.split(",");
                                                 int randomIndex = (int)  Math.random() *  (partialTag.length-1);
                                                 final String luckyOnesToBeSendNotification = partialTag[randomIndex];
-                                                String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
-                                                System.out.println(firstTag + "HAA");
-                                                userDbRefPosts = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+
+                                                userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
                                                 //   final String luckyOnesToBeSendNotification = "2";
                                                 System.out.println(luckyOnesToBeSendNotification);
 
@@ -690,7 +689,7 @@ public class ClubsFragment extends Fragment {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         for (DataSnapshot ds: snapshot.getChildren()){
-
+                                                            System.out.println("User arıyorum");
                                                             ModelUsers modelUsers = ds.getValue(ModelUsers.class);
                                                             String[] userTags = modelUsers.getTags().split(",");
                                                             String firstTag = userTags[0];
@@ -783,7 +782,7 @@ public class ClubsFragment extends Fragment {
                             final String luckyOnesToBeSendNotification = partialTag[randomIndex];
                             String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
                             System.out.println(firstTag + "HAA");
-                            userDbRefPosts = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
                             //   final String luckyOnesToBeSendNotification = "2";
                             System.out.println(luckyOnesToBeSendNotification);
 

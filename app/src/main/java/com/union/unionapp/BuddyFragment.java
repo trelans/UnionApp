@@ -905,7 +905,7 @@ public class BuddyFragment extends Fragment {
 
     private void uploadData(String postTitle, String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
-        String timeStamp = String.valueOf(System.currentTimeMillis());
+      final String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "";
 
         if (!uri.equals("noImage")) {

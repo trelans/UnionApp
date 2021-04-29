@@ -83,8 +83,8 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and if there is a user go to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-        //    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          //  startActivity(intent);
+          Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
         }
 
         // Klavye açık mı kapalı mı onu dinlio
