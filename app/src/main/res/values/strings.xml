@@ -37,6 +37,7 @@
         <item>#SCI-FIBOOKREADING</item>
     </string-array>
     <string-array name="buddy_tags">
+        <item>Choose a Tag</item>
         <item>#walk</item>
         <item>#study</item>
         <item>#gym</item>
@@ -48,6 +49,7 @@
         <item>#flatmate</item>
     </string-array>
     <string-array name="stack_tags">
+        <item>Choose a Tag</item>
         <item>#MATH101</item>
         <item>#MATH102</item>
         <item>#MATH132</item>
@@ -58,6 +60,7 @@
         <item>#TURK101</item>
     </string-array>
     <string-array name="club_tags">
+        <item>Choose a Tag</item>
         <item>#BusinessWeek</item>
         <item>#TDPToddler</item>
         <item>#BilkentOR</item>

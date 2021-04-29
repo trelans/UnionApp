@@ -207,6 +207,10 @@ public class BuddyFragment extends Fragment {
                 timestamp = String.valueOf(MainActivity.getServerDate());
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
                 genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -426,6 +430,10 @@ public class BuddyFragment extends Fragment {
                             uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
                         }
                         buddyDialog.dismiss();
+
+                        tagsStatus[0] = false;
+                        tagsStatus[1] = false;
+                        tagsStatus[2] = false;
                     }
                 });
 
