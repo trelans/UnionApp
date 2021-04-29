@@ -193,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
                     pb_waiting.setVisibility(View.VISIBLE);
 
                     // authenticate user
-                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(email, CreateAnAccountActivity.computeMD5Hash(password)).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -207,9 +207,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-
-
-
             }
         });
 
