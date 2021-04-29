@@ -434,6 +434,19 @@ public class ClubsFragment extends Fragment {
                 filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
                 filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
 
+                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
+                i[0] = 0;
+
+                //set tags to empty strings
+                tag1.setText("");
+                tag2.setText("");
+                tag3.setText("");
+
+                //set boolean array to false only
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -507,18 +520,6 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onDismiss(DialogInterface dialog) {
 
-                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
-                i[0] = 0;
-
-                //set tags to empty strings
-                tag1.setText("");
-                tag2.setText("");
-                tag3.setText("");
-
-                //set boolean array to false only
-                tagsStatus[0] = false;
-                tagsStatus[1] = false;
-                tagsStatus[2] = false;
 
             }
         });
@@ -724,7 +725,13 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pLocation",postLocation);
-                                hashMap.put("pTags", tagsToUpload);
+
+                                if (!tagsToUpload.equals("")) {
+                                    hashMap.put("pTags", tagsToUpload);
+                                }
+                                else {
+                                    hashMap.put("pTags","0");
+                                }
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -825,7 +832,13 @@ public class ClubsFragment extends Fragment {
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pLocation",postLocation);
-            hashMap.put("pTags", tagsToUpload);
+
+            if (!tagsToUpload.equals("")) {
+                hashMap.put("pTags", tagsToUpload);
+            }
+            else {
+                hashMap.put("pTags","0");
+            }
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");

@@ -939,7 +939,12 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pImage", downloadUri);
                                 hashMap.put("pTime", String.valueOf(timeStamp));
                                 hashMap.put("pLocation", postLocation);
-                                hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek TAGS TO UPLOAD
+                                if (!tagsToUpload.equals("")) {
+                                    hashMap.put("pTags", tagsToUpload);
+                                }
+                                else {
+                                    hashMap.put("pTags","0");
+                                }
                                 hashMap.put("pGender", postGender);
                                 hashMap.put("pTitle",postTitle);
 
@@ -1040,7 +1045,14 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pImage", "noImage");
             hashMap.put("pTime", String.valueOf(timeStamp));
             hashMap.put("pLocation", postLocation);
-            hashMap.put("pTags", tagsToUpload); // tagsToUpload
+
+            if (!tagsToUpload.equals("")) {
+                hashMap.put("pTags", tagsToUpload);
+            }
+            else {
+                hashMap.put("pTags","0");
+            }
+
             hashMap.put("pGender", postGender);
             hashMap.put("pTitle",postTitle);
 

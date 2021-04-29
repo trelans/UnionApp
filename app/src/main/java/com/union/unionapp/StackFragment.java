@@ -466,8 +466,12 @@ public class StackFragment extends Fragment {
         hashMap.put("notification" , notification);
         hashMap.put("sUid" , uid);
         hashMap.put("sName" , username);
-        hashMap.put("sTag", tagToUpload);
-
+        if (!tagToUpload.equals("")) {
+            hashMap.put("sTag", tagToUpload);
+        }
+        else {
+            hashMap.put("sTag","0");
+        }
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
         String nUid = ref.push().getKey();
         hashMap.put("nId", nUid);
@@ -495,7 +499,12 @@ public class StackFragment extends Fragment {
         hashMap.put("notification" , notification);
         hashMap.put("sUid" , uid);
         hashMap.put("sName" , username);
-        hashMap.put("sTag", tagToUpload);
+        if (!tagToUpload.equals("")) {
+            hashMap.put("sTag", tagToUpload);
+        }
+        else {
+            hashMap.put("sTag","0");
+        }
         hashMap.put("type", "3");  // 1 buddy 2 club 3 stack
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
