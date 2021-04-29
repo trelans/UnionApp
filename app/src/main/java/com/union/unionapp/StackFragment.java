@@ -44,6 +44,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -267,6 +268,35 @@ public class StackFragment extends Fragment {
                                 filterTagsToUpload = i + "";
                             }
                         }
+
+                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
+                        Query query = queryRef.orderByChild("pTags").equalTo(filterTagsToUpload);
+
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                postList.clear();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    System.out.println(ds.getValue());
+                                    ModelStackPost ModelStackPost = ds.getValue(ModelStackPost.class);
+                                    postList.add(ModelStackPost);
+                                }
+
+                                // adapter
+                                adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                                adapterStackPosts.notifyDataSetChanged();
+                                // set adapter to recyclerView
+                                recyclerView.setAdapter(adapterStackPosts);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+
+
+                        });
 
                         stackTag.setText("");
                         stackDialog.dismiss();
