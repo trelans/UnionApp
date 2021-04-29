@@ -270,7 +270,7 @@ public class StackFragment extends Fragment {
                         }
 
                         DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
-                        Query query = queryRef.orderByChild("pTags").equalTo(filterTagsToUpload);
+                        Query query = queryRef.orderByChild("pTagIndex").equalTo(filterTagsToUpload);
 
                         query.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -286,6 +286,7 @@ public class StackFragment extends Fragment {
                                 // adapter
                                 adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
                                 adapterStackPosts.notifyDataSetChanged();
+
                                 // set adapter to recyclerView
                                 recyclerView.setAdapter(adapterStackPosts);
                             }
@@ -298,7 +299,6 @@ public class StackFragment extends Fragment {
 
                         });
 
-                        stackTag.setText("");
                         stackDialog.dismiss();
                     }
                 });
