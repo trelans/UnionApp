@@ -208,6 +208,11 @@ public class ClubsFragment extends Fragment {
                 Dialog dialog;
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+                i[0] = 0;
+
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.club_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -426,6 +431,12 @@ public class ClubsFragment extends Fragment {
                             //post with image
                             uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload,postTitle);
                         }
+
+                        tagsStatus[0] = false;
+                        tagsStatus[1] = false;
+                        tagsStatus[2] = false;
+                        i[0] = 0;
+
                         clubDialog.dismiss();
 
                     }

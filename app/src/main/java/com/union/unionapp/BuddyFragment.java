@@ -224,6 +224,7 @@ public class BuddyFragment extends Fragment {
                 tagsStatus[0] = false;
                 tagsStatus[1] = false;
                 tagsStatus[2] = false;
+                i[0] = 0;
 
                 genderSpinner = buddyDialog.findViewById(R.id.genderSpinner);
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
@@ -451,6 +452,7 @@ public class BuddyFragment extends Fragment {
                         tagsStatus[0] = false;
                         tagsStatus[1] = false;
                         tagsStatus[2] = false;
+                        i[0] = 0;
                     }
                 });
 
