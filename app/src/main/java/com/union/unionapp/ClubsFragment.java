@@ -730,6 +730,33 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("pLocation",postLocation);
                                 hashMap.put("pTitle",postTitle);
 
+                                //tagsToUpload achievements KUTAY
+                                String[] achsTagsToUpload = tagsToUpload.split(",");
+                                for (int i = 0; i < achsTagsToUpload.length; i++) {
+                                    if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                                        //TODO KUTAY MAT PUANI EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                                        //TODO KUTAY CAREER PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                                        //TODO KUTAY SPORT PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                                        //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                                        //TODO KUTAY ENGLISH PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                                        //TODO KUTAY TURKCE PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                                        //TODO KUTAY STUDY PUAN EKLE
+                                    }
+
+                                }
+
                                 if (!tagsToUpload.equals("")) {
                                     hashMap.put("pTags", tagsToUpload);
                                 }
@@ -837,6 +864,33 @@ public class ClubsFragment extends Fragment {
             hashMap.put("pTime",timeStamp);
             hashMap.put("pLocation",postLocation);
             hashMap.put("pTitle",postTitle);
+
+            //tagsToUpload achievements KUTAY
+            String[] achsTagsToUpload = tagsToUpload.split(",");
+            for (int i = 0; i < achsTagsToUpload.length; i++) {
+                if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                    //TODO KUTAY MAT PUANI EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                    //TODO KUTAY CAREER PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                    //TODO KUTAY SPORT PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                    //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                    //TODO KUTAY ENGLISH PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                    //TODO KUTAY TURKCE PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                    //TODO KUTAY STUDY PUAN EKLE
+                }
+
+            }
 
             if (!tagsToUpload.equals("")) {
                 hashMap.put("pTags", tagsToUpload);

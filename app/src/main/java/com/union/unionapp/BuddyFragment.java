@@ -1001,6 +1001,33 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pGender", postGender);
                                 hashMap.put("pTitle",postTitle);
 
+                                //tagsToUpload achievements KUTAY
+                                String[] achsTagsToUpload = tagsToUpload.split(",");
+                                for (int i = 0; i < achsTagsToUpload.length; i++) {
+                                    if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                                        //TODO KUTAY MAT PUANI EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                                        //TODO KUTAY CAREER PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                                        //TODO KUTAY SPORT PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                                        //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                                        //TODO KUTAY ENGLISH PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                                        //TODO KUTAY TURKCE PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                                        //TODO KUTAY STUDY PUAN EKLE
+                                    }
+
+                                }
+
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
                                 String pUid = reference.push().getKey();
@@ -1108,6 +1135,32 @@ public class BuddyFragment extends Fragment {
 
             hashMap.put("pGender", postGender);
             hashMap.put("pTitle",postTitle);
+            //tagsToUpload achievements KUTAY
+            String[] achsTagsToUpload = tagsToUpload.split(",");
+            for (int i = 0; i < achsTagsToUpload.length; i++) {
+                if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                    //TODO KUTAY MAT PUANI EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                    //TODO KUTAY CAREER PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                    //TODO KUTAY SPORT PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                    //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                    //TODO KUTAY ENGLISH PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                    //TODO KUTAY TURKCE PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                    //TODO KUTAY STUDY PUAN EKLE
+                }
+
+            }
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -1290,6 +1343,8 @@ public class BuddyFragment extends Fragment {
         hashMap.put("sName" , username);
         hashMap.put("sTag", tagsToUpload);
         hashMap.put("type", "1");  // 1 buddy 2 club 3 stack
+
+
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
         String laUid = ref.push().getKey();

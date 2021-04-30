@@ -578,6 +578,18 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pTitle", postTitle);
                                 hashMap.put("pTagIndex",tagToUpload);
 
+                                //tagsToUpload achievements KUTAY
+                                String achTagToUpload = tagToUpload;
+                                if (Integer.valueOf(achTagToUpload) < 4 ) {
+                                    //TODO KUTAY MAT PUAN HERE
+                                }
+                                else if (Integer.valueOf(achTagToUpload) < 19 && Integer.valueOf(achTagToUpload) > 16) {
+                                    //TODO KUTAY ENG PUAN HERE
+                                }
+                                else if (Integer.valueOf(achTagToUpload) < 21 && Integer.valueOf(achTagToUpload) > 18) {
+                                    //TODO KUTAY TURK PUAN HERE
+                                }
+
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
@@ -677,6 +689,18 @@ public class StackFragment extends Fragment {
             hashMap.put("pUpvoteNumber","0");
             hashMap.put("pTitle",postTitle);
             hashMap.put("pTagIndex",tagToUpload);
+
+            //tagsToUpload achievements KUTAY
+            String achTagToUpload = tagToUpload;
+            if (Integer.valueOf(achTagToUpload) < 4 ) {
+                //TODO KUTAY MAT PUAN HERE
+            }
+            else if (Integer.valueOf(achTagToUpload) < 19 && Integer.valueOf(achTagToUpload) > 16) {
+                //TODO KUTAY ENG PUAN HERE
+            }
+            else if (Integer.valueOf(achTagToUpload) < 21 && Integer.valueOf(achTagToUpload) > 18) {
+                //TODO KUTAY TURK PUAN HERE
+            }
 
 
 
