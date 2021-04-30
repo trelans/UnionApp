@@ -285,7 +285,7 @@ public class StackFragment extends Fragment {
                                 }
 
                                 // adapter
-                                adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                                adapterStackPosts = new AdapterStackPosts(getActivity(), postList, getActivity());
                                 adapterStackPosts.notifyDataSetChanged();
 
                                 // set adapter to recyclerView
@@ -326,7 +326,7 @@ public class StackFragment extends Fragment {
                     postList.add(modelStackPost);
 
                     // adapter
-                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList, getActivity());
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterStackPosts);
                 }

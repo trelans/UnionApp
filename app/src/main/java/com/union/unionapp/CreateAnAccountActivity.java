@@ -3,10 +3,16 @@ package com.union.unionapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,8 +33,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -77,11 +88,14 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_an_account);
         slidr = Slidr.attach(this);
 
+
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+
+        final Activity activity = this;
 
         // card denemesi : fail daskjddfdsf
         // RelativeLayout relativeLayout = findViewById(R.id.relativeLayout);
@@ -281,9 +295,6 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
 
                 if (!isThereError) {
-                    pb_waiting.setVisibility(View.VISIBLE);
-
-                    progressDialog.show();
                     token = computeMD5Hash(password);
                     mAuth.createUserWithEmailAndPassword(email, token).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -292,16 +303,6 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
 
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.i("Success", "Yes");
-                                        } else {
-                                            Log.i("Success", "No");
-                                        }
-                                    }
-                                });
                                 //Get user email and uid from auth.
                                 String email = user.getEmail();
                                 String uid = user.getUid();
@@ -318,27 +319,25 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 // will add later!
                                 hashMap.put("username", username);
                                 hashMap.put("pp", "drawable-v24/profile_icon.png");
-                                hashMap.put("accountType", "0"); // 0 regular user, 1 club
+                                hashMap.put("accountType", "-1"); // -1 unauthenticated user, 0 regular user, 1 club
                                 hashMap.put("tags", "1,2,3");
                                 hashMap.put("accountState", "0"); // 0 active, 1 banned, 2 frozen, 3 deleted
                                 hashMap.put("achievements", "1");
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 //path to store user data
-                                DatabaseReference reference = database.getReference("BilkentUniversity/Users/");
+                                DatabaseReference reference = database.getReference("BilkentUniversity/Users/" + uid);
                                 // put data within hashmap in database
-                                reference.child(uid).setValue(hashMap);
+                                reference.setValue(hashMap);
 
                                 //put token
-                                reference = database.getReference("AuthTokens/" + email.replace(".","_"));
+                                reference = database.getReference("AuthTokens/" + email.replace(".", "_"));
                                 hashMap.clear();
                                 hashMap.put("token", token);
                                 reference.setValue(hashMap);
-
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity(new Intent(CreateAnAccountActivity.this,VerifyAccountActivity.class));
                                 finish();
                             } else {
-                                progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT).show();
                             }
 
@@ -378,7 +377,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
     }
 
-    public static String computeMD5Hash(String password){ //TODO loginle ilgili olan her şeyi bir package e koyup bunu da default seviyesinde accessor yap
+    public static String computeMD5Hash(String password) { //TODO loginle ilgili olan her şeyi bir package e koyup bunu da default seviyesinde accessor yap
         try {
             // Create MD5 hash
             MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
@@ -387,7 +386,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
             StringBuilder MD5Hash = new StringBuilder();
             for (int i = 0; i < messageDigest.length; i++) {
                 String h = Integer.toHexString(0xFF & messageDigest[i]);
-                while(h.length() < 2){
+                while (h.length() < 2) {
                     h = "0" + h;
                 }
                 MD5Hash.append(h);
