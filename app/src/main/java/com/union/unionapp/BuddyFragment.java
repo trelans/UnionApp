@@ -59,6 +59,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -645,7 +646,11 @@ public class BuddyFragment extends Fragment {
 
                             //tags to upload'un sonundaki virgülü atıyor
                             StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-                            filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
+                            filterTagsToUpload = tempString.deleteCharAt(tempString.length()-1).toString(); //filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
+                        }
+
+                        if (filterTagsToUpload.equals("")) {
+                            filterTagsToUpload = "0";
                         }
 
 
@@ -684,9 +689,45 @@ public class BuddyFragment extends Fragment {
                                         }
 
                                         if (!filterTagsToUpload.equals("0")) {
-                                            if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
+                                            String[] filterPartialTags = filterTagsToUpload.split(",");
+                                            int filterTagNumber = filterPartialTags.length;
+
+                                            String postTags = modelBuddyPost.getpTags();
+                                            String[] postPartialTags = postTags.split(",");
+
+                                            if (!isMatch(postPartialTags,filterPartialTags)){
                                                 continue;
                                             }
+
+                                            /*
+                                            if ( filterTagNumber == 1 ) {
+
+                                                String tag1 = "";
+                                                tag1 = postPartialTags[0];
+                                                if (!tag1.equals(filterPartialTags[0])) {
+                                                    continue;
+                                                }
+
+                                                for (int i = 0; i < postPartialTags.length; i++) {
+                                                    if ( filterPartialTags[0].equals(postPartialTags[i]) )
+                                                }
+
+
+                                                if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
+                                                    continue;
+                                                }
+                                            }
+                                            else if (filterTagNumber == 2) {
+
+                                            }
+                                            else if ( filterTagNumber == 3 ) {
+                                                for (int i = 0; i < filterPartialTags.length; i++) {
+                                                    for (int j = 0; j < postPartialTags.length; j++) {
+                                                        filterPartialTags[i].equals(postPartialTags[j])
+                                                    }
+                                                }
+                                            }
+                                              */
                                         }
 
                                         postList.add(modelBuddyPost);
@@ -1291,10 +1332,15 @@ public class BuddyFragment extends Fragment {
         String[] allTags = getResources().getStringArray( R.array.all_tags );
         String[] tagIndexes = tags.split( "," );
         StringBuilder returnTags = new StringBuilder();
-        for (int i = 0; i < tagIndexes.length; i++) {
-            returnTags.append(Integer.parseInt(tagIndexes[i]));
-            if (i < returnTags.length() - 1){
-                returnTags.append(",");
+        if (tagIndexes.length == 1) {
+            returnTags.append(tagIndexes[0]);
+        }
+        else {
+            for (int i = 0; i < tagIndexes.length; i++) {
+                returnTags.append(Integer.parseInt(tagIndexes[i]));
+                if (i < returnTags.length() - 1) {
+                    returnTags.append(",");
+                }
             }
         }
         return returnTags.toString();
@@ -1304,6 +1350,19 @@ public class BuddyFragment extends Fragment {
         int index = Integer.parseInt(indexString);
         String[] allTags = getResources().getStringArray( R.array.all_tags );
         return "#" + allTags[index];
+    }
+
+    public static boolean isMatch(String[] arr1, String[] arr2) {
+        for (int i = 0; i < arr1.length; i++) {
+            if (Arrays.stream(arr2).anyMatch( arr1[i] :: equals ) ) {
+
+            }
+            else {
+                return false;
+            }
+
+        }
+        return true;
     }
 }
 
