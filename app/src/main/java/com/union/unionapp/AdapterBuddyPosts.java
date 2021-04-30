@@ -58,8 +58,16 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String[] tags = pTags.split(",");
         String[] allTags = MainActivity.getAllTags();
 
-        for(int i = 0; i < tags.length; i++) {
-            newTags[i] = allTags[Integer.valueOf(tags[i])];
+        if (tags.length == 0) {
+            newTags[0] = "";
+        }
+        else if (tags.length == 1) {
+            newTags[0] = allTags[Integer.valueOf(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
+        }
+        else {
+            for (int i = 0; i < tags.length; i++) {
+                newTags[i] = allTags[Integer.valueOf(tags[i])];
+            }
         }
 
         //set data
