@@ -48,22 +48,17 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     String email;
     String password;
+    String accountType;
+    LocalDataManager localDataManager; // sharedPreferences için
     boolean isThereError = false;
 
-
-
-
-    public void ForgotPassword(View view) {
-        // Button onClick
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
+        localDataManager = new LocalDataManager();
 
         tw_email = findViewById(R.id.nameTextView);
         tw_password = findViewById(R.id.passwordTextView);
@@ -88,17 +83,20 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and if there is a user go to main activity
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-        //    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-          //  startActivity(intent);
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
 
+
+        tw_email.setText(localDataManager.getSharedPreference(LoginActivity.this, "email", ""));
+        tw_password.setText(localDataManager.getSharedPreference(LoginActivity.this, "password", ""));
+        check_box_remember_me.setChecked(true);
+
         // Klavye açık mı kapalı mı onu dinlio
-        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener()
-        {
+        KeyboardUtils.addKeyboardToggleListener(this, new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
-            public void onToggleSoftKeyboard(boolean isVisible)
-            {
-                if (!isVisible && !isThereError ) {
+            public void onToggleSoftKeyboard(boolean isVisible) {
+                if (!isVisible && !isThereError) {
                     button_login.setEnabled(true);
                 }
             }
@@ -165,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-            // click listeners
+        // click listeners
         tw_forgot_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,58 +191,69 @@ public class LoginActivity extends AppCompatActivity {
                     isThereError = true;
                 }
 
-
                 if (!isThereError) {
                     pb_waiting.setVisibility(View.VISIBLE);
 
-                    // authenticate user
-                    mAuth.signInWithEmailAndPassword(email, CreateAnAccountActivity.computeMD5Hash(password)).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(LoginActivity.this, "Giriş yapıldı", Toast.LENGTH_SHORT).show();
-                                System.out.println("burada");
-                                System.out.println(mAuth.getCurrentUser().getUid());
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + mAuth.getCurrentUser().getUid());
-                                System.out.println("sadasda");
-                                reference.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        for (DataSnapshot ds : snapshot.getChildren()
-                                        ) {
-                                            if (ds.getKey().equals("accountType")) {
-                                                System.out.println("burada");
-                                                if (ds.getValue().equals("-1")) {
-                                                    startActivity(new Intent(LoginActivity.this, VerifyAccountActivity.class));
-                                                } else {
-                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    if (check_box_remember_me.isChecked()) {
+                        localDataManager.setSharedPreference(LoginActivity.this, "email", email);
+                        localDataManager.setSharedPreference(LoginActivity.this, "password", password);
+                    } else {
+                        localDataManager.removeSharedPreference(LoginActivity.this, "email");
+                        localDataManager.removeSharedPreference(LoginActivity.this, "password");
+                    }
+
+
+                        // authenticate user
+                        mAuth.signInWithEmailAndPassword(email, CreateAnAccountActivity.computeMD5Hash(password)).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(LoginActivity.this, "Giriş yapıldı", Toast.LENGTH_SHORT).show();
+                                    if (localDataManager.getSharedPreference(LoginActivity.this, "isAccountVerified", "").equals(email)){
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                        return;
+                                    }
+                                    System.out.println(mAuth.getCurrentUser().getUid());
+                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + mAuth.getCurrentUser().getUid());
+                                    reference.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            for (DataSnapshot ds : snapshot.getChildren()
+                                            ) {
+                                                if (ds.getKey().equals("accountType")) {
+                                                    if (ds.getValue().equals("-1")) {
+                                                        startActivity(new Intent(LoginActivity.this, VerifyAccountActivity.class));
+                                                    } else {
+                                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                    }
+                                                    finish();
                                                 }
-                                                finish();
                                             }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
 
-                                    }
-                                });
-                            } else {
-                                tw_error.setText(task.getException().getMessage());
-                                tw_error.setVisibility(View.VISIBLE);
+                                        }
+                                    });
+                                } else {
+                                    tw_error.setText(task.getException().getMessage());
+                                    tw_error.setVisibility(View.VISIBLE);
+                                }
                             }
-                        }
-                    });
+                        });
                 }
             }
         });
 
-    //setContentView( R.layout.activity_main );
+        //setContentView( R.layout.activity_main );
 
     }
 
-    public void openCreateAnAccountActivity( View view ) {
-        Intent intent = new Intent( this, CreateAnAccountActivity.class );
-        startActivity( intent );
+    public void openCreateAnAccountActivity(View view) {
+        Intent intent = new Intent(this, CreateAnAccountActivity.class);
+        startActivity(intent);
     }
 }
