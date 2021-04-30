@@ -2,21 +2,25 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +55,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     String pAnon;
     String username;
     String pId;
+    int previousMargin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         EditText commentET = findViewById(R.id.answerEditText);
         CheckBox isAnonCB = findViewById(R.id.anonymCheckBox);
         ImageView sendButton = findViewById(R.id.sendButtonIB);
+        LinearLayoutCompat clickToOpenCardLL = findViewById(R.id.openCardLL);
 
 
         //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
@@ -116,9 +122,33 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         //TODO comment görünümünde foto gösterme üzerine düşün
         //TODO user info gerekirse 23. video 32.dakikanın başına git
 
+
+
+        commentET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                openOrCloseCard();
+            }
+        });
+
+        clickToOpenCardLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openOrCloseCard();
+            }
+        });
+
+
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+
                 String timeStamp;
                 FirebaseUser user;
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -245,12 +275,16 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         Toast.makeText(PostActivity.this, showToastMessage, Toast.LENGTH_SHORT).show();
     }
 
-    int previousMargin;
+
     //Toast shown when double tapped on screen
     @Override
     public void onDoubleTap() {
         Toast.makeText(this, "You have Double Tapped.", Toast.LENGTH_SHORT)
                 .show();
+        System.out.println("asdasdas");
+    }
+
+    private void openOrCloseCard(){
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
         if (layoutParams.topMargin == 0){
             layoutParams.topMargin = previousMargin;
@@ -259,6 +293,5 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             layoutParams.topMargin = 0;
         }
         commentCardView.setLayoutParams(layoutParams);
-        System.out.println("asdasdas");
     }
 }

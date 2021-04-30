@@ -73,11 +73,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         }
 
         shortComment = name + comment;
-        if (shortComment.length() > 40){
-            return shortComment.substring(0,40) + "...";
-        }else{
-            return shortComment;
-        }
+        return shortComment;
     }
 
     @Override
