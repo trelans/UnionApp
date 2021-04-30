@@ -452,6 +452,12 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
                 buddyDialog.setCanceledOnTouchOutside(true);
 
+                i[0] = 0;
+
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
                 //init views
                 ImageView searchFilterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
                 ImageView resetFiltersImageView = buddyDialog.findViewById(R.id.cancelFilterImageView);
@@ -463,6 +469,12 @@ public class BuddyFragment extends Fragment {
                 filterTag1 = buddyDialog.findViewById(R.id.filterTag1TextView);
                 filterTag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
                 filterTag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
+
+                filterTag1.setText("");
+                filterTag2.setText("");
+                filterTag3.setText("");
+
+                tagsArray = new AppCompatButton[]{filterTag1, filterTag2, filterTag3};
 
                 preferredGenderFilterSpinner = buddyDialog.findViewById(R.id.prefferedGenderFilterSpinner);
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
@@ -671,7 +683,7 @@ public class BuddyFragment extends Fragment {
                                             }
                                         }
 
-                                        if (!filterTagsToUpload.isEmpty()) {
+                                        if (!filterTagsToUpload.equals("0")) {
                                             if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
                                                 continue;
                                             }
@@ -1272,9 +1284,6 @@ public class BuddyFragment extends Fragment {
         else {
             return (  tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
         }
-
-
-
 
     }
 
