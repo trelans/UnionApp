@@ -16,7 +16,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:id="@+id/AchavatarIv"
-            android:src="@drawable/buddy_icon"/>
+            android:src="@drawable/bronze_medal"/>
 
         <TextView
             android:layout_width="match_parent"

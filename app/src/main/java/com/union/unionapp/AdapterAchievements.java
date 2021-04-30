@@ -1,8 +1,11 @@
 package com.union.unionapp;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,19 +59,32 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         // get data
         final  ModelAchievements modelNotification = notificationsList.get(position);
         String description = modelNotification.getDescription();
-        String genre = modelNotification.getGenre();
+        int genre = Integer.parseInt(modelNotification.getGenre());
         String level = modelNotification.getLevel();
         String nId = modelNotification.getnId();
         String point = modelNotification.getPoint();
         String title = modelNotification.getTitle();
-
-
-
-
-
-
+        String[] genreString = {"empty" , "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"};
+        Dialog myDialog;
+        myDialog = new Dialog(context);
+        myDialog.setCanceledOnTouchOutside(true);
+        myDialog.setContentView(R.layout.custom_popup_achievements);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        TextView titleTv = (TextView) myDialog.findViewById(R.id.achtitle);
+        TextView genreTv = (TextView) myDialog.findViewById(R.id.Achgenre);
+        TextView descriptionTv = (TextView) myDialog.findViewById(R.id.achDescripton);
+        ImageView achicon = (ImageView) myDialog.findViewById(R.id.achicon);
         // set to views
         holder.AchnotificationTv.setText(title);
+
+        // TODO YUNUSTAN ALINAN ICONLAR
+
+        // set  dialog views
+        titleTv.setText(title);
+        genreTv.setText("Genre : " + genreString[genre]);
+        // TODO ICON
+        achicon.setImageResource(R.drawable.bronze_medal);
+        descriptionTv.setText(description);
 /*
         if (type.equals("1")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
@@ -87,6 +103,8 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myDialog.show();
+                System.out.println("DSADAS");
 
             }
         });
