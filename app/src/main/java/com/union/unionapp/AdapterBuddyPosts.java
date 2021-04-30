@@ -35,6 +35,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
     @Override
     public void onBindViewHolder(@NonNull AdapterBuddyPosts.MyHolder holder, int position) {
+
         //get data
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();
@@ -57,8 +58,16 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String[] tags = pTags.split(",");
         String[] allTags = MainActivity.getAllTags();
 
-        for(int i = 0; i < tags.length; i++) {
-            newTags[i] = allTags[Integer.valueOf(tags[i])];
+        if (tags.length == 0) {
+            newTags[0] = "";
+        }
+        else if (tags.length == 1) {
+            newTags[0] = allTags[Integer.valueOf(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
+        }
+        else {
+            for (int i = 0; i < tags.length; i++) {
+                newTags[i] = allTags[Integer.valueOf(tags[i])];
+            }
         }
 
         //set data
@@ -73,7 +82,12 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             holder.topicTagTW1.setVisibility(View.INVISIBLE);
         }
         else {
-            holder.topicTagTW1.setText(newTags[0]);
+            if (tags[0].equals("0")) {
+                holder.topicTagTW1.setVisibility(View.INVISIBLE);
+            }
+            else {
+                holder.topicTagTW1.setText(newTags[0]);
+            }
         }
 
         if( newTags[1].equals("")) {
@@ -156,7 +170,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
-            topicTagTW1 = itemView.findViewById(R.id.topicTagTW1);
+            topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);
 

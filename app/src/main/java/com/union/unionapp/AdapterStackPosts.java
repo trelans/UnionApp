@@ -1,39 +1,18 @@
 package com.union.unionapp;
 
-import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,10 +22,12 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
     List<ModelStackPost> postList;
     DatabaseReference ref1;
     String[] allTags;
+    Activity currentActivity;
 
-    public AdapterStackPosts(Context context, List<ModelStackPost> postList) {
+    public AdapterStackPosts(Context context, List<ModelStackPost> postList, Activity currentActivity) {
         this.context = context;
         this.postList = postList;
+        this.currentActivity = currentActivity;
     }
 
     @NonNull
@@ -128,155 +109,16 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
             @Override
             public boolean onLongClick(View view) {
-                Dialog dialog;
-                RecyclerView recyclerView;
-                List<ModelComment> commentList;
-                final AdapterComment[] adapterComment = new AdapterComment[1];
-                dialog = new Dialog(context);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.setContentView(R.layout.custom_view_stack_post_popup);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-                System.out.println(allTags[1]);
-
-                //recycler view and its properties
-                recyclerView = dialog.findViewById(R.id.commentStackRecyclerView);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-                //show newest post first, for this load from last
-                layoutManager.setStackFromEnd(true);
-                layoutManager.setReverseLayout(true);
-                //set layout to recyclerview
-                recyclerView.setLayoutManager(layoutManager);
-
-                //init post list
-                commentList = new ArrayList<>();
-
-                ProgressDialog pd = new ProgressDialog(context);
-                pd.setMessage("Adding comment...");
-
-                TextView relatedTagTW = dialog.findViewById(R.id.relatedTagTextView);
-                TextView pTitleTW = dialog.findViewById(R.id.pTitle);
-                TextView pUserNameTW = dialog.findViewById(R.id.pUserName);
-                TextView upNumberTW = dialog.findViewById(R.id.upNumberTextView);
-                TextView questionContentTW = dialog.findViewById(R.id.askedQuestionTextView);
-                TextView pPostedTimeTW = dialog.findViewById(R.id.pPostedTime);
-                ImageView addPhotoIV = dialog.findViewById(R.id.imageViewAddPhoto);
-                EditText commentET = dialog.findViewById(R.id.answerEditText);
-                CheckBox isAnonCB = dialog.findViewById(R.id.anonymCheckBox);
-                ImageButton sendButton = dialog.findViewById(R.id.sendButtonIB);
-
-
-
-                //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(Long.parseLong(pTime));
-                String pPostedTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-
-                //set data
-                pTitleTW.setText(pTitle);
-                questionContentTW.setText(pDetails);
-                upNumberTW.setText(upVoteNumber[0]);
-                pPostedTimeTW.setText(pTime);
-                relatedTagTW.setText("#Math-102"); //TODO databaseden çek
-                if (!pAnon.equals("1")) {
-                    pUserNameTW.setText(username);
-                } else {
-                    pUserNameTW.setText("Anonymous user");
-                }
-                //TODO comment görünümünde foto gösterme üzerine düşün
-                //TODO user info gerekirse 23. video 32.dakikanın başına git
-
-                sendButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String timeStamp;
-                        FirebaseUser user;
-                        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                            user = FirebaseAuth.getInstance().getCurrentUser();
-                        } else {
-                            Toast.makeText(context, "There is no current user!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        //get data from comment editText
-                        String comment = commentET.getText().toString().trim();
-                        // validate
-                        if (TextUtils.isEmpty(comment)) {
-                            //no value is entered
-                            Toast.makeText(context, "Comment is empty...", Toast.LENGTH_SHORT).show();
-                        } else {
-                            timeStamp = String.valueOf(MainActivity.getServerDate());
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Comments").child(pId);
-                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Users").child(user.getUid()).child("comments");
-                            HashMap<String, Object> hashMap = new HashMap<>();
-                            //put info in hashmap
-                            hashMap.put("cId", timeStamp);
-                            hashMap.put("comment", comment);
-                            hashMap.put("timeStamp", timeStamp);
-                            hashMap.put("upNumber", "0");
-                            hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            hashMap.put("cAnon", isAnonCB.isChecked() ? "1" : "0");
-                            //isAnonCB.isChecked() ? "1" : "0")
-                            hashMap.put("cPhoto", "noImage"); //TODO resim butonunun işlevi
-                            hashMap.put("uName", user.getEmail().split("@")[0].replace(".", "_"));
-
-                            //reset commentEditText
-                            commentET.setText("");
-
-                            // put this data into db
-                            ref.child(timeStamp).setValue(hashMap)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            //added
-                                            pd.dismiss();
-                                            /*
-                                            Toast.makeText(context, "Comment Added...", Toast.LENGTH_SHORT).show();
-                                            commentET.setText("");
-                                            HashMap<String, Object> cIdHashMap = new HashMap<>();
-                                            cIdHashMap.put(timeStamp, pId + "PostComment" + "Stack");
-                                            userRef.updateChildren(cIdHashMap);
-                                             */
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            //failed, not added
-                                            pd.dismiss();
-                                            Toast.makeText(context, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    }
-                });
-
-                // path of all comments
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Comments/" + pId);
-                Query query = ref.orderByChild("upNumber");
-                query.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        commentList.clear();
-                        for (DataSnapshot ds : snapshot.getChildren()) {
-                            ModelComment modelComment = ds.getValue(ModelComment.class);
-                            commentList.add(modelComment);
-
-                            // adapter
-                            adapterComment[0] = new AdapterComment(context, commentList, pId, modelComment.getCId());
-                            // set adapter to recyclerView
-                            recyclerView.setAdapter(adapterComment[0]);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // in case of error
-                        //Toast.makeText(context, "Error on load comments 248. line", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                dialog.show();
-                return false;
+                Intent intent = new Intent(currentActivity, PostActivity.class);
+                intent.putExtra("pTime", pTime);
+                intent.putExtra("pTitle", pTitle);
+                intent.putExtra("pDetails", pDetails);
+                intent.putExtra("upVoteNumber", upVoteNumber[0]);
+                intent.putExtra("pAnon", pAnon);
+                intent.putExtra("username", username);
+                intent.putExtra("pId", pId);
+                context.startActivity(intent);
+                return true;
             }
 
         });
@@ -308,7 +150,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
             upNumber = itemView.findViewById(R.id.textViewUpNumber);
-            topicTag = itemView.findViewById(R.id.topicTagTW1);
+            topicTag = itemView.findViewById(R.id.topicTagTW);
             cardView = itemView.findViewById(R.id.card);
         }
     }

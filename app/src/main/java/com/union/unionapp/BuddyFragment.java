@@ -59,6 +59,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -452,6 +453,12 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
                 buddyDialog.setCanceledOnTouchOutside(true);
 
+                i[0] = 0;
+
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
                 //init views
                 ImageView searchFilterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
                 ImageView resetFiltersImageView = buddyDialog.findViewById(R.id.cancelFilterImageView);
@@ -463,6 +470,12 @@ public class BuddyFragment extends Fragment {
                 filterTag1 = buddyDialog.findViewById(R.id.filterTag1TextView);
                 filterTag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
                 filterTag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
+
+                filterTag1.setText("");
+                filterTag2.setText("");
+                filterTag3.setText("");
+
+                tagsArray = new AppCompatButton[]{filterTag1, filterTag2, filterTag3};
 
                 preferredGenderFilterSpinner = buddyDialog.findViewById(R.id.prefferedGenderFilterSpinner);
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
@@ -633,7 +646,11 @@ public class BuddyFragment extends Fragment {
 
                             //tags to upload'un sonundaki virgülü atıyor
                             StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-                            filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
+                            filterTagsToUpload = tempString.deleteCharAt(tempString.length()-1).toString(); //filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
+                        }
+
+                        if (filterTagsToUpload.equals("")) {
+                            filterTagsToUpload = "0";
                         }
 
 
@@ -671,10 +688,46 @@ public class BuddyFragment extends Fragment {
                                             }
                                         }
 
-                                        if (!filterTagsToUpload.isEmpty()) {
-                                            if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
+                                        if (!filterTagsToUpload.equals("0")) {
+                                            String[] filterPartialTags = filterTagsToUpload.split(",");
+                                            int filterTagNumber = filterPartialTags.length;
+
+                                            String postTags = modelBuddyPost.getpTags();
+                                            String[] postPartialTags = postTags.split(",");
+
+                                            if (!isMatch(postPartialTags,filterPartialTags)){
                                                 continue;
                                             }
+
+                                            /*
+                                            if ( filterTagNumber == 1 ) {
+
+                                                String tag1 = "";
+                                                tag1 = postPartialTags[0];
+                                                if (!tag1.equals(filterPartialTags[0])) {
+                                                    continue;
+                                                }
+
+                                                for (int i = 0; i < postPartialTags.length; i++) {
+                                                    if ( filterPartialTags[0].equals(postPartialTags[i]) )
+                                                }
+
+
+                                                if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
+                                                    continue;
+                                                }
+                                            }
+                                            else if (filterTagNumber == 2) {
+
+                                            }
+                                            else if ( filterTagNumber == 3 ) {
+                                                for (int i = 0; i < filterPartialTags.length; i++) {
+                                                    for (int j = 0; j < postPartialTags.length; j++) {
+                                                        filterPartialTags[i].equals(postPartialTags[j])
+                                                    }
+                                                }
+                                            }
+                                              */
                                         }
 
                                         postList.add(modelBuddyPost);
@@ -939,9 +992,41 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pImage", downloadUri);
                                 hashMap.put("pTime", String.valueOf(timeStamp));
                                 hashMap.put("pLocation", postLocation);
-                                hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek TAGS TO UPLOAD
+                                if (!tagsToUpload.equals("")) {
+                                    hashMap.put("pTags", tagsToUpload);
+                                }
+                                else {
+                                    hashMap.put("pTags","0");
+                                }
                                 hashMap.put("pGender", postGender);
                                 hashMap.put("pTitle",postTitle);
+
+                                //tagsToUpload achievements KUTAY
+                                String[] achsTagsToUpload = tagsToUpload.split(",");
+                                for (int i = 0; i < achsTagsToUpload.length; i++) {
+                                    if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                                        //TODO KUTAY MAT PUANI EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                                        //TODO KUTAY CAREER PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                                        //TODO KUTAY SPORT PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                                        //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                                        //TODO KUTAY ENGLISH PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                                        //TODO KUTAY TURKCE PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                                        //TODO KUTAY STUDY PUAN EKLE
+                                    }
+
+                                }
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -1040,9 +1125,42 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pImage", "noImage");
             hashMap.put("pTime", String.valueOf(timeStamp));
             hashMap.put("pLocation", postLocation);
-            hashMap.put("pTags", tagsToUpload); // tagsToUpload
+
+            if (!tagsToUpload.equals("")) {
+                hashMap.put("pTags", tagsToUpload);
+            }
+            else {
+                hashMap.put("pTags","0");
+            }
+
             hashMap.put("pGender", postGender);
             hashMap.put("pTitle",postTitle);
+            //tagsToUpload achievements KUTAY
+            String[] achsTagsToUpload = tagsToUpload.split(",");
+            for (int i = 0; i < achsTagsToUpload.length; i++) {
+                if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                    //TODO KUTAY MAT PUANI EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                    //TODO KUTAY CAREER PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                    //TODO KUTAY SPORT PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                    //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                    //TODO KUTAY ENGLISH PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                    //TODO KUTAY TURKCE PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                    //TODO KUTAY STUDY PUAN EKLE
+                }
+
+            }
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -1226,6 +1344,8 @@ public class BuddyFragment extends Fragment {
         hashMap.put("sTag", tagsToUpload);
         hashMap.put("type", "1");  // 1 buddy 2 club 3 stack
 
+
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
         String laUid = ref.push().getKey();
         hashMap.put("nId", laUid);
@@ -1261,19 +1381,21 @@ public class BuddyFragment extends Fragment {
             return (  tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
         }
 
-
-
-
     }
 
     public String serverToPhoneTagConverter(String tags) {
         String[] allTags = getResources().getStringArray( R.array.all_tags );
         String[] tagIndexes = tags.split( "," );
         StringBuilder returnTags = new StringBuilder();
-        for (int i = 0; i < tagIndexes.length; i++) {
-            returnTags.append(Integer.parseInt(tagIndexes[i]));
-            if (i < returnTags.length() - 1){
-                returnTags.append(",");
+        if (tagIndexes.length == 1) {
+            returnTags.append(tagIndexes[0]);
+        }
+        else {
+            for (int i = 0; i < tagIndexes.length; i++) {
+                returnTags.append(Integer.parseInt(tagIndexes[i]));
+                if (i < returnTags.length() - 1) {
+                    returnTags.append(",");
+                }
             }
         }
         return returnTags.toString();
@@ -1283,6 +1405,19 @@ public class BuddyFragment extends Fragment {
         int index = Integer.parseInt(indexString);
         String[] allTags = getResources().getStringArray( R.array.all_tags );
         return "#" + allTags[index];
+    }
+
+    public static boolean isMatch(String[] arr1, String[] arr2) {
+        for (int i = 0; i < arr1.length; i++) {
+            if (Arrays.stream(arr2).anyMatch( arr1[i] :: equals ) ) {
+
+            }
+            else {
+                return false;
+            }
+
+        }
+        return true;
     }
 }
 

@@ -55,6 +55,22 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         String pImage = postList.get(position).getpImage();
         String pTime = postList.get(position).getpTime();
         String hisUid = postList.get(position).getUid();
+        String pTags = postList.get(position).getpTags();
+
+        String[] newTags = new String[3];
+        newTags[0] = "";
+        newTags[1] = "";
+        newTags[2] = "";
+
+
+        String[] tags = pTags.split(",");
+        String[] allTags = MainActivity.getAllTags();
+
+        if (tags.length > 0) {
+            for (int i = 0; i < tags.length; i++) {
+                newTags[i] = allTags[Integer.valueOf(tags[i])];
+            }
+        }
 
         //set data
         holder.contentTextView.setText(pDetails);
@@ -63,7 +79,31 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.zoomLinkTW.setText(pLocation);
         holder.genderTW.setText("optional");
         holder.quotaTW.setText(pQuota);
-        holder.topicTagTW.setText("#AI");
+        if( newTags[0].equals("")) {
+            holder.topicTagTW1.setVisibility(View.INVISIBLE);
+        }
+        else {
+            if (tags[0].equals("0")) {
+                holder.topicTagTW1.setVisibility(View.INVISIBLE);
+            }
+            else {
+                holder.topicTagTW1.setText(newTags[0]);
+            }
+        }
+
+        if( newTags[1].equals("")) {
+            holder.topicTagTW2.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.topicTagTW2.setText(newTags[1]);
+        }
+
+        if( newTags[2].equals("")) {
+            holder.topicTagTW3.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.topicTagTW3.setText(newTags[2]);
+        }
 
         //if there is no image
         if (pImage.equals("noImage")){
@@ -144,7 +184,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         //views from custom_feed_card.xml
         ImageButton calendarIB;
         ImageButton sendButtonIB;
-        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW;
+        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3;
         CardView cardView;
 
         public MyHolder(@NonNull View itemView) {
@@ -160,7 +200,9 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
-            topicTagTW = itemView.findViewById(R.id.topicTagTW1);
+            topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
+            topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
+            topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);
 
         }
 

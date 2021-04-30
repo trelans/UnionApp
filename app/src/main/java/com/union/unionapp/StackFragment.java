@@ -285,7 +285,7 @@ public class StackFragment extends Fragment {
                                 }
 
                                 // adapter
-                                adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                                adapterStackPosts = new AdapterStackPosts(getActivity(), postList, getActivity());
                                 adapterStackPosts.notifyDataSetChanged();
 
                                 // set adapter to recyclerView
@@ -326,7 +326,7 @@ public class StackFragment extends Fragment {
                     postList.add(modelStackPost);
 
                     // adapter
-                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList);
+                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList, getActivity());
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterStackPosts);
                 }
@@ -466,8 +466,12 @@ public class StackFragment extends Fragment {
         hashMap.put("notification" , notification);
         hashMap.put("sUid" , uid);
         hashMap.put("sName" , username);
-        hashMap.put("sTag", tagToUpload);
-
+        if (!tagToUpload.equals("")) {
+            hashMap.put("sTag", tagToUpload);
+        }
+        else {
+            hashMap.put("sTag","0");
+        }
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
         String nUid = ref.push().getKey();
         hashMap.put("nId", nUid);
@@ -495,7 +499,12 @@ public class StackFragment extends Fragment {
         hashMap.put("notification" , notification);
         hashMap.put("sUid" , uid);
         hashMap.put("sName" , username);
-        hashMap.put("sTag", tagToUpload);
+        if (!tagToUpload.equals("")) {
+            hashMap.put("sTag", tagToUpload);
+        }
+        else {
+            hashMap.put("sTag","0");
+        }
         hashMap.put("type", "3");  // 1 buddy 2 club 3 stack
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
@@ -568,6 +577,18 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pUpvoteNumber","0");
                                 hashMap.put("pTitle", postTitle);
                                 hashMap.put("pTagIndex",tagToUpload);
+
+                                //tagsToUpload achievements KUTAY
+                                String achTagToUpload = tagToUpload;
+                                if (Integer.valueOf(achTagToUpload) < 4 ) {
+                                    //TODO KUTAY MAT PUAN HERE
+                                }
+                                else if (Integer.valueOf(achTagToUpload) < 19 && Integer.valueOf(achTagToUpload) > 16) {
+                                    //TODO KUTAY ENG PUAN HERE
+                                }
+                                else if (Integer.valueOf(achTagToUpload) < 21 && Integer.valueOf(achTagToUpload) > 18) {
+                                    //TODO KUTAY TURK PUAN HERE
+                                }
 
 
                                 //path to store post data
@@ -668,6 +689,18 @@ public class StackFragment extends Fragment {
             hashMap.put("pUpvoteNumber","0");
             hashMap.put("pTitle",postTitle);
             hashMap.put("pTagIndex",tagToUpload);
+
+            //tagsToUpload achievements KUTAY
+            String achTagToUpload = tagToUpload;
+            if (Integer.valueOf(achTagToUpload) < 4 ) {
+                //TODO KUTAY MAT PUAN HERE
+            }
+            else if (Integer.valueOf(achTagToUpload) < 19 && Integer.valueOf(achTagToUpload) > 16) {
+                //TODO KUTAY ENG PUAN HERE
+            }
+            else if (Integer.valueOf(achTagToUpload) < 21 && Integer.valueOf(achTagToUpload) > 18) {
+                //TODO KUTAY TURK PUAN HERE
+            }
 
 
 

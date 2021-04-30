@@ -70,7 +70,8 @@ public class ClubsFragment extends Fragment {
 
     EditText postDetailsEt,
             postQuotaEt,
-            postLocationEt;
+            postLocationEt,
+            postTitleEt;
 
     ProgressBar pb;
 
@@ -261,6 +262,7 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv = clubDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = clubDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
+                postTitleEt =  clubDialog.findViewById(R.id.editTextHeadLine);
 
                 //init tags
                 tag1 = clubDialog.findViewById(R.id.textViewTag1);
@@ -393,6 +395,7 @@ public class ClubsFragment extends Fragment {
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
+                        String postTitle = postTitleEt.getText().toString().trim();
 
                          tagsToUpload = "";
 
@@ -416,11 +419,11 @@ public class ClubsFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload);
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload,postTitle);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload);
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload,postTitle);
                         }
                         clubDialog.dismiss();
 
@@ -444,6 +447,19 @@ public class ClubsFragment extends Fragment {
 
                 filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
                 filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
+
+                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
+                i[0] = 0;
+
+                //set tags to empty strings
+                tag1.setText("");
+                tag2.setText("");
+                tag3.setText("");
+
+                //set boolean array to false only
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
@@ -518,18 +534,6 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onDismiss(DialogInterface dialog) {
 
-                //set to 0 zero in order to prevent blocking spinner due to the previous posts.
-                i[0] = 0;
-
-                //set tags to empty strings
-                tag1.setText("");
-                tag2.setText("");
-                tag3.setText("");
-
-                //set boolean array to false only
-                tagsStatus[0] = false;
-                tagsStatus[1] = false;
-                tagsStatus[2] = false;
 
             }
         });
@@ -700,7 +704,7 @@ public class ClubsFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postTitle) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_";
@@ -735,7 +739,41 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pLocation",postLocation);
-                                hashMap.put("pTags", tagsToUpload);
+                                hashMap.put("pTitle",postTitle);
+
+                                //tagsToUpload achievements KUTAY
+                                String[] achsTagsToUpload = tagsToUpload.split(",");
+                                for (int i = 0; i < achsTagsToUpload.length; i++) {
+                                    if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                                        //TODO KUTAY MAT PUANI EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                                        //TODO KUTAY CAREER PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                                        //TODO KUTAY SPORT PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                                        //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                                        //TODO KUTAY ENGLISH PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                                        //TODO KUTAY TURKCE PUAN EKLE
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                                        //TODO KUTAY STUDY PUAN EKLE
+                                    }
+
+                                }
+
+                                if (!tagsToUpload.equals("")) {
+                                    hashMap.put("pTags", tagsToUpload);
+                                }
+                                else {
+                                    hashMap.put("pTags","0");
+                                }
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -836,7 +874,41 @@ public class ClubsFragment extends Fragment {
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pLocation",postLocation);
-            hashMap.put("pTags", tagsToUpload);
+            hashMap.put("pTitle",postTitle);
+
+            //tagsToUpload achievements KUTAY
+            String[] achsTagsToUpload = tagsToUpload.split(",");
+            for (int i = 0; i < achsTagsToUpload.length; i++) {
+                if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
+                    //TODO KUTAY MAT PUANI EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
+                    //TODO KUTAY CAREER PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+                    //TODO KUTAY SPORT PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+                    //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+                    //TODO KUTAY ENGLISH PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+                    //TODO KUTAY TURKCE PUAN EKLE
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                    //TODO KUTAY STUDY PUAN EKLE
+                }
+
+            }
+
+            if (!tagsToUpload.equals("")) {
+                hashMap.put("pTags", tagsToUpload);
+            }
+            else {
+                hashMap.put("pTags","0");
+            }
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");

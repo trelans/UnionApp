@@ -188,6 +188,8 @@ public class ProfileFragment extends Fragment {
         lastActsRv.setVisibility(View.VISIBLE);
         lastActsRv.setEnabled(true);
 
+        loadLastAct();
+
         achsListView.setVisibility(View.INVISIBLE);
         achsListView.setEnabled(false);
 
@@ -283,7 +285,7 @@ public class ProfileFragment extends Fragment {
                 calendarDialog.show();
             }
         });
-        loadLastAct();
+
         return view;
 
 
