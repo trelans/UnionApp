@@ -29,13 +29,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActivities.HolderNotification>{
+public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievements.HolderNotification>{
 
     private Context context;
     private ArrayList<ModelLastActivities> notificationsList;
     private FirebaseAuth firebaseAuth;
 
-    public AdapterLastActivities(Context context, ArrayList<ModelLastActivities> notificationsList) {
+    public AdapterAchievements(Context context, ArrayList<ModelLastActivities> notificationsList) {
         this.context = context;
         this.notificationsList = notificationsList;
         firebaseAuth = FirebaseAuth.getInstance();
@@ -45,7 +45,7 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
     @Override
     public HolderNotification onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflate view row_notification
-        View view = LayoutInflater.from(context).inflate(R.layout.row_lastachi, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_achievements, parent,false);
         return new HolderNotification(view);
     }
 
@@ -73,7 +73,7 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
 
         // set to views
         holder.AchnotificationTv.setText(notification);
-        holder.AchtimeTv.setText(dateTime);
+
         if (type.equals("1")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
         }
@@ -108,7 +108,7 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
     class HolderNotification extends RecyclerView.ViewHolder {
         // declare views
         ImageView avatarIv;
-        TextView  AchnotificationTv, AchtimeTv;
+        TextView  AchnotificationTv;
 
         public HolderNotification(@NonNull View itemView) {
             super(itemView);
@@ -116,7 +116,7 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
             //init views
             avatarIv = itemView.findViewById(R.id.AchavatarIv);
             AchnotificationTv = itemView.findViewById(R.id.AchnotificationTv);
-            AchtimeTv = itemView.findViewById(R.id.AchtimeTv);
+
 
 
 

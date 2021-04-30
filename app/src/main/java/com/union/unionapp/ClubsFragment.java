@@ -20,7 +20,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -90,6 +89,18 @@ public class ClubsFragment extends Fragment {
 
     AppCompatButton[] tagsArray;
 
+    //Achievements
+    int mathScore ;
+    int careerScore;
+    int sportScore ;
+    int technologyScore;
+    int socialScore ;
+    int englishScore ;
+    int turkishScore ;
+    int studyScore ;
+
+    String title, description, point  , nId , level;
+    // Achievements
     boolean[] tagsStatus = {false, false, false};
     int[] tagTextsIndexArray = new int[3];
     int[] i = new int[1];
@@ -935,7 +946,398 @@ public class ClubsFragment extends Fragment {
                 });
 
     }
+    private void increaseOnePoints(String genre ) {
+        //TODO create all users with default scores
 
+        title = "";
+        description = "";
+        point = "";
+        nId = "";
+        level = "";
+
+
+        // getting user's scores
+        DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/AchievementsScores/");
+        usersDbRefAchscore.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+                    //Parsing in database user's scores
+                     mathScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     careerScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     sportScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     technologyScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     socialScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     englishScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     turkishScore = Integer.parseInt(modelAchievementsScores.getMath());
+                     studyScore = Integer.parseInt(modelAchievementsScores.getMath());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        // increasing the points depending on the genre
+        //increase 1 point to mathScore
+        if (genre.equals("1")) {
+            mathScore++;
+            if (mathScore == 10 || mathScore == 50 || mathScore == 100 || mathScore == 500 || mathScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("1") && modelAchievements.getPoint().equals(String.valueOf(mathScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to careerScore
+        else if (genre.equals("2")) {
+            careerScore++;
+            if (careerScore == 10 || careerScore == 50 || careerScore == 100 || careerScore == 500 || careerScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("2") && modelAchievements.getPoint().equals(String.valueOf(careerScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to sportScore
+        else if (genre.equals("3")) {
+            sportScore++;
+            if (sportScore == 10 || sportScore == 50 || sportScore == 100 || sportScore == 500 || sportScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("3") && modelAchievements.getPoint().equals(String.valueOf(sportScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to technologyScore
+        else if (genre.equals("4")) {
+            technologyScore++;
+            if (technologyScore == 10 || technologyScore == 50 || technologyScore == 100 || technologyScore == 500 || technologyScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("4") && modelAchievements.getPoint().equals(String.valueOf(technologyScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to socialScore
+        else if (genre.equals("5")) {
+            socialScore++;
+            if (socialScore == 10 || socialScore == 50 || socialScore == 100 || socialScore == 500 || socialScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("5") && modelAchievements.getPoint().equals(String.valueOf(socialScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to englishScore
+        else if (genre.equals("6")) {
+            englishScore++;
+            if (englishScore == 10 || englishScore == 50 || englishScore == 100 || englishScore == 500 || englishScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("6") && modelAchievements.getPoint().equals(String.valueOf(englishScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to turkishScore
+        else if (genre.equals("7")) {
+            turkishScore++;
+            if (turkishScore == 10 || turkishScore == 50 || turkishScore == 100 || turkishScore == 500 || turkishScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("7") && modelAchievements.getPoint().equals(String.valueOf(turkishScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        //increase 1 point to studyScore
+        else if (genre.equals("8")) {
+            studyScore++;
+            if (studyScore == 10 || studyScore == 50 || studyScore == 100 || studyScore == 500 || studyScore == 100) {
+                // query ile bilgileri getirt
+                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DbRefAchs.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
+                            if (modelAchievements.getGenre().equals("8") && modelAchievements.getPoint().equals(String.valueOf(studyScore))) {
+                                // gets achievement information
+                                title = modelAchievements.getTitle();
+                                description = modelAchievements.getDescription();
+                                point = modelAchievements.getPoint();
+                                nId = modelAchievements.getnId();
+                                level = modelAchievements.getLevel();
+                                //puts this to user
+                                HashMap<Object, String> hashMapd = new HashMap<>();
+                                hashMapd.put("title" , title);
+                                hashMapd.put("description" , description );
+                                hashMapd.put("point" , point);
+                                hashMapd.put("genre" , genre);
+                                hashMapd.put("nId" , nId);
+                                hashMapd.put("level" , level);
+                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+
+                                usersDbRefAchs.child(nId).setValue(hashMapd);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                // userin Achievementsına idsini ekle
+            }
+        }
+        // Prapare scores to make it appropraite to send to server
+        String SmathScore = String.valueOf(mathScore);
+        String ScareerScore = String.valueOf(careerScore);
+        String SsportScore = String.valueOf(sportScore);
+        String StechnologyScore = String.valueOf(technologyScore);
+        String SsocialScore = String.valueOf(socialScore);
+        String SenglishScore = String.valueOf(englishScore);
+        String SturkishScore = String.valueOf(turkishScore);
+        String SstudyScore = String.valueOf(studyScore);
+
+        // Creating Hashes to send information to database
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("math" , SmathScore);
+        hashMap.put("career" ,ScareerScore );
+        hashMap.put("sport" , SsportScore);
+        hashMap.put("technology" , StechnologyScore);
+        hashMap.put("social" , SsocialScore);
+        hashMap.put("english" , SenglishScore);
+        hashMap.put("turkish", SturkishScore);
+        hashMap.put("study", SstudyScore);
+        DatabaseReference userAchref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/AchievementsScores/");
+        // Sending hashes to database
+        userAchref.setValue(hashMap);
+    }
+    // Users score will be checked and if he/she wins the achievement achievement's unique id will be added to his database
+    private void didIAchieveAny(String usersUid) {
+
+
+    }
     private void addToHisLastActivities( String pId , String notification) {
 
         HashMap<Object, String> hashMap = new HashMap<>();
