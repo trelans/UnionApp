@@ -16,21 +16,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".VerifyAccountActivity"></activity>
+        <activity android:name=".PostActivity"/>
+        <activity android:name=".VerifyAccountActivity" />
         <activity android:name=".OtherProfile" />
         <activity android:name=".ChatActivity" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.SlidrActivityTheme">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme.SlidrActivityTheme">
+
         </activity>
         <activity android:name=".TestActivity" />
         <activity android:name=".RecoverAccountActivity" />
