@@ -179,7 +179,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
             upNumber = itemView.findViewById(R.id.textViewUpNumber);
-            topicTag = itemView.findViewById(R.id.topicTagTW);
+            topicTag = itemView.findViewById(R.id.topicTagTW1);
             cardView = itemView.findViewById(R.id.card);
         }
     }
