@@ -71,7 +71,8 @@ public class ClubsFragment extends Fragment {
 
     EditText postDetailsEt,
             postQuotaEt,
-            postLocationEt;
+            postLocationEt,
+            postTitleEt;
 
     ProgressBar pb;
 
@@ -250,6 +251,7 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv = clubDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = clubDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
+                postTitleEt =  clubDialog.findViewById(R.id.editTextHeadLine);
 
                 //init tags
                 tag1 = clubDialog.findViewById(R.id.textViewTag1);
@@ -382,6 +384,7 @@ public class ClubsFragment extends Fragment {
                         String postQuotaStr = postQuotaEt.getText().toString().trim();
                         String postTime = postTimeEt.getText().toString().trim();
                         String postLocation = postLocationEt.getText().toString().trim();
+                        String postTitle = postTitleEt.getText().toString().trim();
 
                          tagsToUpload = "";
 
@@ -405,11 +408,11 @@ public class ClubsFragment extends Fragment {
 
                         if (image_uri==null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload);
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload,postTitle);
                         }
                         else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload);
+                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload,postTitle);
                         }
                         clubDialog.dismiss();
 
@@ -690,7 +693,7 @@ public class ClubsFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postTitle) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
         String filePathAndName = "Posts/" + "post_";
@@ -725,6 +728,7 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pLocation",postLocation);
+                                hashMap.put("pTitle",postTitle);
 
                                 if (!tagsToUpload.equals("")) {
                                     hashMap.put("pTags", tagsToUpload);
@@ -832,6 +836,7 @@ public class ClubsFragment extends Fragment {
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pLocation",postLocation);
+            hashMap.put("pTitle",postTitle);
 
             if (!tagsToUpload.equals("")) {
                 hashMap.put("pTags", tagsToUpload);
