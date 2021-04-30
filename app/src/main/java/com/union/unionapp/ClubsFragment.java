@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -67,6 +68,7 @@ public class ClubsFragment extends Fragment {
     DatabaseReference userDbRefPosts;
     Spinner tagSpinner;
 
+
     EditText postDetailsEt,
             postQuotaEt,
             postLocationEt;
@@ -74,7 +76,9 @@ public class ClubsFragment extends Fragment {
     ProgressBar pb;
 
     TextView postDateEt,
-             postTimeEt;
+             postTimeEt,
+             filterDateTv,
+             filterTimeTv;
 
     TextView[] textViewTags;
 
@@ -129,6 +133,7 @@ public class ClubsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_clubs, container, false);
 
         pb = view.findViewById(R.id.progressBar);
@@ -136,6 +141,8 @@ public class ClubsFragment extends Fragment {
         ImageView filterImageView = (ImageView) view.findViewById(R.id.showClubFilterPopup);
         ImageView createPost = (ImageView) view.findViewById(R.id.showPopUpCreate);
         clubDialog = new Dialog(getActivity());
+
+
         // Layoutu transparent yapıo
         clubDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -420,22 +427,12 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_club_filter);
                 clubDialog.setCanceledOnTouchOutside(true);
 
-                tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
-                tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                tagSpinner.setAdapter(tagAdapter);
+                tag1 = clubDialog.findViewById(R.id.filterTag1TextView);
+                tag2 = clubDialog.findViewById(R.id.filterTag2TextView);
+                tag3 = clubDialog.findViewById(R.id.filterTag3TextView);
 
-
-
-                clubDialog.show();
-            }
-        });
-
-
-        //dialog dismiss listener
-        clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
+                filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
+                filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
 
                 //set to 0 zero in order to prevent blocking spinner due to the previous posts.
                 i[0] = 0;
@@ -449,6 +446,80 @@ public class ClubsFragment extends Fragment {
                 tagsStatus[0] = false;
                 tagsStatus[1] = false;
                 tagsStatus[2] = false;
+
+                tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                tagSpinner.setAdapter(tagAdapter);
+
+                //set the postDateEt to current date for default
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(MainActivity.getServerDate());
+                calendarToString(calendar);
+                filterDateTv.setText(date);
+                filterTimeTv.setText(time);
+
+                //setting up the calendar dialog
+                final int year = calendar.get(Calendar.YEAR);
+                final int month = calendar.get(Calendar.MONTH);
+                final int day = calendar.get(Calendar.DAY_OF_MONTH);
+                final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+                final int minute = calendar.get(Calendar.MINUTE);
+
+
+
+                filterDateTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                        );
+                        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.updateDate(year,month,day);
+                        datePickerDialog.show();
+                    }
+                });
+
+                filterTimeTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                        );
+                        timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        timePickerDialog.show();
+                    }
+                });
+
+                setListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month = month + 1;
+                        String date = dayOfMonth + "/" + month + "/" + year;
+                        filterDateTv.setText(date);
+
+                    }
+                };
+
+                timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        String time = hourOfDay + ":" + minute;
+                        filterTimeTv.setText(time);
+                    }
+                };
+
+
+                clubDialog.show();
+            }
+        });
+
+
+        //dialog dismiss listener
+        clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
 
             }
         });
@@ -654,7 +725,13 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pLocation",postLocation);
-                                hashMap.put("pTags", tagsToUpload);
+
+                                if (!tagsToUpload.equals("")) {
+                                    hashMap.put("pTags", tagsToUpload);
+                                }
+                                else {
+                                    hashMap.put("pTags","0");
+                                }
 
                                 //path to store post data
                                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -755,7 +832,13 @@ public class ClubsFragment extends Fragment {
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pLocation",postLocation);
-            hashMap.put("pTags", tagsToUpload);
+
+            if (!tagsToUpload.equals("")) {
+                hashMap.put("pTags", tagsToUpload);
+            }
+            else {
+                hashMap.put("pTags","0");
+            }
 
             //path to store post data
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -769,6 +852,7 @@ public class ClubsFragment extends Fragment {
                         public void onSuccess(Void aVoid) {
                             //added in database
                             Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
+                            addToHisLastActivities(pUid,"Published an announcement");
                             //TODO reset views
 
 
@@ -849,6 +933,37 @@ public class ClubsFragment extends Fragment {
         String nUid = ref.push().getKey();
         hashMap.put("nId", nUid);
         ref.child(nUid).setValue(hashMap)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
+
+    private void addToHisLastActivities( String pId , String notification) {
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timestamp );
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagsToUpload);
+        hashMap.put("type", "2");  // 1 buddy 2 club 3 stack
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
+        String laUid = ref.push().getKey();
+        hashMap.put("nId", laUid);
+        ref.child(laUid).setValue(hashMap)
 
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

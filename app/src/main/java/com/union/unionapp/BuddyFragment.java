@@ -452,6 +452,12 @@ public class BuddyFragment extends Fragment {
                 buddyDialog.setContentView(R.layout.custom_buddy_filter);
                 buddyDialog.setCanceledOnTouchOutside(true);
 
+                i[0] = 0;
+
+                tagsStatus[0] = false;
+                tagsStatus[1] = false;
+                tagsStatus[2] = false;
+
                 //init views
                 ImageView searchFilterImageView = buddyDialog.findViewById(R.id.searchFiltersImageView);
                 ImageView resetFiltersImageView = buddyDialog.findViewById(R.id.cancelFilterImageView);
@@ -463,6 +469,12 @@ public class BuddyFragment extends Fragment {
                 filterTag1 = buddyDialog.findViewById(R.id.filterTag1TextView);
                 filterTag2 = buddyDialog.findViewById(R.id.filterTag2TextView);
                 filterTag3 = buddyDialog.findViewById(R.id.filterTag3TextView);
+
+                filterTag1.setText("");
+                filterTag2.setText("");
+                filterTag3.setText("");
+
+                tagsArray = new AppCompatButton[]{filterTag1, filterTag2, filterTag3};
 
                 preferredGenderFilterSpinner = buddyDialog.findViewById(R.id.prefferedGenderFilterSpinner);
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
@@ -633,7 +645,6 @@ public class BuddyFragment extends Fragment {
 
                             //tags to upload'un sonundaki virgülü atıyor
                             StringBuilder tempString = new StringBuilder(filterTagsToUpload);
-
                             filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
                         }
 
@@ -672,7 +683,7 @@ public class BuddyFragment extends Fragment {
                                             }
                                         }
 
-                                        if (!filterTagsToUpload.isEmpty()) {
+                                        if (!filterTagsToUpload.equals("0")) {
                                             if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
                                                 continue;
                                             }
@@ -940,7 +951,12 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pImage", downloadUri);
                                 hashMap.put("pTime", String.valueOf(timeStamp));
                                 hashMap.put("pLocation", postLocation);
-                                hashMap.put("pTags", tagsToUpload); //TODO tagler için değişicek TAGS TO UPLOAD
+                                if (!tagsToUpload.equals("")) {
+                                    hashMap.put("pTags", tagsToUpload);
+                                }
+                                else {
+                                    hashMap.put("pTags","0");
+                                }
                                 hashMap.put("pGender", postGender);
                                 hashMap.put("pTitle",postTitle);
 
@@ -957,7 +973,7 @@ public class BuddyFragment extends Fragment {
                                                 //added in database
                                                 Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                                                 //TODO reset views
-
+                                                addToHisLastActivities(pUid,"Seeking for a buddy");
 
                                                 // Sends notification to people who have same tag numbers with this post
 
@@ -1041,7 +1057,14 @@ public class BuddyFragment extends Fragment {
             hashMap.put("pImage", "noImage");
             hashMap.put("pTime", String.valueOf(timeStamp));
             hashMap.put("pLocation", postLocation);
-            hashMap.put("pTags", tagsToUpload); // tagsToUpload
+
+            if (!tagsToUpload.equals("")) {
+                hashMap.put("pTags", tagsToUpload);
+            }
+            else {
+                hashMap.put("pTags","0");
+            }
+
             hashMap.put("pGender", postGender);
             hashMap.put("pTitle",postTitle);
 
@@ -1058,7 +1081,7 @@ public class BuddyFragment extends Fragment {
                             //added in database
                             Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             //TODO reset views
-
+                            addToHisLastActivities(pUid,"Seeking for a buddy");
 
                             // Sends notification to people who have same tag numbers with this post
 
@@ -1216,6 +1239,36 @@ public class BuddyFragment extends Fragment {
         return settingsTagsSavedCondition;
     }*/
 
+    private void addToHisLastActivities( String pId , String notification) {
+
+        HashMap<Object, String> hashMap = new HashMap<>();
+        hashMap.put("pId" , pId);
+        hashMap.put("timestamp" ,timestamp );
+        hashMap.put("notification" , notification);
+        hashMap.put("sUid" , uid);
+        hashMap.put("sName" , username);
+        hashMap.put("sTag", tagsToUpload);
+        hashMap.put("type", "1");  // 1 buddy 2 club 3 stack
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
+        String laUid = ref.push().getKey();
+        hashMap.put("nId", laUid);
+        ref.child(laUid).setValue(hashMap)
+
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // failed
+                    }
+                });
+
+    }
     public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
 
         boolean boo;
@@ -1231,9 +1284,6 @@ public class BuddyFragment extends Fragment {
         else {
             return (  tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
         }
-
-
-
 
     }
 

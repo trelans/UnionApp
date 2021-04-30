@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     boolean isThereError = false;
 
 
-    private SlidrInterface slidr;
+
 
     public void ForgotPassword(View view) {
         // Button onClick
@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        slidr = Slidr.attach( this );
+
 
         tw_email = findViewById(R.id.nameTextView);
         tw_password = findViewById(R.id.passwordTextView);

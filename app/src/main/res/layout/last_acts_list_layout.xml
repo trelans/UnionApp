@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/achsLayout"
         android:layout_width="344dp"
         android:layout_height="96dp"
@@ -14,37 +14,41 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="374dp">
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/buddy_icon" />
+
         <TextView
 
             android:id="@+id/lastActsItem"
 
             android:layout_width="194dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="28dp"
-            android:layout_marginEnd="25dp"
+
             android:layout_marginStart="25dp"
             android:layout_marginTop="28dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="28dp"
             android:background="@drawable/text_view_comment_template"
             android:fontFamily="@font/myriad_pro_regular"
             android:gravity="center"
-            android:insetBottom="0sp"
-            android:insetTop="0sp"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="0"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.512" />
+           />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/lastActDate"
+            android:layout_width="18dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="2/2/2021 12:12" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

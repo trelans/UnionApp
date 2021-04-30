@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class ProfileFragment extends Fragment {
@@ -39,17 +42,19 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference databaseReference;
     static int i = 0;
 
-
+    private ArrayList<ModelLastActivities> LastActList;
+    private AdapterLastActivities adapterLastAct;
     boolean lastActsIsActive;
     boolean achsIsActive;
     String tagNums;
+    String uid;
     String[] allAchs;
     String[] userAchs;
     String[] userActs;
     String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
-    ListView lastActsList;
+    RecyclerView lastActsRv;
     ListView achsListView;
     ImageView openCalendar;
     Dialog calendarDialog;
@@ -120,6 +125,7 @@ public class ProfileFragment extends Fragment {
                     String name = "@" + ds.child("username").getValue();
                     String pp = "" + ds.child("pp").getValue();
                     tagNums = "" + ds.child( "tags" ).getValue();
+                    uid = "" + ds.child("uid").getValue();
 
                     if( tagNums != null ) {
                          tagIndexes = tagNums.split( "," );
@@ -171,16 +177,18 @@ public class ProfileFragment extends Fragment {
 
         /*Achievements için listview kısmı*/
         achsListView = (ListView) view.findViewById(R.id.achsList);
-        lastActsList = (ListView) view.findViewById(R.id.lastActsList);
+        lastActsRv = (RecyclerView) view.findViewById(R.id.lastActsList);
 
         CustomAdapterAchievements customAdapterAchs = new CustomAdapterAchievements(getActivity(), userAchs);
-        CustomAdapterLastActs customAdapterLastActs = new CustomAdapterLastActs(getActivity(), userActs);
+
 
         achsListView.setAdapter(customAdapterAchs);
-        lastActsList.setAdapter(customAdapterLastActs);
 
-        lastActsList.setVisibility(View.VISIBLE);
-        lastActsList.setEnabled(true);
+
+        lastActsRv.setVisibility(View.VISIBLE);
+        lastActsRv.setEnabled(true);
+
+        loadLastAct();
 
         achsListView.setVisibility(View.INVISIBLE);
         achsListView.setEnabled(false);
@@ -193,8 +201,9 @@ public class ProfileFragment extends Fragment {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    lastActsList.setVisibility(View.VISIBLE);
-                    lastActsList.setEnabled(true);
+                    lastActsRv.setVisibility(View.VISIBLE);
+                    lastActsRv.setEnabled(true);
+                    loadLastAct();
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
@@ -219,8 +228,8 @@ public class ProfileFragment extends Fragment {
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
-                    lastActsList.setVisibility(View.INVISIBLE);
-                    lastActsList.setEnabled(false);
+                    lastActsRv.setVisibility(View.INVISIBLE);
+                    lastActsRv.setEnabled(false);
                     lastActsIsActive = false;
                 }
             }
@@ -276,6 +285,7 @@ public class ProfileFragment extends Fragment {
                 calendarDialog.show();
             }
         });
+
         return view;
 
 
@@ -303,5 +313,33 @@ public class ProfileFragment extends Fragment {
 
         return s.toString();
     }
+    private void loadLastAct() {
+        System.out.println(uid + "dsfdsdsfsdf");
+        LastActList = new ArrayList<>();
+        DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Users/" + uid + "/LastActivities/");
+        databaseReferenceNotif
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        LastActList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            // get data
+                            ModelLastActivities model = ds.getValue(ModelLastActivities.class);
+                            // add to list
+                            LastActList.add(model);
+                        }
+                        // adapter
+                        adapterLastAct = new AdapterLastActivities(getActivity() , LastActList);
+                        // set to recycler view
+                        lastActsRv.setAdapter(adapterLastAct);
+                        lastActsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
 }

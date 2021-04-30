@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     int[] tagTextsIndexArray = new int[3];
     AppCompatButton[] tagsArray;
     String[] allTags;
-    boolean[] tagsStatue = {false, false, false};
+    boolean[] tagsStatus = {false, false, false};
 
     // String[] allTags = getResources().getStringArray( R.array.all_tags );
     @Override
@@ -420,6 +420,16 @@ public class MainActivity extends AppCompatActivity {
             tagButton2 = myDialog.findViewById(R.id.sampleTag2);
             tagButton3 = myDialog.findViewById(R.id.sampleTag3);
 
+            tagButton1.setText("");
+            tagButton2.setText("");
+            tagButton3.setText("");
+
+            tagsStatus[0] = false;
+            tagsStatus[1] = false;
+            tagsStatus[2] = false;
+
+            saveTagsButton.setEnabled(false);
+
             tagsArray = new AppCompatButton[]{tagButton1, tagButton2, tagButton3};
             Spinner tagSpinner = myDialog.findViewById(R.id.tagSpinner);
 
@@ -430,31 +440,47 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+            {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position > 0) {
                         String selectedItem = parent.getItemAtPosition(position).toString();
-                        while (i[0] < tagsStatue.length) {
-                            if (!tagsStatue[i[0]]) {
-                                tagsStatue[i[0]] = true;
-                                tagsArray[i[0]].setText(selectedItem);
-                                tagsArray[i[0]].setVisibility(View.VISIBLE);
-                                i[0]++;
-                                break;
+                        if (i[ 0 ] < tagsStatus.length) {
+
+                            for (int j = 0; j < 3; j++) {
+
+                                if (!tagsStatus[j]) {
+
+                                    tagsArray[j].setText(selectedItem);
+                                    if (!tagHasSelectedBefore(tagButton1,tagButton2,tagButton3)) {
+                                        tagsArray[j].setVisibility(View.VISIBLE);
+                                        i[0]++;
+                                        tagsStatus[j] = true;
+                                        if (i[0] == 3 ) {
+                                            saveTagsButton.setEnabled(true);
+                                        }
+
+                                    }
+                                    else {
+                                        tagsStatus[j] = false;
+                                        tagsArray[j].setText("");
+                                    }
+                                    break;
+                                }
                             }
                         }
                     }
 
-                    if (i[0] == tagsStatue.length) {
-                        Toast.makeText(getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG).show();
-                        tagSpinner.setEnabled(false);
+                    if( i[ 0 ] == tagsStatus.length ) {
+                        //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+                        tagSpinner.setEnabled( false );
                         //tagSpinner.setClickable( false );
                         //tagSpinner.setTop( 1 );
                         //setTagsSaved( true );
                     }
                 }
 
-                public void onNothingSelected(AdapterView<?> parent) {
+                public void onNothingSelected (AdapterView < ? > parent) {
                     //TODO
                 }
             });
@@ -464,9 +490,10 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     i[0] = 0;
                     tagSpinner.setEnabled(true);
-                    for (int i = 0; i < tagsStatue.length; i++) {
-                        tagsStatue[i] = false;
+                    for (int i = 0; i < tagsStatus.length; i++) {
+                        tagsStatus[i] = false;
                     }
+                    saveTagsButton.setEnabled(false);
                     //tagSpinner.setClickable( true );
                     setAllSettingsTagsInvisible();
                     setTagsSaved(false);
@@ -474,26 +501,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            //TODO hashmap
             saveTagsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    for (int j = 0; j < tagsArray.length; j++) {
-                        for (int k = 1; k < allTags.length; k++) {
-                            if (allTags[k].equals(tagsArray[j].getText().toString())) {
-                                tagTextsIndexArray[j] = k;
-
-                                break;
-                            }
-                        }
-
-
-
-                    }
                     String tagIndexes = "";
-                    for (int l = 0; l < tagTextsIndexArray.length; l++) {
-                        tagIndexes += " " + tagTextsIndexArray[l];
+
+                    for ( int k = 1; k < allTags.length; k++ ) {
+                        if ( allTags[ k ].equals( tagButton1.getText().toString() ) || allTags[ k ].equals( tagButton2.getText().toString() ) || allTags[ k ].equals( tagButton3.getText().toString() ) ) {
+                            tagIndexes = tagIndexes + k + ",";
+                        }
                     }
+
+                    if (tagIndexes.length() > 0) {
+                        StringBuilder tempString = new StringBuilder(tagIndexes);
+                        tempString.deleteCharAt(tempString.length() - 1);
+                        tagIndexes = tempString.toString();
+                    }
+
+                    DatabaseReference reference = firebaseDatabase.getReference("BilkentUniversity/Users/"+mUID);
+                    // put data within hashmap in database
+                    reference.child("tags").setValue(tagIndexes);
+
                     Toast.makeText(getApplicationContext(), tagIndexes, Toast.LENGTH_LONG).show();
                 }
             });
@@ -1091,6 +1121,23 @@ public class MainActivity extends AppCompatActivity {
     public static String[] getAllTags() {
         return allTagz;
     }
+
+    public boolean tagHasSelectedBefore(AppCompatButton tag1, AppCompatButton tag2, AppCompatButton tag3) {
+
+        boolean boo;
+
+        String tag1String = tag1.getText().toString();
+        String tag2String = tag2.getText().toString();
+        String tag3String = tag3.getText().toString();
+
+        if (!tag1String.equals("") && !tag2String.equals("") && !tag3String.equals("")) {
+
+            return (tag1String.equals(tag2String) || tag2String.equals(tag3String) || tag1String.equals(tag3String));
+        } else {
+            return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
+        }
+    }
+
 }
 
 //String[] strings = getResources().getStringArray(R.array.stack_tags); / tagleri arraye yerleştirme kodu
