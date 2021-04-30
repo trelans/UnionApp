@@ -32,10 +32,10 @@ import java.util.Locale;
 public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievements.HolderNotification>{
 
     private Context context;
-    private ArrayList<ModelLastActivities> notificationsList;
+    private ArrayList<ModelAchievements> notificationsList;
     private FirebaseAuth firebaseAuth;
 
-    public AdapterAchievements(Context context, ArrayList<ModelLastActivities> notificationsList) {
+    public AdapterAchievements(Context context, ArrayList<ModelAchievements> notificationsList) {
         this.context = context;
         this.notificationsList = notificationsList;
         firebaseAuth = FirebaseAuth.getInstance();
@@ -54,26 +54,22 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         // get and set data to views
 
         // get data
-        final  ModelLastActivities modelNotification = notificationsList.get(position);
-        String name = modelNotification.getsName();
-        String notification = modelNotification.getNotification();
-        String timestamp = modelNotification.getTimestamp();
-        String senderUid = modelNotification.getsUid();
-        String pId = modelNotification.getpId();
-        String type = modelNotification.getType();
-        // conver timestamp to dd//mm/yyyy hh:mm
+        final  ModelAchievements modelNotification = notificationsList.get(position);
+        String description = modelNotification.getDescription();
+        String genre = modelNotification.getGenre();
+        String level = modelNotification.getLevel();
+        String nId = modelNotification.getnId();
+        String point = modelNotification.getPoint();
+        String title = modelNotification.getTitle();
 
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(Long.parseLong(timestamp));
-        String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
 
 
 
 
         // set to views
-        holder.AchnotificationTv.setText(notification);
-
+        holder.AchnotificationTv.setText(title);
+/*
         if (type.equals("1")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
         }
@@ -86,7 +82,7 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         else {
             holder.avatarIv.setImageResource(R.drawable.stack_icon); // öylesine çökmesin diye
         }
-
+*/
         //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

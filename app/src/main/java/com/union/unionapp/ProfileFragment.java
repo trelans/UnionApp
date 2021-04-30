@@ -44,6 +44,10 @@ public class ProfileFragment extends Fragment {
 
     private ArrayList<ModelLastActivities> LastActList;
     private AdapterLastActivities adapterLastAct;
+
+    private ArrayList<ModelAchievements> AchivementList;
+    private AdapterAchievements adapterAchivement;
+
     boolean lastActsIsActive;
     boolean achsIsActive;
     String tagNums;
@@ -55,7 +59,7 @@ public class ProfileFragment extends Fragment {
     TextView lastActsTextView;
     TextView achsTextView;
     RecyclerView lastActsRv;
-    ListView achsListView;
+    RecyclerView achsListRv;
     ImageView openCalendar;
     Dialog calendarDialog;
     TextView usernameTW;
@@ -176,13 +180,9 @@ public class ProfileFragment extends Fragment {
 
 
         /*Achievements için listview kısmı*/
-        achsListView = (ListView) view.findViewById(R.id.achsList);
+        achsListRv = (RecyclerView) view.findViewById(R.id.achsList);
         lastActsRv = (RecyclerView) view.findViewById(R.id.lastActsList);
 
-        CustomAdapterAchievements customAdapterAchs = new CustomAdapterAchievements(getActivity(), userAchs);
-
-
-        achsListView.setAdapter(customAdapterAchs);
 
 
         lastActsRv.setVisibility(View.VISIBLE);
@@ -190,8 +190,8 @@ public class ProfileFragment extends Fragment {
 
         loadLastAct();
 
-        achsListView.setVisibility(View.INVISIBLE);
-        achsListView.setEnabled(false);
+        achsListRv.setVisibility(View.INVISIBLE);
+        achsListRv.setEnabled(false);
 
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,13 +203,14 @@ public class ProfileFragment extends Fragment {
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
                     lastActsRv.setVisibility(View.VISIBLE);
                     lastActsRv.setEnabled(true);
-                    loadLastAct();
+
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
-                    achsListView.setVisibility(View.INVISIBLE);
-                    achsListView.setEnabled(false);
+                    achsListRv.setVisibility(View.INVISIBLE);
+                    achsListRv.setEnabled(false);
                     achsIsActive = false;
+                    loadLastAct();
 
                 }
             }
@@ -223,14 +224,15 @@ public class ProfileFragment extends Fragment {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    achsListView.setVisibility(View.VISIBLE);
-                    achsListView.setEnabled(true);
+                    achsListRv.setVisibility(View.VISIBLE);
+                    achsListRv.setEnabled(true);
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
                     lastActsRv.setVisibility(View.INVISIBLE);
                     lastActsRv.setEnabled(false);
                     lastActsIsActive = false;
+                    loadAchievements();
                 }
             }
 
@@ -333,6 +335,35 @@ public class ProfileFragment extends Fragment {
                         // set to recycler view
                         lastActsRv.setAdapter(adapterLastAct);
                         lastActsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void loadAchievements() {
+        AchivementList = new ArrayList<>();
+        DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
+        databaseReferenceNotif
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        AchivementList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            // get data
+                            ModelAchievements model = ds.getValue(ModelAchievements.class);
+                            // add to list
+                            AchivementList.add(model);
+                        }
+                        // adapter
+                        adapterAchivement = new AdapterAchievements(getActivity() , AchivementList);
+                        // set to recycler view
+                        achsListRv.setAdapter(adapterAchivement);
+                        achsListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
                     }
 
