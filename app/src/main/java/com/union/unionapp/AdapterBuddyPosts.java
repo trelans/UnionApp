@@ -170,7 +170,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
-            topicTagTW1 = itemView.findViewById(R.id.topicTagTW1);
+            topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);
 
