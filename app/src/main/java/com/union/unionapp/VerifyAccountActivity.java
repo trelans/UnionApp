@@ -19,14 +19,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class VerifyAccountActivity extends AppCompatActivity {
+
+    LocalDataManager localDataManager;
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_account);
+        localDataManager = new LocalDataManager();
         Button verifyAccountButton = findViewById(R.id.verifyButton);
         Button sendAgainButton = findViewById(R.id.sendAgainButton);
         EditText enterCodeET = findViewById(R.id.enterCodeET);
@@ -51,7 +56,7 @@ public class VerifyAccountActivity extends AppCompatActivity {
         sendAgainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
                 // Inform user
                 incorrectCodeTW.setVisibility(View.VISIBLE);
@@ -84,6 +89,8 @@ public class VerifyAccountActivity extends AppCompatActivity {
                             countDownTimer.cancel();
                             HashMap<String, Object> map = new HashMap<>();
                             map.put("accountType", "0");
+                            System.out.println("girdi2");
+                            localDataManager.setSharedPreference(VerifyAccountActivity.this, "isAccountVerified", email);
                             reference.updateChildren(map);
                             ref.child(key[0]).removeValue();
                             startActivity(new Intent(VerifyAccountActivity.this, MainActivity.class));
