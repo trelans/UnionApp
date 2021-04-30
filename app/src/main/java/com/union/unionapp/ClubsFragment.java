@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -91,14 +92,14 @@ public class ClubsFragment extends Fragment {
     AppCompatButton[] tagsArray;
 
     //Achievements
-    int mathScore ;
-    int careerScore;
-    int sportScore ;
-    int technologyScore;
-    int socialScore ;
-    int englishScore ;
-    int turkishScore ;
-    int studyScore ;
+    int mathScore;// = 0;
+    int careerScore;// = 0;
+    int sportScore;// = 0;
+    int technologyScore;// = 0;
+    int socialScore;// = 0;
+    int englishScore;// = 0;
+    int turkishScore;// = 0;
+    int studyScore;// = 0;
 
     String title, description, point  , nId , level;
     // Achievements
@@ -746,24 +747,85 @@ public class ClubsFragment extends Fragment {
                                 for (int i = 0; i < achsTagsToUpload.length; i++) {
                                     if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
                                         //TODO KUTAY MAT PUANI EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("1");
+                                            }
+                                        }, 2000);
+
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
                                         //TODO KUTAY CAREER PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("2");
+                                            }
+                                        }, 2000);
+
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
                                         //TODO KUTAY SPORT PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("3");
+                                            }
+                                        }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
-                                        //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                                        //TODO KUTAY TECH PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("4");
+                                            }
+                                        }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
                                         //TODO KUTAY ENGLISH PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("5");
+                                            }
+                                        }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
-                                        //TODO KUTAY TURKCE PUAN EKLE
+                                        //TODO KUTAY ENGLISH PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("6");
+                                            }
+                                        }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                                        //TODO KUTAY TURKCE PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("7");
+                                            }
+                                        }, 2000);
+                                    }
+                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
                                         //TODO KUTAY STUDY PUAN EKLE
+                                        loadProfileScoreAchievements();
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            public void run() {
+                                                increaseOnePoints("8");
+                                            }
+                                        }, 2000);
                                     }
 
                                 }
@@ -881,24 +943,85 @@ public class ClubsFragment extends Fragment {
             for (int i = 0; i < achsTagsToUpload.length; i++) {
                 if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
                     //TODO KUTAY MAT PUANI EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("1");
+                        }
+                    }, 2000);
+
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
                     //TODO KUTAY CAREER PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("2");
+                        }
+                    }, 2000);
+
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
                     //TODO KUTAY SPORT PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("3");
+                        }
+                    }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
-                    //TODO KUTAY TEKNOLOJİ PUAN EKLE
+                    //TODO KUTAY TECH PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("4");
+                        }
+                    }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
                     //TODO KUTAY ENGLISH PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("5");
+                        }
+                    }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
-                    //TODO KUTAY TURKCE PUAN EKLE
+                    //TODO KUTAY ENGLISH PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("6");
+                        }
+                    }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+                    //TODO KUTAY TURKCE PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("7");
+                        }
+                    }, 2000);
+                }
+                else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
                     //TODO KUTAY STUDY PUAN EKLE
+                    loadProfileScoreAchievements();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            increaseOnePoints("8");
+                        }
+                    }, 2000);
                 }
 
             }
@@ -1018,6 +1141,43 @@ public class ClubsFragment extends Fragment {
                 });
 
     }
+    private void loadProfileScoreAchievements() {
+
+
+        // getting user's scores
+        DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid );
+        usersDbRefAchscore.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (ds.getKey().equals("AchievementsScores")) {
+
+                        System.out.println(ds.getValue());
+                        System.out.println(ds.getKey());
+                        ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+                        //Parsing in database user's scores
+                        mathScore = Integer.parseInt("" + modelAchievementsScores.getMath());
+                        careerScore = Integer.parseInt("" + modelAchievementsScores.getCareer());
+                        System.out.println( "ahahaahhahahaah" + careerScore);
+                        sportScore = Integer.parseInt("" + modelAchievementsScores.getSport());
+                        technologyScore = Integer.parseInt("" + modelAchievementsScores.getTechnology());
+                        socialScore = Integer.parseInt("" + modelAchievementsScores.getSocial());
+                        englishScore = Integer.parseInt("" + modelAchievementsScores.getEnglish());
+                        turkishScore = Integer.parseInt("" + modelAchievementsScores.getTurkish());
+                        studyScore = Integer.parseInt("" + modelAchievementsScores.getStudy());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
+
     private void increaseOnePoints(String genre ) {
         //TODO create all users with default scores
 
@@ -1029,21 +1189,27 @@ public class ClubsFragment extends Fragment {
 
 
         // getting user's scores
-        DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/AchievementsScores/");
+        DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid );
         usersDbRefAchscore.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
-                    //Parsing in database user's scores
-                     mathScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     careerScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     sportScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     technologyScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     socialScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     englishScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     turkishScore = Integer.parseInt(modelAchievementsScores.getMath());
-                     studyScore = Integer.parseInt(modelAchievementsScores.getMath());
+                    if (ds.getKey().equals("AchievementsScores")) {
+
+                        System.out.println(ds.getValue());
+                        System.out.println(ds.getKey());
+                        ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+                        //Parsing in database user's scores
+                        mathScore = Integer.parseInt("" + modelAchievementsScores.getMath());
+                        careerScore = Integer.parseInt("" + modelAchievementsScores.getCareer());
+                        System.out.println( "ahahaahhahahaah" + careerScore);
+                        sportScore = Integer.parseInt("" + modelAchievementsScores.getSport());
+                        technologyScore = Integer.parseInt("" + modelAchievementsScores.getTechnology());
+                        socialScore = Integer.parseInt("" + modelAchievementsScores.getSocial());
+                        englishScore = Integer.parseInt("" + modelAchievementsScores.getEnglish());
+                        turkishScore = Integer.parseInt("" + modelAchievementsScores.getTurkish());
+                        studyScore = Integer.parseInt("" + modelAchievementsScores.getStudy());
+                    }
                 }
             }
 
@@ -1052,6 +1218,8 @@ public class ClubsFragment extends Fragment {
 
             }
         });
+        System.out.println("Math SCore:" + mathScore);
+        System.out.println("Career Score:" + careerScore);
         // increasing the points depending on the genre
         //increase 1 point to mathScore
         if (genre.equals("1")) {
@@ -1097,7 +1265,10 @@ public class ClubsFragment extends Fragment {
         //increase 1 point to careerScore
         else if (genre.equals("2")) {
             careerScore++;
+            System.out.println(careerScore);
+
             if (careerScore == 10 || careerScore == 50 || careerScore == 100 || careerScore == 500 || careerScore == 100) {
+                System.out.println(careerScore);
                 // query ile bilgileri getirt
                 DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {

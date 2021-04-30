@@ -1,85 +1,83 @@
 package com.union.unionapp;
 
-import android.view.Display;
-
 public class ModelAchievementsScores {
-    String Math , Carrier , Sport , Technology, Social, English, Turkish, Study;
+    String math, career, sport, technology, social, english, turkish, study;
 
-    public ModelAchievementsScores(String math, String career, String sport, String technology, String social, String english, String turkish, String study) {
-        Math = math;
-        Carrier = career;
-        Sport = sport;
-        Technology = technology;
-        Social = social;
-        English = english;
-        Turkish = turkish;
-        Study = study;
+    public ModelAchievementsScores(String career, String english, String math, String social, String sport, String study, String technology, String turkish) {
+        this.math = math;
+        this.career = career;
+        this.sport = sport;
+        this.technology = technology;
+        this.social = social;
+        this.english = english;
+        this.turkish = turkish;
+        this.study = study;
     }
     public ModelAchievementsScores() {
 
     }
 
     public String getMath() {
-        return Math;
+        return math;
     }
 
     public void setMath(String math) {
-        Math = math;
+        this.math = math;
     }
 
-    public String getCarrier() {
-        return Carrier;
+    public String getCareer() {
+        return career;
     }
 
-    public void setCarrier(String carrier) {
-        Carrier = carrier;
+    public void setCareer(String career) {
+        this.career = career;
     }
 
     public String getSport() {
-        return Sport;
+        return sport;
     }
 
     public void setSport(String sport) {
-        Sport = sport;
+        this.sport = sport;
     }
 
     public String getTechnology() {
-        return Technology;
+        return technology;
     }
 
     public void setTechnology(String technology) {
-        Technology = technology;
+        this.technology = technology;
     }
 
     public String getSocial() {
-        return Social;
+        return social;
     }
 
     public void setSocial(String social) {
-        Social = social;
+        this.social = social;
     }
 
     public String getEnglish() {
-        return English;
+        return english;
     }
 
     public void setEnglish(String english) {
-        English = english;
+        this.english = english;
     }
 
     public String getTurkish() {
-        return Turkish;
+        return turkish;
     }
 
     public void setTurkish(String turkish) {
-        Turkish = turkish;
+        this.turkish = turkish;
     }
 
     public String getStudy() {
-        return Study;
+        return study;
     }
 
     public void setStudy(String study) {
-        Study = study;
+        this.study = study;
     }
 }
