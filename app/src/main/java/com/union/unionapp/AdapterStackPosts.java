@@ -76,7 +76,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             holder.topicTag.setText(allTags[Integer.valueOf(pTag)]); //TODO
         }
         else {
-            holder.topicTag.setText("No Tag");
+            holder.topicTag.setVisibility(View.INVISIBLE);
         }
         //if there is no image
         if (pImage.equals("noImage")) {
