@@ -71,7 +71,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         if (notification.contains("pro")) {
             postType = "Stack";
         }
-        else if (notification.contains("annnounc")) {
+        else if (notification.contains("announc")) {
             postType = "Club";
         }
         else {
