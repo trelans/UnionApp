@@ -58,25 +58,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String username = postList.get(position).getUsername();
         String uPp = postList.get(position).getuPp();
 
-        String[] newTags = new String[3];
-        newTags[0] = "";
-        newTags[1] = "";
-        newTags[2] = "";
-
-
-        String[] tags = pTags.split(",");
-        String[] allTags = MainActivity.getAllTags();
-
-        if (tags.length == 0) {
-            newTags[0] = "";
-        } else if (tags.length == 1) {
-            newTags[0] = allTags[Integer.valueOf(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
-        } else {
-            for (int i = 0; i < tags.length; i++) {
-                newTags[i] = allTags[Integer.valueOf(tags[i])];
-            }
-        }
-
         //set data
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
@@ -87,27 +68,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.publisherNameTW.setText("@" + username);
         // TODO resim eklemeyi yap holder.publisherPP.setImageResource();
 
-        if (newTags[0].equals("")) {
-            holder.topicTagTW1.setVisibility(View.INVISIBLE);
-        } else {
-            if (tags[0].equals("0")) {
-                holder.topicTagTW1.setVisibility(View.INVISIBLE);
-            } else {
-                holder.topicTagTW1.setText(newTags[0]);
-            }
-        }
-
-        if (newTags[1].equals("")) {
-            holder.topicTagTW2.setVisibility(View.INVISIBLE);
-        } else {
-            holder.topicTagTW2.setText(newTags[1]);
-        }
-
-        if (newTags[2].equals("")) {
-            holder.topicTagTW3.setVisibility(View.INVISIBLE);
-        } else {
-            holder.topicTagTW3.setText(newTags[2]);
-        }
+        convertStringTagsToRealTags(holder, pTags);
 
 
         //if there is no image
@@ -191,6 +152,49 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         });
 
 
+    }
+
+    private void convertStringTagsToRealTags(@NonNull MyHolder holder, String pTags) {
+        String[] newTags = new String[3];
+        newTags[0] = "";
+        newTags[1] = "";
+        newTags[2] = "";
+
+
+        String[] tags = pTags.split(",");
+        String[] allTags = MainActivity.getAllTags();
+
+        if (tags.length == 0) {
+            newTags[0] = "";
+        } else if (tags.length == 1) {
+            newTags[0] = allTags[Integer.valueOf(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
+        } else {
+            for (int i = 0; i < tags.length; i++) {
+                newTags[i] = allTags[Integer.valueOf(tags[i])];
+            }
+        }
+
+        if (newTags[0].equals("")) {
+            holder.topicTagTW1.setVisibility(View.INVISIBLE);
+        } else {
+            if (tags[0].equals("0")) {
+                holder.topicTagTW1.setVisibility(View.INVISIBLE);
+            } else {
+                holder.topicTagTW1.setText(newTags[0]);
+            }
+        }
+
+        if (newTags[1].equals("")) {
+            holder.topicTagTW2.setVisibility(View.INVISIBLE);
+        } else {
+            holder.topicTagTW2.setText(newTags[1]);
+        }
+
+        if (newTags[2].equals("")) {
+            holder.topicTagTW3.setVisibility(View.INVISIBLE);
+        } else {
+            holder.topicTagTW3.setText(newTags[2]);
+        }
     }
 
     @Override
