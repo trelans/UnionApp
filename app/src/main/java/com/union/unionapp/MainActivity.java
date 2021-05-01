@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
             tagsStatus[1] = false;
             tagsStatus[2] = false;
 
-            saveTagsButton.setEnabled(false);
+            //saveTagsButton.setEnabled(false);
 
             tagsArray = new AppCompatButton[]{tagButton1, tagButton2, tagButton3};
             Spinner tagSpinner = myDialog.findViewById(R.id.tagSpinner);
@@ -495,7 +495,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < tagsStatus.length; i++) {
                         tagsStatus[i] = false;
                     }
-                    saveTagsButton.setEnabled(false);
+                    //saveTagsButton.setEnabled(false);
                     //tagSpinner.setClickable( true );
                     setAllSettingsTagsInvisible();
                     setTagsSaved(false);
@@ -507,26 +507,31 @@ public class MainActivity extends AppCompatActivity {
             saveTagsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (i[0] == 3) {
+                        saveTagsButton.setError(null);
+                        String tagIndexes = "";
 
-                    String tagIndexes = "";
-
-                    for ( int k = 1; k < allTags.length; k++ ) {
-                        if ( allTags[ k ].equals( tagButton1.getText().toString() ) || allTags[ k ].equals( tagButton2.getText().toString() ) || allTags[ k ].equals( tagButton3.getText().toString() ) ) {
-                            tagIndexes = tagIndexes + k + ",";
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(tagButton1.getText().toString()) || allTags[k].equals(tagButton2.getText().toString()) || allTags[k].equals(tagButton3.getText().toString())) {
+                                tagIndexes = tagIndexes + k + ",";
+                            }
                         }
+
+                        if (tagIndexes.length() > 0) {
+                            StringBuilder tempString = new StringBuilder(tagIndexes);
+                            tempString.deleteCharAt(tempString.length() - 1);
+                            tagIndexes = tempString.toString();
+                        }
+
+                        DatabaseReference reference = firebaseDatabase.getReference("BilkentUniversity/Users/" + mUID);
+                        // put data within hashmap in database
+                        reference.child("tags").setValue(tagIndexes);
+
+                        Toast.makeText(getApplicationContext(), tagIndexes, Toast.LENGTH_LONG).show();
                     }
-
-                    if (tagIndexes.length() > 0) {
-                        StringBuilder tempString = new StringBuilder(tagIndexes);
-                        tempString.deleteCharAt(tempString.length() - 1);
-                        tagIndexes = tempString.toString();
+                    else {
+                        saveTagsButton.setError("3 tags must be selected!");
                     }
-
-                    DatabaseReference reference = firebaseDatabase.getReference("BilkentUniversity/Users/"+mUID);
-                    // put data within hashmap in database
-                    reference.child("tags").setValue(tagIndexes);
-
-                    Toast.makeText(getApplicationContext(), tagIndexes, Toast.LENGTH_LONG).show();
                 }
             });
 
