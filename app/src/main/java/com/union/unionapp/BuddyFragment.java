@@ -2010,11 +2010,7 @@ public class BuddyFragment extends Fragment {
         // Sending hashes to database
         userAchref.setValue(hashMap);
     }
-    // Users score will be checked and if he/she wins the achievement achievement's unique id will be added to his database
-    private void didIAchieveAny(String usersUid) {
 
-
-    }
 
 }
 

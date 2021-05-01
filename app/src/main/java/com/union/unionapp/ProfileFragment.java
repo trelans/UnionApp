@@ -3,6 +3,7 @@ package com.union.unionapp;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -367,7 +368,11 @@ public class ProfileFragment extends Fragment {
                         adapterLastAct = new AdapterLastActivities(getActivity() , LastActList);
                         // set to recycler view
                         lastActsRv.setAdapter(adapterLastAct);
-                        lastActsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        lastActsRv.setLayoutManager(linearLayoutManager);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
+
 
                     }
 
@@ -396,7 +401,10 @@ public class ProfileFragment extends Fragment {
                         adapterAchivement = new AdapterAchievements(getActivity() , AchivementList);
                         // set to recycler view
                         achsListRv.setAdapter(adapterAchivement);
-                        achsListRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        achsListRv.setLayoutManager(linearLayoutManager);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
 
                     }
 

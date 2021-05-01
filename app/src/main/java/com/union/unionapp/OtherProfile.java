@@ -287,7 +287,10 @@ public class OtherProfile extends AppCompatActivity {
                         adapterLastAct = new AdapterLastActivities(getApplicationContext() , LastActList);
                         // set to recycler view
                         lastActsRv.setAdapter(adapterLastAct);
-                        lastActsRv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        lastActsRv.setLayoutManager(linearLayoutManager);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
 
                     }
 
@@ -316,8 +319,10 @@ public class OtherProfile extends AppCompatActivity {
                         adapterAchivement = new AdapterAchievements(getApplicationContext(), AchivementList);
                         // set to recycler view
                         achsListRv.setAdapter(adapterAchivement);
-                        achsListRv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        achsListRv.setLayoutManager(linearLayoutManager);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
                     }
 
                     @Override
