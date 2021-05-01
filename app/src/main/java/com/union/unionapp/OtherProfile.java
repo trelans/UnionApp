@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class OtherProfile extends AppCompatActivity {
@@ -43,8 +46,13 @@ public class OtherProfile extends AppCompatActivity {
     String achievementLocationsWComma;
     TextView lastActsTextView;
     TextView achsTextView;
-    ListView lastActsList;
-    ListView achsListView;
+    RecyclerView lastActsRv;
+    RecyclerView achsListRv;
+    private ArrayList<ModelLastActivities> LastActList;
+    private AdapterLastActivities adapterLastAct;
+
+    private ArrayList<ModelAchievements> AchivementList;
+    private AdapterAchievements adapterAchivement;
     ImageView directMessage;
     Dialog calendarDialog;
     TextView usernameTW;
@@ -155,7 +163,7 @@ public class OtherProfile extends AppCompatActivity {
 
         calendarDialog = new Dialog(getApplicationContext());
         // Layoutu transparent yapıo
-        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         directMessage = (ImageView) findViewById(R.id.directMessage);
         lastActsTextView = (TextView) findViewById(R.id.lastActsTextView);
@@ -164,20 +172,16 @@ public class OtherProfile extends AppCompatActivity {
         achsTextView.setBackgroundTintList(null);
 
         /*Achievements için listview kısmı*/
-        achsListView = (ListView) findViewById(R.id.achsListPU);
-        lastActsList = (ListView) findViewById(R.id.lastActsListPU);
+        achsListRv = (RecyclerView) findViewById(R.id.achsListPU);
+        lastActsRv = (RecyclerView) findViewById(R.id.lastActsListPU);
 
-        CustomAdapterAchsPU customAdapterAchsPU = new CustomAdapterAchsPU(getApplicationContext(), userAchs);
-        CustomAdapterLastActsPU customAdapterLastActsPU = new CustomAdapterLastActsPU(getApplicationContext(), userActs);
 
-        achsListView.setAdapter(customAdapterAchsPU);
-        lastActsList.setAdapter(customAdapterLastActsPU);
 
-        lastActsList.setVisibility(View.VISIBLE);
-        lastActsList.setEnabled(true);
-        achsListView.setVisibility(View.INVISIBLE);
-        achsListView.setEnabled(false);
-
+        lastActsRv.setVisibility(View.VISIBLE);
+        lastActsRv.setEnabled(true);
+        achsListRv.setVisibility(View.INVISIBLE);
+        achsListRv.setEnabled(false);
+        loadLastAct();
         lastActsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,14 +189,15 @@ public class OtherProfile extends AppCompatActivity {
                     lastActsIsActive = true;
                     lastActsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     lastActsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    lastActsList.setVisibility(View.VISIBLE);
-                    lastActsList.setEnabled(true);
+                    lastActsRv.setVisibility(View.VISIBLE);
+                    lastActsRv.setEnabled(true);
 
                     achsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     achsTextView.setBackgroundTintList(null);
-                    achsListView.setVisibility(View.INVISIBLE);
-                    achsListView.setEnabled(false);
+                    achsListRv.setVisibility(View.INVISIBLE);
+                    achsListRv.setEnabled(false);
                     achsIsActive = false;
+                    loadLastAct();
 
                 }
             }
@@ -206,14 +211,15 @@ public class OtherProfile extends AppCompatActivity {
                     achsIsActive = true;
                     achsTextView.setTextColor(Color.parseColor("#FFFFFF"));
                     achsTextView.getBackground().setTint(Color.parseColor("#4D4D4D"));
-                    achsListView.setVisibility(View.VISIBLE);
-                    achsListView.setEnabled(true);
+                    achsListRv.setVisibility(View.VISIBLE);
+                    achsListRv.setEnabled(true);
 
                     lastActsTextView.setTextColor(Color.parseColor("#5F5E5D"));
                     lastActsTextView.setBackgroundTintList(null);
-                    lastActsList.setVisibility(View.INVISIBLE);
-                    lastActsList.setEnabled(false);
+                    lastActsRv.setVisibility(View.INVISIBLE);
+                    lastActsRv.setEnabled(false);
                     lastActsIsActive = false;
+                    loadAchievements();
                 }
             }
 
@@ -263,4 +269,61 @@ public class OtherProfile extends AppCompatActivity {
         return s.toString();
     }
 
+    private void loadLastAct() {
+        LastActList = new ArrayList<>();
+        DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Users/" + hisUid + "/LastActivities/");
+        databaseReferenceNotif
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        LastActList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            // get data
+                            ModelLastActivities model = ds.getValue(ModelLastActivities.class);
+                            // add to list
+                            LastActList.add(model);
+                        }
+                        // adapter
+                        adapterLastAct = new AdapterLastActivities(getApplicationContext() , LastActList);
+                        // set to recycler view
+                        lastActsRv.setAdapter(adapterLastAct);
+                        lastActsRv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void loadAchievements() {
+        AchivementList = new ArrayList<>();
+        DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Users/" + hisUid + "/Achievements/");
+        databaseReferenceNotif
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        AchivementList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            // get data
+                            ModelAchievements model = ds.getValue(ModelAchievements.class);
+                            // add to list
+                            AchivementList.add(model);
+                        }
+                        // adapter
+                        adapterAchivement = new AdapterAchievements(getApplicationContext(), AchivementList);
+                        // set to recycler view
+                        achsListRv.setAdapter(adapterAchivement);
+                        achsListRv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
 }

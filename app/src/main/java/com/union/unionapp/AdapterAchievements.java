@@ -64,7 +64,7 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         String nId = modelNotification.getnId();
         String point = modelNotification.getPoint();
         String title = modelNotification.getTitle();
-        String[] genreString = {"empty" , "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"};
+        String[] genreString = {"Admin" , "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"};
         Dialog myDialog;
         myDialog = new Dialog(context);
         myDialog.setCanceledOnTouchOutside(true);
