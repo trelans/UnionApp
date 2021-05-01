@@ -67,9 +67,9 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         String shortComment;
 
         if (anonymous.equals("1")){
-            name = "anonymous_user:";
+            name = "@anonymous_user: ";
         }else{
-            name = uName + ":";
+            name = "@" + uName + ": ";
         }
 
         shortComment = name + comment;
