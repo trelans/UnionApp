@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -151,7 +149,7 @@ public class BuddyFragment extends Fragment {
     String storagePermissions[];
 
     //user info
-    String username, email, uid, dp;
+    String username, email, uid, pp;
 
     @Nullable
     @Override
@@ -187,7 +185,8 @@ public class BuddyFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     username = "" + ds.child("username").getValue();
-                    dp = "" + ds.child("pp").getValue();
+                    pp = "" + ds.child("pp").getValue();
+                    uid = "" + ds.child("uid").getValue();
                     //email = "" + ds.child("email").getValue();
 
                 }
@@ -965,17 +964,13 @@ public class BuddyFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in
-
             email = user.getEmail();
-            username = email.split("@")[0].replace(".", "_");
-            uid = user.getUid();
-
         }
     }
 
     private void uploadData(String postTitle, String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postGender) {
         //for post-image name, post-id, post-publish-time
-      final String timeStamp = String.valueOf(System.currentTimeMillis());
+      final String timeStamp = String.valueOf(MainActivity.getServerDate());
         String filePathAndName = "Posts/" + "";
 
         if (!uri.equals("noImage")) {
@@ -998,14 +993,14 @@ public class BuddyFragment extends Fragment {
                                 //put post info
                                 hashMap.put("uid", uid); //çekememiş
                                 hashMap.put("username", username); //çekmemiş
+                                hashMap.put("uPp", pp);
                                 //hashMap.put("uEmail",email);
-                                hashMap.put("uDp", dp);
                                 hashMap.put("pDetails", postDetails);
                                 hashMap.put("pDate", postDate);
                                 hashMap.put("pHour", postTime);
                                 hashMap.put("pQuota", postQuotaStr);
                                 hashMap.put("pImage", downloadUri);
-                                hashMap.put("pTime", String.valueOf(timeStamp));
+                                hashMap.put("pTime", timeStamp);
                                 hashMap.put("pLocation", postLocation);
                                 if (!tagsToUpload.equals("")) {
                                     hashMap.put("pTags", tagsToUpload);
@@ -1110,7 +1105,7 @@ public class BuddyFragment extends Fragment {
                                 hashMap.put("pId", pUid);
 
                                 //put data in this ref
-                                reference.child(timeStamp).setValue(hashMap)
+                                reference.child(pUid).setValue(hashMap)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
@@ -1193,7 +1188,6 @@ public class BuddyFragment extends Fragment {
             hashMap.put("uid", uid);
             hashMap.put("username", username);
             hashMap.put("uEmail", email);
-            hashMap.put("uDp", dp);
             hashMap.put("pDetails", postDetails);
             hashMap.put("pDate", postDate);
             hashMap.put("pHour", postTime);

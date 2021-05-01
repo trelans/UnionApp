@@ -110,13 +110,17 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             @Override
             public boolean onLongClick(View view) {
                 Intent intent = new Intent(currentActivity, PostActivity.class);
+                intent.putExtra("pType", "Stack");
                 intent.putExtra("pTime", pTime);
                 intent.putExtra("pTitle", pTitle);
                 intent.putExtra("pDetails", pDetails);
-                intent.putExtra("upVoteNumber", upVoteNumber[0]);
-                intent.putExtra("pAnon", pAnon);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
+
+                // Dif. from buddy
+                intent.putExtra("upVoteNumber", upVoteNumber[0]);
+                intent.putExtra("pAnon", pAnon);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
                 return true;
             }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,9 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pTime = postList.get(position).getpTime();
         String hisUid = postList.get(position).getUid();
         String pTags = postList.get(position).getpTags();
+        String pGender = postList.get(position).getpGender();
+        String username = postList.get(position).getUsername();
+        String uPp = postList.get(position).getuPp();
 
         String[] newTags = new String[3];
         newTags[0] = "";
@@ -60,11 +64,9 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
         if (tags.length == 0) {
             newTags[0] = "";
-        }
-        else if (tags.length == 1) {
+        } else if (tags.length == 1) {
             newTags[0] = allTags[Integer.valueOf(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
-        }
-        else {
+        } else {
             for (int i = 0; i < tags.length; i++) {
                 newTags[i] = allTags[Integer.valueOf(tags[i])];
             }
@@ -75,38 +77,36 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.titleTextView.setText(pTitle);
         holder.dateTW.setText(pDate + " " + pHour);
         holder.zoomLinkTW.setText(pLocation);
-        holder.genderTW.setText("optional");
-        holder.quotaTW.setText(pQuota);
+        holder.genderTW.setText("Gender Pref: " + pGender);
+        holder.quotaTW.setText("Quota: " + pQuota);
+        holder.publisherNameTW.setText("@" + username);
+        // TODO resim eklemeyi yap holder.publisherPP.setImageResource();
 
-        if( newTags[0].equals("")) {
+        if (newTags[0].equals("")) {
             holder.topicTagTW1.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             if (tags[0].equals("0")) {
                 holder.topicTagTW1.setVisibility(View.INVISIBLE);
-            }
-            else {
+            } else {
                 holder.topicTagTW1.setText(newTags[0]);
             }
         }
 
-        if( newTags[1].equals("")) {
+        if (newTags[1].equals("")) {
             holder.topicTagTW2.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             holder.topicTagTW2.setText(newTags[1]);
         }
 
-        if( newTags[2].equals("")) {
+        if (newTags[2].equals("")) {
             holder.topicTagTW3.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             holder.topicTagTW3.setText(newTags[2]);
         }
 
 
         //if there is no image
-        if (pImage.equals("noImage")){
+        if (pImage.equals("noImage")) {
             //hide imageView
         }
 
@@ -130,13 +130,37 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.sendButtonIB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO mesaj kısmına iletmeyi yap
-                Toast.makeText(context, "Profile mesaj göndermeye basıldı", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent( context, ChatActivity.class);
+                Intent i = new Intent(context, ChatActivity.class);
                 i.putExtra("Hisuid", hisUid);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                 context.startActivity(i);
+            }
+        });
+
+        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent intent = new Intent(context, PostActivity.class);
+                intent.putExtra("pType", "Buddy");
+                intent.putExtra("pTime", pTime);
+                intent.putExtra("pTitle", pTitle);
+                intent.putExtra("pDetails", pDetails);
+                intent.putExtra("username", username);
+                intent.putExtra("pId", pId);
+                intent.putExtra("uPp", uPp);
+
+                //different from stack
+                intent.putExtra("pDate", pDate);
+                intent.putExtra("pHour", pHour);
+                intent.putExtra("pLocation", pLocation);
+                intent.putExtra("pQuota", pQuota);
+                intent.putExtra("pImage", pImage);
+                intent.putExtra("pGender", pGender);
+                intent.putExtra("pTags", pTags);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(intent);
+                return true;
             }
         });
 
@@ -154,7 +178,8 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         //views from custom_feed_card.xml
         ImageButton calendarIB;
         ImageButton sendButtonIB;
-        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3;
+        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3, publisherNameTW;
+        ImageView publisherPP;
         CardView cardView;
 
         public MyHolder(@NonNull View itemView) {
@@ -170,6 +195,8 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
+            publisherNameTW = itemView.findViewById(R.id.publisherNameTextView);
+            publisherPP = itemView.findViewById(R.id.publisherPp);
             topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);

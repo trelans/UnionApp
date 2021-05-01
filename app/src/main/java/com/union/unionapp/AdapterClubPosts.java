@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,8 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         String pTime = postList.get(position).getpTime();
         String hisUid = postList.get(position).getUid();
         String pTags = postList.get(position).getpTags();
+        String username = postList.get(position).getUsername();
+        String uPp = postList.get(position).getuPp();
 
         String[] newTags = new String[3];
         newTags[0] = "";
@@ -77,8 +80,11 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.titleTextView.setText(pTitle);
         holder.dateTW.setText(pDate + " " + pHour);
         holder.zoomLinkTW.setText(pLocation);
-        holder.genderTW.setText("optional");
+        holder.genderTW.setText("Optional");
         holder.quotaTW.setText(pQuota);
+        holder.publisherNameTW.setText("@" + username);
+
+
         if( newTags[0].equals("")) {
             holder.topicTagTW1.setVisibility(View.INVISIBLE);
         }
@@ -145,27 +151,25 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Dialog dialog;
-                dialog = new Dialog(context);
-                dialog.setContentView(R.layout.custom_view_club_post_popup);
-                dialog.setCanceledOnTouchOutside(true);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-                isBackgroundBlurred = true;
-                if(AdapterClubPosts.isBlurred()){
-                    WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-                     lp.dimAmount=0.0f;
-                     dialog.getWindow().setAttributes(lp);
-                     dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
 
-                    /*
-                     //WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-                    lp.alpha=0;
-                    dialog.getWindow().setAttributes(lp);
-                     */
-                }
+                Intent intent = new Intent(context, PostActivity.class);
+                intent.putExtra("pType", "Club");
+                intent.putExtra("pTime", pTime);
+                intent.putExtra("pTitle", pTitle);
+                intent.putExtra("pDetails", pDetails);
+                intent.putExtra("username", username);
+                intent.putExtra("pId", pId);
+                intent.putExtra("uPp", uPp);
 
-                //TODO tanımlamaları yap
+                //different from stack
+                intent.putExtra("pDate", pDate);
+                intent.putExtra("pHour", pHour);
+                intent.putExtra("pLocation", pLocation);
+                intent.putExtra("pQuota", pQuota);
+                intent.putExtra("pImage", pImage);
+                intent.putExtra("pTags", pTags);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(intent);
                 return true;
             }
         });
@@ -184,7 +188,8 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         //views from custom_feed_card.xml
         ImageButton calendarIB;
         ImageButton sendButtonIB;
-        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3;
+        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3, publisherNameTW;
+        ImageView publisherPP;
         CardView cardView;
 
         public MyHolder(@NonNull View itemView) {
@@ -200,6 +205,8 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
+            publisherNameTW = itemView.findViewById(R.id.publisherNameTextView);
+            publisherPP = itemView.findViewById(R.id.publisherPp);
             topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);

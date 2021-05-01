@@ -61,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class ClubsFragment extends Fragment {
 
@@ -141,7 +142,7 @@ public class ClubsFragment extends Fragment {
     String storagePermissions[];
 
     //user info
-    String username, email, uid, dp;
+    String username, email, uid, pp;
 
     @Nullable
     @Override
@@ -168,14 +169,21 @@ public class ClubsFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
 
         //get some info of the current user to include in the post
-        userDbRef = FirebaseDatabase.getInstance().getReference("Users");
-        Query query = userDbRef.orderByChild("email").equalTo(email);
-        query.addValueEventListener(new ValueEventListener() {
+        userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+        userDbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()) {
-                    username = "" + ds.child("username").getValue();
-                    dp = "" + ds.child("pp").getValue();
+                    System.out.println(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    System.out.println("test: " + FirebaseAuth.getInstance().getCurrentUser().getUid() + " key" + ds.getKey());
+                    if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        System.out.println(ds.getKey());
+                        ModelUsers user = ds.getValue(ModelUsers.class);
+                        username = user.getUsername();
+                        pp = user.getPp();
+                        uid = user.getUid();
+                        System.out.println("tamam");
+                    }
                     //email = "" + ds.child("email").getValue();
 
                 }
@@ -708,11 +716,6 @@ public class ClubsFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             //user is signed in
-
-            email = user.getEmail();
-            username = email.split("@")[0].replace(".","_");
-            uid = user.getUid();
-
         }
     }
 
@@ -743,7 +746,7 @@ public class ClubsFragment extends Fragment {
                                 hashMap.put("uid",uid); //çekememiş
                                 hashMap.put("username",username); //çekmemiş
                                 //hashMap.put("uEmail",email);
-                                hashMap.put("uDp",dp);
+                                hashMap.put("uPp", pp);
                                 hashMap.put("pDetails",postDetails);
                                 hashMap.put("pDate",postDate);
                                 hashMap.put("pHour",postTime);
@@ -939,7 +942,7 @@ public class ClubsFragment extends Fragment {
             hashMap.put("uid",uid);
             hashMap.put("username",username);
             hashMap.put("uEmail",email);
-            hashMap.put("uDp",dp);
+            hashMap.put("uDp", pp);
             hashMap.put("pDetails",postDetails);
             hashMap.put("pDate",postDate);
             hashMap.put("pHour",postTime);
@@ -1081,6 +1084,7 @@ public class ClubsFragment extends Fragment {
                                     for (DataSnapshot ds: snapshot.getChildren()){
 
                                         ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+                                        // TODO userin tagleri boş dönüp uygulama çökertiyor
                                         String[] userTags = modelUsers.getTags().split(",");
                                         String firstTag = userTags[0];
                                         String secondTag = userTags[1];

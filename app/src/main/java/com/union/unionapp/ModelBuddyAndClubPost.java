@@ -2,12 +2,12 @@ package com.union.unionapp;
 
 public class ModelBuddyAndClubPost {
     // use same name as we given while uploading posts
-    String pId, pTitle, pDate, pHour, pLocation, pQuota, pDetails, pImage, pTime, uid, uEmail, pAnon , username , pTags;
+    String pId, pTitle, pDate, pHour, pLocation, pQuota, pDetails, pImage, pTime, uid, uEmail, pAnon , username , pTags, pGender, uPp;
 
     public ModelBuddyAndClubPost() {
     }
 
-    public ModelBuddyAndClubPost(String pId, String pTitle, String pDate, String pHour, String pLocation, String pQuota, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username , String pTags) {
+    public ModelBuddyAndClubPost(String pId, String pTitle, String pDate, String pHour, String pLocation, String pQuota, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username , String pTags, String pGender, String uPp) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDate = pDate;
@@ -22,6 +22,8 @@ public class ModelBuddyAndClubPost {
         this.pAnon = pAnon;
         this.username = username;
         this.pTags = pTags;
+        this.pGender = pGender;
+        this.uPp = uPp;
     }
 
     public String getpId() {
@@ -130,5 +132,21 @@ public class ModelBuddyAndClubPost {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getpGender() {
+        return pGender;
+    }
+
+    public void setpGender(String pGender) {
+        this.pGender = pGender;
+    }
+
+    public String getuPp() {
+        return uPp;
+    }
+
+    public void setuPp(String uPp) {
+        this.uPp = uPp;
     }
 }

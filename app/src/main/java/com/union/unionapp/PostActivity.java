@@ -55,6 +55,14 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     String pAnon;
     String username;
     String pId;
+    String pDate;
+    String pHour;
+    String pLocation;
+    String pQuota;
+    String pImage;
+    String pGender;
+    String pTags;
+    String pType;
     int previousMargin;
 
     @Override
@@ -64,13 +72,45 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         commentCardView = findViewById(R.id.commentCard);
         postCardView = findViewById(R.id.cardView);
 
+        TextView relatedTagTW = findViewById(R.id.relatedTagTextView);
+        //TextView pTitleTW = findViewById(R.id.pTitle);
+        TextView pUserNameTW = findViewById(R.id.userNameTextView);
+        TextView upNumberTW = findViewById(R.id.upNumberTextView);
+        TextView questionContentTW = findViewById(R.id.askedQuestionTextView);
+        //TextView pPostedTimeTW = findViewById(R.id.pPostedTime);
+        ImageView addPhotoIV = findViewById(R.id.imageViewAddPhoto);
+        EditText commentET = findViewById(R.id.answerEditText);
+        CheckBox isAnonCB = findViewById(R.id.anonymCheckBox);
+        ImageView sendButton = findViewById(R.id.sendButtonIB);
+        LinearLayoutCompat clickToOpenCardLL = findViewById(R.id.openCardLL);
+        ImageView backButton = findViewById(R.id.backButton);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            pType = extras.getString("pType","0");
+            if (pType.equals("Buddy") || pType.equals("Club")){
+                if (pType.equals("Buddy")){
+                    pGender = extras.getString("pGender","0");
+                }
+                pDate = extras.getString("pDate","0");
+                pHour = extras.getString("pHour","0");
+                pLocation = extras.getString("pLocation","0");
+                pQuota = extras.getString("pQuota","0");
+                pImage = extras.getString("pImage","0");
+                pTags = extras.getString("pTags","0");
+                pAnon = "0";
+                upNumberTW.setVisibility(View.INVISIBLE);
+            }else if (pType.equals("Stack")){
+                upVoteNumber = extras.getString("upVoteNumber", "0");
+                pAnon = extras.getString("pAnon", "0");
+                upNumberTW.setText(upVoteNumber);
+            }else{
+                Toast.makeText(this, "Burada bir hata var Ömere haber ver", Toast.LENGTH_SHORT).show();
+            }
+
             pTime = extras.getString("pTime", "0");
             pTitle = extras.getString("pTitle", "0");
             pDetails = extras.getString("pDetails", "0");
-            upVoteNumber = extras.getString("upVoteNumber", "0");
-            pAnon = extras.getString("pAnon", "0");
             username = extras.getString("username", "0");
             pId = extras.getString("pId", "0");
         }
@@ -90,19 +130,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Adding comment...");
 
-        TextView relatedTagTW = findViewById(R.id.relatedTagTextView);
-        //TextView pTitleTW = findViewById(R.id.pTitle);
-        TextView pUserNameTW = findViewById(R.id.userNameTextView);
-        TextView upNumberTW = findViewById(R.id.upNumberTextView);
-        TextView questionContentTW = findViewById(R.id.askedQuestionTextView);
-        //TextView pPostedTimeTW = findViewById(R.id.pPostedTime);
-        ImageView addPhotoIV = findViewById(R.id.imageViewAddPhoto);
-        EditText commentET = findViewById(R.id.answerEditText);
-        CheckBox isAnonCB = findViewById(R.id.anonymCheckBox);
-        ImageView sendButton = findViewById(R.id.sendButtonIB);
-        LinearLayoutCompat clickToOpenCardLL = findViewById(R.id.openCardLL);
-
-
         //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(pTime));
@@ -111,7 +138,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         //set data
         //pTitleTW.setText(pTitle);
         questionContentTW.setText(pDetails);
-        upNumberTW.setText(upVoteNumber);
         //pPostedTimeTW.setText(pTime);
         relatedTagTW.setText("#Math-102"); //TODO databaseden çek
         if (!pAnon.equals("1")) {
@@ -139,6 +165,12 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         });
 
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
