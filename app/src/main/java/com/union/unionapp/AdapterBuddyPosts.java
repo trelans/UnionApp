@@ -2,6 +2,9 @@ package com.union.unionapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,6 +91,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
          */
 
         holder.calendarIB.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 //TODO calendar ekleme işlemini yap
@@ -94,22 +100,34 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 //Kutay's calendar code
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 String uid = mAuth.getCurrentUser().getUid();
-                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users/"+ uid );
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid);
 
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("pType", "Buddy");
                 hashMap.put("pTitle", pTitle);
-                hashMap.put("pHour", pHour );
-                hashMap.put("pDate", pDate );
+                hashMap.put("pHour", pHour);
+                hashMap.put("pDate", pDate);
                 hashMap.put("pId", pId);
                 hashMap.put("username", username);
 
-                String fixedDate = pDate.replace("/" , "_");
+                String fixedDate = pDate.replace("/", "_");
                 userRef.child("Calendar").child(fixedDate).child(pId).setValue(hashMap);
 
                 //User calender bitişi
 
-                //TODO Omer's calendar code
+                String[] calendarDate = pDate.split("/");
+                String[] calendarTime = pHour.split(":");
+                Calendar cal = Calendar.getInstance();
+                cal.set(Integer.parseInt(calendarDate[2]), Integer.parseInt(calendarDate[1]) - 1, Integer.parseInt(calendarDate[0]), Integer.parseInt(calendarTime[1]), Integer.parseInt(calendarTime[0]));
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", cal.getTimeInMillis());
+                intent.putExtra("eventLocation", pLocation);
+                //TODO etkinlik bitiş saati intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+                intent.putExtra("title", "@" + username + "'s Event");
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, pTitle);
+                context.startActivity(intent);
+
 
             }
         });

@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -134,6 +138,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
          */
 
         holder.calendarIB.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 //TODO calendar ekleme işlemini yap
@@ -157,7 +162,19 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
 
                 //User calender bitişi
 
-                //TODO Ömer's Calendar code
+                String[] calendarDate = pDate.split("/");
+                String[] calendarTime = pHour.split(":");
+                Calendar cal = Calendar.getInstance();
+                cal.set(Integer.parseInt(calendarDate[2]), Integer.parseInt(calendarDate[1]) - 1, Integer.parseInt(calendarDate[0]), Integer.parseInt(calendarTime[1]), Integer.parseInt(calendarTime[0]));
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", cal.getTimeInMillis());
+                intent.putExtra("eventLocation", pLocation);
+                //TODO etkinlik bitiş saati intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+                intent.putExtra("title", "@" + username + "'s Event");
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, pTitle);
+                context.startActivity(intent);
+
 
             }
         });

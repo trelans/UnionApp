@@ -231,7 +231,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
 
         pTitleTW.setText(pTitle);
 
-        if (pImage != null &&!pImage.equals("noImage")) {
+        if (pImage != null && !pImage.equals("noImage") && !pImage.equals("")) {
             //TODO imageı çekme işlemini yap
         } else {
             postImageIW.getLayoutParams().height = 0;

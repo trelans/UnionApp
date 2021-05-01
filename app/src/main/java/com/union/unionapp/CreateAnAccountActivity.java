@@ -153,6 +153,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                     } else {
                         if (!password.equals(tw_password_Auth.getText().toString().trim())) {
                             tw_password_Auth.setError("Passwords don't match");
+                            tw_password_Auth.setBackgroundResource(R.drawable.edittext_border_template);
                             tick5.setVisibility(View.INVISIBLE);
                             isThereError = true;
                             bt_signUp.setEnabled(false);
