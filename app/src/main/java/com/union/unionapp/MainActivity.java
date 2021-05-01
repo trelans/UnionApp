@@ -542,29 +542,38 @@ public class MainActivity extends AppCompatActivity {
             changePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            String password = newPassword.getText().toString();
-                            if (password.equals(currentPassword.getText().toString())) {
-                                Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
-                            } else if (password.length() >= 6) {
-                                mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
-                                Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
-                                currentPassword.setText("");
-                                newPassword.setText("");
-                            } else {
-                                Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
-                            }
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MainActivity.this, "Current password is wrong!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    if (newPassword.getText().toString().trim().isEmpty() || currentPassword.getText().toString().trim().isEmpty() ) {
+                        newPassword.setError("Cannot be left empty!");
+                        currentPassword.setError("Cannot be left empty!");
+                    }
+                    else {
+                        mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                String password = newPassword.getText().toString();
+
+                                if (password.equals(currentPassword.getText().toString())) {
+                                    Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
+                                } else if (password.length() >= 6) {
+                                    mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
+                                    Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
+                                    currentPassword.setText("");
+                                    newPassword.setText("");
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this, "Current password is wrong!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
+
             });
 
             logout.setOnClickListener(new View.OnClickListener() {
