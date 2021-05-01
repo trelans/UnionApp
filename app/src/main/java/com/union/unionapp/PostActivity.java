@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
@@ -63,7 +64,22 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     String pGender;
     String pTags;
     String pType;
+    String source;
+    DatabaseReference postRef;
     int previousMargin;
+
+    TextView relatedTagTW;
+    TextView pUserNameTW;
+    TextView upNumberTW;
+    TextView questionContentTW;
+    TextView pPostedTimeTW;
+    ImageView addPhotoIV;
+    EditText commentET;
+    CheckBox isAnonCB;
+    ImageView sendButton;
+    LinearLayoutCompat clickToOpenCardLL;
+    ImageView backButton;
+    TextView pTitleTW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,47 +88,91 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         commentCardView = findViewById(R.id.commentCard);
         postCardView = findViewById(R.id.cardView);
 
-        TextView relatedTagTW = findViewById(R.id.relatedTagTextView);
-        //TextView pTitleTW = findViewById(R.id.pTitle);
-        TextView pUserNameTW = findViewById(R.id.userNameTextView);
-        TextView upNumberTW = findViewById(R.id.upNumberTextView);
-        TextView questionContentTW = findViewById(R.id.askedQuestionTextView);
-        //TextView pPostedTimeTW = findViewById(R.id.pPostedTime);
-        ImageView addPhotoIV = findViewById(R.id.imageViewAddPhoto);
-        EditText commentET = findViewById(R.id.answerEditText);
-        CheckBox isAnonCB = findViewById(R.id.anonymCheckBox);
-        ImageView sendButton = findViewById(R.id.sendButtonIB);
-        LinearLayoutCompat clickToOpenCardLL = findViewById(R.id.openCardLL);
-        ImageView backButton = findViewById(R.id.backButton);
+        relatedTagTW = findViewById(R.id.relatedTagTextView);
+        pTitleTW = findViewById(R.id.pTitle);
+        pUserNameTW = findViewById(R.id.userNameTextView);
+        upNumberTW = findViewById(R.id.upNumberTextView);
+        questionContentTW = findViewById(R.id.askedQuestionTextView);
+        pPostedTimeTW = findViewById(R.id.pPostedTime);
+        addPhotoIV = findViewById(R.id.imageViewAddPhoto);
+        commentET = findViewById(R.id.answerEditText);
+        isAnonCB = findViewById(R.id.anonymCheckBox);
+        sendButton = findViewById(R.id.sendButtonIB);
+        clickToOpenCardLL = findViewById(R.id.openCardLL);
+        backButton = findViewById(R.id.backButton);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            pType = extras.getString("pType","0");
-            if (pType.equals("Buddy") || pType.equals("Club")){
-                if (pType.equals("Buddy")){
-                    pGender = extras.getString("pGender","0");
-                }
-                pDate = extras.getString("pDate","0");
-                pHour = extras.getString("pHour","0");
-                pLocation = extras.getString("pLocation","0");
-                pQuota = extras.getString("pQuota","0");
-                pImage = extras.getString("pImage","0");
-                pTags = extras.getString("pTags","0");
-                pAnon = "0";
-                upNumberTW.setVisibility(View.INVISIBLE);
-            }else if (pType.equals("Stack")){
-                upVoteNumber = extras.getString("upVoteNumber", "0");
-                pAnon = extras.getString("pAnon", "0");
-                upNumberTW.setText(upVoteNumber);
-            }else{
-                Toast.makeText(this, "Burada bir hata var Ömere haber ver", Toast.LENGTH_SHORT).show();
-            }
-
-            pTime = extras.getString("pTime", "0");
-            pTitle = extras.getString("pTitle", "0");
-            pDetails = extras.getString("pDetails", "0");
-            username = extras.getString("username", "0");
+            source = extras.getString("source", "inside");
+            pType = extras.getString("pType", "0");
             pId = extras.getString("pId", "0");
+            //TODO şuradaki yapıyla database efficiencysi artırabilirsin
+            if (source.equals("outside")) {
+                postRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/" + pType + "Posts/" + pId);
+                postRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("Key " + snapshot.getKey() + "Value " + snapshot.getValue());
+                        if (pType.equals("Stack")) {
+                            ModelStackPost modelStackPost = snapshot.getValue(ModelStackPost.class);
+                            assert modelStackPost != null;
+                            upVoteNumber = modelStackPost.pUpvoteNumber;
+                            pAnon = modelStackPost.pAnon;
+                            upNumberTW.setText(upVoteNumber);
+                            pTime = modelStackPost.pTime;
+                            pTitle = modelStackPost.pTitle;
+                            pDetails = modelStackPost.pDetails;
+                            username = modelStackPost.username;
+                        } else {
+                            ModelBuddyAndClubPost modelBuddyAndClubPost = snapshot.getValue(ModelBuddyAndClubPost.class);
+                            if (pType.equals("Buddy")) {
+                                assert modelBuddyAndClubPost != null;
+                                pGender = modelBuddyAndClubPost.getpGender();
+                            }
+                            assert modelBuddyAndClubPost != null;
+                            pDate = modelBuddyAndClubPost.pDate;
+                            pHour = modelBuddyAndClubPost.pHour;
+                            pLocation = modelBuddyAndClubPost.pLocation;
+                            pQuota = modelBuddyAndClubPost.pQuota;
+                            pImage = modelBuddyAndClubPost.pImage;
+                            pTags = modelBuddyAndClubPost.pTags;
+                            pAnon = "0";
+                            upNumberTW.setVisibility(View.INVISIBLE);
+                            pTime = modelBuddyAndClubPost.pTime;
+                            pTitle = modelBuddyAndClubPost.pTitle;
+                            pDetails = modelBuddyAndClubPost.pDetails;
+                            username = modelBuddyAndClubPost.username;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            } else {
+                if (pType.equals("Buddy") || pType.equals("Club")) {
+                    if (pType.equals("Buddy")) {
+                        pGender = extras.getString("pGender", "0");
+                    }
+                    pDate = extras.getString("pDate", "0");
+                    pHour = extras.getString("pHour", "0");
+                    pLocation = extras.getString("pLocation", "0");
+                    pQuota = extras.getString("pQuota", "0");
+                    pImage = extras.getString("pImage", "0");
+                    pTags = extras.getString("pTags", "0");
+                    pAnon = "0";
+                    upNumberTW.setVisibility(View.INVISIBLE);
+                } else if (pType.equals("Stack")) {
+                    upVoteNumber = extras.getString("upVoteNumber", "0");
+                    pAnon = extras.getString("pAnon", "0");
+                    upNumberTW.setText(upVoteNumber);
+                }
+                pTime = extras.getString("pTime", "0");
+                pTitle = extras.getString("pTitle", "0");
+                pDetails = extras.getString("pDetails", "0");
+                username = extras.getString("username", "0");
+            }
         }
 
         //recycler view and its properties
@@ -127,9 +187,20 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         //init post list
         commentList = new ArrayList<>();
 
-        ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage("Adding comment...");
+        if (source.equals("outside")){
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    loadView();
+                }
+            }, 1000);
+        }else{
+            loadView();
+        }
 
+    }
+
+    private void loadView() {
         //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(pTime));
@@ -139,7 +210,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         //pTitleTW.setText(pTitle);
         questionContentTW.setText(pDetails);
         //pPostedTimeTW.setText(pTime);
-        relatedTagTW.setText("#Math-102"); //TODO databaseden çek
+//        relatedTagTW.setText("#Math-102"); //TODO databaseden çek
         if (!pAnon.equals("1")) {
             pUserNameTW.setText(username);
         } else {
@@ -147,7 +218,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         }
         //TODO comment görünümünde foto gösterme üzerine düşün
         //TODO user info gerekirse 23. video 32.dakikanın başına git
-
 
 
         commentET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -220,7 +290,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     //added
-                                    pd.dismiss();
                                             /*
                                             Toast.makeText(context, "Comment Added...", Toast.LENGTH_SHORT).show();
                                             commentET.setText("");
@@ -234,7 +303,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     //failed, not added
-                                    pd.dismiss();
                                     Toast.makeText(PostActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -267,10 +335,11 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             }
         });
 
-
         // Detect touched area
-        detector = new SimpleGestureFilter(PostActivity.this, this);
+        detector = new SimpleGestureFilter(PostActivity.this, PostActivity.this);
+
     }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent me) {
@@ -316,11 +385,11 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         System.out.println("asdasdas");
     }
 
-    private void openOrCloseCard(){
+    private void openOrCloseCard() {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
-        if (layoutParams.topMargin == 0){
+        if (layoutParams.topMargin == 0) {
             layoutParams.topMargin = previousMargin;
-        }else{
+        } else {
             previousMargin = layoutParams.topMargin;
             layoutParams.topMargin = 0;
         }

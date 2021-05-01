@@ -1,8 +1,7 @@
 package com.union.unionapp;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,73 +11,58 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-import com.union.unionapp.notifications.Data;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-/*
-public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.HolderNotification>{
+
+public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.HolderCalendar>{
 
     private Context context;
-    private ArrayList<ModelLastActivities> notificationsList;
+    private ArrayList<ModelCalendar> calendarList;
     private FirebaseAuth firebaseAuth;
 
-    public AdapterCalendar(Context context, ArrayList<ModelCalendar> notificationsList) {
+    public AdapterCalendar(Context context, ArrayList<ModelCalendar> calendarList) {
         this.context = context;
-        this.notificationsList = notificationsList;
+        this.calendarList = calendarList;
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
     @Override
-    public HolderNotification onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HolderCalendar onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflate view row_notification
         View view = LayoutInflater.from(context).inflate(R.layout.row_calendar, parent,false);
-        return new HolderNotification(view);
+        return new HolderCalendar(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HolderNotification holder, int position) {
+    public void onBindViewHolder(@NonNull HolderCalendar holder, int position) {
         // get and set data to views
 
         // get data
-        final  ModelLastActivities modelNotification = notificationsList.get(position);
-        String name = modelNotification.getsName();
-        String notification = modelNotification.getNotification();
-        String timestamp = modelNotification.getTimestamp();
-        String senderUid = modelNotification.getsUid();
-        String pId = modelNotification.getpId();
-        String type = modelNotification.getType();
+        final  ModelCalendar modelCalendar = calendarList.get(position);
+        String username = modelCalendar.getUsername();
+        String postId = modelCalendar.pId;
+        String postTitle = modelCalendar.getpTitle();
+        String postType = modelCalendar.getpType();
+        String date = modelCalendar.getpDate();
+        String hour = modelCalendar.getpHour();
         // conver timestamp to dd//mm/yyyy hh:mm
-
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(Long.parseLong(timestamp));
-        String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
 
 
 
 
         // set to views
-        holder.AchnotificationTv.setText(notification);
-        holder.AchtimeTv.setText(dateTime);
-        if (type.equals("Buddy")) {
+        holder.calendartitletv.setText("@"+username + ": " +postTitle);
+        holder.calendartimeTv.setText(hour);
+        if (postType.equals("Buddy")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
         }
-        else if (type.equals("Club")) {
+        else if (postType.equals("Club")) {
             holder.avatarIv.setImageResource(R.drawable.club_icon);
         }
         else {
@@ -89,7 +73,12 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent( context, PostActivity.class);
+                i.putExtra("pType",postType);
+                i.putExtra("source", "Outside");
+                i.putExtra("pId", postId);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(i);
             }
         });
 
@@ -99,22 +88,23 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
 
     @Override
     public int getItemCount() {
-        return notificationsList.size();
+        return calendarList.size();
     }
 
     // holder class for views of row_notifications.xlm
-    class HolderNotification extends RecyclerView.ViewHolder {
+    class HolderCalendar extends RecyclerView.ViewHolder {
         // declare views
         ImageView avatarIv;
-        TextView  AchnotificationTv, AchtimeTv;
+        TextView  calendartitletv, calendartimeTv;
 
-        public HolderNotification(@NonNull View itemView) {
+        public HolderCalendar(@NonNull View itemView) {
             super(itemView);
 
             //init views
-            avatarIv = itemView.findViewById(R.id.AchavatarIv);
-            AchnotificationTv = itemView.findViewById(R.id.AchnotificationTv);
-            AchtimeTv = itemView.findViewById(R.id.AchtimeTv);
+            avatarIv = itemView.findViewById(R.id.calendariconIv);
+            calendartitletv = itemView.findViewById(R.id.calendartitleTv);
+            calendartimeTv = itemView.findViewById(R.id.calendarTimeTv);
+
 
 
 
@@ -126,4 +116,3 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
 
 }
 
-*/
