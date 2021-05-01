@@ -75,7 +75,7 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
             public void onClick(View v) {
                 Intent i = new Intent( context, PostActivity.class);
                 i.putExtra("pType",postType);
-                i.putExtra("source", "Outside");
+                i.putExtra("source", "outside");
                 i.putExtra("pId", postId);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(i);
