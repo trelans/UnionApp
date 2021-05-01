@@ -216,10 +216,10 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         String pPostedTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
         System.out.println(pPostedTime);
 
-        postDateTW.setText("Posted on:" + pPostedTime);
+        postDateTW.setText("Posted on: " + pPostedTime);
         if (!pType.equals("Stack")) {
-            postLocationTW.setText("Location: " + pLocation);
-            pGenderTW.setText("Gender Preference: " + pGender);
+            postLocationTW.setText("Location:  " + pLocation);
+            pGenderTW.setText("Gender Preference:  " + pGender);
             pQuotaTW.setText("Quota: " + pQuota);
             upNumberTW.setVisibility(View.INVISIBLE);
         } else {

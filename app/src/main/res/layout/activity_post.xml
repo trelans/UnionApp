@@ -266,7 +266,7 @@
                 android:layout_height="2dp"
                 android:layout_marginTop="70dp"
                 android:layout_marginEnd="0dp"
-                android:background="#878080" />
+                android:background="@color/black" />
 
             <ScrollView
                 android:layout_width="wrap_content"
@@ -300,9 +300,9 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/edittext_border_template"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="Posted On: "
                         android:textSize="12sp" />
 
@@ -314,8 +314,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/edittext_border_template"
                         android:gravity="start"
+                        android:textColor="@color/black"
                         android:padding="5dp"
                         android:text="Location:"
                         android:textSize="12sp" />
@@ -328,9 +328,9 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/edittext_border_template"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="Gender Preference:"
                         android:textSize="12sp" />
 
@@ -338,13 +338,13 @@
                         android:id="@+id/postQuotaTW"
                         android:layout_width="90dp"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_alignParentEnd="true"
-                        android:background="@drawable/edittext_border_template"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="Quota:"
                         android:textSize="12sp" />
 
