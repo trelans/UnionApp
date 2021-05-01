@@ -227,20 +227,6 @@
                     android:text="\@username"
                     android:textSize="20dp" />
 
-                <TextView
-                    android:id="@+id/upNumberTextView"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/bg_up_number_round"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:text="21"
-                    android:textStyle="bold"
-                    android:paddingTop="8dp"
-                    android:textAlignment="center"
-                    android:textSize="16sp" />
-
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -253,13 +239,57 @@
                 android:background="#878080" />
 
             <TextView
-                android:id="@+id/postTitleTW"
-                android:layout_width="match_parent"
+                android:id="@+id/upNumberTextView"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="153dp"
+                android:layout_toEndOf="@id/postDateTW"
+                android:layout_below="@+id/cizgi"
+                android:background="@drawable/bg_up_number_round"
+                android:fontFamily="@font/myriad_pro_regular"
+                android:text="21"
+                android:textStyle="bold"
+                android:paddingTop="8dp"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/postDateTW"
+                android:layout_width="500px"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cizgi"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:background="@drawable/edittext_border_template"
+                android:gravity="start"
+                android:text="Posted On: "
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/postLocation"
+                android:layout_width="500px"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cizgi"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/edittext_border_template"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="Posted On: "
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/postTitleTW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/postDateTW"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
                 android:padding="5dp"
                 android:background="@drawable/edittext_border_template"
                 android:gravity="start"
