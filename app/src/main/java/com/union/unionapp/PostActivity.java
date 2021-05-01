@@ -79,6 +79,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     ImageView sendButton;
     LinearLayoutCompat clickToOpenCardLL;
     ImageView backButton;
+    TextView pTitleTW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         postCardView = findViewById(R.id.cardView);
 
         relatedTagTW = findViewById(R.id.relatedTagTextView);
-        TextView pTitleTW = findViewById(R.id.pTitle);
+        pTitleTW = findViewById(R.id.pTitle);
         pUserNameTW = findViewById(R.id.userNameTextView);
         upNumberTW = findViewById(R.id.upNumberTextView);
         questionContentTW = findViewById(R.id.askedQuestionTextView);
@@ -209,7 +210,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         //pTitleTW.setText(pTitle);
         questionContentTW.setText(pDetails);
         //pPostedTimeTW.setText(pTime);
-        relatedTagTW.setText("#Math-102"); //TODO databaseden çek
+//        relatedTagTW.setText("#Math-102"); //TODO databaseden çek
         if (!pAnon.equals("1")) {
             pUserNameTW.setText(username);
         } else {
