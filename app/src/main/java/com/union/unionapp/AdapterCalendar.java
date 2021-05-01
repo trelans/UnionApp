@@ -1,6 +1,7 @@
 package com.union.unionapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,7 +73,12 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent i = new Intent( context, PostActivity.class);
+                i.putExtra("pType",postType);
+                i.putExtra("source", "Outside");
+                i.putExtra("pId", postId);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(i);
             }
         });
 

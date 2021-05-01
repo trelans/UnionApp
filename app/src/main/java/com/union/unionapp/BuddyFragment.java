@@ -431,6 +431,9 @@ public class BuddyFragment extends Fragment {
                         if (postHeadline.isEmpty()) {
                             postHeadlineEt.setError("the title section cannot be left empty.");
                         }
+                        else if (i[0] == 0) {
+                            ((TextView) tagSpinner.getSelectedView()).setError("Post must have at least 1 tag");
+                        }
                         else {
                             timestamp = String.valueOf(MainActivity.getServerDate());
                             String postDetails = postDetailsEt.getText().toString().trim();
