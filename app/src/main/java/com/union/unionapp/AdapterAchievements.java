@@ -94,6 +94,9 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         if (genre == 1) { //Math
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_rookie);
+                //bunu diğerlerine de eklersn knkss // TODO YUNUS
+                achicon.setImageResource(R.drawable.medal_math_rookie);
+                //
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_pro);
 
@@ -129,6 +132,7 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         } else if (genre == 3) { //Sport
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_sport_rookie);
+                achicon.setImageResource(R.drawable.medal_sport_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_sport_pro);
