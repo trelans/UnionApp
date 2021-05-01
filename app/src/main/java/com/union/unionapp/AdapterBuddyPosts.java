@@ -54,7 +54,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pHour = postList.get(position).getpHour();
         String pLocation = postList.get(position).getpLocation();
         String pQuota = postList.get(position).getpQuota();
-        String pDetails = postList.get(position).getpDetails();
+        String pDetails = "      " + postList.get(position).getpDetails();
         String pImage = postList.get(position).getpImage();
         String pTime = postList.get(position).getpTime();
         String hisUid = postList.get(position).getUid();

@@ -56,12 +56,28 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="43dp"
                 android:autoLink="all"
-                android:background="@drawable/bg_only_top_rounded"
+                android:textColor="@color/black"
+                android:textAlignment="center"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:paddingLeft="4dp"
                 android:paddingTop="2dp"
                 android:text="MATH101 Question"
                 android:textSize="12sp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_below="@+id/contentTW"
+                android:background="#000000" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_above="@+id/contentTW"
+                android:background="#000000" />
 
             <TextView
                 android:id="@+id/contentTW"
@@ -71,10 +87,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="20dp"
                 android:autoLink="all"
-                android:background="@drawable/bg_only_bottom_rounded"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:paddingLeft="4dp"
                 android:paddingTop="2dp"
@@ -90,11 +105,12 @@
                 android:layout_marginStart="280dp"
                 android:layout_marginTop="6dp"
                 android:background="@drawable/bg_up_number_round"
-                android:fontFamily="@font/myriad_pro_regular"
-                android:text="21"
+                android:fontFamily="sans-serif-black"
                 android:paddingTop="5dp"
+                android:text="21"
                 android:textAlignment="center"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/upButtonImageView"

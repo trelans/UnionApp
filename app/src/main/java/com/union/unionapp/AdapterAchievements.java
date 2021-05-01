@@ -90,26 +90,153 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
                 // "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"
                        1          2         3           4           5           6       7           8
    */
-         // Math
-        if (genre == 1) {
+
+        if (genre == 1) { //Math
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_rookie);
-            }
-            else if (lvl == 2) {
+                //bunu diğerlerine de eklersn knkss // TODO YUNUS
+                achicon.setImageResource(R.drawable.medal_math_rookie);
+                //
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_math_pro);
 
-            }
-            else if (lvl == 3) {
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_math_titan);
 
-            }
-            else if (lvl == 4) {
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_math_maestro);
 
-            }
-            else {
+            } else {
                 // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_math_slayer);
             }
 
-        }
-        else if (genre == 2) {
+        } else if (genre == 2) { //Career
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_career_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_career_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_career_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_career_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_career_slayer);
+            }
+
+        } else if (genre == 3) { //Sport
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_sport_rookie);
+                achicon.setImageResource(R.drawable.medal_sport_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_sport_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_sport_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_sport_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_sport_slayer);
+            }
+
+        } else if (genre == 4) { //Technology
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_tech_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_tech_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_tech_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_tech_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_tech_slayer);
+            }
+
+        } else if (genre == 5) { //Social
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_social_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_social_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_social_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_social_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_social_slayer);
+            }
+
+        } else if (genre == 6) { //English
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_english_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_english_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_english_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_english_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_english_slayer);
+            }
+
+        } else if (genre == 7) { //Turkish
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_turkish_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_turkish_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_turkish_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_turkish_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_turkish_slayer);
+            }
+
+        } else { //8. Study
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_study_rookie);
+
+            } else if (lvl == 2) {
+                holder.avatarIv.setImageResource(R.drawable.medal_study_pro);
+
+            } else if (lvl == 3) {
+                holder.avatarIv.setImageResource(R.drawable.medal_study_titan);
+
+            } else if (lvl == 4) {
+                holder.avatarIv.setImageResource(R.drawable.medal_study_maestro);
+
+            } else {
+                // level 5
+                holder.avatarIv.setImageResource(R.drawable.medal_study_slayer);
+            }
 
         }
 
