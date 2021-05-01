@@ -14,6 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.MyHolder> {
@@ -124,6 +129,26 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             public void onClick(View view) {
                 //TODO calendar ekleme işlemini yap
                 Toast.makeText(context, "calendara basıldı", Toast.LENGTH_SHORT).show();
+
+                //Kutay's calendar code
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                String uid = mAuth.getCurrentUser().getUid();
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users/"+ uid );
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("pType", "Buddy");
+                hashMap.put("pTitle", pTitle);
+                hashMap.put("pHour", pHour );
+                hashMap.put("pDate", pDate );
+                hashMap.put("pId", pId);
+                String caluid = userRef.push().getKey();
+
+                userRef.child("Calendar").child(caluid).setValue(hashMap);
+
+                //User calender bitişi
+
+                //TODO Omer's calendar code
+
             }
         });
 
