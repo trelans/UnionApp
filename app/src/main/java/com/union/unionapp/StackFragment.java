@@ -14,7 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,6 +174,27 @@ public class StackFragment extends Fragment {
                 postDetailsEt = stackDialog.findViewById(R.id.postDetailsEt);
                 anonym = stackDialog.findViewById(R.id.checkBoxAnonymous);
                 postTitleEt = stackDialog.findViewById(R.id.editTextHeadLine);
+
+                sendButtonIv.setEnabled(false);
+
+                postTitleEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!postTitleEt.getText().toString().trim().isEmpty()) {
+                            sendButtonIv.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
 
 
                 addPhotoIv.setOnClickListener(new View.OnClickListener() {

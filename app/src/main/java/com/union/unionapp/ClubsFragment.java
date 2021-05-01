@@ -17,7 +17,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -275,6 +277,8 @@ public class ClubsFragment extends Fragment {
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
                 postTitleEt = clubDialog.findViewById(R.id.editTextHeadLine);
 
+                sendButtonIv.setEnabled(false);
+
                 //init tags
                 tag1 = clubDialog.findViewById(R.id.textViewTag1);
                 tag2 = clubDialog.findViewById(R.id.textViewTag2);
@@ -294,6 +298,25 @@ public class ClubsFragment extends Fragment {
                 //tag1.setEnabled(false);
                 //tag2.setEnabled(false);
                 //tag3.setEnabled(false);
+
+                postTitleEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!postTitleEt.getText().toString().trim().isEmpty()) {
+                            sendButtonIv.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
 
                 textViewTags = new TextView[]{tag1, tag2, tag3};
                 tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
