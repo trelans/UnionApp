@@ -408,6 +408,9 @@ public class ClubsFragment extends Fragment {
                         if (postTitle.isEmpty()) {
                             postTitleEt.setError("The title section cannot be left empty.");
                         }
+                        else if (i[0] == 0) {
+                            ((TextView) tagSpinner.getSelectedView()).setError("Post must have at least 1 tag");
+                        }
                         else {
                             String postDetails = postDetailsEt.getText().toString().trim();
                             timestamp = String.valueOf(MainActivity.getServerDate());

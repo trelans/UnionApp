@@ -209,40 +209,43 @@ public class StackFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        String selectedTag = stackTagSpinner.getSelectedItem().toString();
-                        for ( int k = 1; k < allTags.length; k++ ) {
-                            if ( allTags[ k ].equals( selectedTag ) ) {
-                                tagTextIndex = k;
-                                break;
-                            }
-                        }
-
-                        tagToUpload = tagTextIndex+"";
-
                         postTitle = postTitleEt.getText().toString().trim();
-
-                        postDetails = postDetailsEt.getText().toString().trim();
-                        if (anonym.isChecked()) {
-                            postAnonymously = "1";
+                        if (postTitle.isEmpty()) {
+                            postTitleEt.setError("The title section cannot be left empty.");
                         }
                         else {
-                            postAnonymously = "0";
-                        }
+                            String selectedTag = stackTagSpinner.getSelectedItem().toString();
+                            for (int k = 1; k < allTags.length; k++) {
+                                if (allTags[k].equals(selectedTag)) {
+                                    tagTextIndex = k;
+                                    break;
+                                }
+                            }
 
-                        if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
-                            return;
-                        }
+                            tagToUpload = tagTextIndex + "";
 
-                        if (image_uri==null) {
-                            //post without image
-                            uploadData(postTitle, postDetails,"noImage",postAnonymously,tagToUpload);
+
+                            postDetails = postDetailsEt.getText().toString().trim();
+                            if (anonym.isChecked()) {
+                                postAnonymously = "1";
+                            } else {
+                                postAnonymously = "0";
+                            }
+
+                            if (TextUtils.isEmpty(postDetails)) {
+                                Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
+                                return;
+                            }
+
+                            if (image_uri == null) {
+                                //post without image
+                                uploadData(postTitle, postDetails, "noImage", postAnonymously, tagToUpload);
+                            } else {
+                                //post with image
+                                uploadData(postTitle, postDetails, String.valueOf(image_uri), postAnonymously, tagToUpload);
+                            }
+                            stackDialog.dismiss();
                         }
-                        else {
-                            //post with image
-                            uploadData(postTitle, postDetails,String.valueOf(image_uri),postAnonymously,tagToUpload);
-                        }
-                        stackDialog.dismiss();
                     }
                 });
 
