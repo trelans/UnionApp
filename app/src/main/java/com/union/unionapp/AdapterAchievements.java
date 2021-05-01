@@ -103,7 +103,7 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myDialog.show();
+                myDialog.show(); //TODO other profile buglu
                 System.out.println("DSADAS");
 
             }

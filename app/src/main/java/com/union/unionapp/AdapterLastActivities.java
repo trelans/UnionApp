@@ -3,6 +3,7 @@ package com.union.unionapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +62,7 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
         String senderUid = modelNotification.getsUid();
         String pId = modelNotification.getpId();
         String type = modelNotification.getType();
+        final String postType;
         // conver timestamp to dd//mm/yyyy hh:mm
 
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
@@ -76,21 +78,31 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
         holder.AchtimeTv.setText(dateTime);
         if (type.equals("1")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
+            postType = "Buddy";
         }
         else if (type.equals("2")) {
             holder.avatarIv.setImageResource(R.drawable.club_icon);
+            postType = "Club";
         }
         else if (type.equals("3")) {
             holder.avatarIv.setImageResource(R.drawable.stack_icon);
+            postType = "Stack";
         }
         else {
             holder.avatarIv.setImageResource(R.drawable.stack_icon); // öylesine çökmesin diye
+            postType = "";
         }
 
         //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent( context, PostActivity.class);
+                i.putExtra("pType",postType);
+                i.putExtra("source", "outside");
+                i.putExtra("pId", pId);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(i);
 
             }
         });
