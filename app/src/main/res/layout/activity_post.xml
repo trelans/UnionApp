@@ -115,7 +115,7 @@
                     android:layout_marginStart="10dp"
                     android:background="@drawable/edittext_border_template"
                     android:hint="Enter your comment here..."
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textCapSentences"
                     android:paddingLeft="10dp"
                     android:textSize="12sp" />
 
