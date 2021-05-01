@@ -17,7 +17,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -275,6 +277,7 @@ public class ClubsFragment extends Fragment {
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
                 postTitleEt = clubDialog.findViewById(R.id.editTextHeadLine);
 
+
                 //init tags
                 tag1 = clubDialog.findViewById(R.id.textViewTag1);
                 tag2 = clubDialog.findViewById(R.id.textViewTag2);
@@ -400,49 +403,55 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        timestamp = String.valueOf(MainActivity.getServerDate());
-                        String postDetails = postDetailsEt.getText().toString().trim();
-                        String postDate = postDateEt.getText().toString().trim();
-                        String postQuotaStr = postQuotaEt.getText().toString().trim();
-                        String postTime = postTimeEt.getText().toString().trim();
-                        String postLocation = postLocationEt.getText().toString().trim();
+
                         String postTitle = postTitleEt.getText().toString().trim();
+                        if (postTitle.isEmpty()) {
+                            postTitleEt.setError("The title section cannot be left empty.");
+                        }
+                        else {
+                            String postDetails = postDetailsEt.getText().toString().trim();
+                            timestamp = String.valueOf(MainActivity.getServerDate());
+                            String postDate = postDateEt.getText().toString().trim();
+                            String postQuotaStr = postQuotaEt.getText().toString().trim();
+                            String postTime = postTimeEt.getText().toString().trim();
+                            String postLocation = postLocationEt.getText().toString().trim();
 
-                        tagsToUpload = "";
 
-                        for (int k = 1; k < allTags.length; k++) {
-                            if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
-                                tagsToUpload = tagsToUpload + k + ",";
+                            tagsToUpload = "";
+
+                            for (int k = 1; k < allTags.length; k++) {
+                                if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
+                                    tagsToUpload = tagsToUpload + k + ",";
+                                }
                             }
+
+                            //tags to upload'un sonundaki virgülü atıyor
+                            if (tagsToUpload.length() > 0) {
+                                StringBuilder tempString = new StringBuilder(tagsToUpload);
+                                tempString.deleteCharAt(tempString.length() - 1);
+                                tagsToUpload = tempString.toString();
+                            }
+
+                            if (TextUtils.isEmpty(postDetails)) {
+                                Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
+                                return;
+                            }
+
+                            if (image_uri == null) {
+                                //post without image
+                                uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle);
+                            } else {
+                                //post with image
+                                uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postTitle);
+                            }
+
+                            tagsStatus[0] = false;
+                            tagsStatus[1] = false;
+                            tagsStatus[2] = false;
+                            i[0] = 0;
+
+                            clubDialog.dismiss();
                         }
-
-                        //tags to upload'un sonundaki virgülü atıyor
-                        if (tagsToUpload.length() > 0) {
-                            StringBuilder tempString = new StringBuilder(tagsToUpload);
-                            tempString.deleteCharAt(tempString.length() - 1);
-                            tagsToUpload = tempString.toString();
-                        }
-
-                        if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
-                            return;
-                        }
-
-                        if (image_uri == null) {
-                            //post without image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle);
-                        } else {
-                            //post with image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postTitle);
-                        }
-
-                        tagsStatus[0] = false;
-                        tagsStatus[1] = false;
-                        tagsStatus[2] = false;
-                        i[0] = 0;
-
-                        clubDialog.dismiss();
-
                     }
                 });
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,7 +36,7 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
     private ArrayList<ModelLastActivities> notificationsList;
     private FirebaseAuth firebaseAuth;
 
-    public AdapterLastActivities(Context context, ArrayList<ModelLastActivities> notificationsList) {
+    public AdapterCalendar(Context context, ArrayList<ModelCalendar> notificationsList) {
         this.context = context;
         this.notificationsList = notificationsList;
         firebaseAuth = FirebaseAuth.getInstance();
@@ -45,7 +46,7 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
     @Override
     public HolderNotification onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflate view row_notification
-        View view = LayoutInflater.from(context).inflate(R.layout.row_lastachi, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_calendar, parent,false);
         return new HolderNotification(view);
     }
 
@@ -125,4 +126,4 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
 
 }
 
-   */
+*/
