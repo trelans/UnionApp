@@ -277,7 +277,7 @@ public class BuddyFragment extends Fragment {
                 //init views
                 postHeadlineEt = buddyDialog.findViewById(R.id.editTextHeadLine);
                 postDetailsEt = buddyDialog.findViewById(R.id.editTextPostDetails);
-                postDateEt = buddyDialog.findViewById(R.id.editTextDate);
+                postDateEt = buddyDialog.findViewById(R.id.dateTextView);
                 postQuotaEt = buddyDialog.findViewById(R.id.editTextQuota);
                 postTimeEt = buddyDialog.findViewById(R.id.editTextTime);
                 sendButtonIv = buddyDialog.findViewById(R.id.imageViewSendButton);
