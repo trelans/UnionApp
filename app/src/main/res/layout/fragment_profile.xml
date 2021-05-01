@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:gravity="fill">
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/achsList"
                 android:layout_width="match_parent"
                 android:layout_height="318dp"
@@ -33,19 +33,21 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="0dp" />
+                android:layout_marginStart="0dp"
+                tools:listitem="@layout/row_achievements"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lastActsList"
                 android:layout_width="match_parent"
                 android:layout_height="317dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
-                tools:listitem="@layout/row_lastachi"
-                android:layout_marginBottom="0dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="0dp">
+                android:layout_marginBottom="0dp"
+                android:visibility="invisible"
+                tools:listitem="@layout/row_lastachi">
 
             </androidx.recyclerview.widget.RecyclerView>
 

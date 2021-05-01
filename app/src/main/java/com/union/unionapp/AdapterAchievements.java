@@ -1,8 +1,11 @@
 package com.union.unionapp;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +35,10 @@ import java.util.Locale;
 public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievements.HolderNotification>{
 
     private Context context;
-    private ArrayList<ModelLastActivities> notificationsList;
+    private ArrayList<ModelAchievements> notificationsList;
     private FirebaseAuth firebaseAuth;
 
-    public AdapterAchievements(Context context, ArrayList<ModelLastActivities> notificationsList) {
+    public AdapterAchievements(Context context, ArrayList<ModelAchievements> notificationsList) {
         this.context = context;
         this.notificationsList = notificationsList;
         firebaseAuth = FirebaseAuth.getInstance();
@@ -54,26 +57,35 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         // get and set data to views
 
         // get data
-        final  ModelLastActivities modelNotification = notificationsList.get(position);
-        String name = modelNotification.getsName();
-        String notification = modelNotification.getNotification();
-        String timestamp = modelNotification.getTimestamp();
-        String senderUid = modelNotification.getsUid();
-        String pId = modelNotification.getpId();
-        String type = modelNotification.getType();
-        // conver timestamp to dd//mm/yyyy hh:mm
-
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(Long.parseLong(timestamp));
-        String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
-
-
-
-
-
+        final  ModelAchievements modelNotification = notificationsList.get(position);
+        String description = modelNotification.getDescription();
+        int genre = Integer.parseInt(modelNotification.getGenre());
+        String level = modelNotification.getLevel();
+        String nId = modelNotification.getnId();
+        String point = modelNotification.getPoint();
+        String title = modelNotification.getTitle();
+        String[] genreString = {"Admin" , "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"};
+        Dialog myDialog;
+        myDialog = new Dialog(context);
+        myDialog.setCanceledOnTouchOutside(true);
+        myDialog.setContentView(R.layout.custom_popup_achievements);
+        myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        TextView titleTv = (TextView) myDialog.findViewById(R.id.achtitle);
+        TextView genreTv = (TextView) myDialog.findViewById(R.id.Achgenre);
+        TextView descriptionTv = (TextView) myDialog.findViewById(R.id.achDescripton);
+        ImageView achicon = (ImageView) myDialog.findViewById(R.id.achicon);
         // set to views
-        holder.AchnotificationTv.setText(notification);
+        holder.AchnotificationTv.setText(title);
 
+        // TODO YUNUSTAN ALINAN ICONLAR
+
+        // set  dialog views
+        titleTv.setText(title);
+        genreTv.setText("Genre : " + genreString[genre]);
+        // TODO ICON
+        achicon.setImageResource(R.drawable.bronze_medal);
+        descriptionTv.setText(description);
+/*
         if (type.equals("1")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
         }
@@ -86,11 +98,13 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         else {
             holder.avatarIv.setImageResource(R.drawable.stack_icon); // öylesine çökmesin diye
         }
-
+*/
         //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myDialog.show();
+                System.out.println("DSADAS");
 
             }
         });
