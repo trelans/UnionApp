@@ -85,20 +85,34 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         // TODO ICON
         achicon.setImageResource(R.drawable.bronze_medal);
         descriptionTv.setText(description);
+        int lvl = Integer.parseInt(level);
 /*
-        if (type.equals("1")) {
-            holder.avatarIv.setImageResource(R.drawable.buddy_icon);
+                // "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"
+                       1          2         3           4           5           6       7           8
+   */
+         // Math
+        if (genre == 1) {
+            if (lvl == 1) {
+                holder.avatarIv.setImageResource(R.drawable.medal_math_rookie);
+            }
+            else if (lvl == 2) {
+
+            }
+            else if (lvl == 3) {
+
+            }
+            else if (lvl == 4) {
+
+            }
+            else {
+                // level 5
+            }
+
         }
-        else if (type.equals("2")) {
-            holder.avatarIv.setImageResource(R.drawable.club_icon);
+        else if (genre == 2) {
+
         }
-        else if (type.equals("3")) {
-            holder.avatarIv.setImageResource(R.drawable.stack_icon);
-        }
-        else {
-            holder.avatarIv.setImageResource(R.drawable.stack_icon); // öylesine çökmesin diye
-        }
-*/
+
         //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -237,11 +237,11 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             postImageIW.getLayoutParams().height = 0;
         }
 
-        questionContentTW.setText(pDetails);
+        questionContentTW.setText("     " + pDetails);
         if (!pAnon.equals("1")) {
-            pUserNameTW.setText(username);
+            pUserNameTW.setText( "@" + username);
         } else {
-            pUserNameTW.setText("Anonymous user");
+            pUserNameTW.setText("@" + "anonymous");
         }
 
         convertStringTagsToRealTags(topicTagTW1, topicTagTW2, topicTagTW3, pTags);

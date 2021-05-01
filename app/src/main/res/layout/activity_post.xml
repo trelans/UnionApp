@@ -56,21 +56,23 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
                     android:text="\@username"
+                    android:maxLines="1"
                     android:textSize="20dp" />
 
                 <ImageView
                     android:id="@+id/Achavatar1Iv"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="12dp"
                     android:src="@drawable/medal_math_titan" />
 
                 <ImageView
                     android:id="@+id/Achavatar2Iv"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="12dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
@@ -78,9 +80,9 @@
 
                 <ImageView
                     android:id="@+id/Achavatar3Iv"
-                    android:layout_width="40dp"
+                    android:layout_width="30dp"
                     android:layout_marginTop="12dp"
-                    android:layout_height="40dp"
+                    android:layout_height="30dp"
                     android:layout_marginRight="20dp"
                     android:src="@drawable/medal_career_pro" />
             </LinearLayout>
@@ -352,7 +354,14 @@
                         android:textColor="@color/black"
                         android:text="Quota:"
                         android:textSize="12sp" />
-
+                    <View
+                        android:id="@+id/cizgi2"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_below="@+id/postGenderTW"
+                        android:layout_marginEnd="0dp"
+                        android:background="@color/black" />
                     <TextView
                         android:id="@+id/postTitleTW"
                         android:layout_width="match_parent"
@@ -361,13 +370,20 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/edittext_border_template"
                         android:text="Title"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:padding="5dp"
                         android:textSize="15sp"
                         android:textStyle="bold" />
+                    <View
+                        android:id="@+id/cizgi3"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_below="@+id/postTitleTW"
+                        android:layout_marginEnd="0dp"
+                        android:background="@color/black" />
 
                     <ImageView
                         android:id="@+id/postImageIW"
@@ -377,7 +393,6 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/edittext_border_template"
                         android:gravity="start"
                         android:padding="5dp"
                         android:scrollbars="vertical"
@@ -392,8 +407,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/edittext_border_template"
                         android:gravity="start"
+                        android:textColor="@color/black"
                         android:hint="User's question will be displayed here..."
                         android:minLines="10"
                         android:padding="5dp"
