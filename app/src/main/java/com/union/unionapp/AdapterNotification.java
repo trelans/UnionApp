@@ -3,6 +3,7 @@ package com.union.unionapp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,18 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(Long.parseLong(timestamp));
         String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
+        final String postType;
 
+        //TODO notificationsı commentlerde yapıcaksak eklenti yapılmalı
+        if (notification.contains("pro")) {
+            postType = "Stack";
+        }
+        else if (notification.contains("announc")) {
+            postType = "Club";
+        }
+        else {
+            postType = "Buddy";
+        }
         // we will get the name, e mail image of notif
             //TODO burası yanlıs foto çekerken hata olur düzeltilcek
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/");
@@ -107,6 +119,12 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent i = new Intent( context, PostActivity.class);
+                i.putExtra("pType",postType);
+                i.putExtra("source", "outside");
+                i.putExtra("pId", pId);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                context.startActivity(i);
 
             }
         });
