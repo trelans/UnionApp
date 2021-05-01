@@ -277,7 +277,6 @@ public class ClubsFragment extends Fragment {
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
                 postTitleEt = clubDialog.findViewById(R.id.editTextHeadLine);
 
-                sendButtonIv.setEnabled(false);
 
                 //init tags
                 tag1 = clubDialog.findViewById(R.id.textViewTag1);
@@ -298,25 +297,6 @@ public class ClubsFragment extends Fragment {
                 //tag1.setEnabled(false);
                 //tag2.setEnabled(false);
                 //tag3.setEnabled(false);
-
-                postTitleEt.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (!postTitleEt.getText().toString().trim().isEmpty()) {
-                            sendButtonIv.setEnabled(true);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
 
                 textViewTags = new TextView[]{tag1, tag2, tag3};
                 tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
@@ -423,49 +403,55 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        timestamp = String.valueOf(MainActivity.getServerDate());
-                        String postDetails = postDetailsEt.getText().toString().trim();
-                        String postDate = postDateEt.getText().toString().trim();
-                        String postQuotaStr = postQuotaEt.getText().toString().trim();
-                        String postTime = postTimeEt.getText().toString().trim();
-                        String postLocation = postLocationEt.getText().toString().trim();
+
                         String postTitle = postTitleEt.getText().toString().trim();
+                        if (postTitle.isEmpty()) {
+                            postTitleEt.setError("The title section cannot be left empty.");
+                        }
+                        else {
+                            String postDetails = postDetailsEt.getText().toString().trim();
+                            timestamp = String.valueOf(MainActivity.getServerDate());
+                            String postDate = postDateEt.getText().toString().trim();
+                            String postQuotaStr = postQuotaEt.getText().toString().trim();
+                            String postTime = postTimeEt.getText().toString().trim();
+                            String postLocation = postLocationEt.getText().toString().trim();
 
-                        tagsToUpload = "";
 
-                        for (int k = 1; k < allTags.length; k++) {
-                            if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
-                                tagsToUpload = tagsToUpload + k + ",";
+                            tagsToUpload = "";
+
+                            for (int k = 1; k < allTags.length; k++) {
+                                if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
+                                    tagsToUpload = tagsToUpload + k + ",";
+                                }
                             }
+
+                            //tags to upload'un sonundaki virgülü atıyor
+                            if (tagsToUpload.length() > 0) {
+                                StringBuilder tempString = new StringBuilder(tagsToUpload);
+                                tempString.deleteCharAt(tempString.length() - 1);
+                                tagsToUpload = tempString.toString();
+                            }
+
+                            if (TextUtils.isEmpty(postDetails)) {
+                                Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
+                                return;
+                            }
+
+                            if (image_uri == null) {
+                                //post without image
+                                uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle);
+                            } else {
+                                //post with image
+                                uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postTitle);
+                            }
+
+                            tagsStatus[0] = false;
+                            tagsStatus[1] = false;
+                            tagsStatus[2] = false;
+                            i[0] = 0;
+
+                            clubDialog.dismiss();
                         }
-
-                        //tags to upload'un sonundaki virgülü atıyor
-                        if (tagsToUpload.length() > 0) {
-                            StringBuilder tempString = new StringBuilder(tagsToUpload);
-                            tempString.deleteCharAt(tempString.length() - 1);
-                            tagsToUpload = tempString.toString();
-                        }
-
-                        if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
-                            return;
-                        }
-
-                        if (image_uri == null) {
-                            //post without image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle);
-                        } else {
-                            //post with image
-                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postTitle);
-                        }
-
-                        tagsStatus[0] = false;
-                        tagsStatus[1] = false;
-                        tagsStatus[2] = false;
-                        i[0] = 0;
-
-                        clubDialog.dismiss();
-
                     }
                 });
 

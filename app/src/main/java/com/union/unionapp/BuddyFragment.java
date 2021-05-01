@@ -286,8 +286,6 @@ public class BuddyFragment extends Fragment {
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
 
-                //set send button to disable initially.
-                sendButtonIv.setEnabled(false);
 
                 //init tags
                 tag1 = buddyDialog.findViewById(R.id.textViewTag1);
@@ -349,24 +347,6 @@ public class BuddyFragment extends Fragment {
                     }
                 });
 
-                postHeadlineEt.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (!postHeadlineEt.getText().toString().trim().isEmpty()) {
-                            sendButtonIv.setEnabled(true);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
 
 
                 //set the postDateEt to current date for default
@@ -434,48 +414,54 @@ public class BuddyFragment extends Fragment {
                 sendButtonIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        timestamp = String.valueOf(MainActivity.getServerDate());
+
                         String postHeadline = postHeadlineEt.getText().toString().trim();
-                        String postDetails = postDetailsEt.getText().toString().trim();
-                        String postDate = postDateEt.getText().toString().trim();
-                        String postQuotaStr = postQuotaEt.getText().toString().trim();
-                        String postTime = postTimeEt.getText().toString().trim();
-                        String postLocation = postLocationEt.getText().toString().trim();
-                        String postGender = genderSpinner.getSelectedItem().toString();
-                               tagsToUpload = "";
+                        if (postHeadline.isEmpty()) {
+                            postHeadlineEt.setError("the title section cannot be left empty.");
+                        }
+                        else {
+                            timestamp = String.valueOf(MainActivity.getServerDate());
+                            String postDetails = postDetailsEt.getText().toString().trim();
+                            String postDate = postDateEt.getText().toString().trim();
+                            String postQuotaStr = postQuotaEt.getText().toString().trim();
+                            String postTime = postTimeEt.getText().toString().trim();
+                            String postLocation = postLocationEt.getText().toString().trim();
+                            String postGender = genderSpinner.getSelectedItem().toString();
+                            tagsToUpload = "";
 
-                        for (int k = 1; k < allTags.length; k++) {
-                            if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
-                                tagsToUpload = tagsToUpload + k + ",";
+                            for (int k = 1; k < allTags.length; k++) {
+                                if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
+                                    tagsToUpload = tagsToUpload + k + ",";
+                                }
                             }
+
+                            //tags to upload'un sonundaki virgülü atıyor //TODO ömerin yolu
+                            if (tagsToUpload.length() > 0) {
+                                StringBuilder tempString = new StringBuilder(tagsToUpload);
+                                tempString.deleteCharAt(tempString.length() - 1);
+                                tagsToUpload = tempString.toString();
+                            }
+
+
+                            if (TextUtils.isEmpty(postDetails)) {
+                                Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
+                                return;
+                            }
+
+                            if (image_uri == null) {
+                                //post without image
+                                uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender);
+                            } else {
+                                //post with image
+                                uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
+                            }
+                            buddyDialog.dismiss();
+
+                            tagsStatus[0] = false;
+                            tagsStatus[1] = false;
+                            tagsStatus[2] = false;
+                            i[0] = 0;
                         }
-
-                        //tags to upload'un sonundaki virgülü atıyor //TODO ömerin yolu
-                        if (tagsToUpload.length() > 0) {
-                            StringBuilder tempString = new StringBuilder(tagsToUpload);
-                            tempString.deleteCharAt(tempString.length() - 1);
-                            tagsToUpload = tempString.toString();
-                        }
-
-
-                        if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
-                            return;
-                        }
-
-                        if (image_uri == null) {
-                            //post without image
-                            uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender);
-                        } else {
-                            //post with image
-                            uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postGender);
-                        }
-                        buddyDialog.dismiss();
-
-                        tagsStatus[0] = false;
-                        tagsStatus[1] = false;
-                        tagsStatus[2] = false;
-                        i[0] = 0;
                     }
                 });
 
