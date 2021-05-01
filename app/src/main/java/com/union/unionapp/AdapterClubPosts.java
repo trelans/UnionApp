@@ -150,9 +150,10 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 hashMap.put("pHour", pHour );
                 hashMap.put("pDate", pDate );
                 hashMap.put("pId", pId);
-                String caluid = userRef.push().getKey();
+                hashMap.put("username", username);
 
-                userRef.child("Calendar").child(caluid).setValue(hashMap);
+
+                userRef.child("Calendar").child(pId).setValue(hashMap);
 
                 //User calender bitişi
 
