@@ -174,18 +174,12 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()) {
-                    System.out.println(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                    System.out.println("test: " + FirebaseAuth.getInstance().getCurrentUser().getUid() + " key" + ds.getKey());
                     if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                        System.out.println(ds.getKey());
                         ModelUsers user = ds.getValue(ModelUsers.class);
                         username = user.getUsername();
                         pp = user.getPp();
                         uid = user.getUid();
-                        System.out.println("tamam");
                     }
-                    //email = "" + ds.child("email").getValue();
-
                 }
             }
 

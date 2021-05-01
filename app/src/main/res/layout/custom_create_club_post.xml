@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="324dp"
         android:layout_height="451dp"
         android:layout_gravity="center"
@@ -34,19 +34,19 @@
                 android:layout_width="327dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="130dp"
+                android:padding="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="73dp">
 
                 <TextView
                     android:id="@+id/dateTextView"
-                    android:layout_width="94dp"
+                    android:layout_width="85dp"
                     android:layout_height="25dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="53dp"
+                    android:layout_marginStart="38dp"
                     android:layout_marginTop="9dp"
                     android:background="@drawable/edittext_border_template"
-                    android:ems="10"
                     android:inputType="date"
                     android:textAlignment="center" />
 
@@ -56,9 +56,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="183dp"
-                    android:layout_marginTop="47dp"
-                    android:layout_weight="1"
+                    android:layout_marginStart="224dp"
+                    android:layout_marginTop="11dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="Quota:" />
 
@@ -68,30 +67,30 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="11dp"
+                    android:layout_marginStart="4dp"
                     android:layout_marginTop="11dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="Date:" />
 
                 <TextView
                     android:id="@+id/textView5"
-                    android:layout_width="32dp"
+                    android:layout_width="33dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="108dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginStart="127dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="Time:" />
 
                 <TextView
                     android:id="@+id/editTextTime"
-                    android:layout_width="68dp"
+                    android:layout_width="57dp"
                     android:layout_height="25dp"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="9dp"
-                    android:layout_marginEnd="34dp"
+                    android:layout_marginStart="162dp"
                     android:background="@drawable/edittext_border_template"
                     android:ems="10"
                     android:inputType="time"
@@ -99,24 +98,30 @@
 
                 <EditText
                     android:id="@+id/editTextQuota"
-                    android:layout_width="69dp"
-                    android:layout_height="23dp"
+                    android:layout_width="40dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="43dp"
-                    android:layout_marginEnd="27dp"
-                    android:ems="10"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:background="@drawable/edittext_border_template"
                     android:inputType="number" />
 
                 <EditText
                     android:id="@+id/editTextLocation"
-                    android:layout_width="99dp"
-                    android:layout_height="24dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="41dp"
-                    android:layout_marginEnd="154dp"
-                    android:ems="10"
+                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingStart="5dp"
+                    android:textSize="12sp"
+                    android:background="@drawable/edittext_border_template"
                     android:inputType="textPersonName" />
 
                 <TextView
@@ -124,46 +129,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="45dp"
-                    android:layout_marginEnd="260dp"
+                    android:layout_marginStart="4dp"
                     android:fontFamily="@font/myriad_pro_regular"
                     android:text="Location:" />
 
             </RelativeLayout>
 
 
-                android:id="@+id/scrollViewTagArea"
-                android:layout_width="283dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="90dp">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
-
-
             <EditText
                 android:id="@+id/editTextPostDetails"
-                android:layout_width="303dp"
-                android:layout_height="115dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="240dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/edittext_only_bottom_rounded_border_template"
-                android:ems="10"
+                android:paddingStart="5dp"
+                android:paddingEnd="3dp"
                 android:gravity="start|top"
-                android:hint=" Write your question here..."
+                android:hint="Write your announcement here..."
                 android:inputType="textMultiLine"
-                android:paddingLeft="3dp"
+                android:minLines="9"
+                android:maxLines="9"
+                android:scrollbars="vertical"
                 android:paddingTop="2dp"
-                android:textAlignment="center"
                 android:textSize="12sp" />
 
             <Spinner
@@ -177,30 +168,29 @@
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="44dp"
                 android:layout_marginRight="28dp"
-                android:background="@drawable/edittext_border_template"/>
+                android:background="@drawable/edittext_border_template"
+                android:spinnerMode="dialog"/>
 
             <TextView
                 android:id="@+id/textViewCreateAnAnnouncement"
-                android:layout_width="328dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:text="Create an announcement"
-                android:textAlignment="viewStart"
-                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/uploadPhotoImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="370dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginTop="380dp"
                 android:src="@drawable/ic_baseline_add_a_photo_24" />
 
             <ImageView
@@ -218,70 +208,81 @@
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/send_icon" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/textViewTag1"
-                android:layout_width="80dp"
-                android:layout_height="22dp"
-                android:layout_marginLeft="130dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 android:layout_marginTop="90dp"
-                android:background="@drawable/tag_button_template"
-                android:backgroundTint="#FF9800"
-                android:text="#GE250/1"
-                android:textAlignment="center"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.281" />
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textViewTag1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="#FF9800"
+                    android:text="#GE250/1"
+                    android:padding="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeMaxTextSize="20sp"
+                    app:autoSizeStepGranularity="1sp"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/textViewTag2"
-                android:layout_width="75dp"
-                android:layout_height="22dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="90dp"
-                android:background="@drawable/tag_button_template"
-                android:backgroundTint="@color/teal_200"
-                android:text="Startup"
-                android:textAlignment="center"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.281" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textViewTag2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="@color/teal_200"
+                    android:text="Startup"
+                    android:padding="2dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textAlignment="center"
+                    android:layout_weight="1"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeMaxTextSize="100sp"
+                    app:autoSizeStepGranularity="1sp"/>
 
-            <androidx.appcompat.widget.AppCompatButton                android:id="@+id/textViewTag3"
-                android:layout_width="75dp"
-                android:layout_height="22dp"
-                android:layout_marginLeft="230dp"
-                android:layout_marginTop="90dp"
-                android:background="@drawable/tag_button_template"
-                android:backgroundTint="#ED3976"
-                android:text="Startup"
-                android:textAlignment="center"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.281" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/textViewTag3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/tag_button_template"
+                    android:backgroundTint="#ED3976"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:text="Startup"
+                    android:padding="2dp"
+                    android:textAlignment="center"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="10sp"
+                    app:autoSizeMaxTextSize="20sp"
+                    app:autoSizeStepGranularity="1sp" />
+
+            </LinearLayout>
+
 
             <EditText
                 android:id="@+id/editTextHeadLine"
-                android:layout_width="303dp"
+                android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="216dp"
                 android:layout_marginRight="10dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="3dp"
                 android:background="@drawable/edittext_only_top_rounded_border_template"
-                android:ems="10"
-                android:hint="    Write your headline here..."
+                android:hint="Write your headline here..."
                 android:inputType="textPersonName"
                 android:textSize="15dp" />
 
         </androidx.cardview.widget.CardView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

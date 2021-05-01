@@ -179,16 +179,16 @@ public class BuddyFragment extends Fragment {
 
         //get some info of the current user to include in the post
         userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-        Query query = userDbRef.orderByChild("email").equalTo(email);
-        query.addValueEventListener(new ValueEventListener() {
+        userDbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    username = "" + ds.child("username").getValue();
-                    pp = "" + ds.child("pp").getValue();
-                    uid = "" + ds.child("uid").getValue();
-                    //email = "" + ds.child("email").getValue();
-
+                for (DataSnapshot ds: snapshot.getChildren()) {
+                    if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        ModelUsers user = ds.getValue(ModelUsers.class);
+                        username = user.getUsername();
+                        pp = user.getPp();
+                        uid = user.getUid();
+                    }
                 }
             }
 

@@ -32,31 +32,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <TextView
-                    android:id="@+id/textViewCreateQuestion"
-                    android:layout_width="132dp"
+                    android:id="@+id/textViewCreateAnAnnouncement"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="99dp"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginEnd="99dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/myriad_pro_regular"
                     android:text="Find a Buddy"
                     android:textAlignment="center"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="43dp"
-                    android:layout_marginBottom="253dp"
-                    android:layout_weight="1"
-                    android:text="Quota:" />
 
                 <Spinner
                     android:id="@+id/tagSpinner"
@@ -65,246 +51,238 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="43dp"
-                    android:layout_marginLeft="28dp"
-                    android:layout_marginTop="55dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="43dp"
-                    android:layout_marginRight="28dp"
                     android:background="@drawable/edittext_border_template"
                     android:entries="@array/buddy_tags"
                     android:prompt="@string/buddy_search_promt"
                     android:spinnerMode="dialog">
-
                 </Spinner>
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="80dp"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/textViewTag1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tag_button_template"
+                        android:backgroundTint="#FF9800"
+                        android:text="#study"
+                        android:textAlignment="center"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="15dp"
+                        android:layout_weight="1"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/textViewTag2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tag_button_template"
+                        android:backgroundTint="@color/teal_200"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="#walking"
+                        android:textAlignment="center"
+                        android:textSize="15dp"
+                        android:layout_weight="1"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/textViewTag3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/tag_button_template"
+                        android:backgroundTint="#EC2F51"
+                        android:text="#dancing"
+                        android:layout_marginRight="10dp"
+                        android:textAlignment="center"
+                        android:textSize="15dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="327dp"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/textView6"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="43dp"
-                    android:layout_marginTop="130dp"
-                    android:layout_marginBottom="6dp"
-                    android:text="Date:" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="129dp"
-                    android:layout_toEndOf="@+id/editTextDate"
-                    android:text="Time:" />
-
-                <TextView
-                    android:id="@+id/editTextDate"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="130dp"
-                    android:layout_marginBottom="303dp"
-                    android:layout_toEndOf="@+id/textView4"
-                    android:background="@drawable/edittext_border_template"
-                    android:ems="10"
-                    android:inputType="date"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/editTextTime"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="130dp"
-                    android:layout_marginEnd="43dp"
-                    android:layout_marginBottom="302dp"
-                    android:layout_toEndOf="@+id/textView5"
-                    android:background="@drawable/edittext_border_template"
-                    android:ems="10"
-                    android:inputType="time"
-                    android:textAlignment="center" />
-
-                <Spinner
-                    android:id="@+id/genderSpinner"
-                    android:layout_width="137dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="43dp"
-                    android:layout_marginBottom="277dp"
-                    android:layout_toEndOf="@+id/textView6"
-                    android:prompt="@string/buddy_search_promt"
-                    android:spinnerMode="dialog" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="43dp"
-                    android:layout_marginBottom="277dp"
-                    android:text="Preferred Gender:" />
-
-                <EditText
-                    android:id="@+id/editTextQuota"
-                    android:layout_width="41dp"
-                    android:layout_height="21dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginBottom="252dp"
-                    android:layout_toEndOf="@+id/textView7"
-                    android:ems="10"
-                    android:inputType="number" />
-
-                <EditText
-                    android:id="@+id/editTextPostDetails"
-                    android:layout_width="303dp"
-                    android:layout_height="130dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="70dp"
-                    android:background="@drawable/edittext_only_bottom_rounded_border_template"
-                    android:ems="10"
-                    android:gravity="center_horizontal"
-                    android:hint="Write the details here..."
-                    android:inputType="textMultiLine"
-                    android:paddingTop="2dp"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/editTextLocation"
-                    android:layout_width="76dp"
-                    android:layout_height="21dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="43dp"
-                    android:layout_marginBottom="252dp"
-                    android:layout_toEndOf="@+id/textView8"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="252dp"
-                    android:layout_toEndOf="@+id/editTextQuota"
-                    android:text="Location:" />
-
-                <ImageView
-                    android:id="@+id/uploadPhotoImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="115dp"
-                    android:layout_marginLeft="115dp"
-                    android:layout_marginEnd="115dp"
-                    android:layout_marginBottom="42dp"
-                    android:src="@drawable/ic_baseline_add_a_photo_24" />
-
-                <ImageView
-                    android:id="@+id/imageViewSendButton"
-                    android:layout_width="31dp"
-                    android:layout_height="31dp"
-
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="145dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginTop="420dp"
-                    android:layout_marginEnd="145dp"
-                    android:layout_marginBottom="0dp"
-                    android:background="@drawable/send_icon" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textViewTag3"
-                    android:layout_width="80dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="43dp"
-                    android:layout_marginBottom="342dp"
-                    android:layout_toEndOf="@+id/textViewTag2"
-                    android:background="@drawable/tag_button_template"
-                    android:backgroundTint="#EC2F51"
-                    android:text="#dancing"
-                    android:textAlignment="center"
-                    android:textSize="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="110dp"
+                    android:padding="5dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.281" />
+                    tools:layout_editor_absoluteY="73dp">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textViewTag2"
-                    android:layout_width="75dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginBottom="342dp"
-                    android:layout_toEndOf="@+id/textViewTag1"
-                    android:background="@drawable/tag_button_template"
-                    android:backgroundTint="@color/teal_200"
-                    android:text="#walking"
-                    android:textAlignment="center"
-                    android:textSize="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.281" />
+                    <EditText
+                        android:id="@+id/editTextDate"
+                        android:layout_width="85dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="9dp"
+                        android:background="@drawable/edittext_border_template"
+                        android:inputType="date"
+                        android:textAlignment="center" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/textViewTag1"
-                    android:layout_width="80dp"
-                    android:layout_height="22dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="44dp"
-                    android:layout_marginBottom="343dp"
-                    android:background="@drawable/tag_button_template"
-                    android:backgroundTint="#FF9800"
-                    android:text="#study"
-                    android:textAlignment="center"
-                    android:textSize="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.281" />
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="224dp"
+                        android:layout_marginTop="11dp"
+                        android:fontFamily="@font/myriad_pro_regular"
+                        android:text="Quota:" />
 
-                <EditText
-                    android:id="@+id/editTextHeadLine"
-                    android:layout_width="303dp"
-                    android:layout_height="25dp"
-                    android:layout_above="@+id/editTextPostDetails"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="-1dp"
-                    android:background="@drawable/edittext_only_top_rounded_border_template"
-                    android:ems="10"
-                    android:fontFamily="@font/myriad_pro_regular"
-                    android:hint="    Write your headline here..."
-                    android:inputType="textPersonName"
-                    android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="11dp"
+                        android:fontFamily="@font/myriad_pro_regular"
+                        android:text="Date:" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="33dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="11dp"
+                        android:layout_marginStart="127dp"
+                        android:fontFamily="@font/myriad_pro_regular"
+                        android:text="Time:" />
+
+                    <EditText
+                        android:id="@+id/editTextTime"
+                        android:layout_width="57dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginStart="162dp"
+                        android:background="@drawable/edittext_border_template"
+                        android:ems="10"
+                        android:inputType="time"
+                        android:textAlignment="center" />
+
+                    <EditText
+                        android:id="@+id/editTextQuota"
+                        android:layout_width="40dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingBottom="3dp"
+                        android:textSize="12sp"
+                        android:textAlignment="center"
+                        android:background="@drawable/edittext_border_template"
+                        android:inputType="number" />
+
+                    <EditText
+                        android:id="@+id/editTextLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="26dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="41dp"
+                        android:layout_marginStart="60dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingStart="5dp"
+                        android:textSize="12sp"
+                        android:background="@drawable/edittext_border_template"
+                        android:inputType="textPersonName" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="45dp"
+                        android:layout_marginStart="4dp"
+                        android:fontFamily="@font/myriad_pro_regular"
+                        android:text="Location:" />
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/editTextLocation"
+                        android:text="Preferred Gender:" />
+                    <Spinner
+                        android:id="@+id/genderSpinner"
+                        android:layout_width="137dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="65dp"
+                        android:layout_toEndOf="@+id/textView6"
+                        android:prompt="@string/buddy_search_promt"
+                        android:spinnerMode="dialog" />
+
+                    <EditText
+                        android:id="@+id/editTextHeadLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_below="@+id/textView6"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="3dp"
+                        android:background="@drawable/edittext_only_top_rounded_border_template"
+                        android:fontFamily="@font/myriad_pro_regular"
+                        android:hint="Write your headline here..."
+                        android:inputType="textPersonName"
+                        android:textSize="15dp" />
+
+                    <EditText
+                        android:id="@+id/editTextPostDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_below="@id/editTextHeadLine"
+                        android:background="@drawable/edittext_only_bottom_rounded_border_template"
+                        android:ems="10"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="3dp"
+                        android:gravity="start|top"
+                        android:hint="Write your announcement here..."
+                        android:inputType="textMultiLine"
+                        android:minLines="9"
+                        android:maxLines="9"
+                        android:scrollbars="vertical"
+                        android:paddingTop="2dp"
+                        android:textSize="12sp" />
+
+
+                    <ImageView
+                        android:id="@+id/uploadPhotoImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="145dp"
+                        android:layout_below="@id/editTextPostDetails"
+                        android:src="@drawable/ic_baseline_add_a_photo_24" />
+
+                    <ImageView
+                        android:id="@+id/imageViewSendButton"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/uploadPhotoImageView"
+                        android:layout_marginStart="140dp"
+                        android:background="@drawable/send_icon" />
+
+
+                </RelativeLayout>
+
+
+
+
 
             </RelativeLayout>
 
