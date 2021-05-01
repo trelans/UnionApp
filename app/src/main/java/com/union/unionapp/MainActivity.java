@@ -1105,6 +1105,11 @@ public class MainActivity extends AppCompatActivity {
                         // set to recycler view
                         notificationsRv.setAdapter(adapterNotification);
 
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        notificationsRv.setLayoutManager(linearLayoutManager);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
+
                     }
 
                     @Override
