@@ -58,6 +58,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +69,8 @@ public class ClubsFragment extends Fragment {
     Dialog clubDialog;
     DatabaseReference userDbRefPosts;
     Spinner tagSpinner;
+
+    String filterTagsToUpload;
 
 
     EditText postDetailsEt,
@@ -86,7 +89,10 @@ public class ClubsFragment extends Fragment {
 
     AppCompatButton tag1,
                     tag2,
-                    tag3;
+                    tag3,
+                    filterTag1,
+                    filterTag2,
+                    filterTag3;
 
     String[] allTags;
 
@@ -129,7 +135,7 @@ public class ClubsFragment extends Fragment {
 
     RecyclerView recyclerView;
     List<ModelBuddyAndClubPost> postList;
-    AdapterClubPosts adapterBuddyPosts;
+    AdapterClubPosts adapterClubPosts;
 
     //permission constants
     private static final int CAMERA_REQUEST_CODE = 100;
@@ -173,8 +179,8 @@ public class ClubsFragment extends Fragment {
         userDbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds: snapshot.getChildren()) {
-                    if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (ds.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                         ModelUsers user = ds.getValue(ModelUsers.class);
                         username = user.getUsername();
                         pp = user.getPp();
@@ -188,7 +194,6 @@ public class ClubsFragment extends Fragment {
 
             }
         });
-
 
 
         //recycler view and its properties
@@ -216,28 +221,26 @@ public class ClubsFragment extends Fragment {
                 i[0] = 0;
 
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.club_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.club_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
 
-                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-                {
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position > 0) {
                             String selectedItem = parent.getItemAtPosition(position).toString();
-                            if (i[ 0 ] < tagsStatus.length) {
+                            if (i[0] < tagsStatus.length) {
 
                                 for (int j = 0; j < 3; j++) {
 
                                     if (!tagsStatus[j]) {
 
                                         tagsArray[j].setText(selectedItem);
-                                        if (!tagHasSelectedBefore(tag1,tag2,tag3)) {
+                                        if (!tagHasSelectedBefore(tag1, tag2, tag3)) {
                                             tagsArray[j].setVisibility(View.VISIBLE);
                                             i[0]++;
                                             tagsStatus[j] = true;
-                                        }
-                                        else {
+                                        } else {
                                             tagsStatus[j] = false;
                                             tagsArray[j].setText("");
                                         }
@@ -247,16 +250,16 @@ public class ClubsFragment extends Fragment {
                             }
                         }
 
-                        if( i[ 0 ] == tagsStatus.length ) {
+                        if (i[0] == tagsStatus.length) {
                             //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-                            tagSpinner.setEnabled( false );
+                            tagSpinner.setEnabled(false);
                             //tagSpinner.setClickable( false );
                             //tagSpinner.setTop( 1 );
                             //setTagsSaved( true );
                         }
                     }
 
-                    public void onNothingSelected (AdapterView < ? > parent) {
+                    public void onNothingSelected(AdapterView<?> parent) {
                         //TODO
                     }
                 });
@@ -270,7 +273,7 @@ public class ClubsFragment extends Fragment {
                 sendButtonIv = clubDialog.findViewById(R.id.imageViewSendButton);
                 addPhotoIv = clubDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = clubDialog.findViewById(R.id.editTextLocation);
-                postTitleEt =  clubDialog.findViewById(R.id.editTextHeadLine);
+                postTitleEt = clubDialog.findViewById(R.id.editTextHeadLine);
 
                 //init tags
                 tag1 = clubDialog.findViewById(R.id.textViewTag1);
@@ -301,7 +304,7 @@ public class ClubsFragment extends Fragment {
                     public void onClick(View v) {
                         tag1.setVisibility(View.INVISIBLE);
                         tagsStatus[0] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 0;
                     }
@@ -312,7 +315,7 @@ public class ClubsFragment extends Fragment {
                     public void onClick(View v) {
                         tag2.setVisibility(View.INVISIBLE);
                         tagsStatus[1] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 1;
                     }
@@ -323,7 +326,7 @@ public class ClubsFragment extends Fragment {
                     public void onClick(View v) {
                         tag3.setVisibility(View.INVISIBLE);
                         tagsStatus[2] = false;
-                        tagSpinner.setEnabled( true );
+                        tagSpinner.setEnabled(true);
                         i[0]--;
                         lastDeletedtag = 2;
                     }
@@ -348,10 +351,10 @@ public class ClubsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        datePickerDialog.updateDate(year,month,day);
+                        datePickerDialog.updateDate(year, month, day);
                         datePickerDialog.show();
                     }
                 });
@@ -360,7 +363,7 @@ public class ClubsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hourOfDay, minute, true
                         );
                         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         timePickerDialog.show();
@@ -405,10 +408,10 @@ public class ClubsFragment extends Fragment {
                         String postLocation = postLocationEt.getText().toString().trim();
                         String postTitle = postTitleEt.getText().toString().trim();
 
-                         tagsToUpload = "";
+                        tagsToUpload = "";
 
-                        for ( int k = 1; k < allTags.length; k++ ) {
-                            if ( allTags[ k ].equals( tag1.getText().toString() ) || allTags[ k ].equals( tag2.getText().toString() ) || allTags[ k ].equals( tag3.getText().toString() ) ) {
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(tag1.getText().toString()) || allTags[k].equals(tag2.getText().toString()) || allTags[k].equals(tag3.getText().toString())) {
                                 tagsToUpload = tagsToUpload + k + ",";
                             }
                         }
@@ -421,17 +424,16 @@ public class ClubsFragment extends Fragment {
                         }
 
                         if (TextUtils.isEmpty(postDetails)) {
-                            Toast.makeText(getActivity(),"Enter post Details",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), "Enter post Details", Toast.LENGTH_SHORT);
                             return;
                         }
 
-                        if (image_uri==null) {
+                        if (image_uri == null) {
                             //post without image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,"noImage",postLocation,tagsToUpload,postTitle);
-                        }
-                        else {
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle);
+                        } else {
                             //post with image
-                            uploadData(postDetails,postDate,postTime,postQuotaStr,String.valueOf(image_uri),postLocation,tagsToUpload,postTitle);
+                            uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postTitle);
                         }
 
                         tagsStatus[0] = false;
@@ -455,30 +457,85 @@ public class ClubsFragment extends Fragment {
                 clubDialog.setContentView(R.layout.custom_club_filter);
                 clubDialog.setCanceledOnTouchOutside(true);
 
-                tag1 = clubDialog.findViewById(R.id.filterTag1TextView);
-                tag2 = clubDialog.findViewById(R.id.filterTag2TextView);
-                tag3 = clubDialog.findViewById(R.id.filterTag3TextView);
+                filterTag1 = clubDialog.findViewById(R.id.filterTag1TextView);
+                filterTag2 = clubDialog.findViewById(R.id.filterTag2TextView);
+                filterTag3 = clubDialog.findViewById(R.id.filterTag3TextView);
 
-                filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
-                filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
+
+                //init views
+                ImageView searchFilterImageView = clubDialog.findViewById(R.id.searchFiltersImageView);
+                ImageView resetFiltersImageView = clubDialog.findViewById(R.id.cancelFilterImageView);
+                TextView filterDateTv = clubDialog.findViewById(R.id.dateFilterEditText);
+                TextView filterTimeTv = clubDialog.findViewById(R.id.timeFilterEditText);
+                EditText filterLocationEt = clubDialog.findViewById(R.id.locationFilterEditText);
+                EditText filterQuotaEt = clubDialog.findViewById(R.id.quotaFilterEditText);
+
 
                 //set to 0 zero in order to prevent blocking spinner due to the previous posts.
                 i[0] = 0;
 
                 //set tags to empty strings
-                tag1.setText("");
-                tag2.setText("");
-                tag3.setText("");
+                filterTag1.setText("");
+                filterTag2.setText("");
+                filterTag3.setText("");
+
+                //set tags invisible
+                filterTag1.setVisibility(View.INVISIBLE);
+                filterTag2.setVisibility(View.INVISIBLE);
+                filterTag3.setVisibility(View.INVISIBLE);
 
                 //set boolean array to false only
                 tagsStatus[0] = false;
                 tagsStatus[1] = false;
                 tagsStatus[2] = false;
 
+                tagsArray = new AppCompatButton[]{filterTag1, filterTag2, filterTag3};
+                textViewTags = new TextView[]{tag1, tag2, tag3};
+
                 tagSpinner = clubDialog.findViewById(R.id.tagSpinner);
-                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(),R.array.buddy_tags, android.R.layout.simple_spinner_item);
+                ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.buddy_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
+
+                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (position > 0) {
+                            String selectedItem = parent.getItemAtPosition(position).toString();
+                            if (i[0] < tagsStatus.length) {
+
+                                for (int j = 0; j < 3; j++) {
+
+                                    if (!tagsStatus[j]) {
+
+                                        tagsArray[j].setText(selectedItem);
+                                        if (!tagHasSelectedBefore(filterTag1, filterTag2, filterTag3)) {
+                                            tagsArray[j].setVisibility(View.VISIBLE);
+                                            i[0]++;
+                                            tagsStatus[j] = true;
+                                        } else {
+                                            tagsStatus[j] = false;
+                                            tagsArray[j].setText("");
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (i[0] == tagsStatus.length) {
+                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+                            tagSpinner.setEnabled(false);
+                            //tagSpinner.setClickable( false );
+                            //tagSpinner.setTop( 1 );
+                            //setTagsSaved( true );
+                        }
+                    }
+
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        //TODO
+                    }
+                });
+
 
                 //set the postDateEt to current date for default
                 Calendar calendar = Calendar.getInstance();
@@ -495,15 +552,14 @@ public class ClubsFragment extends Fragment {
                 final int minute = calendar.get(Calendar.MINUTE);
 
 
-
                 filterDateTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,day,month,year
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, setListener, day, month, year
                         );
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        datePickerDialog.updateDate(year,month,day);
+                        datePickerDialog.updateDate(year, month, day);
                         datePickerDialog.show();
                     }
                 });
@@ -512,7 +568,7 @@ public class ClubsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,timeSetListener,hourOfDay,minute,true
+                                getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, timeSetListener, hourOfDay, minute, true
                         );
                         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         timePickerDialog.show();
@@ -538,22 +594,200 @@ public class ClubsFragment extends Fragment {
                 };
 
 
+                //set onClickListeners for tags
+                filterTag1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filterTag1.setVisibility(View.INVISIBLE);
+                        tagsStatus[0] = false;
+                        tagSpinner.setEnabled(true);
+                        i[0]--;
+                        lastDeletedtag = 0;
+                    }
+                });
+
+                filterTag2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filterTag2.setVisibility(View.INVISIBLE);
+                        tagsStatus[1] = false;
+                        tagSpinner.setEnabled(true);
+                        i[0]--;
+                        lastDeletedtag = 1;
+                    }
+                });
+
+                filterTag3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        filterTag3.setVisibility(View.INVISIBLE);
+                        tagsStatus[2] = false;
+                        tagSpinner.setEnabled(true);
+                        i[0]--;
+                        lastDeletedtag = 2;
+                    }
+                });
+
+                //set on click listener for the searching filter imageView
+                searchFilterImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //save the user's filter choices
+                        String filterDate = filterDateTv.getText().toString().trim();
+                        String filterQuota = filterQuotaEt.getText().toString().trim();
+                        String filterTime = filterTimeTv.getText().toString().trim();
+                        String filterLocation = filterLocationEt.getText().toString().trim();
+                        filterTagsToUpload = "";
+
+
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(filterTag1.getText().toString()) || allTags[k].equals(filterTag2.getText().toString()) || allTags[k].equals(filterTag3.getText().toString())) {
+                                filterTagsToUpload = filterTagsToUpload + k + ",";
+                            }
+                        }
+
+                        if (filterTagsToUpload.length() != 0) {
+
+                            //tags to upload'un sonundaki virgülü atıyor
+                            StringBuilder tempString = new StringBuilder(filterTagsToUpload);
+                            filterTagsToUpload = tempString.deleteCharAt(tempString.length() - 1).toString(); //filterTagsToUpload = tempString.substring(0,tempString.length() - 2);
+                        }
+
+                        if (filterTagsToUpload.equals("")) {
+                            filterTagsToUpload = "0";
+                        }
+
+
+                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+                        Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
+
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Toast.makeText(getActivity(), "Oluyor buraya kadar", Toast.LENGTH_SHORT).show();
+
+
+                                postList.clear();
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+                                    System.out.println(ds.getValue());
+                                    ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
+
+                                    if (modelBuddyPost.getpQuota().contains(filterQuota)) {
+                                        /*
+                                        if (!filterDate.isEmpty()) {
+                                            if (!modelBuddyPost.getpDate().contains(filterDate)) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if (!filterTime.isEmpty()) {
+                                            if (!modelBuddyPost.getpTime().contains(filterTime)) {
+                                                continue;
+                                            }
+                                        }
+                                        */
+                                        if (!filterLocation.isEmpty()) {
+                                            if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if (!filterTagsToUpload.equals("0")) {
+                                            String[] filterPartialTags = filterTagsToUpload.split(",");
+                                            int filterTagNumber = filterPartialTags.length;
+
+                                            String postTags = modelBuddyPost.getpTags();
+                                            String[] postPartialTags = postTags.split(",");
+
+                                            if (!isMatch(postPartialTags, filterPartialTags)) {
+                                                continue;
+                                            }
+
+                                            /*
+                                            if ( filterTagNumber == 1 ) {
+
+                                                String tag1 = "";
+                                                tag1 = postPartialTags[0];
+                                                if (!tag1.equals(filterPartialTags[0])) {
+                                                    continue;
+                                                }
+
+                                                for (int i = 0; i < postPartialTags.length; i++) {
+                                                    if ( filterPartialTags[0].equals(postPartialTags[i]) )
+                                                }
+
+
+                                                if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
+                                                    continue;
+                                                }
+                                            }
+                                            else if (filterTagNumber == 2) {
+
+                                            }
+                                            else if ( filterTagNumber == 3 ) {
+                                                for (int i = 0; i < filterPartialTags.length; i++) {
+                                                    for (int j = 0; j < postPartialTags.length; j++) {
+                                                        filterPartialTags[i].equals(postPartialTags[j])
+                                                    }
+                                                }
+                                            }
+                                              */
+                                        }
+
+                                        postList.add(modelBuddyPost);
+
+                                        System.out.println();
+                                    }
+                                }
+                                // adapter
+                                adapterClubPosts = new AdapterClubPosts(getActivity(), postList);
+                                adapterClubPosts.notifyDataSetChanged();
+                                // set adapter to recyclerView
+                                recyclerView.setAdapter(adapterClubPosts);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        clubDialog.dismiss();
+                    }
+                });
+
+                //set on click listener to reset filters
+                resetFiltersImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        filterDateTv.setText("");
+                        filterQuotaEt.setText("");
+                        filterTimeTv.setText("");
+                        filterLocationEt.setText("");
+
+                        //TODO Reset Selected filters and set the feed back to normal feed.
+                        loadPosts();
+
+                    }
+                });
+
+
+                //dialog dismiss listener
+                clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+
+
+                    }
+                });
+
                 clubDialog.show();
-            }
-        });
-
-
-        //dialog dismiss listener
-        clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-
 
             }
         });
-
-
-
         return view;
     }
 
@@ -572,9 +806,9 @@ public class ClubsFragment extends Fragment {
                     postList.add(modelBuddyPost);
 
                     // adapter
-                    adapterBuddyPosts = new AdapterClubPosts(getActivity(), postList);
+                    adapterClubPosts = new AdapterClubPosts(getActivity(), postList);
                     // set adapter to recyclerView
-                    recyclerView.setAdapter(adapterBuddyPosts);
+                    recyclerView.setAdapter(adapterClubPosts);
                 }
                 pb.setVisibility(View.GONE);
             }
@@ -1644,6 +1878,19 @@ public class ClubsFragment extends Fragment {
             return (tag1String.equals(tag2String) && tag2String.equals(tag3String) && tag1String.equals(tag3String));
         }
     }
+
+            public static boolean isMatch(String[] arr1, String[] arr2) {
+                for (int i = 0; i < arr1.length; i++) {
+                    if (Arrays.stream(arr2).anyMatch( arr1[i] :: equals ) ) {
+
+                    }
+                    else {
+                        return false;
+                    }
+
+                }
+                return true;
+            }
 
 
 }
