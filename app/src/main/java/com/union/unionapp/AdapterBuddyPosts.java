@@ -143,8 +143,8 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 hashMap.put("pId", pId);
                 hashMap.put("username", username);
 
-
-                userRef.child("Calendar").child(pId).setValue(hashMap);
+                String fixedDate = pDate.replace("/" , "_");
+                userRef.child("Calendar").child(fixedDate).child(pId).setValue(hashMap);
 
                 //User calender bitişi
 
