@@ -42,7 +42,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:orientation="horizontal"
-                            android:layout_marginLeft="39dp">
+                            android:gravity="center">
 
                             <TextView
                                 android:id="@+id/topicTagTW"
@@ -183,9 +183,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="18dp"
                     android:layout_marginEnd="101dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="12dp"
                     android:background="@drawable/send_icon" />
 
                 <TextView

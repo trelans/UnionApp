@@ -47,7 +47,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         String pAnon = postList.get(position).getPAnon();
         String pId = postList.get(position).getPId();
         String pTitle = postList.get(position).getPTitle();
-        String pDetails = postList.get(position).getPDetails();
+        String pDetails = "      " +postList.get(position).getPDetails();
         String pImage = postList.get(position).getPImage();
         String pTime = postList.get(position).getPTime();
         String pTag = postList.get(position).getpTagIndex();
