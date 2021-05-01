@@ -214,6 +214,10 @@ public class MainActivity extends AppCompatActivity {
         // searchView
         searchView = findViewById(R.id.searchTool);
 
+
+
+
+
         //clubtan başlatıyor
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_club);
@@ -806,8 +810,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(messageFragment).commit();
                             active = messageFragment;
+                            searchView.setQueryHint("search to message");
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
+
 
                             // Yeni mesaj için search için
 
@@ -848,6 +854,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(buddyFragment).commit();
                             active = buddyFragment;
+                            searchView.setQueryHint("search users");
                             currentActivity = 2;
                             popUpButton.setImageResource(R.drawable.notif);
 
@@ -889,6 +896,7 @@ public class MainActivity extends AppCompatActivity {
                             fm.beginTransaction().hide(active).show(clubFragment).commit();
                             active = clubFragment;
                             currentActivity = 3;
+                            searchView.setQueryHint("search users");
                             popUpButton.setImageResource(R.drawable.notif);
 
                             // Profile search için
@@ -929,6 +937,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(stackFragment).commit();
                             active = stackFragment;
+                            searchView.setQueryHint("search users");
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
 
@@ -970,6 +979,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(profileFragment).commit();
                             active = profileFragment;
+                            searchView.setQueryHint("search users");
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
 
