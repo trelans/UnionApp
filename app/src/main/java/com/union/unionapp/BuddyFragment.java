@@ -16,7 +16,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -284,6 +286,9 @@ public class BuddyFragment extends Fragment {
                 addPhotoIv = buddyDialog.findViewById(R.id.uploadPhotoImageView);
                 postLocationEt = buddyDialog.findViewById(R.id.editTextLocation);
 
+                //set send button to disable initially.
+                sendButtonIv.setEnabled(false);
+
                 //init tags
                 tag1 = buddyDialog.findViewById(R.id.textViewTag1);
                 tag2 = buddyDialog.findViewById(R.id.textViewTag2);
@@ -341,6 +346,25 @@ public class BuddyFragment extends Fragment {
                         i[0]--;
                         lastDeletedtag = 2;
                         tag3.setText("");
+                    }
+                });
+
+                postHeadlineEt.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (!postHeadlineEt.getText().toString().trim().isEmpty()) {
+                            sendButtonIv.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
                     }
                 });
 
