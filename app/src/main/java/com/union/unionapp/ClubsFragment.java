@@ -397,8 +397,21 @@ public class ClubsFragment extends Fragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
-                        String date = dayOfMonth + "/" + month + "/" + year;
+                        String dayOfMonthS = "";
+                        String monthS = "";
+                        if (dayOfMonth < 10) {
+                            dayOfMonthS = "0" + dayOfMonth;
+                        }else {
+                            dayOfMonthS = String.valueOf(dayOfMonth);
+                        }
+                        if (month < 10 ) {
+                            monthS = "0" + month;
+                        }else {
+                            monthS =  ""+ month;
+                        }
+                        String date = dayOfMonthS + "/" + monthS + "/" + year;
                         postDateEt.setText(date);
+
 
                     }
                 };

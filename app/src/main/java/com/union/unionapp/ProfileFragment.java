@@ -48,6 +48,9 @@ public class ProfileFragment extends Fragment {
     private ArrayList<ModelAchievements> AchivementList;
     private AdapterAchievements adapterAchivement;
 
+    private ArrayList<ModelCalendar> CalendarList;
+    private AdapterCalendar adapterCalendar;
+
     boolean lastActsIsActive;
     boolean achsIsActive;
     String tagNums;
@@ -60,6 +63,7 @@ public class ProfileFragment extends Fragment {
     TextView achsTextView;
     RecyclerView lastActsRv;
     RecyclerView achsListRv;
+    RecyclerView calendarRecycleView;
     ImageView openCalendar;
     Dialog calendarDialog;
     TextView usernameTW;
@@ -250,15 +254,17 @@ public class ProfileFragment extends Fragment {
                 forwardDateImageView = calendarDialog.findViewById(R.id.forwardImageView);
                 backwardDateImageView = calendarDialog.findViewById(R.id.backwardsImageView);
                 dateTextView = calendarDialog.findViewById(R.id.dateTextView);
+                calendarRecycleView = (RecyclerView) calendarDialog.findViewById(R.id.calendarRv);
 
                 calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(MainActivity.getServerDate()); // retrieve the date from the server
                 calendarToString(calendar);
 
+                //date variablı 02/05/2021
 
                 //current date - initial date
                 dateTextView.setText(date);
-                getCurrentDateActivities(calendar); // displays specified dates activities.
+                getCurrentDateActivities(date , calendarRecycleView); // displays specified dates activities.
 
                 forwardDateImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -267,7 +273,8 @@ public class ProfileFragment extends Fragment {
                         calendar.add(Calendar.DATE, 1);
                         calendarToString(calendar);
                         dateTextView.setText(date);
-                        getCurrentDateActivities(calendar);
+                        getCurrentDateActivities(date , calendarRecycleView);
+
 
                     }
                 });
@@ -280,7 +287,7 @@ public class ProfileFragment extends Fragment {
                         calendar.add(Calendar.DATE, -1);
                         calendarToString(calendar);
                         dateTextView.setText(date);
-                        getCurrentDateActivities(calendar);
+                        getCurrentDateActivities(date , calendarRecycleView);
                     }
                 });
 
@@ -293,8 +300,34 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void getCurrentDateActivities(Calendar calendar) {
+    public void getCurrentDateActivities(String date , RecyclerView rv) {
+        String fixedDate =  date.replace("/", "_");
+        CalendarList = new ArrayList<>();
+        DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Users/" + uid + "/Calendar/" + fixedDate);
+        databaseReferenceNotif
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        CalendarList.clear();
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            // get data
+                            ModelCalendar model = ds.getValue(ModelCalendar.class);
+                            // add to list
+                            CalendarList.add(model);
+                        }
+                        // adapter
+                        adapterCalendar = new AdapterCalendar(getActivity() , CalendarList);
+                        // set to recycler view
+                        rv.setAdapter(adapterCalendar);
+                        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     public void calendarToString(Calendar calendar) {
@@ -373,4 +406,6 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+
+
 }
