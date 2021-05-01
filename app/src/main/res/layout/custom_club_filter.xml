@@ -34,7 +34,7 @@
 
 
                 <EditText
-                    android:id="@+id/locationPlainText"
+                    android:id="@+id/locationFilterEditText"
                     android:layout_width="174dp"
                     android:layout_height="25dp"
                     android:layout_alignParentBottom="true"
@@ -69,7 +69,7 @@
                     android:inputType="number" />
 
                 <EditText
-                    android:id="@+id/quotaNumberText"
+                    android:id="@+id/quotaFilterEditText"
                     android:layout_width="65dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -80,7 +80,7 @@
                     android:inputType="number" />
 
                 <ImageView
-                    android:id="@+id/send"
+                    android:id="@+id/cancelFilterImageView"
                     android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -204,7 +204,7 @@
                     app:layout_constraintVertical_bias="0.512" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/filterTag3TextView"
+                    android:id="@+id/filterTag2TextView"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"
@@ -233,7 +233,7 @@
                     app:layout_constraintVertical_bias="0.512" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/sampleTag4"
+                    android:id="@+id/filterTag3TextView"
 
                     android:layout_width="78dp"
                     android:layout_height="19dp"
@@ -262,7 +262,7 @@
                     app:layout_constraintVertical_bias="0.512" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/searchFiltersImageView"
                     android:layout_width="30dp"
                     android:layout_height="34dp"
                     android:layout_alignParentBottom="true"

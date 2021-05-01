@@ -18,6 +18,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHolder> {
@@ -130,6 +138,27 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             public void onClick(View view) {
                 //TODO calendar ekleme işlemini yap
                 Toast.makeText(context, "calendara basıldı", Toast.LENGTH_SHORT).show();
+
+                //Kutay's calendar code
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                String uid = mAuth.getCurrentUser().getUid();
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users/"+ uid );
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("pType", "Club");
+                hashMap.put("pTitle", pTitle);
+                hashMap.put("pHour", pHour );
+                hashMap.put("pDate", pDate );
+                hashMap.put("pId", pId);
+                hashMap.put("username", username);
+
+
+                userRef.child("Calendar").child(pId).setValue(hashMap);
+
+                //User calender bitişi
+
+                //TODO Ömer's Calendar code
+
             }
         });
 
@@ -213,6 +242,10 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
 
         }
 
+
+    }
+
+    private void calendarToServer() {
 
     }
 }
