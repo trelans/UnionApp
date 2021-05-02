@@ -140,6 +140,10 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         }
          */
 
+        if (hisUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            holder.sendButtonIB.setEnabled(false);
+        }
+
         holder.calendarIB.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
