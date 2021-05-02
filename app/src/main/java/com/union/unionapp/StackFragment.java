@@ -362,6 +362,7 @@ public class StackFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
+                    System.out.println("tetiklendi");
                     ModelStackPost modelStackPost = ds.getValue(ModelStackPost.class);
                     postList.add(modelStackPost);
 
@@ -379,6 +380,7 @@ public class StackFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     private void searchPosts( String searchQuery ) {
