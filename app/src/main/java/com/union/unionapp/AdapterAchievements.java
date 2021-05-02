@@ -94,39 +94,47 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         if (genre == 1) { //Math
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_rookie);
-                //bunu diğerlerine de eklersn knkss // TODO YUNUS
                 achicon.setImageResource(R.drawable.medal_math_rookie);
-                //
+
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_pro);
+                achicon.setImageResource(R.drawable.medal_math_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_titan);
+                achicon.setImageResource(R.drawable.medal_math_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_math_maestro);
+                achicon.setImageResource(R.drawable.medal_math_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_math_slayer);
+                achicon.setImageResource(R.drawable.medal_math_slayer);
             }
 
         } else if (genre == 2) { //Career
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_career_rookie);
+                achicon.setImageResource(R.drawable.medal_career_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_career_pro);
+                achicon.setImageResource(R.drawable.medal_career_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_career_titan);
+                achicon.setImageResource(R.drawable.medal_career_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_career_maestro);
+                achicon.setImageResource(R.drawable.medal_career_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_career_slayer);
+                achicon.setImageResource(R.drawable.medal_career_slayer);
             }
 
         } else if (genre == 3) { //Sport
@@ -136,106 +144,135 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_sport_pro);
+                achicon.setImageResource(R.drawable.medal_sport_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_sport_titan);
+                achicon.setImageResource(R.drawable.medal_sport_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_sport_maestro);
+                achicon.setImageResource(R.drawable.medal_sport_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_sport_slayer);
+                achicon.setImageResource(R.drawable.medal_sport_slayer);
             }
 
         } else if (genre == 4) { //Technology
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_tech_rookie);
+                achicon.setImageResource(R.drawable.medal_tech_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_tech_pro);
+                achicon.setImageResource(R.drawable.medal_tech_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_tech_titan);
+                achicon.setImageResource(R.drawable.medal_tech_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_tech_maestro);
+                achicon.setImageResource(R.drawable.medal_tech_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_tech_slayer);
+                achicon.setImageResource(R.drawable.medal_tech_slayer);
             }
 
         } else if (genre == 5) { //Social
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_social_rookie);
+                achicon.setImageResource(R.drawable.medal_social_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_social_pro);
+                achicon.setImageResource(R.drawable.medal_social_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_social_titan);
+                achicon.setImageResource(R.drawable.medal_social_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_social_maestro);
+                achicon.setImageResource(R.drawable.medal_social_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_social_slayer);
+                achicon.setImageResource(R.drawable.medal_social_slayer);
             }
 
         } else if (genre == 6) { //English
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_english_rookie);
+                achicon.setImageResource(R.drawable.medal_english_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_english_pro);
+                achicon.setImageResource(R.drawable.medal_english_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_english_titan);
+                achicon.setImageResource(R.drawable.medal_english_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_english_maestro);
+                achicon.setImageResource(R.drawable.medal_english_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_english_slayer);
+                achicon.setImageResource(R.drawable.medal_english_slayer);
             }
 
         } else if (genre == 7) { //Turkish
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_turkish_rookie);
+                achicon.setImageResource(R.drawable.medal_turkish_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_turkish_pro);
+                achicon.setImageResource(R.drawable.medal_turkish_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_turkish_titan);
+                achicon.setImageResource(R.drawable.medal_turkish_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_turkish_maestro);
+                achicon.setImageResource(R.drawable.medal_turkish_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_turkish_slayer);
+                achicon.setImageResource(R.drawable.medal_turkish_slayer);
             }
 
         } else { //8. Study
             if (lvl == 1) {
                 holder.avatarIv.setImageResource(R.drawable.medal_study_rookie);
+                achicon.setImageResource(R.drawable.medal_study_rookie);
 
             } else if (lvl == 2) {
                 holder.avatarIv.setImageResource(R.drawable.medal_study_pro);
+                achicon.setImageResource(R.drawable.medal_study_pro);
 
             } else if (lvl == 3) {
                 holder.avatarIv.setImageResource(R.drawable.medal_study_titan);
+                achicon.setImageResource(R.drawable.medal_study_titan);
 
             } else if (lvl == 4) {
                 holder.avatarIv.setImageResource(R.drawable.medal_study_maestro);
+                achicon.setImageResource(R.drawable.medal_study_maestro);
 
             } else {
                 // level 5
                 holder.avatarIv.setImageResource(R.drawable.medal_study_slayer);
+                achicon.setImageResource(R.drawable.medal_study_slayer);
             }
 
         }
