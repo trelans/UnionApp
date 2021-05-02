@@ -67,9 +67,9 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
         holder.dateTW.setText(pDate + " " + pHour);
-        holder.zoomLinkTW.setText(pLocation);
-        holder.genderTW.setText("Gender Pref: " + pGender);
-        holder.quotaTW.setText("Quota: " + pQuota);
+        holder.zoomLinkTW.setText("Location: " + pLocation);
+        holder.genderTW.setText("Gender: " + pGender);
+        holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
         // TODO resim eklemeyi yap holder.publisherPP.setImageResource();
 

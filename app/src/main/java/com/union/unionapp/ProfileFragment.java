@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -193,7 +194,15 @@ public class ProfileFragment extends Fragment {
         lastActsRv.setVisibility(View.VISIBLE);
         lastActsRv.setEnabled(true);
 
-        loadLastAct();
+
+
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                loadLastAct();
+            }
+        }, 1000);
 
         achsListRv.setVisibility(View.INVISIBLE);
         achsListRv.setEnabled(false);
@@ -349,7 +358,7 @@ public class ProfileFragment extends Fragment {
 
         return s.toString();
     }
-    private void loadLastAct() {
+    public void loadLastAct() {
         System.out.println(uid + "dsfdsdsfsdf");
         LastActList = new ArrayList<>();
         DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference("BilkentUniversity/Users/" + uid + "/LastActivities/");

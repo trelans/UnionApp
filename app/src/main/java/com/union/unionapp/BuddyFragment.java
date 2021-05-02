@@ -410,7 +410,15 @@ public class BuddyFragment extends Fragment {
                 timeSetListener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        String time = hourOfDay + ":" + minute;
+                        String hourOfDayS = "" + hourOfDay;
+                        String minuteS = "" + minute;
+                        if (hourOfDay < 10) {
+                            hourOfDayS = "0" + hourOfDay;
+                        }
+                        if (minute < 10) {
+                            minuteS = "0" + minute;
+                        }
+                        String time = hourOfDayS + ":" + minuteS;
                         postTimeEt.setText(time);
                     }
                 };
