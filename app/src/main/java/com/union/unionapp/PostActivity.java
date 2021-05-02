@@ -239,7 +239,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
 
         questionContentTW.setText("     " + pDetails);
         if (!pAnon.equals("1")) {
-            pUserNameTW.setText( "@" + username);
+            pUserNameTW.setText("@" + username);
         } else {
             pUserNameTW.setText("@" + "anonymous");
         }
@@ -336,6 +336,10 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             }
         });
 
+        // adapter
+        adapterComment[0] = new AdapterComment(PostActivity.this, commentList, pId);
+        // set adapter to recyclerView
+        recyclerView.setAdapter(adapterComment[0]);
         // path of all comments
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Comments/" + pId);
         Query query = ref.orderByChild("upNumber");
@@ -346,12 +350,8 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     ModelComment modelComment = ds.getValue(ModelComment.class);
                     commentList.add(modelComment);
-
-                    // adapter
-                    adapterComment[0] = new AdapterComment(PostActivity.this, commentList, pId, modelComment.getCId());
-                    // set adapter to recyclerView
-                    recyclerView.setAdapter(adapterComment[0]);
                 }
+                adapterComment[0].notifyDataSetChanged();
             }
 
             @Override
@@ -428,7 +428,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         newTags[1] = "";
         newTags[2] = "";
 
-        if (pTags == null){
+        if (pTags == null) {
             return;
         }
         String[] tags = pTags.split(",");

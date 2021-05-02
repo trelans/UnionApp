@@ -362,7 +362,7 @@ public class StackFragment extends Fragment {
 
         // path of all posts
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
-        Query query = ref.orderByChild("upVoteNumber");
+        Query query = ref.orderByChild("pUpvoteNumber");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

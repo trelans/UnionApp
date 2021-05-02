@@ -100,12 +100,12 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts").child(postList.get(position).pId);
+                ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 System.out.println(postList.get(position).getPId());
                 System.out.println(position);
                 updateUpNumber.put("pUpvoteNumber", Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "");
-                ref1.updateChildren(updateUpNumber);
+                ref1.child(pId).updateChildren(updateUpNumber);
                 upVoteNumber[0] = Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "";
                 holder.upNumber.setText(upVoteNumber[0]);
             }

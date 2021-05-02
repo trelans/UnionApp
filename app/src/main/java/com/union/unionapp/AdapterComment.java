@@ -21,14 +21,12 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
     Context context;
     List<ModelComment> commentList;
     String postId;
-    String commentId;
     DatabaseReference ref;
 
-    public AdapterComment(Context context, List<ModelComment> commentList, String postId, String commentId) {
+    public AdapterComment(Context context, List<ModelComment> commentList, String postId) {
         this.context = context;
         this.commentList = commentList;
         this.postId = postId;
-        this.commentId = commentId;
     }
 
     @NonNull
