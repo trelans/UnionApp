@@ -2,12 +2,13 @@ package com.union.unionapp;
 
 public class ModelStackPost {
     // use same name as we given while uploading posts
-    String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon , username, pUpvoteNumber, pTagIndex;
+    String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon, username, pTagIndex;
+    int pUpvoteNumber;
 
     public ModelStackPost() {
     }
 
-    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, String pUpvoteNumber , String pTagIndex) {
+    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, Integer pUpvoteNumber, String pTagIndex) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDetails = pDetails;
@@ -77,11 +78,11 @@ public class ModelStackPost {
         this.uEmail = uEmail;
     }
 
-    public String getPUpvoteNumber() {
+    public int getPUpvoteNumber() {
         return pUpvoteNumber;
     }
 
-    public void setPUpvoteNumber(String pUpvoteNumber) {
+    public void setPUpvoteNumber(int pUpvoteNumber) {
         this.pUpvoteNumber = pUpvoteNumber;
     }
 
@@ -101,7 +102,11 @@ public class ModelStackPost {
         this.username = username;
     }
 
-    public String getpTagIndex() { return pTagIndex; }
+    public String getpTagIndex() {
+        return pTagIndex;
+    }
 
-    public void setpTagIndex(String pTagIndex) { this.pTagIndex = pTagIndex; }
+    public void setpTagIndex(String pTagIndex) {
+        this.pTagIndex = pTagIndex;
+    }
 }

@@ -606,7 +606,7 @@ public class StackFragment extends Fragment {
                             if (uriTask.isSuccessful()) {
                                 //uri is received upload post to firebase database
 
-                                HashMap<Object,String> hashMap = new HashMap<>();
+                                HashMap<String, Object> hashMap = new HashMap<>();
                                 //put post info
                                 checkUserStatus();
                                 hashMap.put("uid",uid); //çekememiş
@@ -618,7 +618,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pImage",downloadUri);
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pTags", tagToUpload); //TODO tagler için değişicek
-                                hashMap.put("pUpvoteNumber","0");
+                                hashMap.put("pUpvoteNumber", 0);
                                 hashMap.put("pTitle", postTitle);
                                 hashMap.put("pTagIndex",tagToUpload);
 
@@ -742,7 +742,7 @@ public class StackFragment extends Fragment {
         else {
             //post without image
 
-            HashMap<Object,String> hashMap = new HashMap<>();
+            HashMap<String, Object> hashMap = new HashMap<>();
             //put post info
             checkUserStatus();
             hashMap.put("uid",uid);
@@ -753,7 +753,7 @@ public class StackFragment extends Fragment {
             hashMap.put("pDetails",postDetails);
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
-            hashMap.put("pUpvoteNumber","0");
+            hashMap.put("pUpvoteNumber", 0);
             hashMap.put("pTitle",postTitle);
             hashMap.put("pTagIndex",tagToUpload);
 

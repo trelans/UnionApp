@@ -44,7 +44,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         String uName = commentList.get(position).getUName();
         String comment = commentList.get(position).getComment();
         String anonymous = commentList.get(position).getCAnon();
-        String upNumber = commentList.get(position).getUpNumber();
+        int upNumber = commentList.get(position).getUpNumber();
 
 
         //set data
@@ -54,7 +54,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
             public void onClick(View view) {
                 // TODO: 4/26/21 burayı ve üstüne basıldığında yeni diyalog olarak commentin büyük halinin açılmasını yap
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
-                updateUpNumber.put("upNumber", Integer.valueOf(commentList.get(position).getUpNumber()) + 1 + "");
+                updateUpNumber.put("upNumber", commentList.get(position).getUpNumber() + 1);
                 ref.child(commentList.get(position).getCId()).updateChildren(updateUpNumber);
             }
         });

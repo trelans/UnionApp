@@ -2,12 +2,13 @@ package com.union.unionapp;
 
 public class ModelComment {
     // use the same name as used in uploading comments
-    String cId, comment, timeStamp, upNumber, uid, cAnon, cPhoto, uName;
+    String cId, comment, timeStamp, uid, cAnon, cPhoto, uName;
+    int upNumber;
 
     public ModelComment() {
     }
 
-    public ModelComment(String cId, String comment, String timeStamp, String upNumber, String uid, String cAnon, String cPhoto, String uName) {
+    public ModelComment(String cId, String comment, String timeStamp, Integer upNumber, String uid, String cAnon, String cPhoto, String uName) {
         this.cId = cId;
         this.comment = comment;
         this.timeStamp = timeStamp;
@@ -42,11 +43,11 @@ public class ModelComment {
         this.timeStamp = timeStamp;
     }
 
-    public String getUpNumber() {
+    public int getUpNumber() {
         return upNumber;
     }
 
-    public void setUpNumber(String upNumber) {
+    public void setUpNumber(int upNumber) {
         this.upNumber = upNumber;
     }
 

@@ -127,7 +127,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                         if (pType.equals("Stack")) {
                             ModelStackPost modelStackPost = snapshot.getValue(ModelStackPost.class);
                             assert modelStackPost != null;
-                            upVoteNumber = modelStackPost.pUpvoteNumber;
+                            upVoteNumber = modelStackPost.pUpvoteNumber + "";
                             pAnon = modelStackPost.pAnon;
                             upNumberTW.setText(upVoteNumber);
                             pTime = modelStackPost.pTime;
@@ -300,7 +300,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                     hashMap.put("cId", timeStamp);
                     hashMap.put("comment", comment);
                     hashMap.put("timeStamp", timeStamp);
-                    hashMap.put("upNumber", "0");
+                    hashMap.put("upNumber", 0);
                     hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     hashMap.put("cAnon", isAnonCB.isChecked() ? "1" : "0");
                     //isAnonCB.isChecked() ? "1" : "0")

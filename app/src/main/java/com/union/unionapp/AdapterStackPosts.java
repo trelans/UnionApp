@@ -55,7 +55,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         String pTime = postList.get(position).getPTime();
         String pTag = postList.get(position).getpTagIndex();
 
-        final String[] upVoteNumber = {postList.get(position).getPUpvoteNumber()};
+        final int[] upVoteNumber = {postList.get(position).getPUpvoteNumber()};
 
         /*
         //Convert timestamp to dd//mm/yyyy hh:mm am/pm
@@ -67,7 +67,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         //set data
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
-        holder.upNumber.setText(upVoteNumber[0]);
+        holder.upNumber.setText(upVoteNumber[0] + "");
         //holder.upNumber.setText("1");
 
 
@@ -104,10 +104,10 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 System.out.println(postList.get(position).getPId());
                 System.out.println(position);
-                updateUpNumber.put("pUpvoteNumber", Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "");
+                updateUpNumber.put("pUpvoteNumber", postList.get(position).getPUpvoteNumber() + 1);
                 ref1.child(pId).updateChildren(updateUpNumber);
-                upVoteNumber[0] = Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "";
-                holder.upNumber.setText(upVoteNumber[0]);
+                upVoteNumber[0] = postList.get(position).getPUpvoteNumber() + 1;
+                holder.upNumber.setText(upVoteNumber[0] + "");
             }
         });
 
@@ -125,7 +125,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 intent.putExtra("pId", pId);
 
                 // Dif. from buddy
-                intent.putExtra("upVoteNumber", upVoteNumber[0]);
+                intent.putExtra("upVoteNumber", upVoteNumber[0] + "");
                 intent.putExtra("pAnon", pAnon);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
