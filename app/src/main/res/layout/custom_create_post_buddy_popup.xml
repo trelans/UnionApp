@@ -198,15 +198,15 @@
                         android:id="@+id/editTextLocation"
                         android:layout_width="match_parent"
                         android:layout_height="26dp"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentStart="true"
-                        android:layout_marginTop="41dp"
+                        android:layout_alignParentTop="true"
                         android:layout_marginStart="60dp"
+                        android:layout_marginTop="41dp"
                         android:layout_marginEnd="10dp"
-                        android:paddingStart="5dp"
-                        android:textSize="12sp"
                         android:background="@drawable/edittext_border_template"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPersonName|textCapWords"
+                        android:paddingStart="5dp"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/textView8"
@@ -245,32 +245,32 @@
                         android:layout_below="@+id/textView6"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="3dp"
                         android:background="@drawable/edittext_only_top_rounded_border_template"
                         android:fontFamily="@font/myriad_pro_regular"
                         android:hint="Write your headline here..."
-                        android:inputType="textPersonName"
+                        android:inputType="textPersonName|textCapWords"
+                        android:paddingStart="5dp"
+                        android:paddingEnd="3dp"
                         android:textSize="15dp" />
 
                     <EditText
                         android:id="@+id/editTextPostDetails"
                         android:layout_width="match_parent"
                         android:layout_height="130dp"
+                        android:layout_below="@id/editTextHeadLine"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_below="@id/editTextHeadLine"
                         android:background="@drawable/edittext_only_bottom_rounded_border_template"
                         android:ems="10"
-                        android:paddingStart="5dp"
-                        android:paddingEnd="3dp"
                         android:gravity="start|top"
                         android:hint="Write your announcement here..."
-                        android:inputType="textMultiLine"
-                        android:minLines="9"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:maxLines="9"
-                        android:scrollbars="vertical"
+                        android:minLines="9"
+                        android:paddingStart="5dp"
                         android:paddingTop="2dp"
+                        android:paddingEnd="3dp"
+                        android:scrollbars="vertical"
                         android:textSize="12sp" />
 
 

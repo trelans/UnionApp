@@ -60,7 +60,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         String pHour = postList.get(position).getpHour();
         String pLocation = postList.get(position).getpLocation();
         String pQuota = postList.get(position).getpQuota();
-        String pDetails = postList.get(position).getpDetails();
+        String pDetails = "      " + postList.get(position).getpDetails();
         String pImage = postList.get(position).getpImage();
         String pTime = postList.get(position).getpTime();
         String hisUid = postList.get(position).getUid();
@@ -87,9 +87,9 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
         holder.dateTW.setText(pDate + " " + pHour);
-        holder.zoomLinkTW.setText(pLocation);
-        holder.genderTW.setText("Optional");
-        holder.quotaTW.setText(pQuota);
+        holder.zoomLinkTW.setText( "Location: "+ pLocation);
+        holder.genderTW.setText( "Gender:" + "   -");
+        holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
 
 

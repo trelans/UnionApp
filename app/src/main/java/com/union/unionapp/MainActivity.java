@@ -214,6 +214,10 @@ public class MainActivity extends AppCompatActivity {
         // searchView
         searchView = findViewById(R.id.searchTool);
 
+
+
+
+
         //clubtan başlatıyor
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_club);
@@ -430,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
             tagsStatus[1] = false;
             tagsStatus[2] = false;
 
-            saveTagsButton.setEnabled(false);
+            //saveTagsButton.setEnabled(false);
 
             tagsArray = new AppCompatButton[]{tagButton1, tagButton2, tagButton3};
             Spinner tagSpinner = myDialog.findViewById(R.id.tagSpinner);
@@ -495,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < tagsStatus.length; i++) {
                         tagsStatus[i] = false;
                     }
-                    saveTagsButton.setEnabled(false);
+                    //saveTagsButton.setEnabled(false);
                     //tagSpinner.setClickable( true );
                     setAllSettingsTagsInvisible();
                     setTagsSaved(false);
@@ -507,55 +511,69 @@ public class MainActivity extends AppCompatActivity {
             saveTagsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (i[0] == 3) {
+                        saveTagsButton.setError(null);
+                        String tagIndexes = "";
 
-                    String tagIndexes = "";
-
-                    for ( int k = 1; k < allTags.length; k++ ) {
-                        if ( allTags[ k ].equals( tagButton1.getText().toString() ) || allTags[ k ].equals( tagButton2.getText().toString() ) || allTags[ k ].equals( tagButton3.getText().toString() ) ) {
-                            tagIndexes = tagIndexes + k + ",";
+                        for (int k = 1; k < allTags.length; k++) {
+                            if (allTags[k].equals(tagButton1.getText().toString()) || allTags[k].equals(tagButton2.getText().toString()) || allTags[k].equals(tagButton3.getText().toString())) {
+                                tagIndexes = tagIndexes + k + ",";
+                            }
                         }
+
+                        if (tagIndexes.length() > 0) {
+                            StringBuilder tempString = new StringBuilder(tagIndexes);
+                            tempString.deleteCharAt(tempString.length() - 1);
+                            tagIndexes = tempString.toString();
+                        }
+
+                        DatabaseReference reference = firebaseDatabase.getReference("BilkentUniversity/Users/" + mUID);
+                        // put data within hashmap in database
+                        reference.child("tags").setValue(tagIndexes);
+
+                        Toast.makeText(getApplicationContext(), tagIndexes, Toast.LENGTH_LONG).show();
                     }
-
-                    if (tagIndexes.length() > 0) {
-                        StringBuilder tempString = new StringBuilder(tagIndexes);
-                        tempString.deleteCharAt(tempString.length() - 1);
-                        tagIndexes = tempString.toString();
+                    else {
+                        saveTagsButton.setError("3 tags must be selected!");
                     }
-
-                    DatabaseReference reference = firebaseDatabase.getReference("BilkentUniversity/Users/"+mUID);
-                    // put data within hashmap in database
-                    reference.child("tags").setValue(tagIndexes);
-
-                    Toast.makeText(getApplicationContext(), tagIndexes, Toast.LENGTH_LONG).show();
                 }
             });
 
             changePassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            String password = newPassword.getText().toString();
-                            if (password.equals(currentPassword.getText().toString())) {
-                                Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
-                            } else if (password.length() >= 6) {
-                                mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
-                                Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
-                                currentPassword.setText("");
-                                newPassword.setText("");
-                            } else {
-                                Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
-                            }
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MainActivity.this, "Current password is wrong!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    if (newPassword.getText().toString().trim().isEmpty() || currentPassword.getText().toString().trim().isEmpty() ) {
+                        newPassword.setError("Cannot be left empty!");
+                        currentPassword.setError("Cannot be left empty!");
+                    }
+                    else {
+                        mAuth.signInWithEmailAndPassword(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                String password = newPassword.getText().toString();
+
+                                if (password.equals(currentPassword.getText().toString())) {
+                                    Toast.makeText(MainActivity.this, "New Password should be different than old one", Toast.LENGTH_SHORT).show();
+                                } else if (password.length() >= 6) {
+                                    mAuth.getCurrentUser().updatePassword(newPassword.getText().toString());
+                                    Toast.makeText(MainActivity.this, "Password was succesfully changed", Toast.LENGTH_SHORT).show();
+                                    currentPassword.setText("");
+                                    newPassword.setText("");
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Password must be at least 6 character", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this, "Current password is wrong!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
+
             });
 
             logout.setOnClickListener(new View.OnClickListener() {
@@ -801,8 +819,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(messageFragment).commit();
                             active = messageFragment;
+                            searchView.setQueryHint("search to message");
                             currentActivity = 1;
                             popUpButton.setImageResource(R.drawable.notif);
+
 
                             // Yeni mesaj için search için
 
@@ -843,6 +863,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(buddyFragment).commit();
                             active = buddyFragment;
+                            searchView.setQueryHint("search users");
                             currentActivity = 2;
                             popUpButton.setImageResource(R.drawable.notif);
 
@@ -884,6 +905,7 @@ public class MainActivity extends AppCompatActivity {
                             fm.beginTransaction().hide(active).show(clubFragment).commit();
                             active = clubFragment;
                             currentActivity = 3;
+                            searchView.setQueryHint("search users");
                             popUpButton.setImageResource(R.drawable.notif);
 
                             // Profile search için
@@ -924,6 +946,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(stackFragment).commit();
                             active = stackFragment;
+                            searchView.setQueryHint("search users");
                             currentActivity = 4;
                             popUpButton.setImageResource(R.drawable.notif);
 
@@ -965,6 +988,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             fm.beginTransaction().hide(active).show(profileFragment).commit();
                             active = profileFragment;
+                            searchView.setQueryHint("search users");
                             currentActivity = 5;
                             popUpButton.setImageResource(R.drawable.settings_icon);
 
@@ -1099,6 +1123,11 @@ public class MainActivity extends AppCompatActivity {
                         adapterNotification = new AdapterNotification(getApplicationContext() , notificationsList);
                         // set to recycler view
                         notificationsRv.setAdapter(adapterNotification);
+
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                        notificationsRv.setLayoutManager(linearLayoutManager);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
 
                     }
 
