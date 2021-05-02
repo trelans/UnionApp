@@ -355,9 +355,15 @@ public class StackFragment extends Fragment {
     }
 
     private void loadPosts() {
+        // adapter
+        adapterStackPosts = new AdapterStackPosts(getActivity(), postList, getActivity());
+        // set adapter to recyclerView
+        recyclerView.setAdapter(adapterStackPosts);
+
         // path of all posts
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
-        ref.addValueEventListener(new ValueEventListener() {
+        Query query = ref.orderByChild("upVoteNumber");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
@@ -365,12 +371,8 @@ public class StackFragment extends Fragment {
                     System.out.println("tetiklendi");
                     ModelStackPost modelStackPost = ds.getValue(ModelStackPost.class);
                     postList.add(modelStackPost);
-
-                    // adapter
-                    adapterStackPosts = new AdapterStackPosts(getActivity(), postList, getActivity());
-                    // set adapter to recyclerView
-                    recyclerView.setAdapter(adapterStackPosts);
                 }
+                adapterStackPosts.notifyDataSetChanged();
                 pb.setVisibility(View.GONE);
             }
 

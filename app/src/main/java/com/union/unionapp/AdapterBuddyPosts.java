@@ -185,10 +185,10 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         if (tags.length == 0) {
             newTags[0] = "";
         } else if (tags.length == 1) {
-            newTags[0] = allTags[Integer.valueOf(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
+            newTags[0] = allTags[Integer.parseInt(tags[0])]; // newTags[0] = allTags[Integer.valueOf(tags[0])];
         } else {
             for (int i = 0; i < tags.length; i++) {
-                newTags[i] = allTags[Integer.valueOf(tags[i])];
+                newTags[i] = allTags[Integer.parseInt(tags[i])];
             }
         }
 
@@ -198,6 +198,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             if (tags[0].equals("0")) {
                 holder.topicTagTW1.setVisibility(View.INVISIBLE);
             } else {
+                holder.topicTagTW1.setVisibility(View.VISIBLE);
                 holder.topicTagTW1.setText(newTags[0]);
             }
         }
@@ -205,12 +206,14 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         if (newTags[1].equals("")) {
             holder.topicTagTW2.setVisibility(View.INVISIBLE);
         } else {
+            holder.topicTagTW2.setVisibility(View.VISIBLE);
             holder.topicTagTW2.setText(newTags[1]);
         }
 
         if (newTags[2].equals("")) {
             holder.topicTagTW3.setVisibility(View.INVISIBLE);
         } else {
+            holder.topicTagTW3.setVisibility(View.VISIBLE);
             holder.topicTagTW3.setText(newTags[2]);
         }
     }

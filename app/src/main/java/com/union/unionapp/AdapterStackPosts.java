@@ -75,11 +75,13 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         allTags = MainActivity.getAllTags();
         System.out.println();
 
-        if (Integer.valueOf(pTag) != 0) {
-            holder.topicTag.setText(allTags[Integer.valueOf(pTag)]); //TODO
-        }
-        else {
+        if (Integer.parseInt(pTag) != 0) {
+            holder.topicTag.setVisibility(View.VISIBLE);
+            holder.topicTag.setText(allTags[Integer.parseInt(pTag)]); //TODO
+            System.out.println("Tag: " + pTag);
+        } else {
             holder.topicTag.setVisibility(View.INVISIBLE);
+            System.out.println("Tag: " + pTag);
         }
         //if there is no image
         if (pImage.equals("noImage")) {
@@ -94,18 +96,21 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             e.printStackTrace();
         }
          */
+
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts").child(postList.get(position).pId);
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 System.out.println(postList.get(position).getPId());
+                System.out.println(position);
                 updateUpNumber.put("pUpvoteNumber", Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "");
                 ref1.updateChildren(updateUpNumber);
                 upVoteNumber[0] = Integer.valueOf(postList.get(position).getPUpvoteNumber()) + 1 + "";
                 holder.upNumber.setText(upVoteNumber[0]);
             }
         });
+
 
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
 
@@ -158,6 +163,8 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             upNumber = itemView.findViewById(R.id.textViewUpNumber);
             topicTag = itemView.findViewById(R.id.topicTagTW);
             cardView = itemView.findViewById(R.id.card);
+
+
         }
     }
 }
