@@ -282,7 +282,7 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
             @Override
             public void onClick(View v) {
                 myDialog.show(); //TODO other profile buglu
-                System.out.println("DSADAS");
+
 
             }
         });

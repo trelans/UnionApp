@@ -54,7 +54,6 @@ public class OtherProfile extends AppCompatActivity {
     private ArrayList<ModelAchievements> AchivementList;
     private AdapterAchievements adapterAchivement;
     ImageView directMessage;
-    Dialog calendarDialog;
     TextView usernameTW;
     ImageView userPP;
     String hisUid;
@@ -161,9 +160,9 @@ public class OtherProfile extends AppCompatActivity {
             }
         });
 
-        calendarDialog = new Dialog(getApplicationContext());
+
         // Layoutu transparent yapıo
-        calendarDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         directMessage = (ImageView) findViewById(R.id.directMessage);
         lastActsTextView = (TextView) findViewById(R.id.lastActsTextView);
@@ -316,7 +315,7 @@ public class OtherProfile extends AppCompatActivity {
                             AchivementList.add(model);
                         }
                         // adapter
-                        adapterAchivement = new AdapterAchievements(getApplicationContext(), AchivementList);
+                        adapterAchivement = new AdapterAchievements(OtherProfile.this, AchivementList);
                         // set to recycler view
                         achsListRv.setAdapter(adapterAchivement);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
