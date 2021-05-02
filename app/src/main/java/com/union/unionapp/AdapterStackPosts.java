@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,8 +102,12 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         }
          */
 
+        //TODO burayı yap
         if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
             holder.upButton.setVisibility(View.INVISIBLE);
+        }
+        if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            holder.upButton.setEnabled(false);
         }
 
         holder.upButton.setOnClickListener(new View.OnClickListener() {
