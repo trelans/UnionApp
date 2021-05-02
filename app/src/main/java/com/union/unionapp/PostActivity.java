@@ -210,6 +210,8 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     }
 
     private void loadView(String pType) {
+        ArrayList<String> cUpUsers = new ArrayList<>();
+        cUpUsers.add("empty");
         //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(pTime));
@@ -301,6 +303,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                     hashMap.put("comment", comment);
                     hashMap.put("timeStamp", timeStamp);
                     hashMap.put("upNumber", 0);
+                    hashMap.put("cUpUsers", cUpUsers);
                     hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     hashMap.put("cAnon", isAnonCB.isChecked() ? "1" : "0");
                     //isAnonCB.isChecked() ? "1" : "0")

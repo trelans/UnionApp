@@ -1,14 +1,17 @@
 package com.union.unionapp;
 
+import java.util.List;
+
 public class ModelComment {
     // use the same name as used in uploading comments
     String cId, comment, timeStamp, uid, cAnon, cPhoto, uName;
     int upNumber;
+    List<String> cUpUsers;
 
     public ModelComment() {
     }
 
-    public ModelComment(String cId, String comment, String timeStamp, Integer upNumber, String uid, String cAnon, String cPhoto, String uName) {
+    public ModelComment(String cId, String comment, String timeStamp, Integer upNumber, String uid, String cAnon, String cPhoto, String uName, List<String> cUpUsers) {
         this.cId = cId;
         this.comment = comment;
         this.timeStamp = timeStamp;
@@ -17,6 +20,7 @@ public class ModelComment {
         this.cAnon = cAnon;
         this.cPhoto = cPhoto;
         this.uName = uName;
+        this.cUpUsers = cUpUsers;
     }
 
     public String getCId() {
@@ -81,5 +85,13 @@ public class ModelComment {
 
     public void setUName(String uName) {
         this.uName = uName;
+    }
+
+    public List<String> getcUpUsers() {
+        return cUpUsers;
+    }
+
+    public void setcUpUsers(List<String> cUpUsers) {
+        this.cUpUsers = cUpUsers;
     }
 }

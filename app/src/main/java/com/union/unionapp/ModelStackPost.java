@@ -1,14 +1,17 @@
 package com.union.unionapp;
 
+import java.util.List;
+
 public class ModelStackPost {
     // use same name as we given while uploading posts
     String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon, username, pTagIndex;
     int pUpvoteNumber;
+    List<String> pUpUsers;
 
     public ModelStackPost() {
     }
 
-    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, Integer pUpvoteNumber, String pTagIndex) {
+    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, Integer pUpvoteNumber, String pTagIndex, List<String> pUpUsers) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDetails = pDetails;
@@ -20,6 +23,7 @@ public class ModelStackPost {
         this.username = username;
         this.pUpvoteNumber = pUpvoteNumber;
         this.pTagIndex = pTagIndex;
+        this.pUpUsers = pUpUsers;
     }
 
     public String getPId() {
@@ -78,11 +82,11 @@ public class ModelStackPost {
         this.uEmail = uEmail;
     }
 
-    public int getPUpvoteNumber() {
+    public int getpUpvoteNumber() {
         return pUpvoteNumber;
     }
 
-    public void setPUpvoteNumber(int pUpvoteNumber) {
+    public void setpUpvoteNumber(int pUpvoteNumber) {
         this.pUpvoteNumber = pUpvoteNumber;
     }
 
@@ -108,5 +112,13 @@ public class ModelStackPost {
 
     public void setpTagIndex(String pTagIndex) {
         this.pTagIndex = pTagIndex;
+    }
+
+    public List<String> getpUpUsers() {
+        return pUpUsers;
+    }
+
+    public void setpUpUsers(List<String> pUpUsers) {
+        this.pUpUsers = pUpUsers;
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,11 +23,13 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
     List<ModelComment> commentList;
     String postId;
     DatabaseReference ref;
+    String userUid;
 
     public AdapterComment(Context context, List<ModelComment> commentList, String postId) {
         this.context = context;
         this.commentList = commentList;
         this.postId = postId;
+        this.userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @NonNull
@@ -45,7 +48,12 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         String comment = commentList.get(position).getComment();
         String anonymous = commentList.get(position).getCAnon();
         int upNumber = commentList.get(position).getUpNumber();
+        List<String> cUpUsers = commentList.get(position).getcUpUsers();
 
+
+        if (cUpUsers != null && cUpUsers.contains(userUid)){
+            holder.upIconIV.setVisibility(View.INVISIBLE);
+        }
 
         //set data
         holder.answerTV.setText(getShortComment(uName, comment, anonymous));
@@ -55,6 +63,8 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
                 // TODO: 4/26/21 burayı ve üstüne basıldığında yeni diyalog olarak commentin büyük halinin açılmasını yap
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 updateUpNumber.put("upNumber", commentList.get(position).getUpNumber() + 1);
+                cUpUsers.add(userUid);
+                updateUpNumber.put("cUpUsers", cUpUsers);
                 ref.child(commentList.get(position).getCId()).updateChildren(updateUpNumber);
             }
         });

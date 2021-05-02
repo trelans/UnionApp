@@ -368,7 +368,6 @@ public class StackFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 postList.clear();
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    System.out.println("tetiklendi");
                     ModelStackPost modelStackPost = ds.getValue(ModelStackPost.class);
                     postList.add(modelStackPost);
                 }
@@ -589,6 +588,8 @@ public class StackFragment extends Fragment {
         String timeStamp = String.valueOf( MainActivity.getServerDate());
         String filePathAndName = "Posts/" + "post_" + timeStamp;
 
+        ArrayList<String> pUpvoteUsers = new ArrayList<>();
+        pUpvoteUsers.add("empty");
 
         if (!uri.equals("noImage")) {
             //post with image
@@ -619,6 +620,7 @@ public class StackFragment extends Fragment {
                                 hashMap.put("pTime",timeStamp);
                                 hashMap.put("pTags", tagToUpload); //TODO tagler için değişicek
                                 hashMap.put("pUpvoteNumber", 0);
+                                hashMap.put("pUpUsers", pUpvoteUsers);
                                 hashMap.put("pTitle", postTitle);
                                 hashMap.put("pTagIndex",tagToUpload);
 
@@ -754,6 +756,7 @@ public class StackFragment extends Fragment {
             hashMap.put("pImage","noImage");
             hashMap.put("pTime",timeStamp);
             hashMap.put("pUpvoteNumber", 0);
+            hashMap.put("pUpUsers", pUpvoteUsers);
             hashMap.put("pTitle",postTitle);
             hashMap.put("pTagIndex",tagToUpload);
 

@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
@@ -26,11 +26,13 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
     DatabaseReference ref1;
     String[] allTags;
     Activity currentActivity;
+    FirebaseUser firebaseUser;
 
     public AdapterStackPosts(Context context, List<ModelStackPost> postList, Activity currentActivity) {
         this.context = context;
         this.postList = postList;
         this.currentActivity = currentActivity;
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -54,8 +56,9 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         String pImage = postList.get(position).getPImage();
         String pTime = postList.get(position).getPTime();
         String pTag = postList.get(position).getpTagIndex();
+        List<String> pUpUsers = postList.get(position).getpUpUsers();
 
-        final int[] upVoteNumber = {postList.get(position).getPUpvoteNumber()};
+        final int[] upVoteNumber = {postList.get(position).getpUpvoteNumber()};
 
         /*
         //Convert timestamp to dd//mm/yyyy hh:mm am/pm
@@ -97,6 +100,10 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
         }
          */
 
+        if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
+            holder.upButton.setVisibility(View.INVISIBLE);
+        }
+
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,9 +111,11 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 System.out.println(postList.get(position).getPId());
                 System.out.println(position);
-                updateUpNumber.put("pUpvoteNumber", postList.get(position).getPUpvoteNumber() + 1);
+                updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() + 1);
+                pUpUsers.add(firebaseUser.getUid());
+                updateUpNumber.put("pUpUsers", pUpUsers);
                 ref1.child(pId).updateChildren(updateUpNumber);
-                upVoteNumber[0] = postList.get(position).getPUpvoteNumber() + 1;
+                upVoteNumber[0] = postList.get(position).getpUpvoteNumber() + 1;
                 holder.upNumber.setText(upVoteNumber[0] + "");
             }
         });
