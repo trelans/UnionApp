@@ -144,23 +144,30 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_password_Auth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_password_Auth.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_password_Auth.setHint("Password");
                 if (!tw_password_Auth.hasFocus() && tw_password_Auth.getText().toString().length() != 0) {
                     if (password.equals(tw_password_Auth.getText().toString().trim()) && !isPasswordNotValid) {
-                        tick5.setVisibility(View.VISIBLE);
+                        tw_password.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        tw_password.setHint("Password");
+                        //tick5.setVisibility(View.VISIBLE);
                         isThereError = false;
                         bt_signUp.setEnabled(true);
                         return;
                     } else {
                         if (!password.equals(tw_password_Auth.getText().toString().trim())) {
-                            tw_password_Auth.setError("Passwords don't match");
-                            tw_password_Auth.setBackgroundResource(R.drawable.edittext_border_template);
-                            tick5.setVisibility(View.INVISIBLE);
+                            //tw_password_Auth.setError("Passwords don't match");
+                            tw_password_Auth.setBackgroundResource(R.drawable.edittext_error_border_template);
+                            tw_password_Auth.setHint("Passwords don't match");
+                            //tick5.setVisibility(View.INVISIBLE);
                             isThereError = true;
                             bt_signUp.setEnabled(false);
                             return;
                         } else {
-                            tw_password_Auth.setError("Password length must be at least 6 character");
-                            tick5.setVisibility(View.INVISIBLE);
+                            //tw_password_Auth.setError("Password length must be at least 6 character");
+                            tw_password_Auth.setBackgroundResource(R.drawable.edittext_error_border_template);
+                            tw_password_Auth.setHint("Password length must be at least 6 character");
+                            //tick5.setVisibility(View.INVISIBLE);
                             isThereError = true;
                             return;
                         }
@@ -174,16 +181,22 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_password.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_password.setHint("Password");
                 password = tw_password.getText().toString().trim();
                 if (!tw_password.hasFocus() && tw_password.getText().toString().length() != 0) {
                     if (password.length() < 6) {
-                        tw_password.setError("Password length must be at least 6 character");
-                        tick4.setVisibility(View.INVISIBLE);
+                        //tw_password.setError("Password length must be at least 6 character");
+                        tw_password.setBackgroundResource(R.drawable.edittext_error_border_template);
+                        tw_password.setHint("Password length must be at least 6 character");
+                        //tick4.setVisibility(View.INVISIBLE);
                         isPasswordNotValid = true;
                         isThereError = true;
                         return;
                     } else {
-                        tick4.setVisibility(View.VISIBLE);
+                        tw_password.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        tw_password.setHint("Password");
+                        //tick4.setVisibility(View.VISIBLE);
                         isPasswordNotValid = false;
                         isThereError = false;
                         bt_signUp.setEnabled(true);
@@ -196,17 +209,22 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_name.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_name.setHint("Name");
                 name = tw_name.getText().toString().trim();
                 if (!tw_name.hasFocus() && name.length() != 0) {
 
                     Matcher matcher = pattern.matcher(name);
                     if (matcher.find()) {
-                        tick1.setVisibility(View.VISIBLE);
+                        tw_name.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        //tick1.setVisibility(View.VISIBLE);
                         isThereError = false;
                         bt_signUp.setEnabled(true);
                     } else {
-                        tick1.setVisibility(View.INVISIBLE);
-                        tw_name.setError("Invalid characters!");
+                        tw_name.setBackgroundResource(R.drawable.edittext_error_border_template);
+                        tw_name.setHint("Invalid characters!");
+                        //tick1.setVisibility(View.INVISIBLE);
+                        //tw_name.setError("Invalid characters!");
                         isThereError = true;
                     }
                 }
@@ -215,15 +233,21 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_email.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_email.setHint("Email");
                 email = tw_email.getText().toString().trim();
                 if (!tw_email.hasFocus() && email.length() != 0) {
                     if (!email.contains("ug.bilkent.edu.tr")) {
-                        tw_email.setError("Your university hasn't registered yet");
-                        tick3.setVisibility(View.INVISIBLE);
+                        //tw_email.setError("Your university hasn't registered yet");
+                        tw_email.setBackgroundResource(R.drawable.edittext_error_border_template);
+                        tw_email.setHint("Your university hasn't registered yet");
+                        //tick3.setVisibility(View.INVISIBLE);
                         isThereError = true;
                         return;
                     } else {
-                        tick3.setVisibility(View.VISIBLE);
+                        tw_email.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        tw_email.setHint("Email");
+                        //tick3.setVisibility(View.VISIBLE);
                         isThereError = false;
                         bt_signUp.setEnabled(true);
                         return;
@@ -235,17 +259,23 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_surname.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_surname.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_surname.setHint("Surname");
                 surname = tw_surname.getText().toString().trim();
                 if (!tw_surname.hasFocus() && surname.length() != 0) {
                     Matcher matcher = pattern.matcher(surname);
                     if (matcher.find()) {
-                        tick2.setVisibility(View.VISIBLE);
+                        tw_surname.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        tw_surname.setHint("Surname");
+                        //tick2.setVisibility(View.VISIBLE);
                         isThereError = false;
                         bt_signUp.setEnabled(true);
                         return;
                     } else {
-                        tick2.setVisibility(View.INVISIBLE);
-                        tw_surname.setError("Invalid characters!");
+                        tw_surname.setBackgroundResource(R.drawable.edittext_error_border_template);
+                        tw_surname.setHint("Invalid characters!");
+                        //tick2.setVisibility(View.INVISIBLE);
+                        //tw_surname.setError("Invalid characters!");
                         isThereError = true;
                         return;
                     }
@@ -270,27 +300,40 @@ public class CreateAnAccountActivity extends AppCompatActivity {
 
 
                 if (TextUtils.isEmpty(email)) {
-                    tw_email.setError("Email is required");
+                    //tw_email.setError("Email is required");
+                    tw_email.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_email.setHint("Email is required");
                     isThereError = true;
+
                 }
                 if (TextUtils.isEmpty(password)) {
-                    tw_password.setError("Password is required");
+                    //tw_password.setError("Password is required");
+                    tw_password.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_password.setHint("Password is required");
                     isThereError = true;
                 }
                 if (TextUtils.isEmpty(tw_password_Auth.getText().toString())) {
-                    tw_password_Auth.setError("Password is required");
+                    //tw_password_Auth.setError("Password is required");
+                    tw_password_Auth.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_password_Auth.setHint("Password is required");
                     isThereError = true;
                 }
                 if (TextUtils.isEmpty(name)) {
-                    tw_name.setError("Name is required");
+                    //tw_name.setError("Name is required");
+                    tw_name.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_name.setHint("Name is required");
                     isThereError = true;
                 }
                 if (TextUtils.isEmpty(surname)) {
-                    tw_surname.setError("Surname is required");
+                    //tw_surname.setError("Surname is required");
+                    tw_surname.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_surname.setHint("Surname is required");
                     isThereError = true;
                 }
                 if (!cb_aggrement.isChecked()) {
-                    tw_terms.setError("You must agree the terms first");
+                    //tw_terms.setError("You must agree the terms first");
+                    tw_terms.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_terms.setHint("You must agree the terms first");
                     isThereError = true;
                 }
 

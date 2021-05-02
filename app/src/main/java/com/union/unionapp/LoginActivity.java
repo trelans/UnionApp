@@ -121,17 +121,23 @@ public class LoginActivity extends AppCompatActivity {
         tw_email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_email.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_email.setHint("Email");
                 email = tw_email.getText().toString().trim();
                 // if something wrong with email
                 if (!tw_email.hasFocus() && email.length() != 0) {
                     if (!email.contains("ug.bilkent.edu.tr")) {
                         isThereError = true;
                         button_login.setEnabled(false);
-                        tw_email.setError("Your university hasn't registered yet");
-                        tick1.setVisibility(View.INVISIBLE);
+                        //tw_email.setError("Your university hasn't registered yet");
+                        tw_email.setBackgroundResource(R.drawable.edittext_error_border_template);
+                        tw_email.setHint("Your university hasn't registered yet");
+                        //tick1.setVisibility(View.INVISIBLE);
                         return;
                     } else {
-                        tick1.setVisibility(View.VISIBLE);
+                        //tick1.setVisibility(View.VISIBLE);
+                        tw_email.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        tw_email.setHint("Email");
                         isThereError = false;
                         button_login.setEnabled(true);
                         return;
@@ -143,17 +149,23 @@ public class LoginActivity extends AppCompatActivity {
         tw_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
+                tw_password.setBackgroundResource(R.drawable.edittext_begining_border_template);
+                tw_email.setHint("Password");
                 password = tw_password.getText().toString().trim();
                 // if something wrong with password
                 if (!tw_password.hasFocus() && tw_password.getText().toString().length() != 0) {
                     if (password.length() < 6) {
+                        tw_password.setBackgroundResource(R.drawable.edittext_error_border_template);
+                        tw_password.setHint("Password length must be at least 6 character");
                         isThereError = true;
                         button_login.setEnabled(false);
-                        tw_password.setError("Password length must be at least 6 character");
-                        tick2.setVisibility(View.INVISIBLE);
+                        //tw_password.setError("Password length must be at least 6 character");
+                        //tick2.setVisibility(View.INVISIBLE);
                         return;
                     } else {
-                        tick2.setVisibility(View.VISIBLE);
+                        //tick2.setVisibility(View.VISIBLE);
+                        tw_password.setBackgroundResource(R.drawable.edittext_correct_border_template);
+                        tw_password.setHint("Password");
                         isThereError = false;
                         button_login.setEnabled(true);
                         return;
@@ -183,11 +195,15 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 if (TextUtils.isEmpty(email)) {
-                    tw_email.setError("Email is required");
+                    //tw_email.setError("Email is required");
+                    tw_email.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_email.setHint("Email is required");
                     isThereError = true;
                 }
                 if (TextUtils.isEmpty(password)) {
-                    tw_password.setError("Password is required");
+                    //tw_password.setError("Password is required");
+                    tw_password.setBackgroundResource(R.drawable.edittext_error_border_template);
+                    tw_password.setHint("Password is required");
                     isThereError = true;
                 }
 
