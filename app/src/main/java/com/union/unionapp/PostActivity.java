@@ -44,9 +44,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity implements SimpleGestureFilter.SimpleGestureListener {
+public class PostActivity extends AppCompatActivity{
 
-    private SimpleGestureFilter detector;
     CardView commentCardView;
     CardView postCardView;
     RecyclerView recyclerView;
@@ -68,6 +67,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     String pTags;
     String pType;
     String source;
+    String publisherPp;
     DatabaseReference postRef;
     int previousMargin;
 
@@ -85,6 +85,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     ImageView sendButton;
     LinearLayoutCompat clickToOpenCardLL;
     ImageView backButton;
+    ImageView  profilePhoto;
     TextView pTitleTW;
     AppCompatButton topicTagTW1;
     AppCompatButton topicTagTW2;
@@ -115,6 +116,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         topicTagTW1 = findViewById(R.id.topicTagTW1);
         topicTagTW2 = findViewById(R.id.topicTagTW2);
         topicTagTW3 = findViewById(R.id.topicTagTW3);
+        profilePhoto = findViewById(R.id.profilePhoto);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -139,6 +141,8 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                             pDetails = modelStackPost.pDetails;
                             username = modelStackPost.username;
                             pImage = modelStackPost.getPImage();
+                            publisherPp = modelStackPost.getUid();
+
                         } else {
                             ModelBuddyAndClubPost modelBuddyAndClubPost = snapshot.getValue(ModelBuddyAndClubPost.class);
                             if (pType.equals("Buddy")) {
@@ -158,6 +162,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                             pTitle = modelBuddyAndClubPost.pTitle;
                             pDetails = modelBuddyAndClubPost.pDetails;
                             username = modelBuddyAndClubPost.username;
+                            publisherPp = modelBuddyAndClubPost.getuPp();
                         }
                     }
 
@@ -186,6 +191,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                 pDetails = extras.getString("pDetails", "0");
                 username = extras.getString("username", "0");
                 pImage = extras.getString("pImage", "0");
+                publisherPp = extras.getString("uPp", "0");
             }
         }
 
@@ -257,6 +263,24 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         } else {
             postImageIW.getLayoutParams().height = 0;
         }
+
+        if (!pAnon.equals("1")) {
+            try {
+                //if image received, set
+                StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + publisherPp);
+                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(profilePhoto);
+                    }
+                });
+            } catch (Exception e) {
+                //if there is any exception while getting image then set default
+                Picasso.get().load(R.drawable.user_pp_template).into(profilePhoto);
+            }
+        }
+
+
 
         questionContentTW.setText("     " + pDetails);
         if (!pAnon.equals("1")) {
@@ -382,55 +406,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                 //Toast.makeText(context, "Error on load comments 248. line", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Detect touched area
-        detector = new SimpleGestureFilter(PostActivity.this, PostActivity.this);
-
-    }
-
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent me) {
-        // Call onTouchEvent of SimpleGestureFilter class
-        this.detector.onTouchEvent(me);
-        return super.dispatchTouchEvent(me);
-    }
-
-    @Override
-    public void onSwipe(int direction) {
-
-        //Detect the swipe gestures and display toast
-        String showToastMessage = "";
-
-        switch (direction) {
-
-            case SimpleGestureFilter.SWIPE_RIGHT:
-                showToastMessage = "You have Swiped Right.";
-                break;
-            case SimpleGestureFilter.SWIPE_LEFT:
-                showToastMessage = "You have Swiped Left.";
-                break;
-            case SimpleGestureFilter.SWIPE_DOWN:
-                showToastMessage = "You have Swiped Down.";
-                break;
-            case SimpleGestureFilter.SWIPE_UP:
-                showToastMessage = "You have Swiped Up.";
-                System.out.println("swipe up");
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
-                layoutParams.topMargin = 590;
-                break;
-
-        }
-        Toast.makeText(PostActivity.this, showToastMessage, Toast.LENGTH_SHORT).show();
-    }
-
-
-    //Toast shown when double tapped on screen
-    @Override
-    public void onDoubleTap() {
-        Toast.makeText(this, "You have Double Tapped.", Toast.LENGTH_SHORT)
-                .show();
-        System.out.println("asdasdas");
     }
 
     private void openOrCloseCard() {

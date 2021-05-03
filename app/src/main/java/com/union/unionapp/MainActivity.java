@@ -1040,9 +1040,9 @@ public class MainActivity extends AppCompatActivity {
                 mediaScanIntent.setData(contentUri);
                 this.sendBroadcast(mediaScanIntent);
 
-
-                uploadImageToFirebase(contentUri);
-
+                if (userPpInDialog != null) {
+                    uploadImageToFirebase(userPpInDialog, contentUri);
+                }
             }
         }
 
@@ -1050,9 +1050,9 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 Uri contentUri = data.getData();
                 //userPpInDialog.setImageURI(contentUri);
-
-                uploadImageToFirebase(contentUri);
-
+                if (userPpInDialog != null) {
+                    uploadImageToFirebase(userPpInDialog, contentUri);
+                }
             }
         }
 
@@ -1071,7 +1071,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void uploadImageToFirebase(Uri contentUri) {
+    private void uploadImageToFirebase(ImageView userPpInDialog, Uri contentUri) {
+        System.out.println("çalıştı");
         FirebaseUser user;
         user = FirebaseAuth.getInstance().getCurrentUser();
         StorageReference image = storageReference.child("BilkentUniversity/pp/" + user.getUid());
@@ -1125,10 +1126,10 @@ public class MainActivity extends AppCompatActivity {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
-            }else{
+            } else {
                 System.out.println("photo file is null");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("hiçbir şey getirmedi");
         }
     }

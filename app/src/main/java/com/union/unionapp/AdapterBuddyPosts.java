@@ -3,6 +3,7 @@ package com.union.unionapp;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
@@ -18,9 +19,13 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -61,7 +66,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pTags = postList.get(position).getpTags();
         String pGender = postList.get(position).getpGender();
         String username = postList.get(position).getUsername();
-        String uPp = postList.get(position).getuPp();
+        String uPp = postList.get(position).getUid();
 
         //set data
         holder.contentTextView.setText(pDetails);
@@ -71,7 +76,19 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.genderTW.setText("Gender: " + pGender);
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
-        // TODO resim eklemeyi yap holder.publisherPP.setImageResource();
+        try {
+            //if image received, set
+            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + uPp);
+            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.publisherPP);
+                }
+            });
+        } catch (Exception e) {
+            //if there is any exception while getting image then set default
+            Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+        }
 
         convertStringTagsToRealTags(holder, pTags);
 
