@@ -77,7 +77,6 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         newTags[1] = "";
         newTags[2] = "";
 
-
         String[] tags = pTags.split(",");
         String[] allTags = MainActivity.getAllTags();
 
@@ -131,8 +130,8 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             //hide imageView
         }
 
-        /* aynısından image için de yaptı
-        //set user dp
+        /*  comment is left for future needs.
+        set user dp
         try{
             Picasso.get().load(uDp).placeholder(R.drawable.user_pp_template).into(holder.uPictureIv);
         }catch (Exception e){
@@ -167,22 +166,22 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 String fixedDate = pDate.replace("/" , "_");
                 userRef.child("Calendar").child(fixedDate).child(pId).setValue(hashMap);
 
-                //User calender bitişi
+                //User calender finishing line
 
                 String[] calendarDate = pDate.split("/");
                 String[] calendarTime = pHour.split(":");
+
                 Calendar cal = Calendar.getInstance();
                 cal.set(Integer.parseInt(calendarDate[2]), Integer.parseInt(calendarDate[1]) - 1, Integer.parseInt(calendarDate[0]), Integer.parseInt(calendarTime[1]), Integer.parseInt(calendarTime[0]));
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 intent.putExtra("beginTime", cal.getTimeInMillis());
                 intent.putExtra("eventLocation", pLocation);
-                //TODO etkinlik bitiş saati intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+
+                //TODO activity finish time intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
                 intent.putExtra("title", "@" + username + "'s Event");
                 intent.putExtra(CalendarContract.Events.DESCRIPTION, pTitle);
                 context.startActivity(intent);
-
-
             }
         });
 
@@ -198,8 +197,6 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 context.startActivity(i);
             }
         });
-
-
 
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -227,7 +224,6 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             }
         });
 
-
     }
 
     @Override
@@ -251,6 +247,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             //init views
             calendarIB = itemView.findViewById(R.id.calendarIB);
             sendButtonIB = itemView.findViewById(R.id.sendButtonIB);
+
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
             dateTW = itemView.findViewById(R.id.dateTWBuddy);
@@ -258,18 +255,18 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
+
             publisherNameTW = itemView.findViewById(R.id.publisherNameTextView);
             publisherPP = itemView.findViewById(R.id.publisherPp);
+
             topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);
 
         }
-
-
     }
 
     private void calendarToServer() {
-
+        //left for future needs.
     }
 }

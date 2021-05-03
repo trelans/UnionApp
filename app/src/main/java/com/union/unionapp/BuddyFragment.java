@@ -204,9 +204,11 @@ public class BuddyFragment extends Fragment {
         //recycler view and its properties
         recyclerView = view.findViewById(R.id.buddyPostsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
         //show newest post first, for this load from last
         layoutManager.setStackFromEnd(true);
         layoutManager.setReverseLayout(true);
+
         //set layout to recyclerview
         recyclerView.setLayoutManager(layoutManager);
 
@@ -218,7 +220,6 @@ public class BuddyFragment extends Fragment {
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 buddyDialog.setContentView(R.layout.custom_create_post_buddy_popup);
 
@@ -265,9 +266,6 @@ public class BuddyFragment extends Fragment {
                         if (i[0] == tagsStatus.length) {
                             //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
                             tagSpinner.setEnabled(false);
-                            //tagSpinner.setClickable( false );
-                            //tagSpinner.setTop( 1 );
-                            //setTagsSaved( true );
                         }
                     }
 
@@ -302,10 +300,6 @@ public class BuddyFragment extends Fragment {
                 tag2.setVisibility(View.INVISIBLE);
                 tag3.setVisibility(View.INVISIBLE);
 
-                //set tags to disabled -- not needed
-                //tag1.setEnabled(false);
-                //tag2.setEnabled(false);
-                //tag3.setEnabled(false);
 
                 textViewTags = new TextView[]{tag1, tag2, tag3};
                 tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
@@ -1445,57 +1439,6 @@ public class BuddyFragment extends Fragment {
         date = dateFormat.format(calendar.getTime());
     }
 
-    /*
-    i[ 0 ] = 0;
-    if( !getTagsSaved() ) {
-        setAllSettingsTagsInvisible();
-    }
-
-
-            tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-    {
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (position > 0) {
-            String selectedItem = parent.getItemAtPosition(position).toString();
-            while (i[ 0 ] < tagsStatus.length) {
-                if (!tagsStatus[ i[ 0 ] ] ) {
-                    tagsStatus[ i[ 0 ] ] = true;
-                    tagsArray[ i[ 0 ] ].setText( selectedItem );
-                    tagsArray[ i[ 0 ] ].setVisibility( View.VISIBLE );
-                    i[ 0 ]++;
-                    break;
-                }
-            }
-        }
-
-        if( i[ 0 ] == tagsStatus.length ) {
-            Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
-            tagSpinner.setEnabled( false );
-            //tagSpinner.setClickable( false );
-            //tagSpinner.setTop( 1 );
-            //setTagsSaved( true );
-        }
-    }
-
-        public void onNothingSelected (AdapterView < ? > parent) {
-        //TODO
-    }
-    });
-
-    private void setAllSettingsTagsInvisible() {
-        for ( int i = 0; i < textViewTags.length; i++ ) {
-            textViewTags[ i ].setVisibility( View.INVISIBLE );
-        }
-    }
-
-    private boolean settingsTagsSavedCondition;
-
-    private void setTagsSaved( boolean boo ) {
-        settingsTagsSavedCondition = boo;
-    }
-    private boolean getTagsSaved() {
-        return settingsTagsSavedCondition;
-    }*/
 
     private void addToHisLastActivities( String pId , String notification) {
 
@@ -1616,7 +1559,6 @@ public class BuddyFragment extends Fragment {
 
             }
         });
-
 
     }
 
@@ -1745,14 +1687,16 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
+
         //increase 1 point to sportScore
         else if (genre.equals("3")) {
             sportScore++;
             if (sportScore == 10 || sportScore == 50 || sportScore == 100 || sportScore == 500 || sportScore == 100) {
-                // query ile bilgileri getirt
+
+                // with query, pass the information
                 DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -1760,12 +1704,14 @@ public class BuddyFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("3") && modelAchievements.getPoint().equals(String.valueOf(sportScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1786,7 +1732,7 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to technologyScore
@@ -1801,12 +1747,14 @@ public class BuddyFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("4") && modelAchievements.getPoint().equals(String.valueOf(technologyScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1827,7 +1775,7 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to socialScore
@@ -1842,12 +1790,14 @@ public class BuddyFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("5") && modelAchievements.getPoint().equals(String.valueOf(socialScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1868,7 +1818,7 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to englishScore
@@ -1883,12 +1833,14 @@ public class BuddyFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("6") && modelAchievements.getPoint().equals(String.valueOf(englishScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1909,7 +1861,7 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to turkishScore
@@ -1924,12 +1876,14 @@ public class BuddyFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("7") && modelAchievements.getPoint().equals(String.valueOf(turkishScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1950,7 +1904,7 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to studyScore
@@ -1965,12 +1919,14 @@ public class BuddyFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("8") && modelAchievements.getPoint().equals(String.valueOf(studyScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1991,9 +1947,10 @@ public class BuddyFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
+
         // Prapare scores to make it appropraite to send to server
         String SmathScore = String.valueOf(mathScore);
         String ScareerScore = String.valueOf(careerScore);
@@ -2014,11 +1971,12 @@ public class BuddyFragment extends Fragment {
         hashMap.put("english" , SenglishScore);
         hashMap.put("turkish", SturkishScore);
         hashMap.put("study", SstudyScore);
+
         DatabaseReference userAchref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/AchievementsScores/");
+
         // Sending hashes to database
         userAchref.setValue(hashMap);
     }
-
 
 }
 

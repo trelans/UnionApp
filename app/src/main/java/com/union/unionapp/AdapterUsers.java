@@ -70,8 +70,6 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
 
                 context.startActivity(i);
 
-
-
             }
         });
     }
@@ -92,8 +90,6 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
            avatar_ImageView = itemView.findViewById(R.id.userPPRow);
            username_TextView = itemView.findViewById(R.id.usernameRow);
         }
-
-}
-
+    }
 
 }
