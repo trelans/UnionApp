@@ -1,16 +1,23 @@
 package com.union.unionapp;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.text.format.DateFormat;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.Calendar;
@@ -70,6 +77,7 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
         else {
             holder.isSeenTv.setVisibility(View.GONE);
         }
+
     }
 
     @Override
@@ -95,13 +103,13 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
 
         // views
         TextView messageTv, timeTv, isSeenTv;
+        ImageView profilePhoto;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             messageTv = itemView.findViewById(R.id.messageTv);
             timeTv = itemView.findViewById(R.id.AchtimeTv);
             isSeenTv = itemView.findViewById(R.id.isSeenTv);
-
         }
     }
 }

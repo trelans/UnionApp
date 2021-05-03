@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import com.union.unionapp.notifications.APIService;
 import com.union.unionapp.notifications.Client;
@@ -85,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
         //create api service
         apiService = Client.getRetrofit("https://fcm.googleapis.com/").create(APIService.class);
 
@@ -113,11 +118,19 @@ public class ChatActivity extends AppCompatActivity {
                     String pp = "" + ds.child("pp").getValue();
                     // set data
                     tw_username.setText(username);
+                    // set Profile Photo
                     try {
-                        Picasso.get().load(pp).placeholder(R.drawable.profile_icon).into(profileIw);
-                    }
-                    catch (Exception e) {
-                        Picasso.get().load(R.drawable.profile_icon).into(profileIw);
+                        //if image received, set
+                        StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + hisUid);
+                        image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.get().load(uri).into(profileIw);
+                            }
+                        });
+                    } catch (Exception e) {
+                        //if there is any exception while getting image then set default
+                        Picasso.get().load(R.drawable.user_pp_template).into(profileIw);
                     }
                 }
             }

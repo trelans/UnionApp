@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -144,10 +148,17 @@ public class OtherProfile extends AppCompatActivity {
 
                     //set data
                     usernameTW.setText(name);
+                    // set Profile Photo
                     try {
                         //if image received, set
-                        Picasso.get().load(pp).into(userPP);
-                    }catch (Exception e){
+                        StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + hisUid);
+                        image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.get().load(uri).into(userPP);
+                            }
+                        });
+                    } catch (Exception e) {
                         //if there is any exception while getting image then set default
                         Picasso.get().load(R.drawable.user_pp_template).into(userPP);
                     }
