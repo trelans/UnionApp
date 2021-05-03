@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
@@ -22,12 +23,16 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +75,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         String hisUid = postList.get(position).getUid();
         String pTags = postList.get(position).getpTags();
         String username = postList.get(position).getUsername();
-        String uPp = postList.get(position).getuPp();
+        String uPp = postList.get(position).getUid();
 
         String[] newTags = new String[3];
         newTags[0] = "";
@@ -98,6 +103,19 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.genderTW.setText( "Gender:" + "   -");
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
+        try {
+            //if image received, set
+            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + uPp);
+            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.publisherPP);
+                }
+            });
+        } catch (Exception e) {
+            //if there is any exception while getting image then set default
+            Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+        }
 
 
         if (newTags[0].equals("")) {
@@ -209,6 +227,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 intent.putExtra("pDetails", pDetails);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
+                System.out.println(uPp);
                 intent.putExtra("uPp", uPp);
 
                 //different from stack
