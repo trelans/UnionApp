@@ -429,7 +429,7 @@ public class StackFragment extends Fragment {
         }
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid); // uid
         String nUid = ref.push().getKey();
-        hashMap.put("nId", nUid);
+        hashMap.put("nId", pId);
         ref.child(nUid).setValue(hashMap)
 
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
