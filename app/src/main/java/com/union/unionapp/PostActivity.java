@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -34,6 +35,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -134,6 +138,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                             pTitle = modelStackPost.pTitle;
                             pDetails = modelStackPost.pDetails;
                             username = modelStackPost.username;
+                            pImage = modelStackPost.getPImage();
                         } else {
                             ModelBuddyAndClubPost modelBuddyAndClubPost = snapshot.getValue(ModelBuddyAndClubPost.class);
                             if (pType.equals("Buddy")) {
@@ -170,7 +175,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                     pHour = extras.getString("pHour", "0");
                     pLocation = extras.getString("pLocation", "0");
                     pQuota = extras.getString("pQuota", "0");
-                    pImage = extras.getString("pImage", "0");
                     pTags = extras.getString("pTags", "0");
                     pAnon = "0";
                 } else if (pType.equals("Stack")) {
@@ -181,6 +185,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                 pTitle = extras.getString("pTitle", "0");
                 pDetails = extras.getString("pDetails", "0");
                 username = extras.getString("username", "0");
+                pImage = extras.getString("pImage", "0");
             }
         }
 
@@ -232,9 +237,23 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         }
 
         pTitleTW.setText(pTitle);
-
+        System.out.println("geldim gördüm çalışmadım");
+        System.out.println(pImage);
         if (pImage != null && !pImage.equals("noImage") && !pImage.equals("")) {
-            //TODO imageı çekme işlemini yap
+            try {
+                System.out.println("burada");
+                //if image received, set
+                StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/"+ pType + "Posts/" + pImage);
+                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(postImageIW);
+                    }
+                });
+            } catch (Exception e) {
+                //if there is any exception while getting image then set default
+                System.out.println("resim yüklemede hata çıktı");
+            }
         } else {
             postImageIW.getLayoutParams().height = 0;
         }

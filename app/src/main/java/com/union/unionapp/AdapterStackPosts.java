@@ -78,7 +78,6 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
         //allTags = getResources.getStringArray(R.array.all_tags); !!!!! getResources metodu fragment classı için var.
         allTags = MainActivity.getAllTags();
-        System.out.println();
 
         if (Integer.parseInt(pTag) != 0) {
             holder.topicTag.setVisibility(View.VISIBLE);
@@ -138,6 +137,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 intent.putExtra("pDetails", pDetails);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
+                intent.putExtra("pImage", pImage);
 
                 // Dif. from buddy
                 intent.putExtra("upVoteNumber", upVoteNumber[0] + "");
