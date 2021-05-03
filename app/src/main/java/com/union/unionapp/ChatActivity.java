@@ -40,6 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 public class ChatActivity extends AppCompatActivity {
+
     RecyclerView recyclerView;
     ImageView profileIw , send_bt , back_bt;
     TextView tw_username , tw_status;
@@ -48,7 +49,8 @@ public class ChatActivity extends AppCompatActivity {
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference usersDbRef;
-// for checking message is seen
+
+    // for checking message is seen
     ValueEventListener seenListener;
     DatabaseReference userRefForSeen;
 
@@ -78,6 +80,7 @@ public class ChatActivity extends AppCompatActivity {
         Context context;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
+
         // recycler view properties
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -94,6 +97,7 @@ public class ChatActivity extends AppCompatActivity {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         usersDbRef = firebaseDatabase.getReference("BilkentUniversity/Users");
+
         // search user to get that users' info
         Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
         // get user picture and username
@@ -149,9 +153,12 @@ public class ChatActivity extends AppCompatActivity {
         send_bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 notify = true;
+
                 // get message text from edit text
                 String message = messageEt.getText().toString().trim();
+
                 // check if text if empty
                 if (TextUtils.isEmpty(message)) {
                     // empty text
@@ -209,9 +216,11 @@ public class ChatActivity extends AppCompatActivity {
                      || chat.getReceiver().equals(hisUid) && chat.getSender().equals(myUid)  ) {
                         chatList.add(chat);
                     }
+
                     // adapter
                     adapterChat = new AdapterChat(ChatActivity.this, chatList );
                     adapterChat.notifyDataSetChanged();
+
                     // set adapter to recycler view
                     recyclerView.setAdapter(adapterChat);
                 }
@@ -240,9 +249,7 @@ public class ChatActivity extends AppCompatActivity {
         databaseReference.child("BilkentUniversity/Chats").push().setValue(hashMap);
 
         // reset editText after sending message
-
         messageEt.setText("");
-
 
         String msg = message;
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/").child(myUid);
@@ -339,7 +346,6 @@ public class ChatActivity extends AppCompatActivity {
         }
         else  {
             //go back to login
-
 
         }
     }

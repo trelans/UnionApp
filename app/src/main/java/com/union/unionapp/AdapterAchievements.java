@@ -74,17 +74,18 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
         TextView genreTv = (TextView) myDialog.findViewById(R.id.Achgenre);
         TextView descriptionTv = (TextView) myDialog.findViewById(R.id.achDescripton);
         ImageView achicon = (ImageView) myDialog.findViewById(R.id.achicon);
+
         // set to views
         holder.AchnotificationTv.setText(title);
-
-        // TODO YUNUSTAN ALINAN ICONLAR
 
         // set  dialog views
         titleTv.setText(title);
         genreTv.setText("Genre : " + genreString[genre]);
+
         // TODO ICON
         achicon.setImageResource(R.drawable.bronze_medal);
         descriptionTv.setText(description);
+
         int lvl = Integer.parseInt(level);
 /*
                 // "Math" , "Carrier" , "Sport" , "Technology", "Social", "English", "Turkish", "Study"
@@ -277,7 +278,6 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
 
         }
 
-        //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,8 +286,6 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
 
             }
         });
-
-
 
     }
 
@@ -308,9 +306,6 @@ public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievement
             //init views
             avatarIv = itemView.findViewById(R.id.AchavatarIv);
             AchnotificationTv = itemView.findViewById(R.id.AchnotificationTv);
-
-
-
 
         }
     }

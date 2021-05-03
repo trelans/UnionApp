@@ -62,21 +62,11 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
         final int[] upVoteNumber = {postList.get(position).getpUpvoteNumber()};
 
-        /*
-        //Convert timestamp to dd//mm/yyyy hh:mm am/pm
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        calendar.setTimeInMillis(Long.parseLong(pTimeStamp));
-        String pTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-         */
-
         //set data
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
         holder.upNumber.setText(upVoteNumber[0] + "");
-        //holder.upNumber.setText("1");
 
-
-        //allTags = getResources.getStringArray(R.array.all_tags); !!!!! getResources metodu fragment classı için var.
         allTags = MainActivity.getAllTags();
 
         if (Integer.parseInt(pTag) != 0) {
@@ -92,16 +82,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             //hide imageView
         }
 
-        /* aynısından image için de yaptı
-        //set user dp
-        try{
-            Picasso.get().load(uDp).placeholder(R.drawable.user_pp_template).into(holder.uPictureIv);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-         */
-
-        //TODO burayı yap
+        //TODO
         if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
             holder.upButton.setVisibility(View.INVISIBLE);
         }
@@ -113,12 +94,15 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             @Override
             public void onClick(View view) {
                 ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
+
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
                 System.out.println(postList.get(position).getPId());
                 System.out.println(position);
+
                 updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() + 1);
                 pUpUsers.add(firebaseUser.getUid());
                 updateUpNumber.put("pUpUsers", pUpUsers);
+
                 ref1.child(pId).updateChildren(updateUpNumber);
                 upVoteNumber[0] = postList.get(position).getpUpvoteNumber() + 1;
                 holder.upNumber.setText(upVoteNumber[0] + "");
@@ -145,12 +129,11 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 intent.putExtra("pAnon", pAnon);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
+
                 return true;
             }
 
         });
-
-
     }
 
 
@@ -179,7 +162,6 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             upNumber = itemView.findViewById(R.id.textViewUpNumber);
             topicTag = itemView.findViewById(R.id.topicTagTW);
             cardView = itemView.findViewById(R.id.card);
-
 
         }
     }

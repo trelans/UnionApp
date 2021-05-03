@@ -98,15 +98,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             //hide imageView
         }
 
-        /* aynısından image için de yaptı
-        //set user dp
-        try{
-            Picasso.get().load(uDp).placeholder(R.drawable.user_pp_template).into(holder.uPictureIv);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-         */
-
         if (hisUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
             holder.sendButtonIB.setEnabled(false);
         }
@@ -134,21 +125,22 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 String fixedDate = pDate.replace("/", "_");
                 userRef.child("Calendar").child(fixedDate).child(pId).setValue(hashMap);
 
-                //User calender bitişi
+                //User calender finish line
 
                 String[] calendarDate = pDate.split("/");
                 String[] calendarTime = pHour.split(":");
                 Calendar cal = Calendar.getInstance();
                 cal.set(Integer.parseInt(calendarDate[2]), Integer.parseInt(calendarDate[1]) - 1, Integer.parseInt(calendarDate[0]), Integer.parseInt(calendarTime[1]), Integer.parseInt(calendarTime[0]));
+
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 intent.putExtra("beginTime", cal.getTimeInMillis());
                 intent.putExtra("eventLocation", pLocation);
-                //TODO etkinlik bitiş saati intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+
+                //TODO activity finish time intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
                 intent.putExtra("title", "@" + username + "'s Event");
                 intent.putExtra(CalendarContract.Events.DESCRIPTION, pTitle);
                 context.startActivity(intent);
-
 
             }
         });
@@ -167,6 +159,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
                 Intent intent = new Intent(context, PostActivity.class);
                 intent.putExtra("pType", "Buddy");
                 intent.putExtra("pTime", pTime);
@@ -184,13 +177,13 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 intent.putExtra("pImage", pImage);
                 intent.putExtra("pGender", pGender);
                 intent.putExtra("pTags", pTags);
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
+
                 return true;
             }
         });
-
-
     }
 
     private void convertStringTagsToRealTags(@NonNull MyHolder holder, String pTags) {
@@ -262,13 +255,16 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             sendButtonIB = itemView.findViewById(R.id.sendButtonIB);
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
+
             dateTW = itemView.findViewById(R.id.dateTWBuddy);
             zoomLinkTW = itemView.findViewById(R.id.zoomLinkTW);
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
+
             publisherNameTW = itemView.findViewById(R.id.publisherNameTextView);
             publisherPP = itemView.findViewById(R.id.publisherPp);
+
             topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);

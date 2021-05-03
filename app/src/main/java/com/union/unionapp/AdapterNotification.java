@@ -67,7 +67,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
         final String postType;
 
-        //TODO notificationsı commentlerde yapıcaksak eklenti yapılmalı
+        //TODO notificationsı comment
         if (notification.contains("pro")) {
             postType = "Stack";
         }
@@ -78,7 +78,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             postType = "Buddy";
         }
         // we will get the name, e mail image of notif
-            //TODO burası yanlıs foto çekerken hata olur düzeltilcek
+        //TODO rework in the future
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/");
         reference.orderByChild("uid").equalTo(senderUid)
                 .addValueEventListener(new ValueEventListener() {
@@ -185,8 +186,6 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             nameTv = itemView.findViewById(R.id.usernameTv);
             notificationTv = itemView.findViewById(R.id.notificationTv);
             timeTv = itemView.findViewById(R.id.timeTv);
-
-
 
         }
     }

@@ -389,14 +389,14 @@
                         android:id="@+id/postImageIW"
                         android:layout_width="390dp"
                         android:layout_height="200dp"
-                        android:layout_below="@+id/postTitleTW"
+                        android:layout_below="@+id/cizgi3"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
                         android:gravity="start"
                         android:padding="5dp"
-                        android:scrollbars="vertical"
                         android:scaleType="center"
+                        android:scrollbars="vertical"
                         android:textSize="12sp" />
 
                     <TextView
