@@ -34,7 +34,6 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
 
     }
 
-
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -89,8 +88,6 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
             avatar_ImageView = itemView.findViewById(R.id.userPPRow);
             username_TextView = itemView.findViewById(R.id.usernameRow);
         }
-
     }
-
 
 }

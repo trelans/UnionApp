@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder> {
+
     Context context;
     List<ModelComment> commentList;
     String postId;
@@ -35,6 +36,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
     @NonNull
     @Override
     public AdapterComment.MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         //inflate layout custom_stack_over_flow_feed_cards.xml
         View view = LayoutInflater.from(context).inflate(R.layout.row_comment, parent, false);
         ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Comments/").child(postId);
@@ -43,6 +45,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
 
     @Override
     public void onBindViewHolder(@NonNull AdapterComment.MyHolder holder, int position) {
+
         //get data
         String uName = commentList.get(position).getUName();
         String comment = commentList.get(position).getComment();
@@ -71,6 +74,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
     }
 
     private String getShortComment(String uName, String comment, String anonymous) {
+
         String name;
         String shortComment;
 
@@ -98,6 +102,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         ImageView upIconIV;
 
         public MyHolder(@NonNull View itemView) {
+
             super(itemView);
             rowLL = itemView.findViewById(R.id.rowLL);
             answerTV = itemView.findViewById(R.id.answerTV);

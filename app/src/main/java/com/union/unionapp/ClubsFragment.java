@@ -201,9 +201,11 @@ public class ClubsFragment extends Fragment {
         //recycler view and its properties
         recyclerView = view.findViewById(R.id.clubPostsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
         //show newest post first, for this load from last
         layoutManager.setStackFromEnd(true);
         layoutManager.setReverseLayout(true);
+
         //set layout to recyclerview
         recyclerView.setLayoutManager(layoutManager);
 
@@ -214,6 +216,7 @@ public class ClubsFragment extends Fragment {
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Dialog dialog;
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
@@ -253,11 +256,9 @@ public class ClubsFragment extends Fragment {
                         }
 
                         if (i[0] == tagsStatus.length) {
-                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+
                             tagSpinner.setEnabled(false);
-                            //tagSpinner.setClickable( false );
-                            //tagSpinner.setTop( 1 );
-                            //setTagsSaved( true );
+
                         }
                     }
 
@@ -293,10 +294,6 @@ public class ClubsFragment extends Fragment {
                 tag2.setVisibility(View.INVISIBLE);
                 tag3.setVisibility(View.INVISIBLE);
 
-                //set tags to disabled -- not needed
-                //tag1.setEnabled(false);
-                //tag2.setEnabled(false);
-                //tag3.setEnabled(false);
 
                 textViewTags = new TextView[]{tag1, tag2, tag3};
                 tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
@@ -391,7 +388,6 @@ public class ClubsFragment extends Fragment {
                         }
                         String date = dayOfMonthS + "/" + monthS + "/" + year;
                         postDateEt.setText(date);
-
 
                     }
                 };
@@ -556,11 +552,8 @@ public class ClubsFragment extends Fragment {
                         }
 
                         if (i[0] == tagsStatus.length) {
-                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
                             tagSpinner.setEnabled(false);
-                            //tagSpinner.setClickable( false );
-                            //tagSpinner.setTop( 1 );
-                            //setTagsSaved( true );
+
                         }
                     }
 
@@ -707,19 +700,7 @@ public class ClubsFragment extends Fragment {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
 
                                     if (modelBuddyPost.getpQuota().contains(filterQuota)) {
-                                        /*
-                                        if (!filterDate.isEmpty()) {
-                                            if (!modelBuddyPost.getpDate().contains(filterDate)) {
-                                                continue;
-                                            }
-                                        }
 
-                                        if (!filterTime.isEmpty()) {
-                                            if (!modelBuddyPost.getpTime().contains(filterTime)) {
-                                                continue;
-                                            }
-                                        }
-                                        */
                                         if (!filterLocation.isEmpty()) {
                                             if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
                                                 continue;
@@ -737,35 +718,6 @@ public class ClubsFragment extends Fragment {
                                                 continue;
                                             }
 
-                                            /*
-                                            if ( filterTagNumber == 1 ) {
-
-                                                String tag1 = "";
-                                                tag1 = postPartialTags[0];
-                                                if (!tag1.equals(filterPartialTags[0])) {
-                                                    continue;
-                                                }
-
-                                                for (int i = 0; i < postPartialTags.length; i++) {
-                                                    if ( filterPartialTags[0].equals(postPartialTags[i]) )
-                                                }
-
-
-                                                if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
-                                                    continue;
-                                                }
-                                            }
-                                            else if (filterTagNumber == 2) {
-
-                                            }
-                                            else if ( filterTagNumber == 3 ) {
-                                                for (int i = 0; i < filterPartialTags.length; i++) {
-                                                    for (int j = 0; j < postPartialTags.length; j++) {
-                                                        filterPartialTags[i].equals(postPartialTags[j])
-                                                    }
-                                                }
-                                            }
-                                              */
                                         }
 
                                         postList.add(modelBuddyPost);
@@ -773,9 +725,11 @@ public class ClubsFragment extends Fragment {
                                         System.out.println();
                                     }
                                 }
+
                                 // adapter
                                 adapterClubPosts = new AdapterClubPosts(getActivity(), postList);
                                 adapterClubPosts.notifyDataSetChanged();
+
                                 // set adapter to recyclerView
                                 recyclerView.setAdapter(adapterClubPosts);
 
@@ -807,18 +761,15 @@ public class ClubsFragment extends Fragment {
                     }
                 });
 
-
                 //dialog dismiss listener
                 clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
 
-
                     }
                 });
 
                 clubDialog.show();
-
             }
         });
         return view;
@@ -840,6 +791,7 @@ public class ClubsFragment extends Fragment {
 
                     // adapter
                     adapterClubPosts = new AdapterClubPosts(getActivity(), postList);
+
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterClubPosts);
                 }
@@ -849,7 +801,7 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // in case of error
-               // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -957,8 +909,10 @@ public class ClubsFragment extends Fragment {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Temp Pic");
         values.put(MediaStore.Images.Media.DESCRIPTION, "Temp Description");
+
         //put image uri
         image_uri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
         // intent to start camera
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
@@ -1003,9 +957,11 @@ public class ClubsFragment extends Fragment {
 
                                 checkUserStatus();
                                 HashMap<Object,String> hashMap = new HashMap<>();
+
                                 //put post info
                                 hashMap.put("uid",uid); //çekememiş
                                 hashMap.put("username",username); //çekmemiş
+
                                 //hashMap.put("uEmail",email);
                                 hashMap.put("uPp", pp);
                                 hashMap.put("pDetails",postDetails);
@@ -1021,7 +977,7 @@ public class ClubsFragment extends Fragment {
                                 String[] achsTagsToUpload = tagsToUpload.split(",");
                                 for (int i = 0; i < achsTagsToUpload.length; i++) {
                                     if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
-                                        //TODO KUTAY MAT PUANI EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1032,7 +988,7 @@ public class ClubsFragment extends Fragment {
 
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
-                                        //TODO KUTAY CAREER PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1043,7 +999,7 @@ public class ClubsFragment extends Fragment {
 
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
-                                        //TODO KUTAY SPORT PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1053,7 +1009,7 @@ public class ClubsFragment extends Fragment {
                                         }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
-                                        //TODO KUTAY TECH PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1063,7 +1019,7 @@ public class ClubsFragment extends Fragment {
                                         }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
-                                        //TODO KUTAY ENGLISH PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1073,7 +1029,7 @@ public class ClubsFragment extends Fragment {
                                         }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
-                                        //TODO KUTAY ENGLISH PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1083,7 +1039,7 @@ public class ClubsFragment extends Fragment {
                                         }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
-                                        //TODO KUTAY TURKCE PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1093,7 +1049,7 @@ public class ClubsFragment extends Fragment {
                                         }, 2000);
                                     }
                                     else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
-                                        //TODO KUTAY STUDY PUAN EKLE
+
                                         loadProfileScoreAchievements();
                                         Handler handler = new Handler();
                                         handler.postDelayed(new Runnable() {
@@ -1124,8 +1080,6 @@ public class ClubsFragment extends Fragment {
                                             public void onSuccess(Void aVoid) {
                                                 //added in database
                                                 Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
-                                                //TODO reset views
-
 
                                                 // Sends notification to people who have same tag numbers with this post
 
@@ -1157,7 +1111,6 @@ public class ClubsFragment extends Fragment {
                                                             if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
                                                                 if (!userUI.equals(uid)) {
                                                                     addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
-                                                                    //TODO telefonuna burda notif yolla
                                                                 }
                                                             }
 
@@ -1181,7 +1134,6 @@ public class ClubsFragment extends Fragment {
                                             }
                                         });
 
-
                             }
                         }
                     })
@@ -1199,6 +1151,7 @@ public class ClubsFragment extends Fragment {
 
             checkUserStatus();
             HashMap<Object,String> hashMap = new HashMap<>();
+
             //put post info
             hashMap.put("uid",uid);
             hashMap.put("username",username);
@@ -1217,7 +1170,7 @@ public class ClubsFragment extends Fragment {
             String[] achsTagsToUpload = tagsToUpload.split(",");
             for (int i = 0; i < achsTagsToUpload.length; i++) {
                 if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
-                    //TODO KUTAY MAT PUANI EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1228,7 +1181,7 @@ public class ClubsFragment extends Fragment {
 
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
-                    //TODO KUTAY CAREER PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1239,7 +1192,7 @@ public class ClubsFragment extends Fragment {
 
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
-                    //TODO KUTAY SPORT PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1249,7 +1202,7 @@ public class ClubsFragment extends Fragment {
                     }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
-                    //TODO KUTAY TECH PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1259,7 +1212,7 @@ public class ClubsFragment extends Fragment {
                     }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
-                    //TODO KUTAY ENGLISH PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1269,7 +1222,7 @@ public class ClubsFragment extends Fragment {
                     }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
-                    //TODO KUTAY ENGLISH PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1279,7 +1232,7 @@ public class ClubsFragment extends Fragment {
                     }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
-                    //TODO KUTAY TURKCE PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1289,7 +1242,7 @@ public class ClubsFragment extends Fragment {
                     }, 2000);
                 }
                 else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
-                    //TODO KUTAY STUDY PUAN EKLE
+
                     loadProfileScoreAchievements();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -1321,8 +1274,6 @@ public class ClubsFragment extends Fragment {
                             //added in database
                             Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
                             addToHisLastActivities(pUid,"Published an announcement");
-                            //TODO reset views
-
 
                             // Sends notification to people who have same tag numbers with this post
 
@@ -1330,14 +1281,16 @@ public class ClubsFragment extends Fragment {
                             // for now notification will send for random tag
                             String completeTag = tagsToUpload;
                             String[] partialTag = completeTag.split(",");
+
                             int randomIndex = (int)  Math.random() *  (partialTag.length-1);
                             final String luckyOnesToBeSendNotification = partialTag[randomIndex];
+
                             String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
                             System.out.println(firstTag + "HAA");
+
                             userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
                             //   final String luckyOnesToBeSendNotification = "2";
                             System.out.println(luckyOnesToBeSendNotification);
-
 
                             userDbRef.addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -1345,33 +1298,29 @@ public class ClubsFragment extends Fragment {
                                     for (DataSnapshot ds: snapshot.getChildren()){
 
                                         ModelUsers modelUsers = ds.getValue(ModelUsers.class);
-                                        // TODO userin tagleri boş dönüp uygulama çökertiyor
+
                                         String[] userTags = modelUsers.getTags().split(",");
                                         String firstTag = userTags[0];
                                         String secondTag = userTags[1];
                                         String thirdTag = userTags[2];
                                         String userUI = modelUsers.getUid();
                                         String[] alltags = MainActivity.getAllTags();
+
                                         System.out.println("ssdsdf");
                                         System.out.println(luckyOnesToBeSendNotification);
                                         if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
                                             if (!userUI.equals(uid)) {
                                                 addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
-                                                //TODO telefonuna burda notif yolla
                                             }
                                         }
-
                                         System.out.println("oluyor");
                                     }
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
                             });
-
-
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -1381,7 +1330,6 @@ public class ClubsFragment extends Fragment {
                             Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
                         }
                     });
-
 
         }
 
@@ -1419,7 +1367,6 @@ public class ClubsFragment extends Fragment {
     }
     private void loadProfileScoreAchievements() {
 
-
         // getting user's scores
         DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid );
         usersDbRefAchscore.addValueEventListener(new ValueEventListener() {
@@ -1431,6 +1378,7 @@ public class ClubsFragment extends Fragment {
                         System.out.println(ds.getValue());
                         System.out.println(ds.getKey());
                         ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+
                         //Parsing in database user's scores
                         mathScore = Integer.parseInt("" + modelAchievementsScores.getMath());
                         careerScore = Integer.parseInt("" + modelAchievementsScores.getCareer());
@@ -1475,10 +1423,12 @@ public class ClubsFragment extends Fragment {
                         System.out.println(ds.getValue());
                         System.out.println(ds.getKey());
                         ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+
                         //Parsing in database user's scores
                         mathScore = Integer.parseInt("" + modelAchievementsScores.getMath());
                         careerScore = Integer.parseInt("" + modelAchievementsScores.getCareer());
                         System.out.println( "ahahaahhahahaah" + careerScore);
+
                         sportScore = Integer.parseInt("" + modelAchievementsScores.getSport());
                         technologyScore = Integer.parseInt("" + modelAchievementsScores.getTechnology());
                         socialScore = Integer.parseInt("" + modelAchievementsScores.getSocial());
@@ -1497,11 +1447,11 @@ public class ClubsFragment extends Fragment {
         System.out.println("Math SCore:" + mathScore);
         System.out.println("Career Score:" + careerScore);
         // increasing the points depending on the genre
-        //increase 1 point to mathScore
+        // increase 1 point to mathScore
         if (genre.equals("1")) {
             mathScore++;
             if (mathScore == 10 || mathScore == 50 || mathScore == 100 || mathScore == 500 || mathScore == 100) {
-                // query ile bilgileri getirt
+                // query pass info
                 DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -1509,12 +1459,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("1") && modelAchievements.getPoint().equals(String.valueOf(mathScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1535,7 +1487,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to careerScore
@@ -1579,7 +1531,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to sportScore
@@ -1594,12 +1546,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("3") && modelAchievements.getPoint().equals(String.valueOf(sportScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1620,7 +1574,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to technologyScore
@@ -1635,12 +1589,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("4") && modelAchievements.getPoint().equals(String.valueOf(technologyScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1661,7 +1617,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to socialScore
@@ -1676,12 +1632,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("5") && modelAchievements.getPoint().equals(String.valueOf(socialScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1702,7 +1660,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to englishScore
@@ -1717,12 +1675,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("6") && modelAchievements.getPoint().equals(String.valueOf(englishScore))) {
-                                // gets achievement information
+
+                               // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1743,7 +1703,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to turkishScore
@@ -1758,12 +1718,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("7") && modelAchievements.getPoint().equals(String.valueOf(turkishScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1784,7 +1746,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to studyScore
@@ -1799,12 +1761,14 @@ public class ClubsFragment extends Fragment {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("8") && modelAchievements.getPoint().equals(String.valueOf(studyScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
                                 hashMapd.put("title" , title);
@@ -1825,7 +1789,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         // Prapare scores to make it appropraite to send to server
@@ -1849,6 +1813,7 @@ public class ClubsFragment extends Fragment {
         hashMap.put("turkish", SturkishScore);
         hashMap.put("study", SstudyScore);
         DatabaseReference userAchref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/AchievementsScores/");
+
         // Sending hashes to database
         userAchref.setValue(hashMap);
     }
@@ -1924,6 +1889,5 @@ public class ClubsFragment extends Fragment {
                 }
                 return true;
             }
-
 
 }
