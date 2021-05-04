@@ -34,7 +34,7 @@
 
 
                 <ImageView
-                    android:id="@+id/send"
+                    android:id="@+id/resetFilterImageView"
                     android:layout_width="22dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
