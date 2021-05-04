@@ -83,6 +83,8 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.quotaTW.setText( "Quota:      " + pQuota );
         holder.publisherNameTW.setText( "@" + username );
 
+        convertStringTagsToRealTags(holder,pTags);
+
         holder.publisherPP.setBackground( ContextCompat.getDrawable( context, R.drawable.profile_icon ) );
         try {
             //if image received, set
@@ -139,6 +141,8 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
                 String fixedDate = pDate.replace( "/", "_" );
                 userRef.child( "Calendar" ).child( fixedDate ).child( pId ).setValue( hashMap );
+
+
 
                 //User calender finish line
 
@@ -201,6 +205,48 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         } );
     }
 
+
+
+    @Override
+    public int getItemCount() {
+        return postList.size();
+    }
+
+    //view holder class
+    class MyHolder extends RecyclerView.ViewHolder {
+
+        //views from custom_feed_card.xml
+        ImageButton calendarIB;
+        ImageButton sendButtonIB;
+        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3, publisherNameTW;
+        ImageView publisherPP;
+        CardView cardView;
+
+        public MyHolder( @NonNull View itemView ) {
+            super( itemView );
+
+            //init views
+            calendarIB = itemView.findViewById( R.id.calendarIB );
+            sendButtonIB = itemView.findViewById( R.id.sendButtonIB );
+            contentTextView = itemView.findViewById( R.id.contentTW );
+            titleTextView = itemView.findViewById( R.id.titleTW );
+
+            dateTW = itemView.findViewById( R.id.dateTWBuddy );
+            zoomLinkTW = itemView.findViewById( R.id.zoomLinkTW );
+            genderTW = itemView.findViewById( R.id.genderPreferenceTW );
+            quotaTW = itemView.findViewById( R.id.quotaTW );
+            cardView = itemView.findViewById( R.id.card );
+
+            publisherNameTW = itemView.findViewById( R.id.publisherNameTextView );
+            publisherPP = itemView.findViewById( R.id.publisherPp );
+
+            topicTagTW1 = itemView.findViewById( R.id.topicTagTW );
+            topicTagTW2 = itemView.findViewById( R.id.topicTagTW2 );
+            topicTagTW3 = itemView.findViewById( R.id.topicTagTW3 );
+
+        }
+    }
+
     private void convertStringTagsToRealTags( @NonNull MyHolder holder, String pTags ) {
         String[] newTags = new String[3];
         newTags[0] = "";
@@ -244,46 +290,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         } else {
             holder.topicTagTW3.setVisibility( View.VISIBLE );
             holder.topicTagTW3.setText( newTags[2] );
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return postList.size();
-    }
-
-    //view holder class
-    class MyHolder extends RecyclerView.ViewHolder {
-
-        //views from custom_feed_card.xml
-        ImageButton calendarIB;
-        ImageButton sendButtonIB;
-        TextView contentTextView, titleTextView, dateTW, zoomLinkTW, genderTW, quotaTW, topicTagTW1, topicTagTW2, topicTagTW3, publisherNameTW;
-        ImageView publisherPP;
-        CardView cardView;
-
-        public MyHolder( @NonNull View itemView ) {
-            super( itemView );
-
-            //init views
-            calendarIB = itemView.findViewById( R.id.calendarIB );
-            sendButtonIB = itemView.findViewById( R.id.sendButtonIB );
-            contentTextView = itemView.findViewById( R.id.contentTW );
-            titleTextView = itemView.findViewById( R.id.titleTW );
-
-            dateTW = itemView.findViewById( R.id.dateTWBuddy );
-            zoomLinkTW = itemView.findViewById( R.id.zoomLinkTW );
-            genderTW = itemView.findViewById( R.id.genderPreferenceTW );
-            quotaTW = itemView.findViewById( R.id.quotaTW );
-            cardView = itemView.findViewById( R.id.card );
-
-            publisherNameTW = itemView.findViewById( R.id.publisherNameTextView );
-            publisherPP = itemView.findViewById( R.id.publisherPp );
-
-            topicTagTW1 = itemView.findViewById( R.id.topicTagTW );
-            topicTagTW2 = itemView.findViewById( R.id.topicTagTW2 );
-            topicTagTW3 = itemView.findViewById( R.id.topicTagTW3 );
-
         }
     }
 }
