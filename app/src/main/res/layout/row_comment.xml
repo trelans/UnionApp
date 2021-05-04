@@ -30,7 +30,7 @@
         android:textSize="12sp"
         />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/upIconIV"
         android:layout_width="30dp"
         android:layout_height="match_parent"
@@ -38,7 +38,7 @@
         android:layout_marginBottom="1dp"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
-        app:srcCompat="@drawable/up_icon" />
+        android:background="@drawable/up_icon" />
 
 </LinearLayout>
     <View

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.MyHolder> {
 
@@ -82,29 +84,44 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             //hide imageView
         }
 
-        //TODO
-        if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
-            holder.upButton.setVisibility(View.INVISIBLE);
-        }
+
         if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            Toast.makeText(context, "It is your post!", Toast.LENGTH_LONG).show();
             holder.upButton.setEnabled(false);
+        }else{
+            holder.upButton.setEnabled(true);
         }
 
+        if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
+            holder.upButton.setEnabled(true);
+            holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_pressed));
+        }else{
+            holder.upButton.setEnabled(true);
+            holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_icon));
+        }
+
+        ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
-
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
-                System.out.println(postList.get(position).getPId());
-                System.out.println(position);
 
-                updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() + 1);
-                pUpUsers.add(firebaseUser.getUid());
+                //if button is already pressed
+                if (holder.upButton.getBackground().getConstantState().equals(Objects.requireNonNull(ContextCompat.getDrawable(context, R.drawable.up_pressed)).getConstantState())){
+                    holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_icon));
+                    updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() - 1);
+                    pUpUsers.remove(firebaseUser.getUid());
+                    upVoteNumber[0] = postList.get(position).getpUpvoteNumber() - 1;
+                    System.out.println("giriyor");
+                }else{
+                    holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_pressed));
+                    updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() + 1);
+                    pUpUsers.add(firebaseUser.getUid());
+                    upVoteNumber[0] = postList.get(position).getpUpvoteNumber() + 1;
+                }
+
                 updateUpNumber.put("pUpUsers", pUpUsers);
-
                 ref1.child(pId).updateChildren(updateUpNumber);
-                upVoteNumber[0] = postList.get(position).getpUpvoteNumber() + 1;
                 holder.upNumber.setText(upVoteNumber[0] + "");
             }
         });

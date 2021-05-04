@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder> {
 
@@ -55,18 +58,27 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
 
 
         if (cUpUsers != null && cUpUsers.contains(userUid)){
-            holder.upIconIV.setVisibility(View.INVISIBLE);
+            holder.upIconIV.setBackground(ContextCompat.getDrawable(context,R.drawable.up_pressed));
+        }else{
+            holder.upIconIV.setBackground(ContextCompat.getDrawable(context,R.drawable.up_icon));
         }
-
+        System.out.println("buralarda");
         //set data
         holder.answerTV.setText(getShortComment(uName, comment, anonymous));
         holder.upIconIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 4/26/21 burayı ve üstüne basıldığında yeni diyalog olarak commentin büyük halinin açılmasını yap
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
-                updateUpNumber.put("upNumber", commentList.get(position).getUpNumber() + 1);
-                cUpUsers.add(userUid);
+                System.out.println("basdtı");
+                if (holder.upIconIV.getBackground().getConstantState().equals(Objects.requireNonNull(ContextCompat.getDrawable(context, R.drawable.up_pressed)).getConstantState())) {
+                    holder.upIconIV.setBackground(ContextCompat.getDrawable(context, R.drawable.up_icon));
+                    updateUpNumber.put("upNumber", commentList.get(position).getUpNumber() - 1);
+                    cUpUsers.remove(userUid);
+                }else{
+                    holder.upIconIV.setBackground(ContextCompat.getDrawable(context,R.drawable.up_pressed));
+                    updateUpNumber.put("upNumber", commentList.get(position).getUpNumber() + 1);
+                    cUpUsers.add(userUid);
+                }
                 updateUpNumber.put("cUpUsers", cUpUsers);
                 ref.child(commentList.get(position).getCId()).updateChildren(updateUpNumber);
             }
@@ -99,7 +111,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         //views from row_comment.xml
         LinearLayout rowLL;
         TextView answerTV;
-        ImageView upIconIV;
+        ImageButton upIconIV;
 
         public MyHolder(@NonNull View itemView) {
 
