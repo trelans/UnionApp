@@ -61,7 +61,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity{
+public class PostActivity extends AppCompatActivity {
 
     CardView commentCardView;
     CardView postCardView;
@@ -109,7 +109,7 @@ public class PostActivity extends AppCompatActivity{
     ImageView sendButton;
     LinearLayoutCompat clickToOpenCardLL;
     ImageView backButton;
-    ImageView  profilePhoto;
+    ImageView profilePhoto;
     TextView pTitleTW;
     AppCompatButton topicTagTW1;
     AppCompatButton topicTagTW2;
@@ -155,7 +155,6 @@ public class PostActivity extends AppCompatActivity{
                 postRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        System.out.println("Key " + snapshot.getKey() + "Value " + snapshot.getValue());
                         if (pType.equals("Stack")) {
                             ModelStackPost modelStackPost = snapshot.getValue(ModelStackPost.class);
                             assert modelStackPost != null;
@@ -168,6 +167,7 @@ public class PostActivity extends AppCompatActivity{
                             username = modelStackPost.username;
                             pImage = modelStackPost.getPImage();
                             publisherPp = modelStackPost.getUid();
+                            System.out.println("PImage: " + pImage);
 
                         } else {
                             ModelBuddyAndClubPost modelBuddyAndClubPost = snapshot.getValue(ModelBuddyAndClubPost.class);
@@ -188,7 +188,7 @@ public class PostActivity extends AppCompatActivity{
                             pTitle = modelBuddyAndClubPost.pTitle;
                             pDetails = modelBuddyAndClubPost.pDetails;
                             username = modelBuddyAndClubPost.username;
-                            publisherPp = modelBuddyAndClubPost.getuPp();
+                            publisherPp = modelBuddyAndClubPost.getUid();
                         }
                     }
 
@@ -237,7 +237,7 @@ public class PostActivity extends AppCompatActivity{
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    loadView("Buddy");
+                    loadView(pType);
                 }
             }, 1000);
         } else {
@@ -253,7 +253,8 @@ public class PostActivity extends AppCompatActivity{
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(pTime));
         String pPostedTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
+        previousMargin = layoutParams.topMargin;
         FirebaseUser user;
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             user = FirebaseAuth.getInstance().getCurrentUser();
@@ -279,13 +280,12 @@ public class PostActivity extends AppCompatActivity{
         }
 
         pTitleTW.setText(pTitle);
-        System.out.println("geldim gördüm çalışmadım");
-        System.out.println(pImage);
+
         if (pImage != null && !pImage.equals("noImage") && !pImage.equals("")) {
             try {
                 System.out.println("burada");
                 //if image received, set
-                StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/"+ pType + "Posts/" + pImage);
+                StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/" + pType + "Posts/" + pImage);
                 image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
@@ -317,7 +317,6 @@ public class PostActivity extends AppCompatActivity{
         }
 
 
-
         questionContentTW.setText("     " + pDetails);
         if (!pAnon.equals("1")) {
             pUserNameTW.setText("@" + username);
@@ -327,17 +326,23 @@ public class PostActivity extends AppCompatActivity{
 
         convertStringTagsToRealTags(topicTagTW1, topicTagTW2, topicTagTW3, pTags);
 
+        commentET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openOrCloseCard(true);
+            }
+        });
         commentET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                openOrCloseCard();
+                openOrCloseCard(false);
             }
         });
 
         clickToOpenCardLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openOrCloseCard();
+                openOrCloseCard(false);
             }
         });
 
@@ -441,15 +446,21 @@ public class PostActivity extends AppCompatActivity{
                 //Toast.makeText(context, "Error on load comments 248. line", Toast.LENGTH_SHORT).show();
             }
         });
+
+        
     }
 
-    private void openOrCloseCard() {
+    private void openOrCloseCard(boolean openCardImmediately) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
-        if (layoutParams.topMargin == 0) {
-            layoutParams.topMargin = previousMargin;
-        } else {
-            previousMargin = layoutParams.topMargin;
+        if (openCardImmediately) {
             layoutParams.topMargin = 0;
+        } else {
+            if (layoutParams.topMargin == 0) {
+                layoutParams.topMargin = previousMargin;
+            } else {
+                previousMargin = layoutParams.topMargin;
+                layoutParams.topMargin = 0;
+            }
         }
         commentCardView.setLayoutParams(layoutParams);
     }
@@ -563,6 +574,7 @@ public class PostActivity extends AppCompatActivity{
             }
         }
     }
+
     private void dispatchTakePictureIntent() {
         System.out.println("dispatch sdsad");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -583,10 +595,10 @@ public class PostActivity extends AppCompatActivity{
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
-            }else{
+            } else {
                 System.out.println("photo file is null");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("hiçbir şey getirmedi");
         }
     }
@@ -628,7 +640,7 @@ public class PostActivity extends AppCompatActivity{
                     cUid = ref.push().getKey();
                     Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(gallery, GALLERY_REQUEST_CODE);
-                } else if (i == 2){
+                } else if (i == 2) {
                     addPhotoIV.setBackground(ContextCompat.getDrawable(PostActivity.this, R.drawable.ic_baseline_add_a_photo_24));
                     StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/Comments/" + cUid);
                     image_uri = "noImage";
