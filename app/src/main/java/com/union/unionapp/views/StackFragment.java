@@ -536,7 +536,7 @@ public class StackFragment extends Fragment {
         } //TODO else navigate to login
     }
 
-    
+
     private void uploadData( String postTitle, String postDetails, String uri, String postAnonymously, String tagToUpload, DatabaseReference reference ) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf( MainActivity.getServerDate() );
