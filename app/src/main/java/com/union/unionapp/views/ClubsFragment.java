@@ -699,6 +699,9 @@ public class ClubsFragment extends Fragment {
                         //save the user's filter choices
                         String filterDate = filterDateTv.getText().toString().trim();
                         String filterQuota = filterQuotaEt.getText().toString().trim();
+                        if (filterQuota.isEmpty()) {
+                            filterQuota = "";
+                        }
                         String filterTime = filterTimeTv.getText().toString().trim();
                         String filterLocation = filterLocationEt.getText().toString().trim();
                         filterTagsToUpload = "";
@@ -735,7 +738,7 @@ public class ClubsFragment extends Fragment {
                                 for ( DataSnapshot ds : snapshot.getChildren() ) {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue( ModelBuddyAndClubPost.class );
 
-                                    if ( modelBuddyPost.getpQuota().contains( filterQuota ) ) {
+                                    if ( modelBuddyPost.getpQuota().isEmpty() || modelBuddyPost.getpQuota().contains( filterQuota ) ) {
 
                                         if ( !filterLocation.isEmpty() ) {
                                             if ( !modelBuddyPost.getpLocation().contains( filterLocation ) ) {
