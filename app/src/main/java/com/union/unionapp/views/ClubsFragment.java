@@ -755,6 +755,18 @@ public class ClubsFragment extends Fragment {
 
                                         }
 
+                                        if ( !filterDate.isEmpty() ) {
+                                            if (!modelBuddyPost.getpDate().contains( filterDate ) ) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if ( !filterTime.isEmpty() ) {
+                                            if (!modelBuddyPost.getpHour().contains( filterTime ) ) {
+                                                continue;
+                                            }
+                                        }
+
                                         postList.add( modelBuddyPost );
 
                                     }

@@ -705,6 +705,8 @@ public class BuddyFragment extends Fragment {
                         //save the user's filter choices
                         String filterQuota = filterQuotaEt.getText().toString().trim();
                         String filterLocation = filterLocationEt.getText().toString().trim();
+                        String filterDate = filterDateTv.getText().toString().trim();
+                        String filterTime = filterTimeTv.getText().toString().trim();
                         filterTagsToUpload = "";
 
 
@@ -757,6 +759,18 @@ public class BuddyFragment extends Fragment {
                                                 continue;
                                             }
 
+                                        }
+
+                                        if ( !filterDate.isEmpty() ) {
+                                            if (!modelBuddyPost.getpDate().contains( filterDate ) ) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if ( !filterTime.isEmpty() ) {
+                                            if (!modelBuddyPost.getpHour().contains( filterTime ) ) {
+                                                continue;
+                                            }
                                         }
 
                                         postList.add( modelBuddyPost );
