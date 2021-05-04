@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -37,10 +36,17 @@ import com.union.unionapp.views.PostActivity;
 import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ * This class binds given club posts into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHolder> {
 
-    Context context;
-    List<ModelBuddyAndClubPost> postList;
+    private Context context;
+    private List<ModelBuddyAndClubPost> postList;
     private static boolean isBackgroundBlurred = false;
 
     public AdapterClubPosts( Context context, List<ModelBuddyAndClubPost> postList ) {
@@ -172,10 +178,8 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             @RequiresApi( api = Build.VERSION_CODES.N )
             @Override
             public void onClick( View view ) {
-                //TODO calendar ekleme işlemini yap
-                Toast.makeText( context, "calendara basıldı", Toast.LENGTH_SHORT ).show();
 
-                //Kutay's calendar code
+                //Calendar code
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 String uid = mAuth.getCurrentUser().getUid();
                 DatabaseReference userRef = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users/" + uid );
@@ -213,8 +217,6 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.sendButtonIB.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
-                //TODO mesaj kısmına iletmeyi yap
-                Toast.makeText( context, "Profile mesaj göndermeye basıldı", Toast.LENGTH_SHORT ).show();
                 Intent i = new Intent( context, ChatActivity.class );
                 i.putExtra( "Hisuid", hisUid );
                 i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );

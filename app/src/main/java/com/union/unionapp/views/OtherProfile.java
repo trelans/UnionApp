@@ -36,47 +36,47 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+
+/**
+ * This activity shows other users profiles
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class OtherProfile extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    static int i = 0;
+    private static int i = 0;
 
 
-    boolean lastActsIsActive;
-    boolean achsIsActive;
-    String[] allAchs;
-    String[] userAchs;
-    String[] userActs;
-    String achievementLocationsWComma;
-    TextView lastActsTextView;
-    TextView achsTextView;
-    RecyclerView lastActsRv;
-    RecyclerView achsListRv;
+    private boolean lastActsIsActive;
+    private boolean achsIsActive;
+    private String[] allAchs;
+    private String[] userAchs;
+    private String[] userActs;
+    private String achievementLocationsWComma;
+    private TextView lastActsTextView;
+    private TextView achsTextView;
+    private RecyclerView lastActsRv;
+    private RecyclerView achsListRv;
     private ArrayList<ModelLastActivities> LastActList;
     private AdapterLastActivities adapterLastAct;
-
     private ArrayList<ModelAchievements> AchivementList;
     private AdapterAchievements adapterAchivement;
-    ImageView directMessage;
-    TextView usernameTW;
-    ImageView userPP;
-    String hisUid;
+    private ImageView directMessage;
+    private TextView usernameTW;
+    private ImageView userPP;
+    private String hisUid;
 
-    ImageView back_bt;
-    AppCompatButton tagButton1;
-    AppCompatButton tagButton2;
-    AppCompatButton tagButton3;
-    AppCompatButton[] tagButtons;
-    String[] tagIndexes;
-    String[] allTags;
-    String tagNums;
-    ImageView forwardDateImageView;
-    ImageView backwardDateImageView;
-    TextView dateTextView;
-    String date;
-    SimpleDateFormat dateFormat;
+    private ImageView back_bt;
+    private AppCompatButton tagButton1;
+    private AppCompatButton tagButton2;
+    private AppCompatButton tagButton3;
+    private AppCompatButton[] tagButtons;
+    private String[] tagIndexes;
+    private String[] allTags;
+    private String tagNums;
+    private String date;
 
 
     @Override
@@ -87,8 +87,6 @@ public class OtherProfile extends AppCompatActivity {
         Intent intent = getIntent();
         hisUid = intent.getStringExtra( "Hisuid" );
 
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
         firebaseDatabase = firebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference( "BilkentUniversity/Users" );
 

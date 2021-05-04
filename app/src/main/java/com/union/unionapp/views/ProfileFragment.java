@@ -45,12 +45,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * This fragment shows users information
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ProfileFragment extends Fragment {
+
+    // Variables
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    static int i = 0;
+    private static int i = 0;
 
     private ArrayList<ModelLastActivities> LastActList;
     private AdapterLastActivities adapterLastAct;
@@ -61,37 +69,33 @@ public class ProfileFragment extends Fragment {
     private ArrayList<ModelCalendar> CalendarList;
     private AdapterCalendar adapterCalendar;
 
-    boolean lastActsIsActive;
-    boolean achsIsActive;
-    String tagNums;
-    String uid;
-    String[] allAchs;
-    String[] userAchs;
-    String[] userActs;
-    String achievementLocationsWComma;
-    TextView lastActsTextView;
-    TextView achsTextView;
-    RecyclerView lastActsRv;
-    RecyclerView achsListRv;
-    RecyclerView calendarRecycleView;
-    ImageView openCalendar;
-    Dialog calendarDialog;
-    TextView usernameTW;
-    ImageView userPP;
-
-    AppCompatButton tagButton1;
-    AppCompatButton tagButton2;
-    AppCompatButton tagButton3;
-    AppCompatButton[] tagButtons;
-    String[] tagIndexes;
-
-    String[] allTags;
-
-    ImageView forwardDateImageView;
-    ImageView backwardDateImageView;
-    TextView dateTextView;
-    String date;
-    SimpleDateFormat dateFormat;
+    private boolean lastActsIsActive;
+    private boolean achsIsActive;
+    private String tagNums;
+    private String uid;
+    private String[] allAchs;
+    private String[] userAchs;
+    private String[] userActs;
+    private String achievementLocationsWComma;
+    private TextView lastActsTextView;
+    private TextView achsTextView;
+    private RecyclerView lastActsRv;
+    private RecyclerView achsListRv;
+    private RecyclerView calendarRecycleView;
+    private ImageView openCalendar;
+    private Dialog calendarDialog;
+    private TextView usernameTW;
+    private ImageView userPP;
+    private AppCompatButton tagButton1;
+    private AppCompatButton tagButton2;
+    private AppCompatButton tagButton3;
+    private AppCompatButton[] tagButtons;
+    private String[] tagIndexes;
+    private String[] allTags;
+    private ImageView forwardDateImageView;
+    private ImageView backwardDateImageView;
+    private TextView dateTextView;
+    private String date;
 
 
     @Nullable
@@ -329,6 +333,12 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    /**
+     * This method gets given date activities
+     *
+     * @param date specified date to show this day activities
+     * @param rv   recycleView that dates will be showed in
+     */
     public void getCurrentDateActivities( String date, RecyclerView rv ) {
         String fixedDate = date.replace( "/", "_" );
         CalendarList = new ArrayList<>();
@@ -359,11 +369,23 @@ public class ProfileFragment extends Fragment {
                 } );
     }
 
+    /**
+     * This method convert the date of given calendar into dd/MM/yyyy format
+     *
+     * @param calendar given calendar that wanted to be formatted
+     */
     public void calendarToString( Calendar calendar ) {
         SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MM/yyyy" );
         date = dateFormat.format( calendar.getTime() );
     }
 
+    /**
+     * This method removes given char from stringbuilder
+     *
+     * @param s Stringbuilder that will be manipulated
+     * @param c desired char to be deleted from stringbuilder
+     * @return
+     */
     public static String removeALetter( StringBuilder s, char c ) {
 
         if ( s.charAt( i ) == c ) {
@@ -378,6 +400,9 @@ public class ProfileFragment extends Fragment {
         return s.toString();
     }
 
+    /**
+     * This method loads last activities
+     */
     public void loadLastAct() {
         LastActList = new ArrayList<>();
         DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference( "BilkentUniversity/Users/" + uid + "/LastActivities/" );
@@ -411,6 +436,9 @@ public class ProfileFragment extends Fragment {
                 } );
     }
 
+    /**
+     * This method loads achievements of user
+     */
     private void loadAchievements() {
         AchivementList = new ArrayList<>();
         DatabaseReference databaseReferenceNotif = firebaseDatabase.getReference( "BilkentUniversity/Users/" + uid + "/Achievements/" );

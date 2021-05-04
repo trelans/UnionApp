@@ -2,6 +2,12 @@ package com.union.unionapp.models;
 
 import java.util.List;
 
+/**
+ * This model represents comments
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelComment {
     // use the same name as used in uploading comments
     String cId, comment, timeStamp, uid, cAnon, cPhoto, uName;

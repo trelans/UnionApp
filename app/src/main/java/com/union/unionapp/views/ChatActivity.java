@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,28 +47,34 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+/**
+ * This activity enables user to chat privately
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ChatActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    ImageView profileIw, send_bt, back_bt;
-    TextView tw_username, tw_status;
-    EditText messageEt;
-    FirebaseAuth firebaseAuth;
+    private RecyclerView recyclerView;
+    private ImageView profileIw, send_bt, back_bt;
+    private TextView tw_username, tw_status;
+    private EditText messageEt;
+    private FirebaseAuth firebaseAuth;
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference usersDbRef;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference usersDbRef;
 
     // for checking message is seen
-    ValueEventListener seenListener;
-    DatabaseReference userRefForSeen;
+    private ValueEventListener seenListener;
+    private DatabaseReference userRefForSeen;
 
-    List<ModelChat> chatList;
-    AdapterChat adapterChat;
+    private List<ModelChat> chatList;
+    private AdapterChat adapterChat;
 
-    String hisUid;
-    String myUid;
-    APIService apiService;
-    boolean notify = false;
+    private String hisUid;
+    private String myUid;
+    private APIService apiService;
+    private boolean notify = false;
 
 
     @Override
@@ -337,7 +342,6 @@ public class ChatActivity extends AppCompatActivity {
                     apiService.sendNotification( sender ).enqueue( new Callback<Response>() {
                         @Override
                         public void onResponse( Call<Response> call, retrofit2.Response<Response> response ) {
-                            Toast.makeText( ChatActivity.this, "" + response.message(), Toast.LENGTH_SHORT ).show();
                         }
 
                         @Override

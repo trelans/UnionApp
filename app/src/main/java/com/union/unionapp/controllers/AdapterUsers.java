@@ -18,9 +18,15 @@ import com.union.unionapp.views.ChatActivity;
 
 import java.util.List;
 
+/**
+ * This class binds given users into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
-    Context context;
-    List<ModelUsers> userList;
+    private Context context;
+    private List<ModelUsers> userList;
 
 
     //constructor

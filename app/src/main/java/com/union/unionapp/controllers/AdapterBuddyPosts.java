@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -36,11 +35,17 @@ import com.union.unionapp.views.PostActivity;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class binds given buddy posts into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.MyHolder> {
 
-    Context context;
-    List<ModelBuddyAndClubPost> postList;
-    StorageReference reference;
+    private Context context;
+    private List<ModelBuddyAndClubPost> postList;
+    private StorageReference reference;
 
     public AdapterBuddyPosts( Context context, List<ModelBuddyAndClubPost> postList, StorageReference reference ) {
         this.context = context;
@@ -83,7 +88,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.quotaTW.setText( "Quota:      " + pQuota );
         holder.publisherNameTW.setText( "@" + username );
 
-        convertStringTagsToRealTags(holder,pTags);
+        convertStringTagsToRealTags( holder, pTags );
 
         holder.publisherPP.setBackground( ContextCompat.getDrawable( context, R.drawable.profile_icon ) );
         try {
@@ -123,8 +128,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             @RequiresApi( api = Build.VERSION_CODES.N )
             @Override
             public void onClick( View view ) {
-                //TODO calendar ekleme işlemini yap
-                Toast.makeText( context, "calendara basıldı", Toast.LENGTH_SHORT ).show();
 
                 //Kutay's calendar code
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -141,7 +144,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
                 String fixedDate = pDate.replace( "/", "_" );
                 userRef.child( "Calendar" ).child( fixedDate ).child( pId ).setValue( hashMap );
-
 
 
                 //User calender finish line
@@ -204,7 +206,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             }
         } );
     }
-
 
 
     @Override

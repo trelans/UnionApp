@@ -2,6 +2,12 @@ package com.union.unionapp.models;
 
 import java.util.List;
 
+/**
+ * This model represents stack posts
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelStackPost {
     // use same name as we given while uploading posts
     String pId, pTitle, pDetails, pImage, pTime, uid, uEmail, pAnon, username, pTagIndex;

@@ -24,9 +24,15 @@ import com.union.unionapp.views.OtherProfile;
 
 import java.util.List;
 
+/**
+ * This class binds given users into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProfile.MyHolder> {
-    Context context;
-    List<ModelUsers> userList;
+    private Context context;
+    private List<ModelUsers> userList;
 
 
     //constructor

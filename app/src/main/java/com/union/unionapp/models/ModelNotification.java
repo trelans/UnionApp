@@ -1,5 +1,11 @@
 package com.union.unionapp.models;
 
+/**
+ * This model represents notifications
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelNotification {
     String pId, timestamp, pUid, notification, sUid, sName, sEmail, sImage, sTag;
 

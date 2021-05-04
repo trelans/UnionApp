@@ -24,11 +24,17 @@ import com.union.unionapp.views.ChatActivity;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class binds given chatlist into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHolder> {
 
 
-    Context context;
-    List<ModelUsers> userList; // get user info
+    private Context context;
+    private List<ModelUsers> userList; // get user info
     private HashMap<String, String> lastMessageMap;
 
     // constructor

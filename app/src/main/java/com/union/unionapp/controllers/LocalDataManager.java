@@ -3,6 +3,12 @@ package com.union.unionapp.controllers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * This class gives methods to storre user informations locally
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class LocalDataManager {
     public void setSharedPreference( Context context, String key, String value ) {
         SharedPreferences sharedPref = context.getSharedPreferences( context.getPackageName(), Context.MODE_PRIVATE );

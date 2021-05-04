@@ -1,5 +1,11 @@
 package com.union.unionapp.models;
 
+/**
+ * This model represents Chatlist
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelChatlist {
     String id;  // to get chat list , sender/receiver uid
 

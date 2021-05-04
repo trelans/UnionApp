@@ -284,8 +284,6 @@ public class MainActivity extends AppCompatActivity {
                     if ( !modelUser.getUid().equals( fUser.getUid() ) ) {
                         if ( modelUser.getUsername().toLowerCase().contains( query.toLowerCase() ) ) {
                             userList.add( modelUser );
-                            // silincek
-                            Toast.makeText( getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT ).show();
                         }
 
                     }
@@ -324,8 +322,7 @@ public class MainActivity extends AppCompatActivity {
                     if ( !modelUser.getUid().equals( fUser.getUid() ) ) {
                         if ( modelUser.getUsername().toLowerCase().contains( query.toLowerCase() ) ) {
                             userList.add( modelUser );
-                            // silincek
-                            Toast.makeText( getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT ).show();
+
                         }
 
                     }
@@ -466,8 +463,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    if (i[0] == tagsStatus.length) {
-                        tagSpinner.setEnabled(false);
+                    if ( i[0] == tagsStatus.length ) {
+                        //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+                        tagSpinner.setEnabled( false );
+                        //tagSpinner.setClickable( false );
+                        //tagSpinner.setTop( 1 );
+                        //setTagsSaved( true );
                     }
                 }
 
@@ -484,7 +485,8 @@ public class MainActivity extends AppCompatActivity {
                     for ( int i = 0; i < tagsStatus.length; i++ ) {
                         tagsStatus[i] = false;
                     }
-
+                    //saveTagsButton.setEnabled(false);
+                    //tagSpinner.setClickable( true );
                     setAllSettingsTagsInvisible();
                     setTagsSaved( false );
                     Toast.makeText( getApplicationContext(), "All tags are cleared", Toast.LENGTH_LONG ).show();
@@ -515,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
                         // put data within hashmap in database
                         reference.child( "tags" ).setValue( tagIndexes );
 
-                        Toast.makeText(getApplicationContext(), "all tags are saved", Toast.LENGTH_LONG).show();
+                        Toast.makeText( getApplicationContext(), tagIndexes, Toast.LENGTH_LONG ).show();
                     } else {
                         saveTagsButton.setError( "3 tags must be selected!" );
                     }

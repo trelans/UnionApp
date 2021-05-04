@@ -1,5 +1,12 @@
 package com.union.unionapp.models;
 
+
+/**
+ * This model represents user
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelUsers {
     String accountState, accountType, achievements, email, pp, tags, uid, username;
 
@@ -14,6 +21,7 @@ public class ModelUsers {
         this.username = username;
     }
 
+    // This is required for database
     public ModelUsers() {
 
     }

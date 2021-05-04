@@ -1,5 +1,11 @@
 package com.union.unionapp.models;
 
+/**
+ * This model represents calendar
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelCalendar {
     String pDate, pHour, pId, pTitle, pType, username;
 

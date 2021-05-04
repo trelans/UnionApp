@@ -28,14 +28,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class binds given Stack Posts into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.MyHolder> {
 
-    Context context;
-    List<ModelStackPost> postList;
-    DatabaseReference ref1;
-    String[] allTags;
-    Activity currentActivity;
-    FirebaseUser firebaseUser;
+    private Context context;
+    private List<ModelStackPost> postList;
+    private DatabaseReference ref1;
+    private String[] allTags;
+    private Activity currentActivity;
+    private FirebaseUser firebaseUser;
 
     public AdapterStackPosts( Context context, List<ModelStackPost> postList, Activity currentActivity ) {
         this.context = context;

@@ -30,13 +30,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This class binds given comments into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder> {
 
-    Context context;
-    List<ModelComment> commentList;
-    String postId;
-    DatabaseReference ref;
-    String userUid;
+    private Context context;
+    private List<ModelComment> commentList;
+    private String postId;
+    private DatabaseReference ref;
+    private String userUid;
 
     public AdapterComment( Context context, List<ModelComment> commentList, String postId ) {
         this.context = context;

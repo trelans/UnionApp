@@ -21,16 +21,20 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * This class binds given last activities into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActivities.HolderNotification> {
 
     private Context context;
     private ArrayList<ModelLastActivities> notificationsList;
-    private FirebaseAuth firebaseAuth;
 
     public AdapterLastActivities( Context context, ArrayList<ModelLastActivities> notificationsList ) {
         this.context = context;
         this.notificationsList = notificationsList;
-        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
