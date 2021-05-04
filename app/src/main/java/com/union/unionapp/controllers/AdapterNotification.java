@@ -73,49 +73,34 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         //TODO notificationsı comment
         if ( notification.contains( "pro" ) ) {
             postType = "Stack";
+            holder.avatarIv.setImageResource(R.drawable.stack_icon);
         } else if ( notification.contains( "announc" ) ) {
             postType = "Club";
+            holder.avatarIv.setImageResource(R.drawable.club_icon);
         } else {
             postType = "Buddy";
+            holder.avatarIv.setImageResource(R.drawable.buddy_icon);
+
         }
-        // we will get the name, e mail image of notif
-        //TODO rework in the future
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Notifications/" );
-        reference.orderByChild( "uid" ).equalTo( senderUid )
-                .addValueEventListener( new ValueEventListener() {
-                    @Override
-                    public void onDataChange( @NonNull DataSnapshot snapshot ) {
-                        for ( DataSnapshot ds : snapshot.getChildren() ) {
-                            String username = "" + ds.child( "username" ).getValue();
-                            String image = "" + ds.child( "image" ).getValue();
-                            String email = "" + ds.child( "email" ).getValue(); // gereksiz gibi
 
-                            // set to views
-                            holder.nameTv.setText( "@" + username );
-                            try {
-                                Picasso.get().load( image ).placeholder( R.drawable.profile_icon ).into( holder.avatarIv );
-                            } catch ( Exception e ) {
-                                holder.avatarIv.setImageResource( R.drawable.profile_icon );
-                            }
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled( @NonNull DatabaseError error ) {
-
-                    }
-                } );
 
         // set to views
-        holder.nameTv.setText( name );
+        holder.nameTv.setText( "@"+ name );
         holder.notificationTv.setText( notification );
         holder.timeTv.setText( dateTime );
-        try {
-            Picasso.get().load( image ).placeholder( R.drawable.profile_icon ).into( holder.avatarIv );
-        } catch ( Exception e ) {
-            holder.avatarIv.setImageResource( R.drawable.profile_icon );
+        if ( notification.contains( "pro" ) ) {
+            holder.avatarIv.setImageResource(R.drawable.stack_icon);
+        } else if ( notification.contains( "announc" ) ) {
+
+            holder.avatarIv.setImageResource(R.drawable.club_icon);
+        } else {
+
+            holder.avatarIv.setImageResource(R.drawable.buddy_icon);
+
         }
+
         //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener( new View.OnClickListener() {
             @Override

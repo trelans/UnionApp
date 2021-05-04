@@ -76,64 +76,61 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * This activity includes all fragments and is main activity of the app
- *
- * @author unionTeam
- * @version 04.05.2021
- */
 public class MainActivity extends AppCompatActivity {
 
-    // Constants
-    private final Fragment messageFragment = new MessageFragment();
-    private final Fragment buddyFragment = new BuddyFragment();
-    private final Fragment stackFragment = new StackFragment();
-    private final Fragment clubFragment = new ClubsFragment();
-    private final Fragment profileFragment = new ProfileFragment();
-    private final FragmentManager fm = getSupportFragmentManager();
-    private final int[] clickCount = { 0 };
 
-    // Variables
     private static long dateServer;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase firebaseDatabase;
-    private Dialog myDialog;
-    private Boolean searchBarEmpty;
-    private SearchView searchView;
-    private ImageView popUpButton;
-    private AdapterUsers adapterUsers;
-    private AdapterSearchProfile adapterSearchProfile;
-    private List<ModelUsers> userList;
-    private RecyclerView recyclerView;
-    private RecyclerView notificationsRv;
+    FirebaseAuth mAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    TextView selectedOptionTextView;
+    Dialog myDialog;
+    Boolean searchBarEmpty;
+    SearchView searchView;
+    ImageView popUpButton;
+    AdapterUsers adapterUsers;
+    AdapterSearchProfile adapterSearchProfile;
+    List<ModelUsers> userList;
+    RecyclerView recyclerView;
+    RecyclerView notificationsRv;
     private ArrayList<ModelNotification> notificationsList;
     private AdapterNotification adapterNotification;
+    final Fragment messageFragment = new MessageFragment();
+    final Fragment buddyFragment = new BuddyFragment();
+    final Fragment stackFragment = new StackFragment();
+    final Fragment clubFragment = new ClubsFragment();
+    final Fragment profileFragment = new ProfileFragment();
+    final FragmentManager fm = getSupportFragmentManager();
+    final int[] clickCount = { 0 };
+    Fragment active;
+    String mUID;
 
-    private Fragment active;
-    private String mUID;
+    public static final int CAMERA_PERM_CODE = 101;
+    public static final int CAMERA_REQUEST_CODE = 102;
+    public static final int GALLERY_REQUEST_CODE = 105;
 
-    private static final int CAMERA_PERM_CODE = 101;
-    private static final int CAMERA_REQUEST_CODE = 102;
-    private static final int GALLERY_REQUEST_CODE = 105;
-
-    private String currentPhotoPath;
-    private StorageReference storageReference;
+    String currentPhotoPath;
+    StorageReference storageReference;
 
 
     private static String[] allTagz;
 
-    private int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
+    int currentActivity = 3;     // 1 Messages / 2 Buddy / 3 Club / 4 Stack / 5 Profile
+
+
+    //path where images of user profile will be stored
+    String storagePath = "Users_Profile_Imgs/";
 
 
     // settings
-    private ImageView userPpInDialog;
-    private AppCompatButton tagButton1;
-    private AppCompatButton tagButton2;
-    private AppCompatButton tagButton3;
-    private int[] tagTextsIndexArray = new int[3];
-    private AppCompatButton[] tagsArray;
-    private String[] allTags;
-    private boolean[] tagsStatus = { false, false, false };
+    ImageView userPpInDialog;
+    AppCompatButton tagButton1;
+    AppCompatButton tagButton2;
+    AppCompatButton tagButton3;
+    int[] tagTextsIndexArray = new int[3];
+    AppCompatButton[] tagsArray;
+    String[] allTags;
+    boolean[] tagsStatus = { false, false, false };
 
     // String[] allTags = getResources().getStringArray( R.array.all_tags );
     @Override
@@ -161,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference( "BilkentUniversity/Users" );
         storageReference = FirebaseStorage.getInstance().getReference();
 
 
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // Close the app clicking the outside
+    // klavyeyi dışarı tıklayınca kapatmaya yarıyor
     @Override
     public boolean dispatchTouchEvent( MotionEvent ev ) {
         if ( getCurrentFocus() != null ) {
@@ -270,10 +268,6 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( ev );
     }
 
-    /**
-     * This method searches users and get appropriate users from database to show their profile by clicking
-     * @param query query for users name
-     */
     private void searchUsersForProfile( String query ) {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -290,6 +284,8 @@ public class MainActivity extends AppCompatActivity {
                     if ( !modelUser.getUid().equals( fUser.getUid() ) ) {
                         if ( modelUser.getUsername().toLowerCase().contains( query.toLowerCase() ) ) {
                             userList.add( modelUser );
+                            // silincek
+                            Toast.makeText( getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT ).show();
                         }
 
                     }
@@ -312,10 +308,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * This method searches users and get appropriate users from database to enable user to message them
-     * @param query query for users name
-     */
     private void searchUsersForMessage( String query ) {
         //get current user
         FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -332,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
                     if ( !modelUser.getUid().equals( fUser.getUid() ) ) {
                         if ( modelUser.getUsername().toLowerCase().contains( query.toLowerCase() ) ) {
                             userList.add( modelUser );
+                            // silincek
+                            Toast.makeText( getApplicationContext(), modelUser.getEmail(), Toast.LENGTH_SHORT ).show();
                         }
 
                     }
@@ -482,6 +476,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 public void onNothingSelected( AdapterView<?> parent ) {
+                    //TODO
                 }
             } );
 
@@ -497,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
                     //tagSpinner.setClickable( true );
                     setAllSettingsTagsInvisible();
                     setTagsSaved( false );
+                    Toast.makeText( getApplicationContext(), "All tags are cleared", Toast.LENGTH_LONG ).show();
                 }
             } );
 
@@ -524,6 +520,7 @@ public class MainActivity extends AppCompatActivity {
                         // put data within hashmap in database
                         reference.child( "tags" ).setValue( tagIndexes );
 
+                        Toast.makeText( getApplicationContext(), tagIndexes, Toast.LENGTH_LONG ).show();
                     } else {
                         saveTagsButton.setError( "3 tags must be selected!" );
                     }
@@ -1037,10 +1034,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
             /*gelen resmi direkt koymak için
             Bitmap image = (Bitmap) data.getExtras().get("data");
             userPpInDialog.setImageBitmap(image);
              */
+
+
     }
 
     private String getFileExt( Uri contentUri ) {
@@ -1128,6 +1128,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 /*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //imageView.setImageBitmap(imageBitmap);
+        }
+    }
+
+
     private void setPic() {
         // Get the dimensions of the View
         int targetW = imageView.getWidth();

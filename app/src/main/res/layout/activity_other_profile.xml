@@ -33,15 +33,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="23dp"
 
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="44dp"
+                android:layout_marginTop="105dp"
                 android:background="@drawable/tag_button_template"
                 android:backgroundTint="#F14D53"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:insetTop="0sp"
                 android:insetBottom="0sp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:shadowDx="0"
                 android:shadowDy="0"
                 android:shadowRadius="5"
@@ -50,10 +49,10 @@
                 android:textAllCaps="false"
                 android:textColor="#000000"
                 android:textSize="13sp"
-                app:layout_constraintBottom_toTopOf="@+id/lastActsTextView"
-                app:layout_constraintEnd_toStartOf="@+id/profileTagButton2"
-                app:layout_constraintStart_toEndOf="@+id/userPp"
-                app:layout_constraintTop_toBottomOf="@+id/userNameTextView" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/profileTagButton2"
@@ -61,13 +60,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="23dp"
 
-                android:layout_marginEnd="28dp"
-                android:layout_marginBottom="44dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/tag_button_template"
                 android:backgroundTint="#5FC1E8"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:insetTop="0sp"
                 android:insetBottom="0sp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:shadowDx="0"
                 android:shadowDy="0"
                 android:shadowRadius="5"
@@ -76,8 +77,9 @@
                 android:textAllCaps="false"
                 android:textColor="#040202"
                 android:textSize="13sp"
-                app:layout_constraintBottom_toTopOf="@+id/achsTextView"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileTagButton1" />
 
             <TextView
                 android:id="@+id/lastActsTextView"
@@ -107,7 +109,7 @@
                 android:layout_width="159dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="34dp"
-                android:layout_marginTop="81dp"
+                android:layout_marginTop="70dp"
                 android:layout_marginEnd="88dp"
                 android:text="\@_______________"
                 android:textSize="18sp"
@@ -180,13 +182,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
 
-                android:layout_marginTop="56dp"
-                android:layout_marginEnd="76dp"
+                android:layout_marginStart="160dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="156dp"
                 android:background="@drawable/tag_button_template"
                 android:backgroundTint="#5FE8A1"
                 android:fontFamily="@font/myriad_pro_regular"
                 android:insetTop="0sp"
                 android:insetBottom="0sp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:shadowDx="0"
                 android:shadowDy="0"
                 android:shadowRadius="5"
@@ -196,7 +201,8 @@
                 android:textColor="#000000"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userNameTextView" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profileTagButton2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/achsListPU"
