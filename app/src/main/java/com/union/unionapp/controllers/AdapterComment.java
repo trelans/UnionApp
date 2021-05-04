@@ -140,7 +140,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         String name;
         String shortComment;
 
-        if ( anonymous.equals( "1" ) ) {
+        if ( anonymous != null && anonymous.equals( "1" ) ) {
             name = "@anonymous_user: ";
         } else {
             name = "@" + uName + ": ";
