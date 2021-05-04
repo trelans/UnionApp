@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-        Toast.makeText( this, "Main activity", Toast.LENGTH_SHORT ).show();
         fm.beginTransaction().add( R.id.fragment_container, clubFragment, "3" ).commit();
 
         active = clubFragment;
@@ -517,7 +516,7 @@ public class MainActivity extends AppCompatActivity {
                         // put data within hashmap in database
                         reference.child( "tags" ).setValue( tagIndexes );
 
-                        Toast.makeText( getApplicationContext(), tagIndexes, Toast.LENGTH_LONG ).show();
+                        Toast.makeText( getApplicationContext(), "All tags are saved", Toast.LENGTH_LONG ).show();
                     } else {
                         saveTagsButton.setError( "3 tags must be selected!" );
                     }

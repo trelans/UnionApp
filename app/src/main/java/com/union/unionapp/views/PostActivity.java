@@ -274,17 +274,17 @@ public class PostActivity extends AppCompatActivity {
 
         postDateTW.setText( "Posted on: " + pPostedTime );
         if ( !pType.equals( "Stack" ) ) {
-            if ( postLocationTW != null && !pLocation.equals( "0" ) && pLocation.equals( "" ) ) {
+            if ( postLocationTW != null && !pLocation.equals( "0" ) && !pLocation.equals( "" ) ) {
                 postLocationTW.setText( "Location:  " + pLocation );
             } else {
                 postLocationTW.setHeight( 0 );
             }
-            if ( pGender != null && !pGender.equals( "0" ) && pGender.equals( "" ) ) {
+            if ( pGender != null && !pGender.equals( "0" ) && !pGender.equals( "" ) ) {
                 pGenderTW.setText( "Gender Preference:  " + pGender );
             } else {
                 pGenderTW.setHeight( 0 );
             }
-            if ( pQuota != null && !pQuota.equals( "0" ) && pQuota.equals( "" ) && pQuota.equals( " " ) ) {
+            if ( pQuota != null && !pQuota.equals( "0" ) && !pQuota.equals( "" ) && !pQuota.equals( " " ) ) {
                 pQuotaTW.setText( "Quota: " + pQuota );
             } else {
                 pGenderTW.setHeight( 0 );

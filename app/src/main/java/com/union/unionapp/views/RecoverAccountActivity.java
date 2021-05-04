@@ -174,7 +174,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
      * Change user password by using his email
      */
     private void changePassword() {
-        if ( tw_email.getText().toString().equals( tw_enter_code.getText().toString() ) && tw_email.getText().toString().length() >= 6 ) {
+        if ( tw_password.getText().toString().equals( tw_password_verify.getText().toString() ) && tw_password.getText().toString().length() >= 6 ) {
             tw_incorrect_code.setText( "" );
             DatabaseReference tokenRef = FirebaseDatabase.getInstance().getReference( "AuthTokens/" + email.replace( ".", "_" ) + "/token" );
             tokenRef.addListenerForSingleValueEvent( new ValueEventListener() {
@@ -185,7 +185,7 @@ public class RecoverAccountActivity extends AppCompatActivity {
                         mAuth.signInWithEmailAndPassword( email, token ).addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete( @NonNull Task<AuthResult> task ) {
-                                String newToken = CreateAnAccountActivity.computeMD5Hash( tw_email.getText().toString() );
+                                String newToken = CreateAnAccountActivity.computeMD5Hash( tw_password.getText().toString() );
                                 mAuth.getCurrentUser().updatePassword( newToken );
                                 tokenRef.setValue( newToken );
                                 mAuth.signOut();
