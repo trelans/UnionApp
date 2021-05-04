@@ -74,6 +74,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This fragment enables user to search buddy for specific needings and see others posts
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class BuddyFragment extends Fragment {
 
     Dialog buddyDialog;
@@ -732,7 +738,6 @@ public class BuddyFragment extends Fragment {
                         query.addValueEventListener( new ValueEventListener() {
                             @Override
                             public void onDataChange( @NonNull DataSnapshot snapshot ) {
-                                Toast.makeText( getActivity(), "Oluyor buraya kadar", Toast.LENGTH_SHORT ).show();
 
 
                                 postList.clear();
@@ -1024,7 +1029,6 @@ public class BuddyFragment extends Fragment {
                     @Override
                     public void onSuccess( Void aVoid ) {
                         //added in database
-                        Toast.makeText( getActivity(), "Added", Toast.LENGTH_SHORT );
                         //TODO reset views
                         addToHisLastActivities( pUid, "Seeking for a buddy" );
 

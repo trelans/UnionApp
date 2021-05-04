@@ -25,25 +25,30 @@ import com.union.unionapp.R;
 
 import java.util.HashMap;
 
+/**
+ * This Activity enable verify their email (it should be university email)
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
+
 public class RecoverAccountActivity extends AppCompatActivity {
     // Variables
-    TextView tw_email;
-    TextView tw_enter_code;
-    TextView tw_incorrect_code;
-    TextView tw_login;
-    TextView tw_password;
-    TextView tw_password_verify;
-    Button sendAgainButton;
-    Button verifyButton;
-    Button changePasswordButton;
-    String code;
-    String email = "";
-    String key;
+    private TextView tw_email;
+    private TextView tw_enter_code;
+    private TextView tw_incorrect_code;
+    private TextView tw_login;
+    private TextView tw_password;
+    private TextView tw_password_verify;
+    private Button sendAgainButton;
+    private Button verifyButton;
+    private Button changePasswordButton;
+    private String code;
+    private String email = "";
+    private String key;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ref;
     private FirebaseAuth mAuth;
-    final String VERIFICATION_SUBJECT = " Your UnI0n verification code";
-    final String VERIFICATION_MAIL = "Your UnI0n verification code is " + code + ".";
 
 
     @Override
@@ -165,6 +170,9 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Change user password by using his email
+     */
     private void changePassword() {
         if ( tw_email.getText().toString().equals( tw_enter_code.getText().toString() ) && tw_email.getText().toString().length() >= 6 ) {
             tw_incorrect_code.setText( "" );
@@ -204,7 +212,11 @@ public class RecoverAccountActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * This method generates email verification code
+     *
+     * @return verification code
+     */
     public static String generateVerifCode() {
         int code1 = (int) ( Math.random() * 9 ) + 1;
         int code2 = (int) ( Math.random() * 9 ) + 1;

@@ -2,7 +2,6 @@ package com.union.unionapp.views;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +11,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,27 +28,29 @@ import com.union.unionapp.controllers.KeyboardUtils;
 import com.union.unionapp.controllers.LocalDataManager;
 import com.union.unionapp.R;
 
+
+/**
+ * This activity starting point of the app and enable user to login their account
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class LoginActivity extends AppCompatActivity {
 
-    // FirebaseAuth.getInstance().signOut(); çıkış yapılacak yerde kullanılacak
 
     // Variables
-    TextView tw_email;
-    TextView tw_password;
-    TextView tw_forgot_password;
-    TextView tw_error;
-    CheckBox check_box_remember_me;
-    Button button_login;
-    CardView cardView;
-    ProgressBar pb_waiting;
-    ImageView tick1;
-    ImageView tick2;
+    private TextView tw_email;
+    private TextView tw_password;
+    private TextView tw_forgot_password;
+    private TextView tw_error;
+    private CheckBox check_box_remember_me;
+    private Button button_login;
+    private ProgressBar pb_waiting;
     private FirebaseAuth mAuth;
-    String email;
-    String password;
-    String accountType;
-    LocalDataManager localDataManager; // sharedPreferences için
-    boolean isThereError = false;
+    private String email;
+    private String password;
+    private LocalDataManager localDataManager; // for sharedPreferences
+    private boolean isThereError = false;
 
 
     @Override
@@ -67,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
         tw_error = findViewById( R.id.errorTextView );
         tw_error.setVisibility( View.INVISIBLE );
 
-        cardView = findViewById( R.id.cardView );
         /*
         ViewGroup.LayoutParams layoutParams = (ViewGroup.LayoutParams);
         cardView.getLayoutParams();
@@ -77,8 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         check_box_remember_me = findViewById( R.id.rememberMeCheckBox );
         button_login = findViewById( R.id.VerifyButton );
         pb_waiting = findViewById( R.id.waitingProgressBar );
-        tick1 = findViewById( R.id.tickView1 );
-        tick2 = findViewById( R.id.tickView2 );
 
         mAuth = FirebaseAuth.getInstance();
         // Check if user is signed in (non-null) and if there is a user go to main activity
@@ -93,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         tw_password.setText( localDataManager.getSharedPreference( LoginActivity.this, "password", "" ) );
         check_box_remember_me.setChecked( true );
 
-        // Klavye açık mı kapalı mı onu dinlio
+        // Is keyboard on or off
         KeyboardUtils.addKeyboardToggleListener( this, new KeyboardUtils.SoftKeyboardToggleListener() {
             @Override
             public void onToggleSoftKeyboard( boolean isVisible ) {
@@ -104,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
         } );
 
-        // klavyeyi dışarı tıklayınca kapatmaya yarıyor
+        // Close keyboard clicking outside
         findViewById( R.id.slideButtonForward ).setOnTouchListener( new View.OnTouchListener() {
             @Override
             public boolean onTouch( View view, MotionEvent motionEvent ) {
@@ -225,7 +221,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete( @NonNull Task<AuthResult> task ) {
                             if ( task.isSuccessful() ) {
-                                Toast.makeText( LoginActivity.this, "Giriş yapıldı", Toast.LENGTH_SHORT ).show();
                                 if ( localDataManager.getSharedPreference( LoginActivity.this, "isAccountVerified", "" ).equals( email ) ) {
                                     Intent intent = new Intent( LoginActivity.this, MainActivity.class );
                                     startActivity( intent );

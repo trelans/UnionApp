@@ -64,59 +64,60 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This activity shows posts details
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class PostActivity extends AppCompatActivity {
 
-    CardView commentCardView;
-    CardView postCardView;
-    RecyclerView recyclerView;
-    List<ModelComment> commentList;
-    final AdapterComment[] adapterComment = new AdapterComment[1];
-    String pTime;
-    String pTitle;
-    String pDetails;
-    String upVoteNumber;
-    String pAnon;
-    String username;
-    String pId;
-    String pDate;
-    String pHour;
-    String pLocation;
-    String pQuota;
-    String pImage;
-    String pGender;
-    String pTags;
-    String pType;
-    String source;
-    String publisherPp;
-    DatabaseReference postRef;
-    int previousMargin;
-    public static final int CAMERA_PERM_CODE = 101;
-    public static final int CAMERA_REQUEST_CODE = 102;
-    public static final int GALLERY_REQUEST_CODE = 105;
-
-    String currentPhotoPath;
-    String cUid;
-    String image_uri;
-
-    TextView pUserNameTW;
-    TextView upNumberTW;
-    TextView questionContentTW;
-    TextView postDateTW;
-    TextView postLocationTW;
-    TextView pGenderTW;
-    TextView pQuotaTW;
-    ImageView postImageIW;
-    ImageView addPhotoIV;
-    EditText commentET;
-    CheckBox isAnonCB;
-    ImageView sendButton;
-    LinearLayoutCompat clickToOpenCardLL;
-    ImageView backButton;
-    ImageView profilePhoto;
-    TextView pTitleTW;
-    AppCompatButton topicTagTW1;
-    AppCompatButton topicTagTW2;
-    AppCompatButton topicTagTW3;
+    private CardView commentCardView;
+    private RecyclerView recyclerView;
+    private List<ModelComment> commentList;
+    private final AdapterComment[] adapterComment = new AdapterComment[1];
+    private String pTime;
+    private String pTitle;
+    private String pDetails;
+    private String upVoteNumber;
+    private String pAnon;
+    private String username;
+    private String pId;
+    private String pLocation;
+    private String pQuota;
+    private String pImage;
+    private String pGender;
+    private String pTags;
+    private String pType;
+    private String source;
+    private String publisherPp;
+    private DatabaseReference postRef;
+    private int previousMargin;
+    private static final int CAMERA_PERM_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 102;
+    private static final int GALLERY_REQUEST_CODE = 105;
+    private String currentPhotoPath;
+    private String cUid;
+    private String image_uri;
+    private TextView pUserNameTW;
+    private TextView upNumberTW;
+    private TextView questionContentTW;
+    private TextView postDateTW;
+    private TextView postLocationTW;
+    private TextView pGenderTW;
+    private TextView pQuotaTW;
+    private ImageView postImageIW;
+    private ImageView addPhotoIV;
+    private EditText commentET;
+    private CheckBox isAnonCB;
+    private ImageView sendButton;
+    private LinearLayoutCompat clickToOpenCardLL;
+    private ImageView backButton;
+    private ImageView profilePhoto;
+    private TextView pTitleTW;
+    private AppCompatButton topicTagTW1;
+    private AppCompatButton topicTagTW2;
+    private AppCompatButton topicTagTW3;
 
 
     @Override
@@ -124,7 +125,6 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_post );
         commentCardView = findViewById( R.id.commentCard );
-        postCardView = findViewById( R.id.cardView );
         pTitleTW = findViewById( R.id.postTitleTW );
         pUserNameTW = findViewById( R.id.userNameTextView );
         upNumberTW = findViewById( R.id.upNumberTextView );
@@ -152,7 +152,8 @@ public class PostActivity extends AppCompatActivity {
             source = extras.getString( "source", "inside" );
             pType = extras.getString( "pType", "0" );
             pId = extras.getString( "pId", "0" );
-            //TODO şuradaki yapıyla database efficiencysi artırabilirsin
+
+            //şuradaki yapıyla database efficiencysi artırabilirsin
             if ( source.equals( "outside" ) ) {
                 postRef = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/" + pType + "Posts/" + pId );
                 postRef.addListenerForSingleValueEvent( new ValueEventListener() {
@@ -178,8 +179,6 @@ public class PostActivity extends AppCompatActivity {
                                 pGender = modelBuddyAndClubPost.getpGender();
                             }
                             assert modelBuddyAndClubPost != null;
-                            pDate = modelBuddyAndClubPost.getpDate();
-                            pHour = modelBuddyAndClubPost.getpHour();
                             pLocation = modelBuddyAndClubPost.getpLocation();
                             pQuota = modelBuddyAndClubPost.getpQuota();
                             pImage = modelBuddyAndClubPost.getpImage();
@@ -204,8 +203,6 @@ public class PostActivity extends AppCompatActivity {
                     if ( pType.equals( "Buddy" ) ) {
                         pGender = extras.getString( "pGender", "0" );
                     }
-                    pDate = extras.getString( "pDate", "0" );
-                    pHour = extras.getString( "pHour", "0" );
                     pLocation = extras.getString( "pLocation", "0" );
                     pQuota = extras.getString( "pQuota", "0" );
                     pTags = extras.getString( "pTags", "0" );
@@ -249,6 +246,11 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method loads the post details according to post type
+     *
+     * @param pType post Type
+     */
     private void loadView( String pType ) {
         ArrayList<String> cUpUsers = new ArrayList<>();
         cUpUsers.add( "empty" );
@@ -264,7 +266,6 @@ public class PostActivity extends AppCompatActivity {
         if ( FirebaseAuth.getInstance().getCurrentUser() != null ) {
             user = FirebaseAuth.getInstance().getCurrentUser();
         } else {
-            Toast.makeText( PostActivity.this, "There is no current user!", Toast.LENGTH_SHORT ).show();
             return;
         }
 
@@ -433,7 +434,6 @@ public class PostActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure( @NonNull Exception e ) {
                                     //failed, not added
-                                    Toast.makeText( PostActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT ).show();
                                 }
                             } );
                 }
@@ -460,13 +460,17 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onCancelled( @NonNull DatabaseError error ) {
                 // in case of error
-                //Toast.makeText(context, "Error on load comments 248. line", Toast.LENGTH_SHORT).show();
             }
         } );
 
 
     }
 
+    /**
+     * This method open comment card
+     *
+     * @param openCardImmediately open card or obey the opening rule
+     */
     private void openOrCloseCard( boolean openCardImmediately ) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
         if ( openCardImmediately ) {
@@ -563,6 +567,9 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Upload comment image to the database
+     */
     private void uploadImageToFirebase( String cId, Uri contentUri ) {
 
         StorageReference image = FirebaseStorage.getInstance().getReference( "BilkentUniversity/Comments/" + cId );
@@ -572,6 +579,9 @@ public class PostActivity extends AppCompatActivity {
         addPhotoIV.setBackground( ContextCompat.getDrawable( this, R.drawable.upload_photo_icon ) );
     }
 
+    /**
+     * ask camera permission to the user
+     */
     void askCameraPermissions() {
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( this, new String[]{ Manifest.permission.CAMERA }, CAMERA_PERM_CODE );
@@ -589,6 +599,9 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Go to the camera
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
         // Ensure that there's a camera activity to handle the intent
@@ -616,6 +629,9 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method creates image file in user phone
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat( "yyyyMMdd_HHmmss" ).format( new Date() );
@@ -633,6 +649,11 @@ public class PostActivity extends AppCompatActivity {
         return image;
     }
 
+    /**
+     * This method enable user to pick image
+     *
+     * @param ref where image will be uploaded
+     */
     private void showImagePickDialog( DatabaseReference ref ) {
         String[] options = { "Camera", "Gallery", "Delete Photo" };
         Context context;

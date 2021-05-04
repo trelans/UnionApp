@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -78,51 +77,50 @@ import java.util.List;
 public class StackFragment extends Fragment {
 
     //Constants
-    public static final int CAMERA_PERM_CODE = 101;
-    public static final int CAMERA_REQUEST_CODE = 102;
-    public static final int GALLERY_REQUEST_CODE = 105;
+    private static final int CAMERA_PERM_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 102;
+    private static final int GALLERY_REQUEST_CODE = 105;
 
     //Variables
-    Dialog stackDialog;
-    Spinner stackTagSpinner;
-    EditText postTitleEt;
-    EditText postDetailsEt;
-    TextView clickToSeeImageTv;
-    String postAnonymously;
-    String postDetails;
-    String tagToUpload;
-    String postTitle;
-    String timestamp;
-    String filterTagsToUpload;
+    private Dialog stackDialog;
+    private Spinner stackTagSpinner;
+    private EditText postTitleEt;
+    private EditText postDetailsEt;
+    private TextView clickToSeeImageTv;
+    private String postAnonymously;
+    private String postDetails;
+    private String tagToUpload;
+    private String postTitle;
+    private String timestamp;
+    private String filterTagsToUpload;
 
     //Achievements
-    int mathScore;// = 0;
-    int careerScore;// = 0;
-    int sportScore;// = 0;
-    int technologyScore;// = 0;
-    int socialScore;// = 0;
-    int englishScore;// = 0;
-    int turkishScore;// = 0;
-    int studyScore;// = 0;
+    private int mathScore;// = 0;
+    private int careerScore;// = 0;
+    private int sportScore;// = 0;
+    private int technologyScore;// = 0;
+    private int socialScore;// = 0;
+    private int englishScore;// = 0;
+    private int turkishScore;// = 0;
+    private int studyScore;// = 0;
 
-    String title, description, point, nId, level;
-    AppCompatButton stackTag;
-    CheckBox anonym;
-    int tagTextIndex;
-    ProgressBar pb;
-    ImageView sendButtonIv,
-            addPhotoIv;
-    DatabaseReference userDbRef;
-    FirebaseAuth firebaseAuth;
-    String image_uri;
-    RecyclerView recyclerView;
-    List<ModelStackPost> postList;
-    AdapterStackPosts adapterStackPosts;
-    String currentPhotoPath;
-    String pUid;
+    private String title, description, point, nId, level;
+    private AppCompatButton stackTag;
+    private CheckBox anonym;
+    private int tagTextIndex;
+    private ProgressBar pb;
+    private ImageView sendButtonIv, addPhotoIv;
+    private DatabaseReference userDbRef;
+    private FirebaseAuth firebaseAuth;
+    private String image_uri;
+    private RecyclerView recyclerView;
+    private List<ModelStackPost> postList;
+    private AdapterStackPosts adapterStackPosts;
+    private String currentPhotoPath;
+    private String pUid;
 
     //user info
-    String username, email, uid, dp;
+    private String username, email, uid, dp;
 
     @Nullable
     @Override
@@ -410,8 +408,6 @@ public class StackFragment extends Fragment {
 
             @Override
             public void onCancelled( @NonNull DatabaseError error ) {
-                // in case of error
-                Toast.makeText( getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT ).show();
             }
         } );
 
@@ -528,15 +524,23 @@ public class StackFragment extends Fragment {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if ( user != null ) {
             //user is signed in
-
             email = user.getEmail();
             username = email.split( "@" )[0].replace( ".", "_" );
             uid = user.getUid();
-
-        } //TODO else navigate to login
+        }
     }
 
 
+    /**
+     * Upload post data into database
+     *
+     * @param postTitle       title
+     * @param postDetails     post content
+     * @param uri             image uri
+     * @param postAnonymously is posted anonymously
+     * @param tagToUpload     tags that post has
+     * @param reference       database reference
+     */
     private void uploadData( String postTitle, String postDetails, String uri, String postAnonymously, String tagToUpload, DatabaseReference reference ) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf( MainActivity.getServerDate() );
@@ -656,9 +660,10 @@ public class StackFragment extends Fragment {
 
     }
 
-
+    /**
+     * Get user achievements
+     */
     private void loadProfileScoreAchievements() {
-
 
         // getting user's scores
         DatabaseReference usersDbRefAchscore = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users/" + uid );
@@ -691,9 +696,12 @@ public class StackFragment extends Fragment {
 
     }
 
+    /**
+     * Increase user achievement points
+     *
+     * @param genre what is the type of the post user was posted
+     */
     private void increaseOnePoints( String genre ) {
-        //TODO create all users with default scores
-
         title = "";
         description = "";
         point = "";
@@ -1114,15 +1122,14 @@ public class StackFragment extends Fragment {
 
             }
         }
-
-            /*gelen resmi direkt koymak için
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            userPpInDialog.setImageBitmap(image);
-             */
-
-
     }
 
+    /**
+     * Upload given image to the firebase
+     *
+     * @param pId        post that will be uploaded
+     * @param contentUri uri of the image
+     */
     private void uploadImageToFirebase( String pId, Uri contentUri ) {
 
         StorageReference image = FirebaseStorage.getInstance().getReference( "BilkentUniversity/StackPosts/" + pId );
@@ -1133,6 +1140,9 @@ public class StackFragment extends Fragment {
         clickToSeeImageTv.setVisibility( View.VISIBLE );
     }
 
+    /**
+     * Get camera permissions for usage
+     */
     void askCameraPermissions() {
         if ( ContextCompat.checkSelfPermission( getContext(), Manifest.permission.CAMERA ) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions( getActivity(), new String[]{ Manifest.permission.CAMERA }, CAMERA_PERM_CODE );
@@ -1140,6 +1150,7 @@ public class StackFragment extends Fragment {
             dispatchTakePictureIntent();
         }
     }
+
 
     @Override
     public void onRequestPermissionsResult( int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults ) {
@@ -1150,6 +1161,9 @@ public class StackFragment extends Fragment {
         }
     }
 
+    /**
+     * Go and get the image from camera
+     */
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
         // Ensure that there's a camera activity to handle the intent
@@ -1177,6 +1191,9 @@ public class StackFragment extends Fragment {
         }
     }
 
+    /**
+     * Create image file and save this into user phone
+     */
     private File createImageFile() throws IOException {
 
         // Create an image file name

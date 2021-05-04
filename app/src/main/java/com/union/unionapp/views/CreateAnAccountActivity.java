@@ -15,10 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,33 +35,35 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This activity enable users to create an account
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class CreateAnAccountActivity extends AppCompatActivity {
-    // Variables
-    final String regexStr = "[a-zA-ZığüşöçİĞÜŞÖÇ ]+$";
-    TextView tw_name;
-    TextView tw_email;
-    TextView tw_surname;
-    TextView tw_password;
-    TextView tw_password_Auth;
-    TextView tw_terms;
-    CheckBox cb_aggrement;
-    ImageView tick1;
-    ImageView tick2;
-    ImageView tick3;
-    ImageView tick4;
-    ImageView tick5;
-    private String token;
-    String email;
-    String name;
-    String surname;
-    String password;
-    ProgressDialog progressDialog;
-    boolean isPasswordNotValid;
-    boolean isThereError = false; // int yap
 
-    ProgressBar pb_waiting;
-    Button bt_signUp;
-    Drawable tickIcon;
+    // Constants
+    final String regexStr = "[a-zA-ZığüşöçİĞÜŞÖÇ ]+$";
+
+    // Variables
+    private TextView tw_name;
+    private TextView tw_email;
+    private TextView tw_surname;
+    private TextView tw_password;
+    private TextView tw_password_Auth;
+    private TextView tw_terms;
+    private CheckBox cb_aggrement;
+    private String token;
+    private String email;
+    private String name;
+    private String surname;
+    private String password;
+    private ProgressDialog progressDialog;
+    private boolean isPasswordNotValid;
+    private boolean isThereError = false; // int yap
+    private Button bt_signUp;
+    private Drawable tickIcon;
     private FirebaseAuth mAuth;
     private SlidrInterface slidr;
 
@@ -102,13 +101,7 @@ public class CreateAnAccountActivity extends AppCompatActivity {
         tw_password_Auth = findViewById( R.id.passwordAuthTextView );
         tw_terms = findViewById( R.id.termsTextView );
         cb_aggrement = findViewById( R.id.rememberMeCheckBox );
-        pb_waiting = findViewById( R.id.waitingProgressBar );
         bt_signUp = findViewById( R.id.VerifyButton );
-        tick1 = findViewById( R.id.thickView1 );
-        tick2 = findViewById( R.id.thickView2 );
-        tick3 = findViewById( R.id.thickView3 );
-        tick4 = findViewById( R.id.thickView4 );
-        tick5 = findViewById( R.id.thickView5 );
         tickIcon = getResources().getDrawable( R.drawable.ic_action_name );
         tickIcon.setBounds( 0, 0, tickIcon.getIntrinsicWidth(), tickIcon.getIntrinsicHeight() );
         Pattern pattern = Pattern.compile( regexStr );
@@ -371,7 +364,6 @@ public class CreateAnAccountActivity extends AppCompatActivity {
                                 startActivity( new Intent( CreateAnAccountActivity.this, VerifyAccountActivity.class ) );
                                 finish();
                             } else {
-                                Toast.makeText( getApplicationContext(), "Error: " + task.getException(), Toast.LENGTH_SHORT ).show();
                             }
 
 

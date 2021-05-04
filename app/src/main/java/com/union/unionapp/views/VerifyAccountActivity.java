@@ -2,6 +2,7 @@ package com.union.unionapp.views;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,10 +21,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.union.unionapp.controllers.JavaMailAPI;
 import com.union.unionapp.controllers.LocalDataManager;
 import com.union.unionapp.R;
+
 import java.util.HashMap;
 
 /**
  * This Activity handles account verification.
+ *
  * @author unionTeam
  * @version 04.05.2021
  */
@@ -30,8 +34,8 @@ import java.util.HashMap;
 public class VerifyAccountActivity extends AppCompatActivity {
 
     // Variables
-    LocalDataManager localDataManager;
-    String email;
+    private LocalDataManager localDataManager;
+    private String email;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {

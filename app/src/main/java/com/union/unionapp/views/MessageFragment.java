@@ -28,18 +28,23 @@ import com.union.unionapp.models.ModelUsers;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This fragment shows chatbox of a user and enable them to communicate with others in private chats
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class MessageFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    List<ModelChatlist> chatlistList;
-    List<ModelUsers> usersList;
-    FirebaseUser currentUser;
-    FirebaseAuth firebaseAuth;
-    AdapterChatlist adapterChatlist;
+    private RecyclerView recyclerView;
+    private List<ModelChatlist> chatlistList;
+    private List<ModelUsers> usersList;
+    private FirebaseUser currentUser;
+    private AdapterChatlist adapterChatlist;
 
     // firebase
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference reference;
+    private DatabaseReference reference;
 
 
     @Nullable
@@ -50,7 +55,6 @@ public class MessageFragment extends Fragment {
 
 
         // firebase
-        firebaseAuth = FirebaseAuth.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         chatlistList = new ArrayList<>();
@@ -78,6 +82,9 @@ public class MessageFragment extends Fragment {
         return view;
     }
 
+    /**
+     * This method loads user chats
+     */
     private void loadChats() {
         usersList = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users" );
@@ -112,6 +119,12 @@ public class MessageFragment extends Fragment {
         } );
     }
 
+
+    /**
+     * This method gets the last message from database
+     *
+     * @param userId user that current user has a chat with him/her
+     */
     private void lastMessage( String userId ) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Chats" );
         reference.addValueEventListener( new ValueEventListener() {
@@ -141,7 +154,6 @@ public class MessageFragment extends Fragment {
 
             @Override
             public void onCancelled( @NonNull DatabaseError error ) {
-
             }
         } );
     }
