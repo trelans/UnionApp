@@ -726,6 +726,7 @@ public class BuddyFragment extends Fragment {
                         String filterLocation = filterLocationEt.getText().toString().trim();
                         String filterDate = filterDateTv.getText().toString().trim();
                         String filterTime = filterTimeTv.getText().toString().trim();
+                        String filterGender = preferredGenderFilterSpinner.getSelectedItem().toString().trim();
                         filterTagsToUpload = "";
 
 
@@ -787,6 +788,11 @@ public class BuddyFragment extends Fragment {
 
                                         if ( !filterTime.isEmpty() ) {
                                             if (!modelBuddyPost.getpHour().contains( filterTime ) ) {
+                                                continue;
+                                            }
+                                        }
+                                        if ( !filterGender.equals( "None" ) ) {
+                                            if (!modelBuddyPost.getpGender().contains( filterGender )) {
                                                 continue;
                                             }
                                         }
