@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -106,7 +107,12 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         try {
             //if image received, set
             StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + uPp);
-            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            image.getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
                     Picasso.get().load(uri).into(holder.publisherPP);

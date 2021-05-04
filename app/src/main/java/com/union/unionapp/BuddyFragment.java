@@ -788,8 +788,9 @@ public class BuddyFragment extends Fragment {
                                         System.out.println();
                                     }
                                 }
+
                                 // adapter
-                                adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
+                                adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList, FirebaseStorage.getInstance().getReference("BilkentUniversity/pp"));
                                 adapterBuddyPosts.notifyDataSetChanged();
                                 // set adapter to recyclerView
                                 recyclerView.setAdapter(adapterBuddyPosts);
@@ -865,6 +866,10 @@ public class BuddyFragment extends Fragment {
     private void loadPosts() {
         // path of all posts
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+        // adapter
+        adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList, FirebaseStorage.getInstance().getReference("BilkentUniversity/pp"));
+        // set adapter to recyclerView
+        recyclerView.setAdapter(adapterBuddyPosts);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -872,11 +877,7 @@ public class BuddyFragment extends Fragment {
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
                     postList.add(modelBuddyPost);
-
-                    // adapter
-                    adapterBuddyPosts = new AdapterBuddyPosts(getActivity(), postList);
-                    // set adapter to recyclerView
-                    recyclerView.setAdapter(adapterBuddyPosts);
+                    adapterBuddyPosts.notifyDataSetChanged();
                 }
                 pb.setVisibility(View.GONE);
 

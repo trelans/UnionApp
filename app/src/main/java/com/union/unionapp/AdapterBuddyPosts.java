@@ -2,9 +2,11 @@ package com.union.unionapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -35,10 +39,12 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
     Context context;
     List<ModelBuddyAndClubPost> postList;
+    StorageReference reference;
 
-    public AdapterBuddyPosts(Context context, List<ModelBuddyAndClubPost> postList) {
+    public AdapterBuddyPosts(Context context, List<ModelBuddyAndClubPost> postList, StorageReference reference) {
         this.context = context;
         this.postList = postList;
+        this.reference = reference;
     }
 
     @NonNull
@@ -51,7 +57,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
     @Override
     public void onBindViewHolder(@NonNull AdapterBuddyPosts.MyHolder holder, int position) {
-
+        //holder.setIsRecyclable(false);
         //get data
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();
@@ -66,7 +72,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pTags = postList.get(position).getpTags();
         String pGender = postList.get(position).getpGender();
         String username = postList.get(position).getUsername();
-        String uPp = postList.get(position).getUid();
 
         //set data
         holder.contentTextView.setText(pDetails);
@@ -76,10 +81,15 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.genderTW.setText("Gender: " + pGender);
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
+
         try {
             //if image received, set
-            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + uPp);
-            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            reference.child(hisUid).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
                     Picasso.get().load(uri).into(holder.publisherPP);
@@ -90,15 +100,17 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
         }
 
-        convertStringTagsToRealTags(holder, pTags);
-
 
         //if there is no image
         if (pImage.equals("noImage")) {
             //hide imageView
         }
 
-        if (hisUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        if (hisUid.equals(FirebaseAuth.getInstance().
+
+                getCurrentUser().
+
+                getUid())) {
             holder.sendButtonIB.setEnabled(false);
         }
 
@@ -167,7 +179,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 intent.putExtra("pDetails", pDetails);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
-                intent.putExtra("uPp", uPp);
+                intent.putExtra("uPp", hisUid);
 
                 //different from stack
                 intent.putExtra("pDate", pDate);
