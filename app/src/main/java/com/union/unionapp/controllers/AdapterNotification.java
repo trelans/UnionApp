@@ -31,6 +31,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * This class binds given notifications into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterNotification extends RecyclerView.Adapter<AdapterNotification.HolderNotification> {
 
     private Context context;

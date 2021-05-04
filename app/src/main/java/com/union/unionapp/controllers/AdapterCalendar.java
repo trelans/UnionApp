@@ -11,13 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.union.unionapp.R;
 import com.union.unionapp.models.ModelCalendar;
 import com.union.unionapp.views.PostActivity;
 
 import java.util.ArrayList;
 
+
+/**
+ * This class binds given calendar into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.HolderCalendar> {
 
     private Context context;

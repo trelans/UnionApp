@@ -1,5 +1,11 @@
 package com.union.unionapp.models;
 
+/**
+ * This model represents Last Activities
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelLastActivities {
     String pId, timestamp, pUid, notification, sUid, sName, sEmail, sImage, sTag, type;
 

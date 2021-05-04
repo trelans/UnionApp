@@ -24,7 +24,6 @@ import java.util.ArrayList;
  * @author unionTeam
  * @version 04.05.2021
  */
-
 public class AdapterAchievements extends RecyclerView.Adapter<AdapterAchievements.HolderNotification> {
 
     // Constants

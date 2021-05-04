@@ -82,82 +82,83 @@ import java.util.List;
  */
 public class BuddyFragment extends Fragment {
 
-    Dialog buddyDialog;
-    Spinner genderSpinner;
-    Spinner tagSpinner;
-    Spinner preferredGenderFilterSpinner;
+    // Constants
+    private static final int CAMERA_PERM_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 102;
+    private static final int GALLERY_REQUEST_CODE = 105;
 
-    EditText postDetailsEt,
+    // Variables
+    private Dialog buddyDialog;
+    private Spinner genderSpinner;
+    private Spinner tagSpinner;
+    private Spinner preferredGenderFilterSpinner;
+
+    private EditText postDetailsEt,
             postQuotaEt,
             postLocationEt,
             postHeadlineEt;
 
-    TextView postDateEt,
+    private TextView postDateEt,
             postTimeEt,
             clickToSeeImageTv;
 
     //Achievements
-    int mathScore;// = 0;
-    int careerScore;// = 0;
-    int sportScore;// = 0;
-    int technologyScore;// = 0;
-    int socialScore;// = 0;
-    int englishScore;// = 0;
-    int turkishScore;// = 0;
-    int studyScore;// = 0;
+    private int mathScore;// = 0;
+    private int careerScore;// = 0;
+    private int sportScore;// = 0;
+    private int technologyScore;// = 0;
+    private int socialScore;// = 0;
+    private int englishScore;// = 0;
+    private int turkishScore;// = 0;
+    private int studyScore;// = 0;
 
-    String title, description, point, nId, level;
+    private String title, description, point, nId, level;
 
-    ProgressBar pb;
+    private ProgressBar pb;
 
-    String filterTagsToUpload;
+    private String filterTagsToUpload;
 
-    AppCompatButton tag1,
+    private AppCompatButton tag1,
             tag2,
             tag3,
             filterTag1,
             filterTag2,
             filterTag3;
 
-    AppCompatButton[] tagsArray;
+    private AppCompatButton[] tagsArray;
 
-    boolean[] tagsStatus = { false, false, false };
-    int[] i = new int[1];
+    private boolean[] tagsStatus = { false, false, false };
+    private int[] i = new int[1];
 
-    int lastDeletedtag = 0;
+    private int lastDeletedtag = 0;
 
-    ImageView sendButtonIv,
+    private ImageView sendButtonIv,
             addPhotoIv;
 
 
-    DatabaseReference userDbRef;
-    DatabaseReference userDbRefPosts;
-    FirebaseAuth firebaseAuth;
-    String image_uri;
+    private DatabaseReference userDbRef;
+    private DatabaseReference userDbRefPosts;
+    private FirebaseAuth firebaseAuth;
+    private String image_uri;
 
-    RecyclerView recyclerView;
-    List<ModelBuddyAndClubPost> postList;
-    AdapterBuddyPosts adapterBuddyPosts;
+    private RecyclerView recyclerView;
+    private List<ModelBuddyAndClubPost> postList;
+    private AdapterBuddyPosts adapterBuddyPosts;
 
-    String time;
-    String timestamp;
-    String date;
-    String tagsToUpload;
-    String[] allTags;
-    TextView[] textViewTags;
-    DatePickerDialog.OnDateSetListener setListener;
-    TimePickerDialog.OnTimeSetListener timeSetListener;
+    private String time;
+    private String timestamp;
+    private String date;
+    private String tagsToUpload;
+    private String[] allTags;
+    private TextView[] textViewTags;
+    private DatePickerDialog.OnDateSetListener setListener;
+    private TimePickerDialog.OnTimeSetListener timeSetListener;
 
-
-    public static final int CAMERA_PERM_CODE = 101;
-    public static final int CAMERA_REQUEST_CODE = 102;
-    public static final int GALLERY_REQUEST_CODE = 105;
-
-    String currentPhotoPath;
-    String pUid;
+    private String currentPhotoPath;
+    private String pUid;
 
     //user info
-    String username, email, uid, pp;
+    private String username, email, uid, pp;
 
     @Nullable
     @Override

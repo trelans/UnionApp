@@ -2,6 +2,12 @@ package com.union.unionapp.models;
 
 import com.google.firebase.database.PropertyName;
 
+/**
+ * This model represents chat
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelChat {
     String message, receiver, sender, timestamp;
     boolean isSeen;

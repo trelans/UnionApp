@@ -1,5 +1,11 @@
 package com.union.unionapp.models;
 
+/**
+ * This model represents achievements
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelAchievements {
     String title, description, point, genre, nId, level;
 

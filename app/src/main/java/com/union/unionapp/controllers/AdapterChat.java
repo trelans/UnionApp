@@ -21,14 +21,22 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * This class binds given chat into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
 
-
+    // Constants
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
-    Context context;
-    List<ModelChat> chatList;
-    FirebaseUser fuser;
+
+    // Variables
+    private Context context;
+    private List<ModelChat> chatList;
+    private FirebaseUser fuser;
 
     public AdapterChat( Context context, List<ModelChat> chatList ) {
         this.context = context;

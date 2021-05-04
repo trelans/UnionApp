@@ -1,5 +1,12 @@
 package com.union.unionapp.models;
 
+
+/**
+ * This model represents club and buddy posts
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelBuddyAndClubPost {
     // use same name as we given while uploading posts
     String pId, pTitle, pDate, pHour, pLocation, pQuota, pDetails, pImage, pTime, uid, uEmail, pAnon, username, pTags, pGender, uPp;

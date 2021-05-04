@@ -1,5 +1,11 @@
 package com.union.unionapp.models;
 
+/**
+ * This model represents achievements scores
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class ModelAchievementsScores {
     String math, career, sport, technology, social, english, turkish, study;
 

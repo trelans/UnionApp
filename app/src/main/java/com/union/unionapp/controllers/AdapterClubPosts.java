@@ -36,10 +36,17 @@ import com.union.unionapp.views.PostActivity;
 import java.util.HashMap;
 import java.util.List;
 
+
+/**
+ * This class binds given club posts into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHolder> {
 
-    Context context;
-    List<ModelBuddyAndClubPost> postList;
+    private Context context;
+    private List<ModelBuddyAndClubPost> postList;
     private static boolean isBackgroundBlurred = false;
 
     public AdapterClubPosts( Context context, List<ModelBuddyAndClubPost> postList ) {

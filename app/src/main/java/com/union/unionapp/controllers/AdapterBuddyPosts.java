@@ -35,11 +35,17 @@ import com.union.unionapp.views.PostActivity;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class binds given buddy posts into the view
+ *
+ * @author unionTeam
+ * @version 04.05.2021
+ */
 public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.MyHolder> {
 
-    Context context;
-    List<ModelBuddyAndClubPost> postList;
-    StorageReference reference;
+    private Context context;
+    private List<ModelBuddyAndClubPost> postList;
+    private StorageReference reference;
 
     public AdapterBuddyPosts( Context context, List<ModelBuddyAndClubPost> postList, StorageReference reference ) {
         this.context = context;
