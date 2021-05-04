@@ -88,7 +88,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.quotaTW.setText( "Quota:      " + pQuota );
         holder.publisherNameTW.setText( "@" + username );
 
-        convertStringTagsToRealTags(holder,pTags);
+        convertStringTagsToRealTags( holder, pTags );
 
         holder.publisherPP.setBackground( ContextCompat.getDrawable( context, R.drawable.profile_icon ) );
         try {
@@ -144,7 +144,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
                 String fixedDate = pDate.replace( "/", "_" );
                 userRef.child( "Calendar" ).child( fixedDate ).child( pId ).setValue( hashMap );
-
 
 
                 //User calender finish line
@@ -207,7 +206,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             }
         } );
     }
-
 
 
     @Override

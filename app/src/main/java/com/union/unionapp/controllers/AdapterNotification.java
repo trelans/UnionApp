@@ -79,31 +79,29 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
         //TODO notificationsı comment
         if ( notification.contains( "pro" ) ) {
             postType = "Stack";
-            holder.avatarIv.setImageResource(R.drawable.stack_icon);
+            holder.avatarIv.setImageResource( R.drawable.stack_icon );
         } else if ( notification.contains( "announc" ) ) {
             postType = "Club";
-            holder.avatarIv.setImageResource(R.drawable.club_icon);
+            holder.avatarIv.setImageResource( R.drawable.club_icon );
         } else {
             postType = "Buddy";
-            holder.avatarIv.setImageResource(R.drawable.buddy_icon);
+            holder.avatarIv.setImageResource( R.drawable.buddy_icon );
 
         }
 
 
-
-
         // set to views
-        holder.nameTv.setText( "@"+ name );
+        holder.nameTv.setText( "@" + name );
         holder.notificationTv.setText( notification );
         holder.timeTv.setText( dateTime );
         if ( notification.contains( "pro" ) ) {
-            holder.avatarIv.setImageResource(R.drawable.stack_icon);
+            holder.avatarIv.setImageResource( R.drawable.stack_icon );
         } else if ( notification.contains( "announc" ) ) {
 
-            holder.avatarIv.setImageResource(R.drawable.club_icon);
+            holder.avatarIv.setImageResource( R.drawable.club_icon );
         } else {
 
-            holder.avatarIv.setImageResource(R.drawable.buddy_icon);
+            holder.avatarIv.setImageResource( R.drawable.buddy_icon );
 
         }
 
