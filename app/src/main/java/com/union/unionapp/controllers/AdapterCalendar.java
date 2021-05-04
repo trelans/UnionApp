@@ -18,32 +18,30 @@ import com.union.unionapp.views.PostActivity;
 
 import java.util.ArrayList;
 
-public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.HolderCalendar>{
+public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.HolderCalendar> {
 
     private Context context;
     private ArrayList<ModelCalendar> calendarList;
-    private FirebaseAuth firebaseAuth;
 
-    public AdapterCalendar(Context context, ArrayList<ModelCalendar> calendarList) {
+    public AdapterCalendar( Context context, ArrayList<ModelCalendar> calendarList ) {
         this.context = context;
         this.calendarList = calendarList;
-        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
     @Override
-    public HolderCalendar onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HolderCalendar onCreateViewHolder( @NonNull ViewGroup parent, int viewType ) {
         // inflate view row_notification
-        View view = LayoutInflater.from(context).inflate(R.layout.row_calendar, parent,false);
-        return new HolderCalendar(view);
+        View view = LayoutInflater.from( context ).inflate( R.layout.row_calendar, parent, false );
+        return new HolderCalendar( view );
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HolderCalendar holder, int position) {
+    public void onBindViewHolder( @NonNull HolderCalendar holder, int position ) {
         // get and set data to views
 
         // get data
-        final  ModelCalendar modelCalendar = calendarList.get(position);
+        final ModelCalendar modelCalendar = calendarList.get( position );
         String username = modelCalendar.getUsername();
         String postId = modelCalendar.getpId();
         String postTitle = modelCalendar.getpTitle();
@@ -54,30 +52,28 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
 
 
         // set to views
-        holder.calendartitletv.setText("@"+username + ": " +postTitle);
-        holder.calendartimeTv.setText(hour);
-        if (postType.equals("Buddy")) {
-            holder.avatarIv.setImageResource(R.drawable.buddy_icon);
-        }
-        else if (postType.equals("Club")) {
-            holder.avatarIv.setImageResource(R.drawable.club_icon);
-        }
-        else {
-            holder.avatarIv.setImageResource(R.drawable.stack_icon); // öylesine çökmesin diye
+        holder.calendartitletv.setText( "@" + username + ": " + postTitle );
+        holder.calendartimeTv.setText( hour );
+        if ( postType.equals( "Buddy" ) ) {
+            holder.avatarIv.setImageResource( R.drawable.buddy_icon );
+        } else if ( postType.equals( "Club" ) ) {
+            holder.avatarIv.setImageResource( R.drawable.club_icon );
+        } else {
+            holder.avatarIv.setImageResource( R.drawable.stack_icon ); // öylesine çökmesin diye
         }
 
         //TODO Tıklandığında postu acıcak
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent( context, PostActivity.class);
-                i.putExtra("pType",postType);
-                i.putExtra("source", "outside");
-                i.putExtra("pId", postId);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                context.startActivity(i);
+            public void onClick( View v ) {
+                Intent i = new Intent( context, PostActivity.class );
+                i.putExtra( "pType", postType );
+                i.putExtra( "source", "outside" );
+                i.putExtra( "pId", postId );
+                i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
+                context.startActivity( i );
             }
-        });
+        } );
 
     }
 
@@ -90,15 +86,15 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
     class HolderCalendar extends RecyclerView.ViewHolder {
         // declare views
         ImageView avatarIv;
-        TextView  calendartitletv, calendartimeTv;
+        TextView calendartitletv, calendartimeTv;
 
-        public HolderCalendar(@NonNull View itemView) {
-            super(itemView);
+        public HolderCalendar( @NonNull View itemView ) {
+            super( itemView );
 
             //init views
-            avatarIv = itemView.findViewById(R.id.calendariconIv);
-            calendartitletv = itemView.findViewById(R.id.calendartitleTv);
-            calendartimeTv = itemView.findViewById(R.id.calendarTimeTv);
+            avatarIv = itemView.findViewById( R.id.calendariconIv );
+            calendartitletv = itemView.findViewById( R.id.calendartitleTv );
+            calendartimeTv = itemView.findViewById( R.id.calendarTimeTv );
 
         }
     }

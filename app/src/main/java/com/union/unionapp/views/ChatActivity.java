@@ -51,8 +51,8 @@ import retrofit2.Callback;
 public class ChatActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    ImageView profileIw , send_bt , back_bt;
-    TextView tw_username , tw_status;
+    ImageView profileIw, send_bt, back_bt;
+    TextView tw_username, tw_status;
     EditText messageEt;
     FirebaseAuth firebaseAuth;
 
@@ -73,105 +73,105 @@ public class ChatActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+    protected void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_chat );
 
-        recyclerView = findViewById(R.id.chat_recyclerView);
-        tw_status = findViewById(R.id.userStatus);
-        tw_username = findViewById(R.id.userNameTextView);
-        messageEt = findViewById(R.id.editTextChat);
-        profileIw = findViewById(R.id.profilePhoto);
-        send_bt = findViewById(R.id.send);
-        back_bt = findViewById(R.id.backButton);
+        recyclerView = findViewById( R.id.chat_recyclerView );
+        tw_status = findViewById( R.id.userStatus );
+        tw_username = findViewById( R.id.userNameTextView );
+        messageEt = findViewById( R.id.editTextChat );
+        profileIw = findViewById( R.id.profilePhoto );
+        send_bt = findViewById( R.id.send );
+        back_bt = findViewById( R.id.backButton );
 
         // Layout for recycler view
         Context context;
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager( this );
+        linearLayoutManager.setStackFromEnd( true );
 
         // recycler view properties
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize( true );
+        recyclerView.setLayoutManager( linearLayoutManager );
 
 
         //create api service
-        apiService = Client.getRetrofit("https://fcm.googleapis.com/").create(APIService.class);
+        apiService = Client.getRetrofit( "https://fcm.googleapis.com/" ).create( APIService.class );
 
         // firebase
         firebaseAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-         hisUid = intent.getStringExtra("Hisuid");
+        hisUid = intent.getStringExtra( "Hisuid" );
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        usersDbRef = firebaseDatabase.getReference("BilkentUniversity/Users");
+        usersDbRef = firebaseDatabase.getReference( "BilkentUniversity/Users" );
 
         // search user to get that users' info
-        Query userQuery = usersDbRef.orderByChild("uid").equalTo(hisUid);
+        Query userQuery = usersDbRef.orderByChild( "uid" ).equalTo( hisUid );
         // get user picture and username
 
-        userQuery.addValueEventListener(new ValueEventListener() {
+        userQuery.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
                 // check until requitrf info is received
-                for (DataSnapshot ds : snapshot.getChildren()) {
+                for ( DataSnapshot ds : snapshot.getChildren() ) {
 
                     // get data
-                    String username ="" + ds.child("username").getValue();
-                    String pp = "" + ds.child("pp").getValue();
+                    String username = "" + ds.child( "username" ).getValue();
+                    String pp = "" + ds.child( "pp" ).getValue();
                     // set data
-                    tw_username.setText(username);
+                    tw_username.setText( username );
                     // set Profile Photo
-                    profileIw.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.profile_icon));
+                    profileIw.setBackground( ContextCompat.getDrawable( ChatActivity.this, R.drawable.profile_icon ) );
                     try {
                         //if image received, set
-                        StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + hisUid);
-                        image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        StorageReference image = FirebaseStorage.getInstance().getReference( "BilkentUniversity/pp/" + hisUid );
+                        image.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
                             @Override
-                            public void onSuccess(Uri uri) {
-                                Picasso.get().load(uri).into(profileIw);
+                            public void onSuccess( Uri uri ) {
+                                Picasso.get().load( uri ).into( profileIw );
                             }
-                        });
-                    } catch (Exception e) {
+                        } );
+                    } catch ( Exception e ) {
                         //if there is any exception while getting image then set default
-                        Picasso.get().load(R.drawable.user_pp_template).into(profileIw);
+                        Picasso.get().load( R.drawable.user_pp_template ).into( profileIw );
                     }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
+        } );
 
-        profileIw.setOnClickListener(new View.OnClickListener() {
+        profileIw.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent( getApplicationContext(), OtherProfile.class);
-                i.putExtra("Hisuid", hisUid);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            public void onClick( View v ) {
+                Intent i = new Intent( getApplicationContext(), OtherProfile.class );
+                i.putExtra( "Hisuid", hisUid );
+                i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
 
-                startActivity(i);
+                startActivity( i );
 
             }
-        });
+        } );
 
-        tw_username.setOnClickListener(new View.OnClickListener() {
+        tw_username.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent( getApplicationContext(), OtherProfile.class);
-                i.putExtra("Hisuid", hisUid);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            public void onClick( View v ) {
+                Intent i = new Intent( getApplicationContext(), OtherProfile.class );
+                i.putExtra( "Hisuid", hisUid );
+                i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
 
-                startActivity(i);
+                startActivity( i );
             }
-        });
-        send_bt.setOnClickListener(new View.OnClickListener() {
+        } );
+        send_bt.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick( View v ) {
 
                 notify = true;
 
@@ -179,191 +179,191 @@ public class ChatActivity extends AppCompatActivity {
                 String message = messageEt.getText().toString().trim();
 
                 // check if text if empty
-                if (TextUtils.isEmpty(message)) {
+                if ( TextUtils.isEmpty( message ) ) {
                     // empty text
+                } else {
+                    sendMessage( message );
                 }
-                else {
-                    sendMessage(message);
-                }
-                messageEt.setText("");
+                messageEt.setText( "" );
             }
-        });
+        } );
 
         readMessages();
         seenMessage();
 
         // back button
-        back_bt.setOnClickListener(new View.OnClickListener() {
+        back_bt.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                    finish();
+            public void onClick( View v ) {
+                finish();
             }
-        });
+        } );
 
     }
-    private  void seenMessage () {
-        userRefForSeen = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chats/");
-        seenListener = userRefForSeen.addValueEventListener(new ValueEventListener() {
+
+    private void seenMessage() {
+        userRefForSeen = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Chats/" );
+        seenListener = userRefForSeen.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    ModelChat chat = ds.getValue(ModelChat.class);
-                    if (chat.getReceiver().equals(myUid) && chat.getSender().equals(hisUid)) {
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                for ( DataSnapshot ds : snapshot.getChildren() ) {
+                    ModelChat chat = ds.getValue( ModelChat.class );
+                    if ( chat.getReceiver().equals( myUid ) && chat.getSender().equals( hisUid ) ) {
                         HashMap<String, Object> hasSeenHasmap = new HashMap<>();
-                        hasSeenHasmap.put("isSeen",true);
-                        ds.getRef().updateChildren(hasSeenHasmap);
+                        hasSeenHasmap.put( "isSeen", true );
+                        ds.getRef().updateChildren( hasSeenHasmap );
                     }
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
+        } );
     }
+
     private void readMessages() {
         chatList = new ArrayList<>();
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chats/");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Chats/" );
+        dbRef.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
                 chatList.clear();
-                for (DataSnapshot ds: snapshot.getChildren()) {
-                    ModelChat chat = ds.getValue(ModelChat.class);
-                    if (chat.getReceiver().equals(myUid) && chat.getSender().equals(hisUid)
-                     || chat.getReceiver().equals(hisUid) && chat.getSender().equals(myUid)  ) {
-                        chatList.add(chat);
+                for ( DataSnapshot ds : snapshot.getChildren() ) {
+                    ModelChat chat = ds.getValue( ModelChat.class );
+                    if ( chat.getReceiver().equals( myUid ) && chat.getSender().equals( hisUid )
+                            || chat.getReceiver().equals( hisUid ) && chat.getSender().equals( myUid ) ) {
+                        chatList.add( chat );
                     }
 
                     // adapter
-                    adapterChat = new AdapterChat(ChatActivity.this, chatList );
+                    adapterChat = new AdapterChat( ChatActivity.this, chatList );
                     adapterChat.notifyDataSetChanged();
 
                     // set adapter to recycler view
-                    recyclerView.setAdapter(adapterChat);
+                    recyclerView.setAdapter( adapterChat );
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
-
+        } );
 
 
     }
-    private void sendMessage (String message) {
+
+    private void sendMessage( String message ) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        String timestamp = String.valueOf(MainActivity.getServerDate());
+        String timestamp = String.valueOf( MainActivity.getServerDate() );
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", myUid);
-        hashMap.put("receiver",hisUid);
-        hashMap.put("message", message);
-        hashMap.put("timestamp", timestamp);
-        hashMap.put("isSeem", false);
+        hashMap.put( "sender", myUid );
+        hashMap.put( "receiver", hisUid );
+        hashMap.put( "message", message );
+        hashMap.put( "timestamp", timestamp );
+        hashMap.put( "isSeem", false );
 
-        databaseReference.child("BilkentUniversity/Chats").push().setValue(hashMap);
+        databaseReference.child( "BilkentUniversity/Chats" ).push().setValue( hashMap );
 
         // reset editText after sending message
-        messageEt.setText("");
+        messageEt.setText( "" );
 
         String msg = message;
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/").child(myUid);
-        database.addValueEventListener(new ValueEventListener() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Users/" ).child( myUid );
+        database.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ModelUsers user = snapshot.getValue(ModelUsers.class);
-                if (notify) {
-                    sendNotification(hisUid, user.getUsername() , message);
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                ModelUsers user = snapshot.getValue( ModelUsers.class );
+                if ( notify ) {
+                    sendNotification( hisUid, user.getUsername(), message );
                 }
                 notify = false;
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
+        } );
 
         // create chatList node/child in firebase database
-        final DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chatlist/").child(myUid).child(hisUid);
+        final DatabaseReference chatRef1 = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Chatlist/" ).child( myUid ).child( hisUid );
 
-        chatRef1.addValueEventListener(new ValueEventListener() {
+        chatRef1.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    chatRef1.child("id").setValue(hisUid);
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                if ( !snapshot.exists() ) {
+                    chatRef1.child( "id" ).setValue( hisUid );
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
+        } );
 
-        final  DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Chatlist/").child(hisUid).child(myUid);
-        chatRef2.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference chatRef2 = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Chatlist/" ).child( hisUid ).child( myUid );
+        chatRef2.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    chatRef2.child("id").setValue(myUid);
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                if ( !snapshot.exists() ) {
+                    chatRef2.child( "id" ).setValue( myUid );
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
+        } );
 
     }
 
-    private void sendNotification(final String hisUid, final String name , final  String message) {
-        DatabaseReference allTokens = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Tokens/");
-        Query query = allTokens.orderByKey().equalTo(hisUid);
-        query.addValueEventListener(new ValueEventListener() {
+    private void sendNotification( final String hisUid, final String name, final String message ) {
+        DatabaseReference allTokens = FirebaseDatabase.getInstance().getReference( "BilkentUniversity/Tokens/" );
+        Query query = allTokens.orderByKey().equalTo( hisUid );
+        query.addValueEventListener( new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Token token = ds.getValue(Token.class);
-                    Data data = new Data (myUid , name + ": "+ message, "New Message", hisUid, R.drawable.profile_icon);
+            public void onDataChange( @NonNull DataSnapshot snapshot ) {
+                for ( DataSnapshot ds : snapshot.getChildren() ) {
+                    Token token = ds.getValue( Token.class );
+                    Data data = new Data( myUid, name + ": " + message, "New Message", hisUid, R.drawable.profile_icon );
 
-                    Sender sender = new Sender(data, token.getToken());
-                    apiService.sendNotification(sender).enqueue(new Callback<Response>(){
+                    Sender sender = new Sender( data, token.getToken() );
+                    apiService.sendNotification( sender ).enqueue( new Callback<Response>() {
                         @Override
-                        public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                            Toast.makeText(ChatActivity.this, "" + response.message(), Toast.LENGTH_SHORT).show();
+                        public void onResponse( Call<Response> call, retrofit2.Response<Response> response ) {
+                            Toast.makeText( ChatActivity.this, "" + response.message(), Toast.LENGTH_SHORT ).show();
                         }
 
                         @Override
-                        public void onFailure(Call<Response> call, Throwable t) {
+                        public void onFailure( Call<Response> call, Throwable t ) {
 
                         }
-                    });
+                    } );
 
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled( @NonNull DatabaseError error ) {
 
             }
-        });
+        } );
     }
 
-    private void  checkUserStatus() {
+    private void checkUserStatus() {
         //get current user
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
+        if ( user != null ) {
             //user is signed stay
             // set email of logged in user
             myUid = user.getUid();
-        }
-        else  {
+        } else {
             //go back to login
 
         }
@@ -378,6 +378,6 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        userRefForSeen.removeEventListener(seenListener);
+        userRefForSeen.removeEventListener( seenListener );
     }
 }

@@ -29,10 +29,10 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
 
     Context context;
     List<ModelUsers> userList; // get user info
-    private  HashMap <String, String> lastMessageMap;
+    private HashMap<String, String> lastMessageMap;
 
-        // constructor
-    public AdapterChatlist(Context context, List<ModelUsers> userList) {
+    // constructor
+    public AdapterChatlist( Context context, List<ModelUsers> userList ) {
         this.context = context;
         this.userList = userList;
         lastMessageMap = new HashMap<>();
@@ -40,61 +40,61 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyHolder onCreateViewHolder( @NonNull ViewGroup parent, int viewType ) {
         // inflate layout row_chatlist.xml
-        View view = LayoutInflater.from(context).inflate(R.layout.row_chatlist,parent, false);
-        return new MyHolder(view);
+        View view = LayoutInflater.from( context ).inflate( R.layout.row_chatlist, parent, false );
+        return new MyHolder( view );
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+    public void onBindViewHolder( @NonNull MyHolder holder, int position ) {
 
         // get data
-        String hisUid = userList.get(position).getUid();
-        String userImage = userList.get(position).getPp();
-        String userName = "@" + userList.get(position).getUsername();
-        String lastMessage = lastMessageMap.get(hisUid);
+        String hisUid = userList.get( position ).getUid();
+        String userImage = userList.get( position ).getPp();
+        String userName = "@" + userList.get( position ).getUsername();
+        String lastMessage = lastMessageMap.get( hisUid );
 
         // set data
-        holder.usernameTv.setText(userName);
-        if (lastMessage == null || lastMessage.equals("default")) {
-            holder.lastmessageTv.setVisibility(View.GONE);
-        }
-        else {
-            holder.lastmessageTv.setVisibility(View.VISIBLE);
-            holder.lastmessageTv.setText(lastMessage);
+        holder.usernameTv.setText( userName );
+        if ( lastMessage == null || lastMessage.equals( "default" ) ) {
+            holder.lastmessageTv.setVisibility( View.GONE );
+        } else {
+            holder.lastmessageTv.setVisibility( View.VISIBLE );
+            holder.lastmessageTv.setText( lastMessage );
         }
         try {
             //if image received, set
-            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + userImage);
-            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            StorageReference image = FirebaseStorage.getInstance().getReference( "BilkentUniversity/pp/" + userImage );
+            image.getDownloadUrl().addOnSuccessListener( new OnSuccessListener<Uri>() {
                 @Override
-                public void onSuccess(Uri uri) {
-                    Picasso.get().load(uri).into(holder.profileIv);
+                public void onSuccess( Uri uri ) {
+                    Picasso.get().load( uri ).into( holder.profileIv );
                 }
-            });
-        } catch (Exception e) {
+            } );
+        } catch ( Exception e ) {
             //if there is any exception while getting image then set default
-            Picasso.get().load(R.drawable.user_pp_template).into(holder.profileIv);
+            Picasso.get().load( R.drawable.user_pp_template ).into( holder.profileIv );
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick( View v ) {
                 // start chat activity
-                Intent intent = new Intent (context , ChatActivity.class);
-                intent.putExtra("Hisuid" , hisUid);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                Intent intent = new Intent( context, ChatActivity.class );
+                intent.putExtra( "Hisuid", hisUid );
+                intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
 
-                context.startActivity(intent);
+                context.startActivity( intent );
 
 
             }
-        });
+        } );
     }
-    public void setLastMessageMap(String userId, String lastMessage) {
-        lastMessageMap.put(userId, lastMessage);
+
+    public void setLastMessageMap( String userId, String lastMessage ) {
+        lastMessageMap.put( userId, lastMessage );
     }
 
     @Override
@@ -104,18 +104,18 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
     }
 
 
-    class  MyHolder extends RecyclerView.ViewHolder {
+    class MyHolder extends RecyclerView.ViewHolder {
 
         // view row_chatlist
         ImageView profileIv;
-        TextView usernameTv , lastmessageTv;
+        TextView usernameTv, lastmessageTv;
 
-        public MyHolder(@NonNull View itemView) {
-            super(itemView);
+        public MyHolder( @NonNull View itemView ) {
+            super( itemView );
 
-            profileIv = itemView.findViewById(R.id.profile_Iv);
-            usernameTv = itemView.findViewById(R.id.nameTv);
-            lastmessageTv = itemView.findViewById(R.id.lastMessageTv);
+            profileIv = itemView.findViewById( R.id.profile_Iv );
+            usernameTv = itemView.findViewById( R.id.nameTv );
+            lastmessageTv = itemView.findViewById( R.id.lastMessageTv );
         }
     }
 }

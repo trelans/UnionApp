@@ -1,9 +1,9 @@
 package com.union.unionapp.models;
 
 public class ModelNotification {
-    String pId, timestamp, pUid, notification, sUid, sName, sEmail , sImage, sTag;
+    String pId, timestamp, pUid, notification, sUid, sName, sEmail, sImage, sTag;
 
-    public ModelNotification(String pId, String timestamp, String pUid, String notification, String sUid, String sName,  String sImage, String sTag) {
+    public ModelNotification( String pId, String timestamp, String pUid, String notification, String sUid, String sName, String sImage, String sTag ) {
         this.pId = pId;
         this.timestamp = timestamp;
         this.pUid = pUid;
@@ -13,12 +13,15 @@ public class ModelNotification {
         this.sImage = sImage;
         this.sTag = sTag;
     }
-    public  ModelNotification() {}
+
+    public ModelNotification() {
+    }
+
     public String getsEmail() {
         return sEmail;
     }
 
-    public void setsEmail(String sEmail) {
+    public void setsEmail( String sEmail ) {
         this.sEmail = sEmail;
     }
 
@@ -26,7 +29,7 @@ public class ModelNotification {
         return sTag;
     }
 
-    public void setsTag(String sTag) {
+    public void setsTag( String sTag ) {
         this.sTag = sTag;
     }
 
@@ -34,7 +37,7 @@ public class ModelNotification {
         return pId;
     }
 
-    public void setpId(String pId) {
+    public void setpId( String pId ) {
         this.pId = pId;
     }
 
@@ -42,7 +45,7 @@ public class ModelNotification {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp( String timestamp ) {
         this.timestamp = timestamp;
     }
 
@@ -50,7 +53,7 @@ public class ModelNotification {
         return pUid;
     }
 
-    public void setpUid(String pUid) {
+    public void setpUid( String pUid ) {
         this.pUid = pUid;
     }
 
@@ -58,7 +61,7 @@ public class ModelNotification {
         return notification;
     }
 
-    public void setNotification(String notification) {
+    public void setNotification( String notification ) {
         this.notification = notification;
     }
 
@@ -66,7 +69,7 @@ public class ModelNotification {
         return sUid;
     }
 
-    public void setsUid(String sUid) {
+    public void setsUid( String sUid ) {
         this.sUid = sUid;
     }
 
@@ -74,7 +77,7 @@ public class ModelNotification {
         return sName;
     }
 
-    public void setsName(String sName) {
+    public void setsName( String sName ) {
         this.sName = sName;
     }
 
@@ -82,7 +85,7 @@ public class ModelNotification {
         return sImage;
     }
 
-    public void setsImage(String sImage) {
+    public void setsImage( String sImage ) {
         this.sImage = sImage;
     }
 }

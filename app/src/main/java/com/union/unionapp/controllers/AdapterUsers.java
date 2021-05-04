@@ -18,13 +18,13 @@ import com.union.unionapp.views.ChatActivity;
 
 import java.util.List;
 
-public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
+public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
     Context context;
     List<ModelUsers> userList;
 
 
     //constructor
-    public  AdapterUsers(Context context , List<ModelUsers> userList) {
+    public AdapterUsers( Context context, List<ModelUsers> userList ) {
 
         this.context = context;
         this.userList = userList;
@@ -34,36 +34,36 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyHolder onCreateViewHolder( @NonNull ViewGroup parent, int viewType ) {
         // inflate layout(row_user.xml)
-        View view = LayoutInflater.from(context).inflate(R.layout.row_users, parent , false);
-        return new MyHolder(view);
+        View view = LayoutInflater.from( context ).inflate( R.layout.row_users, parent, false );
+        return new MyHolder( view );
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
-            // get data
-        String hisUID = userList.get(position).getUid();
-        String userPP = userList.get(position).getPp();
-        String userName = userList.get(position).getUsername();
-            // set data
-        holder.username_TextView.setText(userName);
-        holder.avatar_ImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+    public void onBindViewHolder( @NonNull MyHolder holder, int position ) {
+        // get data
+        String hisUID = userList.get( position ).getUid();
+        String userPP = userList.get( position ).getPp();
+        String userName = userList.get( position ).getUsername();
+        // set data
+        holder.username_TextView.setText( userName );
+        holder.avatar_ImageView.setBackground( ContextCompat.getDrawable( context, R.drawable.profile_icon ) );
 
 
         // handle item click
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick( View v ) {
 
-                Intent i = new Intent( context, ChatActivity.class);
-                i.putExtra("Hisuid",hisUID);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                Intent i = new Intent( context, ChatActivity.class );
+                i.putExtra( "Hisuid", hisUID );
+                i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
 
-                context.startActivity(i);
+                context.startActivity( i );
 
             }
-        });
+        } );
     }
 
     @Override
@@ -72,15 +72,15 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
     }
 
     // view holder class
-    class MyHolder extends RecyclerView.ViewHolder{
+    class MyHolder extends RecyclerView.ViewHolder {
         ImageView avatar_ImageView;
         TextView username_TextView;
 
-        public MyHolder(@NonNull View itemView) {
-            super(itemView);
+        public MyHolder( @NonNull View itemView ) {
+            super( itemView );
             // init views
-           avatar_ImageView = itemView.findViewById(R.id.userPPRow);
-           username_TextView = itemView.findViewById(R.id.usernameRow);
+            avatar_ImageView = itemView.findViewById( R.id.userPPRow );
+            username_TextView = itemView.findViewById( R.id.usernameRow );
         }
     }
 

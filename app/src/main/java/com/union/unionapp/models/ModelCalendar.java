@@ -1,9 +1,9 @@
 package com.union.unionapp.models;
 
 public class ModelCalendar {
-    String pDate, pHour, pId, pTitle , pType , username;
+    String pDate, pHour, pId, pTitle, pType, username;
 
-    public ModelCalendar(String pDate, String pHour, String pId, String pTitle, String pType, String username) {
+    public ModelCalendar( String pDate, String pHour, String pId, String pTitle, String pType, String username ) {
         this.pDate = pDate;
         this.pHour = pHour;
         this.pId = pId;
@@ -20,7 +20,7 @@ public class ModelCalendar {
         return pDate;
     }
 
-    public void setpDate(String pDate) {
+    public void setpDate( String pDate ) {
         this.pDate = pDate;
     }
 
@@ -28,7 +28,7 @@ public class ModelCalendar {
         return pHour;
     }
 
-    public void setpHour(String pHour) {
+    public void setpHour( String pHour ) {
         this.pHour = pHour;
     }
 
@@ -36,7 +36,7 @@ public class ModelCalendar {
         return pId;
     }
 
-    public void setpId(String pId) {
+    public void setpId( String pId ) {
         this.pId = pId;
     }
 
@@ -44,7 +44,7 @@ public class ModelCalendar {
         return pTitle;
     }
 
-    public void setpTitle(String pTitle) {
+    public void setpTitle( String pTitle ) {
         this.pTitle = pTitle;
     }
 
@@ -52,7 +52,7 @@ public class ModelCalendar {
         return pType;
     }
 
-    public void setpType(String pType) {
+    public void setpType( String pType ) {
         this.pType = pType;
     }
 
@@ -60,7 +60,7 @@ public class ModelCalendar {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername( String username ) {
         this.username = username;
     }
 }

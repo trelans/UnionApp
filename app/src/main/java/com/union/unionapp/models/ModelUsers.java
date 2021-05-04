@@ -1,9 +1,9 @@
 package com.union.unionapp.models;
 
 public class ModelUsers {
-         String accountState, accountType, achievements, email, pp , tags, uid, username;
+    String accountState, accountType, achievements, email, pp, tags, uid, username;
 
-    public ModelUsers(String accountState, String accountType, String achievements, String email, String pp, String tags, String uid, String username) {
+    public ModelUsers( String accountState, String accountType, String achievements, String email, String pp, String tags, String uid, String username ) {
         this.accountState = accountState;
         this.accountType = accountType;
         this.achievements = achievements;
@@ -13,7 +13,8 @@ public class ModelUsers {
         this.uid = uid;
         this.username = username;
     }
-    public ModelUsers () {
+
+    public ModelUsers() {
 
     }
 
@@ -21,7 +22,7 @@ public class ModelUsers {
         return accountState;
     }
 
-    public void setAccountState(String accountState) {
+    public void setAccountState( String accountState ) {
         this.accountState = accountState;
     }
 
@@ -29,7 +30,7 @@ public class ModelUsers {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType( String accountType ) {
         this.accountType = accountType;
     }
 
@@ -37,7 +38,7 @@ public class ModelUsers {
         return achievements;
     }
 
-    public void setAchievements(String achievements) {
+    public void setAchievements( String achievements ) {
         this.achievements = achievements;
     }
 
@@ -45,7 +46,7 @@ public class ModelUsers {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail( String email ) {
         this.email = email;
     }
 
@@ -53,7 +54,7 @@ public class ModelUsers {
         return pp;
     }
 
-    public void setPp(String pp) {
+    public void setPp( String pp ) {
         this.pp = pp;
     }
 
@@ -61,7 +62,7 @@ public class ModelUsers {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags( String tags ) {
         this.tags = tags;
     }
 
@@ -69,7 +70,7 @@ public class ModelUsers {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public void setUid( String uid ) {
         this.uid = uid;
     }
 
@@ -77,7 +78,7 @@ public class ModelUsers {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername( String username ) {
         this.username = username;
     }
 }

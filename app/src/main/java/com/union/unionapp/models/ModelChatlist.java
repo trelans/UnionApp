@@ -3,7 +3,7 @@ package com.union.unionapp.models;
 public class ModelChatlist {
     String id;  // to get chat list , sender/receiver uid
 
-    public ModelChatlist(String id) {
+    public ModelChatlist( String id ) {
         this.id = id;
 
     }
@@ -12,7 +12,7 @@ public class ModelChatlist {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId( String id ) {
         this.id = id;
     }
 

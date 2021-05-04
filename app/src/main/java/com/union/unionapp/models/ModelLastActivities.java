@@ -1,9 +1,9 @@
 package com.union.unionapp.models;
 
 public class ModelLastActivities {
-    String pId, timestamp, pUid, notification, sUid, sName, sEmail , sImage, sTag, type;
+    String pId, timestamp, pUid, notification, sUid, sName, sEmail, sImage, sTag, type;
 
-    public ModelLastActivities(String pId, String timestamp, String sUid, String sName,  String sTag, String type) {
+    public ModelLastActivities( String pId, String timestamp, String sUid, String sName, String sTag, String type ) {
         this.pId = pId;
         this.timestamp = timestamp;
         this.sUid = sUid;
@@ -11,17 +11,23 @@ public class ModelLastActivities {
         this.sTag = sTag; // geçmişteki kutay gelecekteki kutaya not : burdan achievements puanını kontrol et
         this.type = type;
     }
-    public  ModelLastActivities() {}
 
-    public String getType() { return type; }
+    public ModelLastActivities() {
+    }
 
-    public void setType(String type) { this.type = type; }
+    public String getType() {
+        return type;
+    }
+
+    public void setType( String type ) {
+        this.type = type;
+    }
 
     public String getsEmail() {
         return sEmail;
     }
 
-    public void setsEmail(String sEmail) {
+    public void setsEmail( String sEmail ) {
         this.sEmail = sEmail;
     }
 
@@ -29,7 +35,7 @@ public class ModelLastActivities {
         return sTag;
     }
 
-    public void setsTag(String sTag) {
+    public void setsTag( String sTag ) {
         this.sTag = sTag;
     }
 
@@ -37,7 +43,7 @@ public class ModelLastActivities {
         return pId;
     }
 
-    public void setpId(String pId) {
+    public void setpId( String pId ) {
         this.pId = pId;
     }
 
@@ -45,7 +51,7 @@ public class ModelLastActivities {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp( String timestamp ) {
         this.timestamp = timestamp;
     }
 
@@ -53,7 +59,7 @@ public class ModelLastActivities {
         return pUid;
     }
 
-    public void setpUid(String pUid) {
+    public void setpUid( String pUid ) {
         this.pUid = pUid;
     }
 
@@ -61,7 +67,7 @@ public class ModelLastActivities {
         return notification;
     }
 
-    public void setNotification(String notification) {
+    public void setNotification( String notification ) {
         this.notification = notification;
     }
 
@@ -69,7 +75,7 @@ public class ModelLastActivities {
         return sUid;
     }
 
-    public void setsUid(String sUid) {
+    public void setsUid( String sUid ) {
         this.sUid = sUid;
     }
 
@@ -77,7 +83,7 @@ public class ModelLastActivities {
         return sName;
     }
 
-    public void setsName(String sName) {
+    public void setsName( String sName ) {
         this.sName = sName;
     }
 
@@ -85,7 +91,7 @@ public class ModelLastActivities {
         return sImage;
     }
 
-    public void setsImage(String sImage) {
+    public void setsImage( String sImage ) {
         this.sImage = sImage;
     }
 }

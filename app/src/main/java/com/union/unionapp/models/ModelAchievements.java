@@ -1,9 +1,9 @@
 package com.union.unionapp.models;
 
 public class ModelAchievements {
-    String title, description, point , genre , nId , level;
+    String title, description, point, genre, nId, level;
 
-    public ModelAchievements(String title, String description, String point, String genre, String nId , String level) {
+    public ModelAchievements( String title, String description, String point, String genre, String nId, String level ) {
         this.title = title;
         this.description = description;
         this.point = point;
@@ -12,6 +12,7 @@ public class ModelAchievements {
         this.nId = nId;
 
     }
+
     public ModelAchievements() {
 
     }
@@ -20,7 +21,7 @@ public class ModelAchievements {
         return nId;
     }
 
-    public void setnId(String nId) {
+    public void setnId( String nId ) {
         this.nId = nId;
     }
 
@@ -28,7 +29,7 @@ public class ModelAchievements {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel( String level ) {
         this.level = level;
     }
 
@@ -36,7 +37,7 @@ public class ModelAchievements {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle( String title ) {
         this.title = title;
     }
 
@@ -44,7 +45,7 @@ public class ModelAchievements {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription( String description ) {
         this.description = description;
     }
 
@@ -52,7 +53,7 @@ public class ModelAchievements {
         return point;
     }
 
-    public void setPoint(String point) {
+    public void setPoint( String point ) {
         this.point = point;
     }
 
@@ -60,7 +61,7 @@ public class ModelAchievements {
         return genre;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre( String genre ) {
         this.genre = genre;
     }
 }

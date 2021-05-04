@@ -3,7 +3,7 @@ package com.union.unionapp.models;
 public class ModelAchievementsScores {
     String math, career, sport, technology, social, english, turkish, study;
 
-    public ModelAchievementsScores(String career, String english, String math, String social, String sport, String study, String technology, String turkish) {
+    public ModelAchievementsScores( String career, String english, String math, String social, String sport, String study, String technology, String turkish ) {
         this.math = math;
         this.career = career;
         this.sport = sport;
@@ -13,6 +13,7 @@ public class ModelAchievementsScores {
         this.turkish = turkish;
         this.study = study;
     }
+
     public ModelAchievementsScores() {
 
     }
@@ -21,7 +22,7 @@ public class ModelAchievementsScores {
         return math;
     }
 
-    public void setMath(String math) {
+    public void setMath( String math ) {
         this.math = math;
     }
 
@@ -29,7 +30,7 @@ public class ModelAchievementsScores {
         return career;
     }
 
-    public void setCareer(String career) {
+    public void setCareer( String career ) {
         this.career = career;
     }
 
@@ -37,7 +38,7 @@ public class ModelAchievementsScores {
         return sport;
     }
 
-    public void setSport(String sport) {
+    public void setSport( String sport ) {
         this.sport = sport;
     }
 
@@ -45,7 +46,7 @@ public class ModelAchievementsScores {
         return technology;
     }
 
-    public void setTechnology(String technology) {
+    public void setTechnology( String technology ) {
         this.technology = technology;
     }
 
@@ -53,7 +54,7 @@ public class ModelAchievementsScores {
         return social;
     }
 
-    public void setSocial(String social) {
+    public void setSocial( String social ) {
         this.social = social;
     }
 
@@ -61,7 +62,7 @@ public class ModelAchievementsScores {
         return english;
     }
 
-    public void setEnglish(String english) {
+    public void setEnglish( String english ) {
         this.english = english;
     }
 
@@ -69,7 +70,7 @@ public class ModelAchievementsScores {
         return turkish;
     }
 
-    public void setTurkish(String turkish) {
+    public void setTurkish( String turkish ) {
         this.turkish = turkish;
     }
 
@@ -77,7 +78,7 @@ public class ModelAchievementsScores {
         return study;
     }
 
-    public void setStudy(String study) {
+    public void setStudy( String study ) {
         this.study = study;
     }
 }

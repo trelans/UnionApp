@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.text.format.DateFormat;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,49 +30,46 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
     List<ModelChat> chatList;
     FirebaseUser fuser;
 
-    public AdapterChat(Context context, List<ModelChat> chatList) {
+    public AdapterChat( Context context, List<ModelChat> chatList ) {
         this.context = context;
         this.chatList = chatList;
     }
 
     @NonNull
     @Override
-    public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == MSG_TYPE_RIGHT) {
-            View view = LayoutInflater.from(context).inflate(R.layout.row_chat_right,parent, false);
-            return new MyHolder(view);
-        }
-        else {
-            View view = LayoutInflater.from(context).inflate(R.layout.row_chat_left,parent, false);
-            return new MyHolder(view);
+    public MyHolder onCreateViewHolder( @NonNull ViewGroup parent, int viewType ) {
+        if ( viewType == MSG_TYPE_RIGHT ) {
+            View view = LayoutInflater.from( context ).inflate( R.layout.row_chat_right, parent, false );
+            return new MyHolder( view );
+        } else {
+            View view = LayoutInflater.from( context ).inflate( R.layout.row_chat_left, parent, false );
+            return new MyHolder( view );
         }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+    public void onBindViewHolder( @NonNull MyHolder holder, int position ) {
 
         // get data
-        String message = chatList.get(position).getMessage();
-        String timeStamp = chatList.get(position).getTimestamp();
+        String message = chatList.get( position ).getMessage();
+        String timeStamp = chatList.get( position ).getTimestamp();
 
         // conver timestamp to dd//mm/yyyy hh:mm
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(Long.parseLong(timeStamp));
-        String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
+        Calendar cal = Calendar.getInstance( Locale.ENGLISH );
+        cal.setTimeInMillis( Long.parseLong( timeStamp ) );
+        String dateTime = DateFormat.format( "dd/MM/yyyy hh:mm aa", cal ).toString();
 
         // set data
-        holder.messageTv.setText(message);
-        holder.timeTv.setText(dateTime);
-        if (position == chatList.size()-1) {
-           if (chatList.get(position).isSeen()) {
-               holder.isSeenTv.setText("Seen");
-           }
-           else {
-               holder.isSeenTv.setText("Delivered");
-           }
-        }
-        else {
-            holder.isSeenTv.setVisibility(View.GONE);
+        holder.messageTv.setText( message );
+        holder.timeTv.setText( dateTime );
+        if ( position == chatList.size() - 1 ) {
+            if ( chatList.get( position ).isSeen() ) {
+                holder.isSeenTv.setText( "Seen" );
+            } else {
+                holder.isSeenTv.setText( "Delivered" );
+            }
+        } else {
+            holder.isSeenTv.setVisibility( View.GONE );
         }
 
     }
@@ -82,14 +80,13 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType( int position ) {
         // get currently signed user
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        if (chatList.get(position).getSender().equals(fuser.getUid())) {
-            return  MSG_TYPE_RIGHT;
+        if ( chatList.get( position ).getSender().equals( fuser.getUid() ) ) {
+            return MSG_TYPE_RIGHT;
 
-        }
-        else {
+        } else {
             return MSG_TYPE_LEFT;
         }
     }
@@ -101,11 +98,11 @@ public class AdapterChat extends RecyclerView.Adapter<AdapterChat.MyHolder> {
         TextView messageTv, timeTv, isSeenTv;
         ImageView profilePhoto;
 
-        public MyHolder(@NonNull View itemView) {
-            super(itemView);
-            messageTv = itemView.findViewById(R.id.messageTv);
-            timeTv = itemView.findViewById(R.id.AchtimeTv);
-            isSeenTv = itemView.findViewById(R.id.isSeenTv);
+        public MyHolder( @NonNull View itemView ) {
+            super( itemView );
+            messageTv = itemView.findViewById( R.id.messageTv );
+            timeTv = itemView.findViewById( R.id.AchtimeTv );
+            isSeenTv = itemView.findViewById( R.id.isSeenTv );
         }
     }
 }

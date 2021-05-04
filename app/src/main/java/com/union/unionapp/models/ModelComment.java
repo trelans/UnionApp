@@ -11,7 +11,7 @@ public class ModelComment {
     public ModelComment() {
     }
 
-    public ModelComment(String cId, String comment, String timeStamp, Integer upNumber, String uid, String cAnon, String cPhoto, String uName, List<String> cUpUsers) {
+    public ModelComment( String cId, String comment, String timeStamp, Integer upNumber, String uid, String cAnon, String cPhoto, String uName, List<String> cUpUsers ) {
         this.cId = cId;
         this.comment = comment;
         this.timeStamp = timeStamp;
@@ -27,7 +27,7 @@ public class ModelComment {
         return cId;
     }
 
-    public void setCId(String cId) {
+    public void setCId( String cId ) {
         this.cId = cId;
     }
 
@@ -35,7 +35,7 @@ public class ModelComment {
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setComment( String comment ) {
         this.comment = comment;
     }
 
@@ -43,7 +43,7 @@ public class ModelComment {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp( String timeStamp ) {
         this.timeStamp = timeStamp;
     }
 
@@ -51,7 +51,7 @@ public class ModelComment {
         return upNumber;
     }
 
-    public void setUpNumber(int upNumber) {
+    public void setUpNumber( int upNumber ) {
         this.upNumber = upNumber;
     }
 
@@ -59,7 +59,7 @@ public class ModelComment {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public void setUid( String uid ) {
         this.uid = uid;
     }
 
@@ -67,7 +67,7 @@ public class ModelComment {
         return cAnon;
     }
 
-    public void setCAnon(String cAnon) {
+    public void setCAnon( String cAnon ) {
         this.cAnon = cAnon;
     }
 
@@ -75,7 +75,7 @@ public class ModelComment {
         return cPhoto;
     }
 
-    public void setCPhoto(String cPhoto) {
+    public void setCPhoto( String cPhoto ) {
         this.cPhoto = cPhoto;
     }
 
@@ -83,7 +83,7 @@ public class ModelComment {
         return uName;
     }
 
-    public void setUName(String uName) {
+    public void setUName( String uName ) {
         this.uName = uName;
     }
 
@@ -91,7 +91,7 @@ public class ModelComment {
         return cUpUsers;
     }
 
-    public void setcUpUsers(List<String> cUpUsers) {
+    public void setcUpUsers( List<String> cUpUsers ) {
         this.cUpUsers = cUpUsers;
     }
 }

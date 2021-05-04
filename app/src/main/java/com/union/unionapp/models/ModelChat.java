@@ -3,17 +3,17 @@ package com.union.unionapp.models;
 import com.google.firebase.database.PropertyName;
 
 public class ModelChat {
-    String message , receiver , sender , timestamp;
+    String message, receiver, sender, timestamp;
     boolean isSeen;
-        public ModelChat () {
 
-        }
+    public ModelChat() {
+    }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage( String message ) {
         this.message = message;
     }
 
@@ -21,7 +21,7 @@ public class ModelChat {
         return receiver;
     }
 
-    public void setReceiver(String receiver) {
+    public void setReceiver( String receiver ) {
         this.receiver = receiver;
     }
 
@@ -29,7 +29,7 @@ public class ModelChat {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender( String sender ) {
         this.sender = sender;
     }
 
@@ -37,20 +37,21 @@ public class ModelChat {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp( String timestamp ) {
         this.timestamp = timestamp;
     }
 
-    @PropertyName("isSeen")
+    @PropertyName( "isSeen" )
     public boolean isSeen() {
         return isSeen;
     }
-    @PropertyName("isSeen")
-    public void setSeen(boolean seen) {
+
+    @PropertyName( "isSeen" )
+    public void setSeen( boolean seen ) {
         isSeen = seen;
     }
 
-    public ModelChat(String message, String receiver, String sender, String timestamp, boolean isSeen) {
+    public ModelChat( String message, String receiver, String sender, String timestamp, boolean isSeen ) {
         this.message = message;
         this.receiver = receiver;
         this.sender = sender;

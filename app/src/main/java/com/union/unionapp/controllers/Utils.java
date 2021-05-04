@@ -1,7 +1,7 @@
 package com.union.unionapp.controllers;
 
 /**
- * This class store mail api informations
+ * This class store mail api informations.
  * @author unionTeam
  * @version 04.05.2021
  */

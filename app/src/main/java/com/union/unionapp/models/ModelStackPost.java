@@ -11,7 +11,7 @@ public class ModelStackPost {
     public ModelStackPost() {
     }
 
-    public ModelStackPost(String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, Integer pUpvoteNumber, String pTagIndex, List<String> pUpUsers) {
+    public ModelStackPost( String pId, String pTitle, String pDetails, String pImage, String pTime, String uid, String uEmail, String pAnon, String username, Integer pUpvoteNumber, String pTagIndex, List<String> pUpUsers ) {
         this.pId = pId;
         this.pTitle = pTitle;
         this.pDetails = pDetails;
@@ -30,7 +30,7 @@ public class ModelStackPost {
         return pId;
     }
 
-    public void setPId(String pId) {
+    public void setPId( String pId ) {
         this.pId = pId;
     }
 
@@ -38,7 +38,7 @@ public class ModelStackPost {
         return pTitle;
     }
 
-    public void setPTitle(String pTitle) {
+    public void setPTitle( String pTitle ) {
         this.pTitle = pTitle;
     }
 
@@ -46,7 +46,7 @@ public class ModelStackPost {
         return pDetails;
     }
 
-    public void setPDetails(String pDetails) {
+    public void setPDetails( String pDetails ) {
         this.pDetails = pDetails;
     }
 
@@ -54,7 +54,7 @@ public class ModelStackPost {
         return pImage;
     }
 
-    public void setPImage(String pImage) {
+    public void setPImage( String pImage ) {
         this.pImage = pImage;
     }
 
@@ -62,7 +62,7 @@ public class ModelStackPost {
         return pTime;
     }
 
-    public void setPTime(String pTime) {
+    public void setPTime( String pTime ) {
         this.pTime = pTime;
     }
 
@@ -70,7 +70,7 @@ public class ModelStackPost {
         return uid;
     }
 
-    public void setUid(String uid) {
+    public void setUid( String uid ) {
         this.uid = uid;
     }
 
@@ -78,7 +78,7 @@ public class ModelStackPost {
         return uEmail;
     }
 
-    public void setUEmail(String uEmail) {
+    public void setUEmail( String uEmail ) {
         this.uEmail = uEmail;
     }
 
@@ -86,7 +86,7 @@ public class ModelStackPost {
         return pUpvoteNumber;
     }
 
-    public void setpUpvoteNumber(int pUpvoteNumber) {
+    public void setpUpvoteNumber( int pUpvoteNumber ) {
         this.pUpvoteNumber = pUpvoteNumber;
     }
 
@@ -94,7 +94,7 @@ public class ModelStackPost {
         return pAnon;
     }
 
-    public void setPAnon(String pAnon) {
+    public void setPAnon( String pAnon ) {
         this.pAnon = pAnon;
     }
 
@@ -102,7 +102,7 @@ public class ModelStackPost {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername( String username ) {
         this.username = username;
     }
 
@@ -110,7 +110,7 @@ public class ModelStackPost {
         return pTagIndex;
     }
 
-    public void setpTagIndex(String pTagIndex) {
+    public void setpTagIndex( String pTagIndex ) {
         this.pTagIndex = pTagIndex;
     }
 
@@ -118,7 +118,7 @@ public class ModelStackPost {
         return pUpUsers;
     }
 
-    public void setpUpUsers(List<String> pUpUsers) {
+    public void setpUpUsers( List<String> pUpUsers ) {
         this.pUpUsers = pUpUsers;
     }
 }
