@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -51,13 +52,8 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder>{
         String userName = userList.get(position).getUsername();
             // set data
         holder.username_TextView.setText(userName);
-        try {
-            Picasso.get().load(userPP).placeholder(R.drawable.profile_icon).into(holder.avatar_ImageView);
+        holder.avatar_ImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
 
-        }
-        catch (Exception e) {
-
-        }
 
         // handle item click
         holder.itemView.setOnClickListener(new View.OnClickListener() {

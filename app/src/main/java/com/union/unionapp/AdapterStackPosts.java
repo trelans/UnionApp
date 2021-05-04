@@ -140,7 +140,7 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 intent.putExtra("pId", pId);
                 intent.putExtra("pImage", pImage);
                 intent.putExtra("uPp", uid);
-
+                intent.putExtra("pTags", pTag);
                 // Dif. from buddy
                 intent.putExtra("upVoteNumber", upVoteNumber[0] + "");
                 intent.putExtra("pAnon", pAnon);

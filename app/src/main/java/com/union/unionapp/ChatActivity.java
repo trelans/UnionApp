@@ -2,6 +2,7 @@ package com.union.unionapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -119,6 +120,7 @@ public class ChatActivity extends AppCompatActivity {
                     // set data
                     tw_username.setText(username);
                     // set Profile Photo
+                    profileIw.setBackground(ContextCompat.getDrawable(ChatActivity.this, R.drawable.profile_icon));
                     try {
                         //if image received, set
                         StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + hisUid);

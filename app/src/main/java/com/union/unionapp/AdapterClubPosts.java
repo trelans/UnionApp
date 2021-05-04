@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -104,13 +105,15 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.genderTW.setText( "Gender:" + "   -");
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
+        holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
         try {
             //if image received, set
             StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + uPp);
             image.getDownloadUrl().addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+                    holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+                    Picasso.get().load(R.drawable.profile_icon).into(holder.publisherPP);
                 }
             }).addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -120,7 +123,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             });
         } catch (Exception e) {
             //if there is any exception while getting image then set default
-            Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+            holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
         }
 
 

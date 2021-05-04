@@ -165,6 +165,7 @@ public class PostActivity extends AppCompatActivity {
                             pTitle = modelStackPost.pTitle;
                             pDetails = modelStackPost.pDetails;
                             username = modelStackPost.username;
+                            pTags = modelStackPost.pTagIndex;
                             pImage = modelStackPost.getPImage();
                             publisherPp = modelStackPost.getUid();
                             System.out.println("PImage: " + pImage);
@@ -211,6 +212,7 @@ public class PostActivity extends AppCompatActivity {
                 } else if (pType.equals("Stack")) {
                     upVoteNumber = extras.getString("upVoteNumber", "0");
                     pAnon = extras.getString("pAnon", "0");
+                    pTags = extras.getString("pTags", "0");
                 }
                 pTime = extras.getString("pTime", "0");
                 pTitle = extras.getString("pTitle", "0");
@@ -251,7 +253,9 @@ public class PostActivity extends AppCompatActivity {
         cUpUsers.add("empty");
         //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.parseLong(pTime));
+        if (pTime != null) {
+            calendar.setTimeInMillis(Long.parseLong(pTime));
+        }
         String pPostedTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
         previousMargin = layoutParams.topMargin;
@@ -268,9 +272,21 @@ public class PostActivity extends AppCompatActivity {
 
         postDateTW.setText("Posted on: " + pPostedTime);
         if (!pType.equals("Stack")) {
-            postLocationTW.setText("Location:  " + pLocation);
-            pGenderTW.setText("Gender Preference:  " + pGender);
-            pQuotaTW.setText("Quota: " + pQuota);
+            if (postLocationTW != null && !pLocation.equals("0") && pLocation.equals("")) {
+                postLocationTW.setText("Location:  " + pLocation);
+            } else {
+                postLocationTW.setHeight(0);
+            }
+            if (pGender != null && !pGender.equals("0") && pGender.equals("")) {
+                pGenderTW.setText("Gender Preference:  " + pGender);
+            } else {
+                pGenderTW.setHeight(0);
+            }
+            if (pQuota != null && !pQuota.equals("0") && pQuota.equals("")) {
+                pQuotaTW.setText("Quota: " + pQuota);
+            } else {
+                pGenderTW.setHeight(0);
+            }
             upNumberTW.setVisibility(View.INVISIBLE);
         } else {
             postLocationTW.setHeight(0);
@@ -281,6 +297,7 @@ public class PostActivity extends AppCompatActivity {
 
         pTitleTW.setText(pTitle);
 
+        profilePhoto.setBackground(ContextCompat.getDrawable(PostActivity.this, R.drawable.profile_icon));
         if (pImage != null && !pImage.equals("noImage") && !pImage.equals("")) {
             try {
                 System.out.println("burada");
@@ -294,7 +311,7 @@ public class PostActivity extends AppCompatActivity {
                 });
             } catch (Exception e) {
                 //if there is any exception while getting image then set default
-                System.out.println("resim yüklemede hata çıktı");
+                profilePhoto.setBackground(ContextCompat.getDrawable(PostActivity.this, R.drawable.profile_icon));
             }
         } else {
             postImageIW.getLayoutParams().height = 0;
@@ -447,7 +464,7 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
-        
+
     }
 
     private void openOrCloseCard(boolean openCardImmediately) {

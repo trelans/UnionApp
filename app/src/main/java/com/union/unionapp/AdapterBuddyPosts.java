@@ -82,12 +82,14 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
 
+        holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
         try {
             //if image received, set
             reference.child(hisUid).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+                    holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+                    Picasso.get().load(R.drawable.profile_icon).into(holder.publisherPP);
                 }
             }).addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -97,7 +99,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             });
         } catch (Exception e) {
             //if there is any exception while getting image then set default
-            Picasso.get().load(R.drawable.user_pp_template).into(holder.publisherPP);
+            holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
         }
 
 
