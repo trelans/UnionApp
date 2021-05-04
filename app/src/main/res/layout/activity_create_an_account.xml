@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg"
     android:fillViewport="true"
-    tools:context="com.union.unionapp.CreateAnAccountActivity">
+    tools:context="com.union.unionapp.views.CreateAnAccountActivity">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:gravity="center_horizontal"></LinearLayout>
+                android:gravity="center_horizontal" />
 
         </RelativeLayout>
 
@@ -76,7 +76,7 @@
                         android:layout_marginStart="40dp"
                         android:layout_marginTop="293dp"
                         android:fontFamily="@font/myriad_pro_regular"
-                        android:text="I agree with"
+                        android:text="@string/i_agree_with"
                         android:textSize="10sp" />
 
                     <EditText

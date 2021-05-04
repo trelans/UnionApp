@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#88ABE3"
     android:id="@+id/slideButtonForward"
-    tools:context="com.union.unionapp.MainActivity">
+    tools:context="com.union.unionapp.views.MainActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/topBar"
