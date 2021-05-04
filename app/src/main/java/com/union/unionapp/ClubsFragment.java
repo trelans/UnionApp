@@ -60,6 +60,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,7 +92,8 @@ public class ClubsFragment extends Fragment {
     TextView postDateEt,
             postTimeEt,
             filterDateTv,
-            filterTimeTv;
+            filterTimeTv,
+            clickToSeeImageTv;
 
     TextView[] textViewTags;
 
@@ -229,6 +231,37 @@ public class ClubsFragment extends Fragment {
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.club_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
+
+                clickToSeeImageTv = clubDialog.findViewById(R.id.clickToSeeImageTW);
+                clickToSeeImageTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.custom_comment_image_view);
+                        ImageView commentImageIV = dialog.findViewById(R.id.commentImageIV);
+                        try {
+                            //if image received, set
+                            FirebaseStorage.getInstance().getReference("BilkentUniversity/ClubPosts/" + image_uri).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.get().load(uri).into(commentImageIV);
+                                }
+                            });
+                        } catch (Exception e) {
+                            //if there is any exception while getting image then set default
+                            Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                        }
+
+                        dialog.show();
+                    }
+                });
 
                 //path to store post data
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
@@ -687,7 +720,7 @@ public class ClubsFragment extends Fragment {
                         }
 
 
-                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/ClubPosts");
                         Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
 
                         query.addValueEventListener(new ValueEventListener() {
@@ -814,7 +847,7 @@ public class ClubsFragment extends Fragment {
 
 
     private void showImagePickDialog() {
-        String[] options = {"Camera", "Gallery"};
+        String[] options = {"Camera", "Gallery",  "Delete Photo"};
         Context context;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         // set items to dialog
@@ -830,6 +863,12 @@ public class ClubsFragment extends Fragment {
                     // gallery clicked
                     Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+                } else if (i == 2){
+                    addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_a_photo_24));
+                    StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/ClubPosts/" + pUid);
+                    image_uri = "noImage";
+                    image.delete();
+                    clickToSeeImageTv.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -1625,6 +1664,8 @@ public class ClubsFragment extends Fragment {
         image.putFile(contentUri);
 
         image_uri = pId;
+        addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.upload_photo_icon));
+        clickToSeeImageTv.setVisibility(View.VISIBLE);
     }
 
     void askCameraPermissions() {

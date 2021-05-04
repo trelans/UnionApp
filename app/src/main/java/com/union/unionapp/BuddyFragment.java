@@ -61,6 +61,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,7 +91,8 @@ public class BuddyFragment extends Fragment {
     TextView postDateEt,
             postTimeEt,
             filterDate,
-            filterTime;
+            filterTime,
+            clickToSeeImageTv;
 
     //Achievements
     int mathScore;// = 0;
@@ -232,6 +234,36 @@ public class BuddyFragment extends Fragment {
                 ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.gender_preferences, android.R.layout.simple_spinner_item);
                 genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 genderSpinner.setAdapter(genderAdapter);
+                clickToSeeImageTv = buddyDialog.findViewById(R.id.clickToSeeImageTW);
+                clickToSeeImageTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.custom_comment_image_view);
+                        ImageView commentImageIV = dialog.findViewById(R.id.commentImageIV);
+                        try {
+                            //if image received, set
+                            FirebaseStorage.getInstance().getReference("BilkentUniversity/BuddyPosts/" + image_uri).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.get().load(uri).into(commentImageIV);
+                                }
+                            });
+                        } catch (Exception e) {
+                            //if there is any exception while getting image then set default
+                            Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                        }
+
+                        dialog.show();
+                    }
+                });
 
                 //path to store post data
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
@@ -476,13 +508,12 @@ public class BuddyFragment extends Fragment {
                             }
 
 
-
                             if (image_uri == null) {
                                 //post without image
-                                uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender,reference);
+                                uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postGender, reference);
                             } else {
                                 //post with image
-                                uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, image_uri, postLocation, tagsToUpload, postGender,reference);
+                                uploadData(postHeadline, postDetails, postDate, postTime, postQuotaStr, image_uri, postLocation, tagsToUpload, postGender, reference);
                             }
                             buddyDialog.dismiss();
 
@@ -896,7 +927,7 @@ public class BuddyFragment extends Fragment {
     }
 
     private void showImagePickDialog() {
-        String[] options = {"Camera", "Gallery"};
+        String[] options = {"Camera", "Gallery", "Delete Photo"};
         Context context;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         // set items to dialog
@@ -912,6 +943,12 @@ public class BuddyFragment extends Fragment {
                     // gallery clicked
                     Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+                } else if (i == 2) {
+                    addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_a_photo_24));
+                    StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/BuddyPosts/" + pUid);
+                    image_uri = "noImage";
+                    image.delete();
+                    clickToSeeImageTv.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -1762,6 +1799,8 @@ public class BuddyFragment extends Fragment {
         image.putFile(contentUri);
 
         image_uri = pId;
+        addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.upload_photo_icon));
+        clickToSeeImageTv.setVisibility(View.VISIBLE);
     }
 
     void askCameraPermissions() {

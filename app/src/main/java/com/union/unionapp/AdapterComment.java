@@ -1,6 +1,9 @@
 package com.union.unionapp;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +60,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         String uName = commentList.get(position).getUName();
         String comment = commentList.get(position).getComment();
         String anonymous = commentList.get(position).getCAnon();
+        String cPhoto = commentList.get(position).getCPhoto();
         int upNumber = commentList.get(position).getUpNumber();
         List<String> cUpUsers = commentList.get(position).getcUpUsers();
 
@@ -81,6 +89,43 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
                 }
                 updateUpNumber.put("cUpUsers", cUpUsers);
                 ref.child(commentList.get(position).getCId()).updateChildren(updateUpNumber);
+            }
+        });
+
+        System.out.println("Cphoto: " + cPhoto);
+        if(cPhoto != null && !cPhoto.equals("noImage")){
+            holder.clickToSeeImage.setVisibility(View.VISIBLE);
+        }else{
+            holder.clickToSeeImage.setVisibility(View.GONE);
+        }
+
+        holder.clickToSeeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Dialog dialog = new Dialog(context);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.setContentView(R.layout.custom_comment_image_view);
+                ImageView commentImageIV = dialog.findViewById(R.id.commentImageIV);
+                try {
+                    //if image received, set
+                    FirebaseStorage.getInstance().getReference("BilkentUniversity/Comments/" + cPhoto).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Picasso.get().load(uri).into(commentImageIV);
+                        }
+                    });
+                } catch (Exception e) {
+                    //if there is any exception while getting image then set default
+                    Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                }
+
+                dialog.show();
             }
         });
     }
@@ -112,6 +157,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
         LinearLayout rowLL;
         TextView answerTV;
         ImageButton upIconIV;
+        TextView clickToSeeImage;
 
         public MyHolder(@NonNull View itemView) {
 
@@ -119,6 +165,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.MyHolder
             rowLL = itemView.findViewById(R.id.rowLL);
             answerTV = itemView.findViewById(R.id.answerTV);
             upIconIV = itemView.findViewById(R.id.upIconIV);
+            clickToSeeImage = itemView.findViewById(R.id.clickToSeeImageTW);
         }
 
     }

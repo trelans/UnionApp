@@ -121,9 +121,10 @@
 
                 <ImageView
                     android:id="@+id/imageViewAddPhoto"
-                    android:layout_width="52dp"
+                    android:layout_width="31dp"
                     android:layout_height="31dp"
-                    android:src="@drawable/ic_baseline_add_a_photo_24" />
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/ic_baseline_add_a_photo_24" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat

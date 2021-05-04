@@ -41,6 +41,21 @@
         android:background="@drawable/up_icon" />
 
 </LinearLayout>
+
+    <TextView
+        android:id="@+id/clickToSeeImageTW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/teal_700"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:layout_marginStart="3dp"
+        android:layout_weight="1"
+        android:text="Click to see linked Image"
+        android:textSize="16sp" />
+
+
     <View
         android:id="@+id/cizgi3"
         android:layout_width="match_parent"

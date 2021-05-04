@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -126,6 +127,8 @@ public class StackFragment extends Fragment {
     //user info
     String username, email, uid, dp;
 
+    TextView clickToSeeImageTv;
+
 
     @Nullable
     @Override
@@ -166,6 +169,36 @@ public class StackFragment extends Fragment {
                 //path to store post data
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("StackPosts");
                 pUid = reference.push().getKey();
+
+                clickToSeeImageTv = stackDialog.findViewById(R.id.clickToSeeImageTW);
+                clickToSeeImageTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.custom_comment_image_view);
+                        ImageView commentImageIV = dialog.findViewById(R.id.commentImageIV);
+                        try {
+                            //if image received, set
+                            FirebaseStorage.getInstance().getReference("BilkentUniversity/StackPosts/" + image_uri).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.get().load(uri).into(commentImageIV);
+                                }
+                            });
+                        } catch (Exception e) {
+                            //if there is any exception while getting image then set default
+                            Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                        }
+                        dialog.show();
+                    }
+                });
 
 
                 stackTagSpinner = stackDialog.findViewById(R.id.tagSpinner);
@@ -389,7 +422,7 @@ public class StackFragment extends Fragment {
     }
 
     private void showImagePickDialog() {
-        String[] options = {"Camera", "Gallery"};
+        String[] options = {"Camera", "Gallery", "Delete Photo"};
         Context context;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         // set items to dialog
@@ -405,6 +438,13 @@ public class StackFragment extends Fragment {
                     // gallery clicked
                     Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+                }
+                else if (i == 2){
+                    addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_a_photo_24));
+                    StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/StackPosts/" + pUid);
+                    image_uri = "noImage";
+                    image.delete();
+                    clickToSeeImageTv.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -1111,6 +1151,8 @@ public class StackFragment extends Fragment {
         image.putFile(contentUri);
 
         image_uri = pId;
+        addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.upload_photo_icon));
+        clickToSeeImageTv.setVisibility(View.VISIBLE);
     }
 
     void askCameraPermissions() {
