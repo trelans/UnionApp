@@ -640,9 +640,21 @@ public class ClubsFragment extends Fragment {
                 setListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet( DatePicker view, int year, int month, int dayOfMonth ) {
+                        String monthS = month + "";
+                        String dayS = dayOfMonth + "";
+
                         month = month + 1;
-                        String date = dayOfMonth + "/" + month + "/" + year;
-                        filterDateTv.setText( date );
+
+                        if (month < 10) {
+                            monthS = "0" + month;
+                        }
+                        if (dayOfMonth < 10) {
+                            dayS = "0" + dayOfMonth;
+                        }
+
+                        String newDate = dayS + "/" + monthS + "/" + year;
+                        filterDateTv.setText( newDate );
+
 
                     }
                 };
