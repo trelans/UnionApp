@@ -13,14 +13,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/avatarIv"
             android:src="@drawable/profile_icon"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="4dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
