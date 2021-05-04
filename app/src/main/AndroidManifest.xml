@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.union.unionapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,12 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UnionApp"
         android:windowSoftInputMode="adjustResize">
-        <activity android:name=".PostActivity"/>
-        <activity android:name=".VerifyAccountActivity" />
-        <activity android:name=".OtherProfile" />
-        <activity android:name=".ChatActivity" />
+        <activity android:name=".views.PostActivity"/>
+        <activity android:name=".views.VerifyAccountActivity" />
+        <activity android:name=".views.OtherProfile" />
+        <activity android:name=".views.ChatActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -32,15 +31,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".views.LoginActivity"
             android:theme="@style/AppTheme.SlidrActivityTheme">
 
         </activity>
-        <activity android:name=".TestActivity" />
-        <activity android:name=".RecoverAccountActivity" />
+        <activity android:name=".views.RecoverAccountActivity" />
 
         <service
-            android:name=".notifications.FirebaseService"
+            android:name=".controllers.notifications.FirebaseService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -49,11 +47,11 @@
         </service>
 
         <activity
-            android:name=".CreateAnAccountActivity"
+            android:name=".views.CreateAnAccountActivity"
             android:theme="@style/AppTheme.SlidrActivityTheme" />
 
         <service
-            android:name=".notifications.FirebaseMessaging"
+            android:name=".controllers.notifications.FirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
