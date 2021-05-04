@@ -2,8 +2,11 @@ package com.union.unionapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +19,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,10 +39,12 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
     Context context;
     List<ModelBuddyAndClubPost> postList;
+    StorageReference reference;
 
-    public AdapterBuddyPosts(Context context, List<ModelBuddyAndClubPost> postList) {
+    public AdapterBuddyPosts(Context context, List<ModelBuddyAndClubPost> postList, StorageReference reference) {
         this.context = context;
         this.postList = postList;
+        this.reference = reference;
     }
 
     @NonNull
@@ -46,7 +57,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
 
     @Override
     public void onBindViewHolder(@NonNull AdapterBuddyPosts.MyHolder holder, int position) {
-
+        //holder.setIsRecyclable(false);
         //get data
         String pId = postList.get(position).getpId();
         String pTitle = postList.get(position).getpTitle();
@@ -61,7 +72,6 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         String pTags = postList.get(position).getpTags();
         String pGender = postList.get(position).getpGender();
         String username = postList.get(position).getUsername();
-        String uPp = postList.get(position).getuPp();
 
         //set data
         holder.contentTextView.setText(pDetails);
@@ -71,9 +81,26 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.genderTW.setText("Gender: " + pGender);
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
-        // TODO resim eklemeyi yap holder.publisherPP.setImageResource();
 
-        convertStringTagsToRealTags(holder, pTags);
+        holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+        try {
+            //if image received, set
+            reference.child(hisUid).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+                    Picasso.get().load(R.drawable.profile_icon).into(holder.publisherPP);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.publisherPP);
+                }
+            });
+        } catch (Exception e) {
+            //if there is any exception while getting image then set default
+            holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+        }
 
 
         //if there is no image
@@ -81,16 +108,11 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             //hide imageView
         }
 
-        /* aynısından image için de yaptı
-        //set user dp
-        try{
-            Picasso.get().load(uDp).placeholder(R.drawable.user_pp_template).into(holder.uPictureIv);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-         */
+        if (hisUid.equals(FirebaseAuth.getInstance().
 
-        if (hisUid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                getCurrentUser().
+
+                getUid())) {
             holder.sendButtonIB.setEnabled(false);
         }
 
@@ -117,21 +139,22 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 String fixedDate = pDate.replace("/", "_");
                 userRef.child("Calendar").child(fixedDate).child(pId).setValue(hashMap);
 
-                //User calender bitişi
+                //User calender finish line
 
                 String[] calendarDate = pDate.split("/");
                 String[] calendarTime = pHour.split(":");
                 Calendar cal = Calendar.getInstance();
                 cal.set(Integer.parseInt(calendarDate[2]), Integer.parseInt(calendarDate[1]) - 1, Integer.parseInt(calendarDate[0]), Integer.parseInt(calendarTime[1]), Integer.parseInt(calendarTime[0]));
+
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 intent.putExtra("beginTime", cal.getTimeInMillis());
                 intent.putExtra("eventLocation", pLocation);
-                //TODO etkinlik bitiş saati intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+
+                //TODO activity finish time intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
                 intent.putExtra("title", "@" + username + "'s Event");
                 intent.putExtra(CalendarContract.Events.DESCRIPTION, pTitle);
                 context.startActivity(intent);
-
 
             }
         });
@@ -150,6 +173,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+
                 Intent intent = new Intent(context, PostActivity.class);
                 intent.putExtra("pType", "Buddy");
                 intent.putExtra("pTime", pTime);
@@ -157,7 +181,7 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 intent.putExtra("pDetails", pDetails);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
-                intent.putExtra("uPp", uPp);
+                intent.putExtra("uPp", hisUid);
 
                 //different from stack
                 intent.putExtra("pDate", pDate);
@@ -167,13 +191,13 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
                 intent.putExtra("pImage", pImage);
                 intent.putExtra("pGender", pGender);
                 intent.putExtra("pTags", pTags);
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
+
                 return true;
             }
         });
-
-
     }
 
     private void convertStringTagsToRealTags(@NonNull MyHolder holder, String pTags) {
@@ -245,13 +269,16 @@ public class AdapterBuddyPosts extends RecyclerView.Adapter<AdapterBuddyPosts.My
             sendButtonIB = itemView.findViewById(R.id.sendButtonIB);
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
+
             dateTW = itemView.findViewById(R.id.dateTWBuddy);
             zoomLinkTW = itemView.findViewById(R.id.zoomLinkTW);
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
+
             publisherNameTW = itemView.findViewById(R.id.publisherNameTextView);
             publisherPP = itemView.findViewById(R.id.publisherPp);
+
             topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);

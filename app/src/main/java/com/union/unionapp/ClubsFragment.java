@@ -1,13 +1,14 @@
 package com.union.unionapp;
 
 
-
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -39,6 +41,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,11 +60,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -83,18 +90,19 @@ public class ClubsFragment extends Fragment {
     ProgressBar pb;
 
     TextView postDateEt,
-             postTimeEt,
-             filterDateTv,
-             filterTimeTv;
+            postTimeEt,
+            filterDateTv,
+            filterTimeTv,
+            clickToSeeImageTv;
 
     TextView[] textViewTags;
 
     AppCompatButton tag1,
-                    tag2,
-                    tag3,
-                    filterTag1,
-                    filterTag2,
-                    filterTag3;
+            tag2,
+            tag3,
+            filterTag1,
+            filterTag2,
+            filterTag3;
 
     String[] allTags;
 
@@ -110,7 +118,7 @@ public class ClubsFragment extends Fragment {
     int turkishScore;// = 0;
     int studyScore;// = 0;
 
-    String title, description, point  , nId , level;
+    String title, description, point, nId, level;
     // Achievements
     boolean[] tagsStatus = {false, false, false};
     int[] tagTextsIndexArray = new int[3];
@@ -125,7 +133,7 @@ public class ClubsFragment extends Fragment {
 
     DatabaseReference userDbRef;
     FirebaseAuth firebaseAuth;
-    Uri image_uri;
+    String image_uri;
 
     String date;
     String time;
@@ -139,15 +147,12 @@ public class ClubsFragment extends Fragment {
     List<ModelBuddyAndClubPost> postList;
     AdapterClubPosts adapterClubPosts;
 
-    //permission constants
-    private static final int CAMERA_REQUEST_CODE = 100;
-    private static final int STORAGE_REQUEST_CODE = 200;
-    private static final int IMAGE_PICK__GALLERY_CODE = 300;
-    private static final int IMAGE_PICK_CAMERA_CODE = 400;
+    public static final int CAMERA_PERM_CODE = 101;
+    public static final int CAMERA_REQUEST_CODE = 102;
+    public static final int GALLERY_REQUEST_CODE = 105;
 
-    // arrays of permissions to be requested
-    String cameraPermissions[];
-    String storagePermissions[];
+    String currentPhotoPath;
+    String pUid;
 
     //user info
     String username, email, uid, pp;
@@ -170,9 +175,6 @@ public class ClubsFragment extends Fragment {
 
         allTags = getResources().getStringArray(R.array.all_tags);
 
-        //inits arrays of permissions
-        cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -201,9 +203,11 @@ public class ClubsFragment extends Fragment {
         //recycler view and its properties
         recyclerView = view.findViewById(R.id.clubPostsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
         //show newest post first, for this load from last
         layoutManager.setStackFromEnd(true);
         layoutManager.setReverseLayout(true);
+
         //set layout to recyclerview
         recyclerView.setLayoutManager(layoutManager);
 
@@ -214,6 +218,7 @@ public class ClubsFragment extends Fragment {
         createPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Dialog dialog;
                 clubDialog.setContentView(R.layout.custom_create_club_post);
 
@@ -226,6 +231,41 @@ public class ClubsFragment extends Fragment {
                 ArrayAdapter<CharSequence> tagAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.club_tags, android.R.layout.simple_spinner_item);
                 tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 tagSpinner.setAdapter(tagAdapter);
+
+                clickToSeeImageTv = clubDialog.findViewById(R.id.clickToSeeImageTW);
+                clickToSeeImageTv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Dialog dialog = new Dialog(getContext());
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(true);
+                        dialog.setContentView(R.layout.custom_comment_image_view);
+                        ImageView commentImageIV = dialog.findViewById(R.id.commentImageIV);
+                        try {
+                            //if image received, set
+                            FirebaseStorage.getInstance().getReference("BilkentUniversity/ClubPosts/" + image_uri).getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.get().load(uri).into(commentImageIV);
+                                }
+                            });
+                        } catch (Exception e) {
+                            //if there is any exception while getting image then set default
+                            Picasso.get().load(R.drawable.user_pp_template).into(commentImageIV);
+                        }
+
+                        dialog.show();
+                    }
+                });
+
+                //path to store post data
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
+                pUid = reference.push().getKey();
 
                 tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -253,11 +293,9 @@ public class ClubsFragment extends Fragment {
                         }
 
                         if (i[0] == tagsStatus.length) {
-                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
+
                             tagSpinner.setEnabled(false);
-                            //tagSpinner.setClickable( false );
-                            //tagSpinner.setTop( 1 );
-                            //setTagsSaved( true );
+
                         }
                     }
 
@@ -293,10 +331,6 @@ public class ClubsFragment extends Fragment {
                 tag2.setVisibility(View.INVISIBLE);
                 tag3.setVisibility(View.INVISIBLE);
 
-                //set tags to disabled -- not needed
-                //tag1.setEnabled(false);
-                //tag2.setEnabled(false);
-                //tag3.setEnabled(false);
 
                 textViewTags = new TextView[]{tag1, tag2, tag3};
                 tagsArray = new AppCompatButton[]{tag1, tag2, tag3};
@@ -381,17 +415,16 @@ public class ClubsFragment extends Fragment {
                         String monthS = "";
                         if (dayOfMonth < 10) {
                             dayOfMonthS = "0" + dayOfMonth;
-                        }else {
+                        } else {
                             dayOfMonthS = String.valueOf(dayOfMonth);
                         }
-                        if (month < 10 ) {
+                        if (month < 10) {
                             monthS = "0" + month;
-                        }else {
-                            monthS =  ""+ month;
+                        } else {
+                            monthS = "" + month;
                         }
                         String date = dayOfMonthS + "/" + monthS + "/" + year;
                         postDateEt.setText(date);
-
 
                     }
                 };
@@ -428,11 +461,9 @@ public class ClubsFragment extends Fragment {
                         String postTitle = postTitleEt.getText().toString().trim();
                         if (postTitle.isEmpty()) {
                             postTitleEt.setError("The title section cannot be left empty.");
-                        }
-                        else if (i[0] == 0) {
+                        } else if (i[0] == 0) {
                             ((TextView) tagSpinner.getSelectedView()).setError("Post must have at least 1 tag");
-                        }
-                        else {
+                        } else {
                             String postDetails = postDetailsEt.getText().toString().trim();
                             timestamp = String.valueOf(MainActivity.getServerDate());
                             String postDate = postDateEt.getText().toString().trim();
@@ -463,10 +494,10 @@ public class ClubsFragment extends Fragment {
 
                             if (image_uri == null) {
                                 //post without image
-                                uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle);
+                                uploadData(postDetails, postDate, postTime, postQuotaStr, "noImage", postLocation, tagsToUpload, postTitle, reference);
                             } else {
                                 //post with image
-                                uploadData(postDetails, postDate, postTime, postQuotaStr, String.valueOf(image_uri), postLocation, tagsToUpload, postTitle);
+                                uploadData(postDetails, postDate, postTime, postQuotaStr, image_uri, postLocation, tagsToUpload, postTitle, reference);
                             }
 
                             tagsStatus[0] = false;
@@ -556,11 +587,8 @@ public class ClubsFragment extends Fragment {
                         }
 
                         if (i[0] == tagsStatus.length) {
-                            //Toast.makeText( getApplicationContext(), "All tags are fixed", Toast.LENGTH_LONG ).show();
                             tagSpinner.setEnabled(false);
-                            //tagSpinner.setClickable( false );
-                            //tagSpinner.setTop( 1 );
-                            //setTagsSaved( true );
+
                         }
                     }
 
@@ -692,7 +720,7 @@ public class ClubsFragment extends Fragment {
                         }
 
 
-                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/BuddyPosts");
+                        DatabaseReference queryRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/ClubPosts");
                         Query query = queryRef.orderByChild("pQuota").equalTo(filterQuota);
 
                         query.addValueEventListener(new ValueEventListener() {
@@ -707,19 +735,7 @@ public class ClubsFragment extends Fragment {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue(ModelBuddyAndClubPost.class);
 
                                     if (modelBuddyPost.getpQuota().contains(filterQuota)) {
-                                        /*
-                                        if (!filterDate.isEmpty()) {
-                                            if (!modelBuddyPost.getpDate().contains(filterDate)) {
-                                                continue;
-                                            }
-                                        }
 
-                                        if (!filterTime.isEmpty()) {
-                                            if (!modelBuddyPost.getpTime().contains(filterTime)) {
-                                                continue;
-                                            }
-                                        }
-                                        */
                                         if (!filterLocation.isEmpty()) {
                                             if (!modelBuddyPost.getpLocation().contains(filterLocation)) {
                                                 continue;
@@ -737,35 +753,6 @@ public class ClubsFragment extends Fragment {
                                                 continue;
                                             }
 
-                                            /*
-                                            if ( filterTagNumber == 1 ) {
-
-                                                String tag1 = "";
-                                                tag1 = postPartialTags[0];
-                                                if (!tag1.equals(filterPartialTags[0])) {
-                                                    continue;
-                                                }
-
-                                                for (int i = 0; i < postPartialTags.length; i++) {
-                                                    if ( filterPartialTags[0].equals(postPartialTags[i]) )
-                                                }
-
-
-                                                if (!serverToPhoneTagConverter(modelBuddyPost.getpTags()).equals(filterTagsToUpload)) {
-                                                    continue;
-                                                }
-                                            }
-                                            else if (filterTagNumber == 2) {
-
-                                            }
-                                            else if ( filterTagNumber == 3 ) {
-                                                for (int i = 0; i < filterPartialTags.length; i++) {
-                                                    for (int j = 0; j < postPartialTags.length; j++) {
-                                                        filterPartialTags[i].equals(postPartialTags[j])
-                                                    }
-                                                }
-                                            }
-                                              */
                                         }
 
                                         postList.add(modelBuddyPost);
@@ -773,9 +760,11 @@ public class ClubsFragment extends Fragment {
                                         System.out.println();
                                     }
                                 }
+
                                 // adapter
                                 adapterClubPosts = new AdapterClubPosts(getActivity(), postList);
                                 adapterClubPosts.notifyDataSetChanged();
+
                                 // set adapter to recyclerView
                                 recyclerView.setAdapter(adapterClubPosts);
 
@@ -807,24 +796,19 @@ public class ClubsFragment extends Fragment {
                     }
                 });
 
-
                 //dialog dismiss listener
                 clubDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
 
-
                     }
                 });
 
                 clubDialog.show();
-
             }
         });
         return view;
     }
-
-
 
 
     private void loadPosts() {
@@ -840,6 +824,7 @@ public class ClubsFragment extends Fragment {
 
                     // adapter
                     adapterClubPosts = new AdapterClubPosts(getActivity(), postList);
+
                     // set adapter to recyclerView
                     recyclerView.setAdapter(adapterClubPosts);
                 }
@@ -849,7 +834,7 @@ public class ClubsFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // in case of error
-               // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Error on load post method 214. line", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -862,114 +847,32 @@ public class ClubsFragment extends Fragment {
 
 
     private void showImagePickDialog() {
-        //options (camera, gallery) to show in dialog
-        String[] options = {"Camera", "Gallery"};
-
-        //dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose Image from");
-
-        //set options to dialog
+        String[] options = {"Camera", "Gallery",  "Delete Photo"};
+        Context context;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        // set items to dialog
+        builder.setTitle("Pick Image From");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //item click handle
-                if (which==0) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
                     //camera clicked
+                    askCameraPermissions();
 
-                }
-                if (which==1) {
-                    //gallery clicked
+                } else if (i == 1) {
+                    // gallery clicked
+                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+                } else if (i == 2){
+                    addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_add_a_photo_24));
+                    StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/ClubPosts/" + pUid);
+                    image_uri = "noImage";
+                    image.delete();
+                    clickToSeeImageTv.setVisibility(View.INVISIBLE);
                 }
             }
         });
-        //create and show dialog
-    }
-
-
-    private boolean checkStoragePermission() {
-        boolean result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == (PackageManager.PERMISSION_GRANTED);
-        return result;
-    }
-
-    private void requestStoragePermission() {
-        // request runtime storage permission
-        ActivityCompat.requestPermissions(getActivity(), storagePermissions, STORAGE_REQUEST_CODE);
-    }
-
-    private boolean checkCameraPermission() {
-        boolean result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                == (PackageManager.PERMISSION_GRANTED);
-        boolean result1 = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == (PackageManager.PERMISSION_GRANTED);
-        return result && result1;
-    }
-
-    private void requestCameraPermission() {
-        // request runtime storage permission
-        ActivityCompat.requestPermissions(getActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-
-        switch (requestCode) {
-            case CAMERA_REQUEST_CODE: {
-                if (grantResults.length > 0) {
-                    System.out.println("burada");
-                    System.out.println(grantResults.length);
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(cameraAccepted);
-                    boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
-                    if (cameraAccepted && writeStorageAccepted) {
-                        System.out.println("dadsda");
-                        pickFromCamera();
-                    } else {
-                        Toast.makeText(getActivity(), "Please enable camera & storage permission", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            break;
-            case STORAGE_REQUEST_CODE: {
-                if (grantResults.length > 0) {
-                    System.out.println("şurada");
-                    boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    System.out.println(writeStorageAccepted);
-                    if (writeStorageAccepted) {
-                        pickFromGallery();
-                    } else {
-                        Toast.makeText(getActivity(), "Please enable storage permission", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            break;
-
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    private void pickFromCamera() {
-
-        //Intent of picking image from device camera
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.TITLE, "Temp Pic");
-        values.put(MediaStore.Images.Media.DESCRIPTION, "Temp Description");
-        //put image uri
-        image_uri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        // intent to start camera
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri);
-        startActivityForResult(cameraIntent, IMAGE_PICK_CAMERA_CODE);
-    }
-
-    private void pickFromGallery() {
-        // pick from gallery
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, IMAGE_PICK__GALLERY_CODE);
+        builder.show();
     }
 
     private void checkUserStatus() {
@@ -980,428 +883,201 @@ public class ClubsFragment extends Fragment {
         }
     }
 
-    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postTitle) {
+    private void uploadData(String postDetails, String postDate, String postTime, String postQuotaStr, String uri, String postLocation, String tagsToUpload, String postTitle, DatabaseReference reference) {
         //for post-image name, post-id, post-publish-time
         String timeStamp = String.valueOf(System.currentTimeMillis());
-        String filePathAndName = "Posts/" + "post_";
 
-        if (!uri.equals("noImage")) {
-            //post with image
-            StorageReference ref = FirebaseStorage.getInstance().getReference().child(filePathAndName);
-            ref.putFile(Uri.parse(uri))
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            //image is uploaded to firebase, now get its uri
-                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!uriTask.isSuccessful());
+        //post without image
 
-                            String downloadUri = uriTask.getResult().toString();
+        checkUserStatus();
+        HashMap<Object, String> hashMap = new HashMap<>();
 
-                            if (uriTask.isSuccessful()) {
-                                //uri is received upload post to firebase database
+        //put post info
+        hashMap.put("uid", uid);
+        hashMap.put("username", username);
+        hashMap.put("uEmail", email);
+        hashMap.put("uDp", pp);
+        hashMap.put("pDetails", postDetails);
+        hashMap.put("pDate", postDate);
+        hashMap.put("pHour", postTime);
+        hashMap.put("pQuota", postQuotaStr);
+        hashMap.put("pImage", uri);
+        hashMap.put("pTime", timeStamp);
+        hashMap.put("pLocation", postLocation);
+        hashMap.put("pTitle", postTitle);
 
-                                checkUserStatus();
-                                HashMap<Object,String> hashMap = new HashMap<>();
-                                //put post info
-                                hashMap.put("uid",uid); //çekememiş
-                                hashMap.put("username",username); //çekmemiş
-                                //hashMap.put("uEmail",email);
-                                hashMap.put("uPp", pp);
-                                hashMap.put("pDetails",postDetails);
-                                hashMap.put("pDate",postDate);
-                                hashMap.put("pHour",postTime);
-                                hashMap.put("pQuota",postQuotaStr);
-                                hashMap.put("pImage",downloadUri);
-                                hashMap.put("pTime",timeStamp);
-                                hashMap.put("pLocation",postLocation);
-                                hashMap.put("pTitle",postTitle);
+        //tagsToUpload achievements KUTAY
+        String[] achsTagsToUpload = tagsToUpload.split(",");
+        for (int i = 0; i < achsTagsToUpload.length; i++) {
+            if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
 
-                                //tagsToUpload achievements KUTAY
-                                String[] achsTagsToUpload = tagsToUpload.split(",");
-                                for (int i = 0; i < achsTagsToUpload.length; i++) {
-                                    if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
-                                        //TODO KUTAY MAT PUANI EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("1");
-                                            }
-                                        }, 2000);
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("1");
+                    }
+                }, 2000);
 
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
-                                        //TODO KUTAY CAREER PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("2");
-                                            }
-                                        }, 2000);
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
 
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
-                                        //TODO KUTAY SPORT PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("3");
-                                            }
-                                        }, 2000);
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
-                                        //TODO KUTAY TECH PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("4");
-                                            }
-                                        }, 2000);
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
-                                        //TODO KUTAY ENGLISH PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("5");
-                                            }
-                                        }, 2000);
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
-                                        //TODO KUTAY ENGLISH PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("6");
-                                            }
-                                        }, 2000);
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
-                                        //TODO KUTAY TURKCE PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("7");
-                                            }
-                                        }, 2000);
-                                    }
-                                    else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
-                                        //TODO KUTAY STUDY PUAN EKLE
-                                        loadProfileScoreAchievements();
-                                        Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            public void run() {
-                                                increaseOnePoints("8");
-                                            }
-                                        }, 2000);
-                                    }
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("2");
+                    }
+                }, 2000);
 
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
+
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("3");
+                    }
+                }, 2000);
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
+
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("4");
+                    }
+                }, 2000);
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
+
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("5");
+                    }
+                }, 2000);
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
+
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("6");
+                    }
+                }, 2000);
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
+
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("7");
+                    }
+                }, 2000);
+            } else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
+
+                loadProfileScoreAchievements();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        increaseOnePoints("8");
+                    }
+                }, 2000);
+            }
+
+        }
+
+        if (!tagsToUpload.equals("")) {
+            hashMap.put("pTags", tagsToUpload);
+        } else {
+            hashMap.put("pTags", "0");
+        }
+
+        hashMap.put("pId", pUid);
+
+        //put data in this ref
+        reference.child(pUid).setValue(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //added in database
+                        Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
+                        addToHisLastActivities(pUid, "Published an announcement");
+
+                        // Sends notification to people who have same tag numbers with this post
+
+                        //getting users who have that spesific tag
+                        // for now notification will send for random tag
+                        String completeTag = tagsToUpload;
+                        String[] partialTag = completeTag.split(",");
+
+                        int randomIndex = (int) Math.random() * (partialTag.length - 1);
+                        final String luckyOnesToBeSendNotification = partialTag[randomIndex];
+
+                        String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
+                        System.out.println(firstTag + "HAA");
+
+                        userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
+                        //   final String luckyOnesToBeSendNotification = "2";
+                        System.out.println(luckyOnesToBeSendNotification);
+
+                        userDbRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot ds : snapshot.getChildren()) {
+
+                                    ModelUsers modelUsers = ds.getValue(ModelUsers.class);
+
+                                    String[] userTags = modelUsers.getTags().split(",");
+                                    String firstTag = userTags[0];
+                                    String secondTag = userTags[1];
+                                    String thirdTag = userTags[2];
+                                    String userUI = modelUsers.getUid();
+                                    String[] alltags = MainActivity.getAllTags();
+
+                                    System.out.println("ssdsdf");
+                                    System.out.println(luckyOnesToBeSendNotification);
+                                    if (luckyOnesToBeSendNotification.equals(firstTag) || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag)) {
+                                        if (!userUI.equals(uid)) {
+                                            addToHisNotifications("" + userUI, "" + pUid, "" + username + " has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
+                                        }
+                                    }
+                                    System.out.println("oluyor");
                                 }
+                            }
 
-                                if (!tagsToUpload.equals("")) {
-                                    hashMap.put("pTags", tagsToUpload);
-                                }
-                                else {
-                                    hashMap.put("pTags","0");
-                                }
-
-                                //path to store post data
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
-                                String pUid = reference.push().getKey();
-                                hashMap.put("pId", pUid);
-
-                                //put data in this ref
-                                reference.child(pUid).setValue(hashMap)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                //added in database
-                                                Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
-                                                //TODO reset views
-
-
-                                                // Sends notification to people who have same tag numbers with this post
-
-                                                //getting users who have that spesific tag
-                                                // for now notification will send for random tag
-                                                String completeTag = tagsToUpload;
-                                                String[] partialTag = completeTag.split(",");
-                                                int randomIndex = (int)  Math.random() *  (partialTag.length-1);
-                                                final String luckyOnesToBeSendNotification = partialTag[randomIndex];
-
-                                                userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-                                                //   final String luckyOnesToBeSendNotification = "2";
-                                                System.out.println(luckyOnesToBeSendNotification);
-
-
-                                                userDbRef.addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        for (DataSnapshot ds: snapshot.getChildren()){
-                                                            System.out.println("User arıyorum");
-                                                            ModelUsers modelUsers = ds.getValue(ModelUsers.class);
-                                                            String[] userTags = modelUsers.getTags().split(",");
-                                                            String firstTag = userTags[0];
-                                                            String secondTag = userTags[1];
-                                                            String thirdTag = userTags[2];
-                                                            String userUI = modelUsers.getUid();
-                                                            String[] alltags = MainActivity.getAllTags();
-                                                            System.out.println("ssdsdf");
-                                                            if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
-                                                                if (!userUI.equals(uid)) {
-                                                                    addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
-                                                                    //TODO telefonuna burda notif yolla
-                                                                }
-                                                            }
-
-                                                            System.out.println("oluyor");
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });
-
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                //failed adding post in database
-                                                Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
-                                            }
-                                        });
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
                             }
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //failed uploading image
-                            Toast.makeText(getActivity(),"Failed uploading image",Toast.LENGTH_SHORT);
-                        }
-                    });
-
-        }
-        else {
-            //post without image
-
-            checkUserStatus();
-            HashMap<Object,String> hashMap = new HashMap<>();
-            //put post info
-            hashMap.put("uid",uid);
-            hashMap.put("username",username);
-            hashMap.put("uEmail",email);
-            hashMap.put("uDp", pp);
-            hashMap.put("pDetails",postDetails);
-            hashMap.put("pDate",postDate);
-            hashMap.put("pHour",postTime);
-            hashMap.put("pQuota",postQuotaStr);
-            hashMap.put("pImage","noImage");
-            hashMap.put("pTime",timeStamp);
-            hashMap.put("pLocation",postLocation);
-            hashMap.put("pTitle",postTitle);
-
-            //tagsToUpload achievements KUTAY
-            String[] achsTagsToUpload = tagsToUpload.split(",");
-            for (int i = 0; i < achsTagsToUpload.length; i++) {
-                if (Integer.valueOf(achsTagsToUpload[i]) < 4) {
-                    //TODO KUTAY MAT PUANI EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("1");
-                        }
-                    }, 2000);
-
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 6) {
-                    //TODO KUTAY CAREER PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("2");
-                        }
-                    }, 2000);
-
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 11) {
-                    //TODO KUTAY SPORT PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("3");
-                        }
-                    }, 2000);
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 14) {
-                    //TODO KUTAY TECH PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("4");
-                        }
-                    }, 2000);
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 17) {
-                    //TODO KUTAY ENGLISH PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("5");
-                        }
-                    }, 2000);
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 19) {
-                    //TODO KUTAY ENGLISH PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("6");
-                        }
-                    }, 2000);
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 21) {
-                    //TODO KUTAY TURKCE PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("7");
-                        }
-                    }, 2000);
-                }
-                else if (Integer.valueOf(achsTagsToUpload[i]) < 23) {
-                    //TODO KUTAY STUDY PUAN EKLE
-                    loadProfileScoreAchievements();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            increaseOnePoints("8");
-                        }
-                    }, 2000);
-                }
-
-            }
-
-            if (!tagsToUpload.equals("")) {
-                hashMap.put("pTags", tagsToUpload);
-            }
-            else {
-                hashMap.put("pTags","0");
-            }
-
-            //path to store post data
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("ClubPosts");
-            String pUid = reference.push().getKey();
-            hashMap.put("pId", pUid);
-
-            //put data in this ref
-            reference.child(pUid).setValue(hashMap)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            //added in database
-                            Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT);
-                            addToHisLastActivities(pUid,"Published an announcement");
-                            //TODO reset views
-
-
-                            // Sends notification to people who have same tag numbers with this post
-
-                            //getting users who have that spesific tag
-                            // for now notification will send for random tag
-                            String completeTag = tagsToUpload;
-                            String[] partialTag = completeTag.split(",");
-                            int randomIndex = (int)  Math.random() *  (partialTag.length-1);
-                            final String luckyOnesToBeSendNotification = partialTag[randomIndex];
-                            String firstTag = "1,2,3"; //tagSplitter(tagsToUpload)[0];
-                            System.out.println(firstTag + "HAA");
-                            userDbRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users");
-                            //   final String luckyOnesToBeSendNotification = "2";
-                            System.out.println(luckyOnesToBeSendNotification);
-
-
-                            userDbRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    for (DataSnapshot ds: snapshot.getChildren()){
-
-                                        ModelUsers modelUsers = ds.getValue(ModelUsers.class);
-                                        // TODO userin tagleri boş dönüp uygulama çökertiyor
-                                        String[] userTags = modelUsers.getTags().split(",");
-                                        String firstTag = userTags[0];
-                                        String secondTag = userTags[1];
-                                        String thirdTag = userTags[2];
-                                        String userUI = modelUsers.getUid();
-                                        String[] alltags = MainActivity.getAllTags();
-                                        System.out.println("ssdsdf");
-                                        System.out.println(luckyOnesToBeSendNotification);
-                                        if ( luckyOnesToBeSendNotification.equals(firstTag)  || luckyOnesToBeSendNotification.equals(secondTag) || luckyOnesToBeSendNotification.equals(thirdTag) ){
-                                            if (!userUI.equals(uid)) {
-                                                addToHisNotifications("" + userUI, "" + pUid, ""+ username +" has a new announcement !" + " " + alltags[Integer.parseInt(luckyOnesToBeSendNotification)]);
-                                                //TODO telefonuna burda notif yolla
-                                            }
-                                        }
-
-                                        System.out.println("oluyor");
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            //failed adding post in database
-                            Toast.makeText(getActivity(),"Failed publishing post",Toast.LENGTH_SHORT);
-                        }
-                    });
-
-
-        }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //failed adding post in database
+                        Toast.makeText(getActivity(), "Failed publishing post", Toast.LENGTH_SHORT);
+                    }
+                });
 
     }
 
-    private void addToHisNotifications(String hisUid, String pId , String notification) {
+    private void addToHisNotifications(String hisUid, String pId, String notification) {
 
         HashMap<Object, String> hashMap = new HashMap<>();
-        hashMap.put("pId" , pId);
-        hashMap.put("timestamp" ,timestamp );
-        hashMap.put("pUid" , hisUid);
-        hashMap.put("notification" , notification);
-        hashMap.put("sUid" , uid);
-        hashMap.put("sName" , username);
+        hashMap.put("pId", pId);
+        hashMap.put("timestamp", timestamp);
+        hashMap.put("pUid", hisUid);
+        hashMap.put("notification", notification);
+        hashMap.put("sUid", uid);
+        hashMap.put("sName", username);
         hashMap.put("sTag", tagsToUpload);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid ); // uid
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Notifications/" + hisUid); // uid
         String nUid = ref.push().getKey();
         hashMap.put("nId", nUid);
-        ref.child(nUid).setValue(hashMap)
+        ref.child(pId).setValue(hashMap)
 
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -1417,11 +1093,11 @@ public class ClubsFragment extends Fragment {
                 });
 
     }
+
     private void loadProfileScoreAchievements() {
 
-
         // getting user's scores
-        DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid );
+        DatabaseReference usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid);
         usersDbRefAchscore.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1431,10 +1107,11 @@ public class ClubsFragment extends Fragment {
                         System.out.println(ds.getValue());
                         System.out.println(ds.getKey());
                         ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+
                         //Parsing in database user's scores
                         mathScore = Integer.parseInt("" + modelAchievementsScores.getMath());
                         careerScore = Integer.parseInt("" + modelAchievementsScores.getCareer());
-                        System.out.println( "ahahaahhahahaah" + careerScore);
+                        System.out.println("ahahaahhahahaah" + careerScore);
                         sportScore = Integer.parseInt("" + modelAchievementsScores.getSport());
                         technologyScore = Integer.parseInt("" + modelAchievementsScores.getTechnology());
                         socialScore = Integer.parseInt("" + modelAchievementsScores.getSocial());
@@ -1454,7 +1131,7 @@ public class ClubsFragment extends Fragment {
 
     }
 
-    private void increaseOnePoints(String genre ) {
+    private void increaseOnePoints(String genre) {
         //TODO create all users with default scores
 
         title = "";
@@ -1465,7 +1142,7 @@ public class ClubsFragment extends Fragment {
 
 
         // getting user's scores
-        DatabaseReference  usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid );
+        DatabaseReference usersDbRefAchscore = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid);
         usersDbRefAchscore.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1475,10 +1152,12 @@ public class ClubsFragment extends Fragment {
                         System.out.println(ds.getValue());
                         System.out.println(ds.getKey());
                         ModelAchievementsScores modelAchievementsScores = ds.getValue(ModelAchievementsScores.class);
+
                         //Parsing in database user's scores
                         mathScore = Integer.parseInt("" + modelAchievementsScores.getMath());
                         careerScore = Integer.parseInt("" + modelAchievementsScores.getCareer());
-                        System.out.println( "ahahaahhahahaah" + careerScore);
+                        System.out.println("ahahaahhahahaah" + careerScore);
+
                         sportScore = Integer.parseInt("" + modelAchievementsScores.getSport());
                         technologyScore = Integer.parseInt("" + modelAchievementsScores.getTechnology());
                         socialScore = Integer.parseInt("" + modelAchievementsScores.getSocial());
@@ -1497,33 +1176,35 @@ public class ClubsFragment extends Fragment {
         System.out.println("Math SCore:" + mathScore);
         System.out.println("Career Score:" + careerScore);
         // increasing the points depending on the genre
-        //increase 1 point to mathScore
+        // increase 1 point to mathScore
         if (genre.equals("1")) {
             mathScore++;
             if (mathScore == 10 || mathScore == 50 || mathScore == 100 || mathScore == 500 || mathScore == 100) {
-                // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                // query pass info
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("1") && modelAchievements.getPoint().equals(String.valueOf(mathScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1535,7 +1216,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to careerScore
@@ -1546,7 +1227,7 @@ public class ClubsFragment extends Fragment {
             if (careerScore == 10 || careerScore == 50 || careerScore == 100 || careerScore == 500 || careerScore == 100) {
                 System.out.println(careerScore);
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -1561,13 +1242,13 @@ public class ClubsFragment extends Fragment {
                                 level = modelAchievements.getLevel();
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1579,7 +1260,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to sportScore
@@ -1587,28 +1268,30 @@ public class ClubsFragment extends Fragment {
             sportScore++;
             if (sportScore == 10 || sportScore == 50 || sportScore == 100 || sportScore == 500 || sportScore == 100) {
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("3") && modelAchievements.getPoint().equals(String.valueOf(sportScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1620,7 +1303,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to technologyScore
@@ -1628,28 +1311,30 @@ public class ClubsFragment extends Fragment {
             technologyScore++;
             if (technologyScore == 10 || technologyScore == 50 || technologyScore == 100 || technologyScore == 500 || technologyScore == 100) {
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("4") && modelAchievements.getPoint().equals(String.valueOf(technologyScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1661,7 +1346,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to socialScore
@@ -1669,28 +1354,30 @@ public class ClubsFragment extends Fragment {
             socialScore++;
             if (socialScore == 10 || socialScore == 50 || socialScore == 100 || socialScore == 500 || socialScore == 100) {
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("5") && modelAchievements.getPoint().equals(String.valueOf(socialScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1702,7 +1389,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to englishScore
@@ -1710,28 +1397,30 @@ public class ClubsFragment extends Fragment {
             englishScore++;
             if (englishScore == 10 || englishScore == 50 || englishScore == 100 || englishScore == 500 || englishScore == 100) {
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("6") && modelAchievements.getPoint().equals(String.valueOf(englishScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1743,7 +1432,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to turkishScore
@@ -1751,28 +1440,30 @@ public class ClubsFragment extends Fragment {
             turkishScore++;
             if (turkishScore == 10 || turkishScore == 50 || turkishScore == 100 || turkishScore == 500 || turkishScore == 100) {
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("7") && modelAchievements.getPoint().equals(String.valueOf(turkishScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1784,7 +1475,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         //increase 1 point to studyScore
@@ -1792,28 +1483,30 @@ public class ClubsFragment extends Fragment {
             studyScore++;
             if (studyScore == 10 || studyScore == 50 || studyScore == 100 || studyScore == 500 || studyScore == 100) {
                 // query ile bilgileri getirt
-                DatabaseReference  DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
+                DatabaseReference DbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Achievements/");
                 DbRefAchs.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             ModelAchievements modelAchievements = ds.getValue(ModelAchievements.class);
                             if (modelAchievements.getGenre().equals("8") && modelAchievements.getPoint().equals(String.valueOf(studyScore))) {
+
                                 // gets achievement information
                                 title = modelAchievements.getTitle();
                                 description = modelAchievements.getDescription();
                                 point = modelAchievements.getPoint();
                                 nId = modelAchievements.getnId();
                                 level = modelAchievements.getLevel();
+
                                 //puts this to user
                                 HashMap<Object, String> hashMapd = new HashMap<>();
-                                hashMapd.put("title" , title);
-                                hashMapd.put("description" , description );
-                                hashMapd.put("point" , point);
-                                hashMapd.put("genre" , genre);
-                                hashMapd.put("nId" , nId);
-                                hashMapd.put("level" , level);
-                                DatabaseReference  usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" +uid +"/Achievements/");
+                                hashMapd.put("title", title);
+                                hashMapd.put("description", description);
+                                hashMapd.put("point", point);
+                                hashMapd.put("genre", genre);
+                                hashMapd.put("nId", nId);
+                                hashMapd.put("level", level);
+                                DatabaseReference usersDbRefAchs = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/Achievements/");
 
                                 usersDbRefAchs.child(nId).setValue(hashMapd);
                             }
@@ -1825,7 +1518,7 @@ public class ClubsFragment extends Fragment {
 
                     }
                 });
-                // userin Achievementsına idsini ekle
+                // add user's Achievements their id
             }
         }
         // Prapare scores to make it appropraite to send to server
@@ -1840,35 +1533,38 @@ public class ClubsFragment extends Fragment {
 
         // Creating Hashes to send information to database
         HashMap<Object, String> hashMap = new HashMap<>();
-        hashMap.put("math" , SmathScore);
-        hashMap.put("career" ,ScareerScore );
-        hashMap.put("sport" , SsportScore);
-        hashMap.put("technology" , StechnologyScore);
-        hashMap.put("social" , SsocialScore);
-        hashMap.put("english" , SenglishScore);
+        hashMap.put("math", SmathScore);
+        hashMap.put("career", ScareerScore);
+        hashMap.put("sport", SsportScore);
+        hashMap.put("technology", StechnologyScore);
+        hashMap.put("social", SsocialScore);
+        hashMap.put("english", SenglishScore);
         hashMap.put("turkish", SturkishScore);
         hashMap.put("study", SstudyScore);
         DatabaseReference userAchref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/AchievementsScores/");
+
         // Sending hashes to database
         userAchref.setValue(hashMap);
     }
+
     // Users score will be checked and if he/she wins the achievement achievement's unique id will be added to his database
     private void didIAchieveAny(String usersUid) {
 
 
     }
-    private void addToHisLastActivities( String pId , String notification) {
+
+    private void addToHisLastActivities(String pId, String notification) {
 
         HashMap<Object, String> hashMap = new HashMap<>();
-        hashMap.put("pId" , pId);
-        hashMap.put("timestamp" ,timestamp );
-        hashMap.put("notification" , notification);
-        hashMap.put("sUid" , uid);
-        hashMap.put("sName" , username);
+        hashMap.put("pId", pId);
+        hashMap.put("timestamp", timestamp);
+        hashMap.put("notification", notification);
+        hashMap.put("sUid", uid);
+        hashMap.put("sName", username);
         hashMap.put("sTag", tagsToUpload);
         hashMap.put("type", "2");  // 1 buddy 2 club 3 stack
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities" ); // uid
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Users/" + uid + "/LastActivities"); // uid
         String laUid = ref.push().getKey();
         hashMap.put("nId", laUid);
         ref.child(laUid).setValue(hashMap)
@@ -1912,18 +1608,129 @@ public class ClubsFragment extends Fragment {
         }
     }
 
-            public static boolean isMatch(String[] arr1, String[] arr2) {
-                for (int i = 0; i < arr1.length; i++) {
-                    if (Arrays.stream(arr2).anyMatch( arr1[i] :: equals ) ) {
+    public static boolean isMatch(String[] arr1, String[] arr2) {
+        for (int i = 0; i < arr1.length; i++) {
+            if (Arrays.stream(arr2).anyMatch(arr1[i]::equals)) {
 
-                    }
-                    else {
-                        return false;
-                    }
-
-                }
-                return true;
+            } else {
+                return false;
             }
+
+        }
+        return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                File f = new File(currentPhotoPath);
+                //userPpInDialog.setImageURI(Uri.fromFile(f));
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                getContext().sendBroadcast(mediaScanIntent);
+
+
+                uploadImageToFirebase(pUid, contentUri);
+
+            }
+        }
+
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contentUri = data.getData();
+                //userPpInDialog.setImageURI(contentUri);
+
+                uploadImageToFirebase(pUid, contentUri);
+
+            }
+        }
+
+            /*gelen resmi direkt koymak için
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            userPpInDialog.setImageBitmap(image);
+             */
+
+
+    }
+
+    private void uploadImageToFirebase(String pId, Uri contentUri) {
+        System.out.println("girdi buraya sıkıntı yok");
+        FirebaseUser user;
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/ClubPosts/" + pId);
+        image.putFile(contentUri);
+
+        image_uri = pId;
+        addPhotoIv.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.upload_photo_icon));
+        clickToSeeImageTv.setVisibility(View.VISIBLE);
+    }
+
+    void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+        } else {
+            dispatchTakePictureIntent();
+            System.out.println("burada");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CAMERA_PERM_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
+            }
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        System.out.println("dispatch sdsad");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        try {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                System.out.println("Error while creating the file");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                        "com.union.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            } else {
+                System.out.println("photo file is null");
+            }
+        } catch (Exception e) {
+            System.out.println("hiçbir şey getirmedi");
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        System.out.println("gjajdajsdj");
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        //Private için kod File storageDir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 
 
 }

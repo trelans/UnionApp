@@ -202,6 +202,7 @@
                     android:fontFamily="@font/myriad_pro_regular"
                     android:paddingLeft="10dp"
                     android:paddingTop="2dp"
+                    android:maxLines="1"
                     android:text="23/04/2020   19.06"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -221,6 +222,7 @@
                     android:fontFamily="@font/myriad_pro_regular"
                     android:paddingLeft="10dp"
                     android:paddingTop="2dp"
+                    android:maxLines="1"
                     android:text="Zoom link deuufdhgdg"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
@@ -239,6 +241,7 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="1dp"
                     android:text="Quota: 15"
+                    android:maxLines="1"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -255,6 +258,7 @@
                     android:fontFamily="@font/myriad_pro_regular"
                     android:paddingLeft="10dp"
                     android:paddingTop="1dp"
+                    android:maxLines="1"
                     android:text="Gender: optional"
                     android:textColor="@color/black"
                     android:textSize="12sp" />

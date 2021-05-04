@@ -2,6 +2,7 @@ package com.union.unionapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -42,6 +46,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+
         // get data
         String hisUid = userList.get(position).getUid();
         String userImage = userList.get(position).getPp();
@@ -58,9 +63,17 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
             holder.lastmessageTv.setText(lastMessage);
         }
         try {
-            Picasso.get().load(userImage).placeholder(R.drawable.profile_icon).into(holder.profileIv);
-        }catch (Exception e) {
-            Picasso.get().load(R.drawable.profile_icon).into(holder.profileIv);
+            //if image received, set
+            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + userImage);
+            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.profileIv);
+                }
+            });
+        } catch (Exception e) {
+            //if there is any exception while getting image then set default
+            Picasso.get().load(R.drawable.user_pp_template).into(holder.profileIv);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +102,7 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.MyHold
 
 
     class  MyHolder extends RecyclerView.ViewHolder {
+
         // view row_chatlist
         ImageView profileIv;
         TextView usernameTv , lastmessageTv;

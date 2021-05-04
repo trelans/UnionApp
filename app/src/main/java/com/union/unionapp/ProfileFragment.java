@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +25,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +37,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -155,13 +164,29 @@ public class ProfileFragment extends Fragment {
 
                     //set data
                     usernameTW.setText(name);
-                    try {
-                        //if image received, set
-                        Picasso.get().load(pp).into(userPP);
-                    }catch (Exception e){
-                        //if there is any exception while getting image then set default
-                        Picasso.get().load(R.drawable.user_pp_template).into(userPP);
-                    }
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!pp.equals("drawable-v24/profile_icon.png")) {
+                                try {
+                                    //if image received, set
+                                    System.out.println(pp);
+                                    StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + pp);
+                                    image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Picasso.get().load(uri).into(userPP);
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    //if there is any exception while getting image then set default
+                                    Picasso.get().load(R.drawable.user_pp_template).into(userPP);
+                                    System.out.println("resim yüklemede hata çıktı");
+                                }
+                            }
+                        }
+                    }, 2500);
                 }
             }
 

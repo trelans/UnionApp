@@ -53,9 +53,6 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
         // conver timestamp to dd//mm/yyyy hh:mm
 
 
-
-
-
         // set to views
         holder.calendartitletv.setText("@"+username + ": " +postTitle);
         holder.calendartimeTv.setText(hour);
@@ -82,8 +79,6 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
             }
         });
 
-
-
     }
 
     @Override
@@ -105,14 +100,8 @@ public class AdapterCalendar extends RecyclerView.Adapter<AdapterCalendar.Holder
             calendartitletv = itemView.findViewById(R.id.calendartitleTv);
             calendartimeTv = itemView.findViewById(R.id.calendarTimeTv);
 
-
-
-
         }
     }
-
-
-
 
 }
 

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.MyHolder> {
 
@@ -62,23 +64,12 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
 
         final int[] upVoteNumber = {postList.get(position).getpUpvoteNumber()};
 
-        /*
-        //Convert timestamp to dd//mm/yyyy hh:mm am/pm
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        calendar.setTimeInMillis(Long.parseLong(pTimeStamp));
-        String pTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-         */
-
         //set data
         holder.contentTextView.setText(pDetails);
         holder.titleTextView.setText(pTitle);
         holder.upNumber.setText(upVoteNumber[0] + "");
-        //holder.upNumber.setText("1");
 
-
-        //allTags = getResources.getStringArray(R.array.all_tags); !!!!! getResources metodu fragment classı için var.
         allTags = MainActivity.getAllTags();
-        System.out.println();
 
         if (Integer.parseInt(pTag) != 0) {
             holder.topicTag.setVisibility(View.VISIBLE);
@@ -93,35 +84,44 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             //hide imageView
         }
 
-        /* aynısından image için de yaptı
-        //set user dp
-        try{
-            Picasso.get().load(uDp).placeholder(R.drawable.user_pp_template).into(holder.uPictureIv);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-         */
 
-        //TODO burayı yap
-        if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
-            holder.upButton.setVisibility(View.INVISIBLE);
-        }
         if (uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            Toast.makeText(context, "It is your post!", Toast.LENGTH_LONG).show();
             holder.upButton.setEnabled(false);
+        }else{
+            holder.upButton.setEnabled(true);
         }
 
+        if (pUpUsers != null && pUpUsers.contains(firebaseUser.getUid())){
+            holder.upButton.setEnabled(true);
+            holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_pressed));
+        }else{
+            holder.upButton.setEnabled(true);
+            holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_icon));
+        }
+
+        ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
         holder.upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ref1 = FirebaseDatabase.getInstance().getReference("BilkentUniversity/StackPosts");
                 HashMap<String, Object> updateUpNumber = new HashMap<>();
-                System.out.println(postList.get(position).getPId());
-                System.out.println(position);
-                updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() + 1);
-                pUpUsers.add(firebaseUser.getUid());
+
+                //if button is already pressed
+                if (holder.upButton.getBackground().getConstantState().equals(Objects.requireNonNull(ContextCompat.getDrawable(context, R.drawable.up_pressed)).getConstantState())){
+                    holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_icon));
+                    updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() - 1);
+                    pUpUsers.remove(firebaseUser.getUid());
+                    upVoteNumber[0] = postList.get(position).getpUpvoteNumber() - 1;
+                    System.out.println("giriyor");
+                }else{
+                    holder.upButton.setBackground(ContextCompat.getDrawable(context,R.drawable.up_pressed));
+                    updateUpNumber.put("pUpvoteNumber", postList.get(position).getpUpvoteNumber() + 1);
+                    pUpUsers.add(firebaseUser.getUid());
+                    upVoteNumber[0] = postList.get(position).getpUpvoteNumber() + 1;
+                }
+
                 updateUpNumber.put("pUpUsers", pUpUsers);
                 ref1.child(pId).updateChildren(updateUpNumber);
-                upVoteNumber[0] = postList.get(position).getpUpvoteNumber() + 1;
                 holder.upNumber.setText(upVoteNumber[0] + "");
             }
         });
@@ -138,18 +138,19 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
                 intent.putExtra("pDetails", pDetails);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
-
+                intent.putExtra("pImage", pImage);
+                intent.putExtra("uPp", uid);
+                intent.putExtra("pTags", pTag);
                 // Dif. from buddy
                 intent.putExtra("upVoteNumber", upVoteNumber[0] + "");
                 intent.putExtra("pAnon", pAnon);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 context.startActivity(intent);
+
                 return true;
             }
 
         });
-
-
     }
 
 
@@ -178,7 +179,6 @@ public class AdapterStackPosts extends RecyclerView.Adapter<AdapterStackPosts.My
             upNumber = itemView.findViewById(R.id.textViewUpNumber);
             topicTag = itemView.findViewById(R.id.topicTagTW);
             cardView = itemView.findViewById(R.id.card);
-
 
         }
     }

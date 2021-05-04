@@ -1,8 +1,6 @@
 package com.union.unionapp;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -10,22 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
-import com.union.unionapp.notifications.Data;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -70,12 +55,10 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
         String dateTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
 
-
-
-
         // set to views
         holder.AchnotificationTv.setText(notification);
         holder.AchtimeTv.setText(dateTime);
+
         if (type.equals("1")) {
             holder.avatarIv.setImageResource(R.drawable.buddy_icon);
             postType = "Buddy";
@@ -93,7 +76,6 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
             postType = "";
         }
 
-        //TODO Tıklandığında postu acıcak
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,8 +89,6 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
             }
         });
 
-
-
     }
 
     @Override
@@ -118,6 +98,7 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
 
     // holder class for views of row_notifications.xlm
     class HolderNotification extends RecyclerView.ViewHolder {
+
         // declare views
         ImageView avatarIv;
         TextView  AchnotificationTv, AchtimeTv;
@@ -129,8 +110,6 @@ public class AdapterLastActivities extends RecyclerView.Adapter<AdapterLastActiv
             avatarIv = itemView.findViewById(R.id.AchavatarIv);
             AchnotificationTv = itemView.findViewById(R.id.AchnotificationTv);
             AchtimeTv = itemView.findViewById(R.id.AchtimeTv);
-
-
 
         }
     }

@@ -1,16 +1,29 @@
 package com.union.unionapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
@@ -34,15 +47,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.union.unionapp.notifications.Data;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class PostActivity extends AppCompatActivity implements SimpleGestureFilter.SimpleGestureListener {
+public class PostActivity extends AppCompatActivity {
 
-    private SimpleGestureFilter detector;
     CardView commentCardView;
     CardView postCardView;
     RecyclerView recyclerView;
@@ -64,8 +84,16 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     String pTags;
     String pType;
     String source;
+    String publisherPp;
     DatabaseReference postRef;
     int previousMargin;
+    public static final int CAMERA_PERM_CODE = 101;
+    public static final int CAMERA_REQUEST_CODE = 102;
+    public static final int GALLERY_REQUEST_CODE = 105;
+
+    String currentPhotoPath;
+    String cUid;
+    String image_uri;
 
     TextView pUserNameTW;
     TextView upNumberTW;
@@ -81,6 +109,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
     ImageView sendButton;
     LinearLayoutCompat clickToOpenCardLL;
     ImageView backButton;
+    ImageView profilePhoto;
     TextView pTitleTW;
     AppCompatButton topicTagTW1;
     AppCompatButton topicTagTW2;
@@ -111,6 +140,9 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         topicTagTW1 = findViewById(R.id.topicTagTW1);
         topicTagTW2 = findViewById(R.id.topicTagTW2);
         topicTagTW3 = findViewById(R.id.topicTagTW3);
+        profilePhoto = findViewById(R.id.profilePhoto);
+
+        image_uri = "noImage";
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -123,7 +155,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                 postRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        System.out.println("Key " + snapshot.getKey() + "Value " + snapshot.getValue());
                         if (pType.equals("Stack")) {
                             ModelStackPost modelStackPost = snapshot.getValue(ModelStackPost.class);
                             assert modelStackPost != null;
@@ -134,6 +165,11 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                             pTitle = modelStackPost.pTitle;
                             pDetails = modelStackPost.pDetails;
                             username = modelStackPost.username;
+                            pTags = modelStackPost.pTagIndex;
+                            pImage = modelStackPost.getPImage();
+                            publisherPp = modelStackPost.getUid();
+                            System.out.println("PImage: " + pImage);
+
                         } else {
                             ModelBuddyAndClubPost modelBuddyAndClubPost = snapshot.getValue(ModelBuddyAndClubPost.class);
                             if (pType.equals("Buddy")) {
@@ -153,6 +189,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                             pTitle = modelBuddyAndClubPost.pTitle;
                             pDetails = modelBuddyAndClubPost.pDetails;
                             username = modelBuddyAndClubPost.username;
+                            publisherPp = modelBuddyAndClubPost.getUid();
                         }
                     }
 
@@ -170,17 +207,19 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                     pHour = extras.getString("pHour", "0");
                     pLocation = extras.getString("pLocation", "0");
                     pQuota = extras.getString("pQuota", "0");
-                    pImage = extras.getString("pImage", "0");
                     pTags = extras.getString("pTags", "0");
                     pAnon = "0";
                 } else if (pType.equals("Stack")) {
                     upVoteNumber = extras.getString("upVoteNumber", "0");
                     pAnon = extras.getString("pAnon", "0");
+                    pTags = extras.getString("pTags", "0");
                 }
                 pTime = extras.getString("pTime", "0");
                 pTitle = extras.getString("pTitle", "0");
                 pDetails = extras.getString("pDetails", "0");
                 username = extras.getString("username", "0");
+                pImage = extras.getString("pImage", "0");
+                publisherPp = extras.getString("uPp", "0");
             }
         }
 
@@ -200,7 +239,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    loadView("Buddy");
+                    loadView(pType);
                 }
             }, 1000);
         } else {
@@ -214,15 +253,40 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         cUpUsers.add("empty");
         //Convert TimeStamp to dd/mm/yyyy hh:mm am/pm
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.parseLong(pTime));
+        if (pTime != null) {
+            calendar.setTimeInMillis(Long.parseLong(pTime));
+        }
         String pPostedTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-        System.out.println(pPostedTime);
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
+        previousMargin = layoutParams.topMargin;
+        FirebaseUser user;
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+        } else {
+            Toast.makeText(PostActivity.this, "There is no current user!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Comments").child(pId);
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Users").child(user.getUid()).child("comments");
 
         postDateTW.setText("Posted on: " + pPostedTime);
         if (!pType.equals("Stack")) {
-            postLocationTW.setText("Location:  " + pLocation);
-            pGenderTW.setText("Gender Preference:  " + pGender);
-            pQuotaTW.setText("Quota: " + pQuota);
+            if (postLocationTW != null && !pLocation.equals("0") && pLocation.equals("")) {
+                postLocationTW.setText("Location:  " + pLocation);
+            } else {
+                postLocationTW.setHeight(0);
+            }
+            if (pGender != null && !pGender.equals("0") && pGender.equals("")) {
+                pGenderTW.setText("Gender Preference:  " + pGender);
+            } else {
+                pGenderTW.setHeight(0);
+            }
+            if (pQuota != null && !pQuota.equals("0") && pQuota.equals("")) {
+                pQuotaTW.setText("Quota: " + pQuota);
+            } else {
+                pGenderTW.setHeight(0);
+            }
             upNumberTW.setVisibility(View.INVISIBLE);
         } else {
             postLocationTW.setHeight(0);
@@ -233,11 +297,42 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
 
         pTitleTW.setText(pTitle);
 
+        profilePhoto.setBackground(ContextCompat.getDrawable(PostActivity.this, R.drawable.profile_icon));
         if (pImage != null && !pImage.equals("noImage") && !pImage.equals("")) {
-            //TODO imageı çekme işlemini yap
+            try {
+                System.out.println("burada");
+                //if image received, set
+                StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/" + pType + "Posts/" + pImage);
+                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(postImageIW);
+                    }
+                });
+            } catch (Exception e) {
+                //if there is any exception while getting image then set default
+                profilePhoto.setBackground(ContextCompat.getDrawable(PostActivity.this, R.drawable.profile_icon));
+            }
         } else {
             postImageIW.getLayoutParams().height = 0;
         }
+
+        if (!pAnon.equals("1")) {
+            try {
+                //if image received, set
+                StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + publisherPp);
+                image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(profilePhoto);
+                    }
+                });
+            } catch (Exception e) {
+                //if there is any exception while getting image then set default
+                Picasso.get().load(R.drawable.user_pp_template).into(profilePhoto);
+            }
+        }
+
 
         questionContentTW.setText("     " + pDetails);
         if (!pAnon.equals("1")) {
@@ -248,17 +343,23 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
 
         convertStringTagsToRealTags(topicTagTW1, topicTagTW2, topicTagTW3, pTags);
 
+        commentET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openOrCloseCard(true);
+            }
+        });
         commentET.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                openOrCloseCard();
+                openOrCloseCard(false);
             }
         });
 
         clickToOpenCardLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openOrCloseCard();
+                openOrCloseCard(false);
             }
         });
 
@@ -267,6 +368,13 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        addPhotoIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showImagePickDialog(ref);
             }
         });
 
@@ -280,13 +388,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                         InputMethodManager.HIDE_NOT_ALWAYS);
 
                 String timeStamp;
-                FirebaseUser user;
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    user = FirebaseAuth.getInstance().getCurrentUser();
-                } else {
-                    Toast.makeText(PostActivity.this, "There is no current user!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
                 //get data from comment editText
                 String comment = commentET.getText().toString().trim();
                 // validate
@@ -295,11 +397,10 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                     Toast.makeText(PostActivity.this, "Comment is empty...", Toast.LENGTH_SHORT).show();
                 } else {
                     timeStamp = String.valueOf(MainActivity.getServerDate());
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Comments").child(pId);
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("BilkentUniversity").child("Users").child(user.getUid()).child("comments");
+
                     HashMap<String, Object> hashMap = new HashMap<>();
                     //put info in hashmap
-                    hashMap.put("cId", timeStamp);
+                    hashMap.put("cId", cUid);
                     hashMap.put("comment", comment);
                     hashMap.put("timeStamp", timeStamp);
                     hashMap.put("upNumber", 0);
@@ -307,7 +408,7 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
                     hashMap.put("uid", FirebaseAuth.getInstance().getCurrentUser().getUid());
                     hashMap.put("cAnon", isAnonCB.isChecked() ? "1" : "0");
                     //isAnonCB.isChecked() ? "1" : "0")
-                    hashMap.put("cPhoto", "noImage"); //TODO resim butonunun işlevi
+                    hashMap.put("cPhoto", image_uri); //TODO resim butonunun işlevi
                     hashMap.put("uName", user.getEmail().split("@")[0].replace(".", "_"));
 
                     //reset commentEditText
@@ -344,7 +445,6 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
         // set adapter to recyclerView
         recyclerView.setAdapter(adapterComment[0]);
         // path of all comments
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("BilkentUniversity/Comments/" + pId);
         Query query = ref.orderByChild("upNumber");
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -364,63 +464,20 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             }
         });
 
-        // Detect touched area
-        detector = new SimpleGestureFilter(PostActivity.this, PostActivity.this);
 
     }
 
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent me) {
-        // Call onTouchEvent of SimpleGestureFilter class
-        this.detector.onTouchEvent(me);
-        return super.dispatchTouchEvent(me);
-    }
-
-    @Override
-    public void onSwipe(int direction) {
-
-        //Detect the swipe gestures and display toast
-        String showToastMessage = "";
-
-        switch (direction) {
-
-            case SimpleGestureFilter.SWIPE_RIGHT:
-                showToastMessage = "You have Swiped Right.";
-                break;
-            case SimpleGestureFilter.SWIPE_LEFT:
-                showToastMessage = "You have Swiped Left.";
-                break;
-            case SimpleGestureFilter.SWIPE_DOWN:
-                showToastMessage = "You have Swiped Down.";
-                break;
-            case SimpleGestureFilter.SWIPE_UP:
-                showToastMessage = "You have Swiped Up.";
-                System.out.println("swipe up");
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
-                layoutParams.topMargin = 590;
-                break;
-
-        }
-        Toast.makeText(PostActivity.this, showToastMessage, Toast.LENGTH_SHORT).show();
-    }
-
-
-    //Toast shown when double tapped on screen
-    @Override
-    public void onDoubleTap() {
-        Toast.makeText(this, "You have Double Tapped.", Toast.LENGTH_SHORT)
-                .show();
-        System.out.println("asdasdas");
-    }
-
-    private void openOrCloseCard() {
+    private void openOrCloseCard(boolean openCardImmediately) {
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) commentCardView.getLayoutParams();
-        if (layoutParams.topMargin == 0) {
-            layoutParams.topMargin = previousMargin;
-        } else {
-            previousMargin = layoutParams.topMargin;
+        if (openCardImmediately) {
             layoutParams.topMargin = 0;
+        } else {
+            if (layoutParams.topMargin == 0) {
+                layoutParams.topMargin = previousMargin;
+            } else {
+                previousMargin = layoutParams.topMargin;
+                layoutParams.topMargin = 0;
+            }
         }
         commentCardView.setLayoutParams(layoutParams);
     }
@@ -469,4 +526,146 @@ public class PostActivity extends AppCompatActivity implements SimpleGestureFilt
             topicTagTW3.setText(newTags[2]);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("buradaki çalıştı");
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                File f = new File(currentPhotoPath);
+                //userPpInDialog.setImageURI(Uri.fromFile(f));
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+
+
+                uploadImageToFirebase(cUid, contentUri);
+
+            }
+        }
+
+        if (requestCode == GALLERY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contentUri = data.getData();
+                //userPpInDialog.setImageURI(contentUri);
+
+                uploadImageToFirebase(cUid, contentUri);
+
+            }
+        }
+
+            /*gelen resmi direkt koymak için
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            userPpInDialog.setImageBitmap(image);
+             */
+
+
+    }
+
+    private void uploadImageToFirebase(String cId, Uri contentUri) {
+        System.out.println("girdi buraya sıkıntı yok");
+
+        StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/Comments/" + cId);
+        image.putFile(contentUri);
+
+        image_uri = cId;
+        addPhotoIV.setBackground(ContextCompat.getDrawable(this, R.drawable.upload_photo_icon));
+    }
+
+    void askCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+        } else {
+            dispatchTakePictureIntent();
+            System.out.println("burada");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CAMERA_PERM_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent();
+            }
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        System.out.println("dispatch sdsad");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        try {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                System.out.println("Error while creating the file");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.union.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            } else {
+                System.out.println("photo file is null");
+            }
+        } catch (Exception e) {
+            System.out.println("hiçbir şey getirmedi");
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        System.out.println("gjajdajsdj");
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        //Private için kod File storageDir = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void showImagePickDialog(DatabaseReference ref) {
+        String[] options = {"Camera", "Gallery", "Delete Photo"};
+        Context context;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set items to dialog
+        builder.setTitle("Pick Image From");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
+                    //camera clicked
+                    cUid = ref.push().getKey();
+                    askCameraPermissions();
+
+                } else if (i == 1) {
+                    // gallery clicked
+                    cUid = ref.push().getKey();
+                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(gallery, GALLERY_REQUEST_CODE);
+                } else if (i == 2) {
+                    addPhotoIV.setBackground(ContextCompat.getDrawable(PostActivity.this, R.drawable.ic_baseline_add_a_photo_24));
+                    StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/Comments/" + cUid);
+                    image_uri = "noImage";
+                    image.delete();
+                }
+            }
+        });
+        builder.show();
+    }
+
 }

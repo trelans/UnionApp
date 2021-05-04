@@ -30,7 +30,7 @@
         android:textSize="12sp"
         />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/upIconIV"
         android:layout_width="30dp"
         android:layout_height="match_parent"
@@ -38,9 +38,24 @@
         android:layout_marginBottom="1dp"
         android:adjustViewBounds="false"
         android:cropToPadding="false"
-        app:srcCompat="@drawable/up_icon" />
+        android:background="@drawable/up_icon" />
 
 </LinearLayout>
+
+    <TextView
+        android:id="@+id/clickToSeeImageTW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/teal_700"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:layout_marginStart="3dp"
+        android:layout_weight="1"
+        android:text="Click to see linked Image"
+        android:textSize="16sp" />
+
+
     <View
         android:id="@+id/cizgi3"
         android:layout_width="match_parent"

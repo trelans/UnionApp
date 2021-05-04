@@ -123,7 +123,8 @@
                 android:layout_marginEnd="140dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/up_icon"
-                android:foregroundGravity="center_horizontal" />
+                android:foregroundGravity="center_horizontal"
+                android:scaleType="centerCrop" />
         </RelativeLayout>
 
 

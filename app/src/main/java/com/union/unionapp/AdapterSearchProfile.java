@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -14,8 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,7 +40,6 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
 
     }
 
-
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,12 +56,25 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
         String userName = userList.get(position).getUsername();
         // set data
         holder.username_TextView.setText(userName);
+
+        holder.avatar_ImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
         try {
-            Picasso.get().load(userPP).placeholder(R.drawable.profile_icon).into(holder.avatar_ImageView);
-
-        }
-        catch (Exception e) {
-
+            //if image received, set
+            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + hisUID);
+            image.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.avatar_ImageView);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.avatar_ImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+                }
+            });
+        } catch (Exception e) {
+            //if there is any exception while getting image then set default
+            holder.avatar_ImageView.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
         }
 
         // handle item click
@@ -82,6 +100,7 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
     class MyHolder extends RecyclerView.ViewHolder{
         ImageView avatar_ImageView;
         TextView username_TextView;
+        ImageView profileIv;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,8 +108,6 @@ public class AdapterSearchProfile extends RecyclerView.Adapter<AdapterSearchProf
             avatar_ImageView = itemView.findViewById(R.id.userPPRow);
             username_TextView = itemView.findViewById(R.id.usernameRow);
         }
-
     }
-
 
 }

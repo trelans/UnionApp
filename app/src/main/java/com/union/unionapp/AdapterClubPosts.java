@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
@@ -20,14 +21,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,13 +77,12 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         String hisUid = postList.get(position).getUid();
         String pTags = postList.get(position).getpTags();
         String username = postList.get(position).getUsername();
-        String uPp = postList.get(position).getuPp();
+        String uPp = postList.get(position).getUid();
 
         String[] newTags = new String[3];
         newTags[0] = "";
         newTags[1] = "";
         newTags[2] = "";
-
 
         String[] tags = pTags.split(",");
         String[] allTags = MainActivity.getAllTags();
@@ -99,6 +105,26 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
         holder.genderTW.setText( "Gender:" + "   -");
         holder.quotaTW.setText("Quota:      " + pQuota);
         holder.publisherNameTW.setText("@" + username);
+        holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+        try {
+            //if image received, set
+            StorageReference image = FirebaseStorage.getInstance().getReference("BilkentUniversity/pp/" + uPp);
+            image.getDownloadUrl().addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+                    Picasso.get().load(R.drawable.profile_icon).into(holder.publisherPP);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.get().load(uri).into(holder.publisherPP);
+                }
+            });
+        } catch (Exception e) {
+            //if there is any exception while getting image then set default
+            holder.publisherPP.setBackground(ContextCompat.getDrawable(context, R.drawable.profile_icon));
+        }
 
 
         if (newTags[0].equals("")) {
@@ -131,8 +157,8 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             //hide imageView
         }
 
-        /* aynısından image için de yaptı
-        //set user dp
+        /*  comment is left for future needs.
+        set user dp
         try{
             Picasso.get().load(uDp).placeholder(R.drawable.user_pp_template).into(holder.uPictureIv);
         }catch (Exception e){
@@ -167,22 +193,22 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 String fixedDate = pDate.replace("/" , "_");
                 userRef.child("Calendar").child(fixedDate).child(pId).setValue(hashMap);
 
-                //User calender bitişi
+                //User calender finishing line
 
                 String[] calendarDate = pDate.split("/");
                 String[] calendarTime = pHour.split(":");
+
                 Calendar cal = Calendar.getInstance();
                 cal.set(Integer.parseInt(calendarDate[2]), Integer.parseInt(calendarDate[1]) - 1, Integer.parseInt(calendarDate[0]), Integer.parseInt(calendarTime[1]), Integer.parseInt(calendarTime[0]));
                 Intent intent = new Intent(Intent.ACTION_EDIT);
                 intent.setType("vnd.android.cursor.item/event");
                 intent.putExtra("beginTime", cal.getTimeInMillis());
                 intent.putExtra("eventLocation", pLocation);
-                //TODO etkinlik bitiş saati intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
+
+                //TODO activity finish time intent.putExtra("endTime", cal.getTimeInMillis() + 60 * 60 * 1000);
                 intent.putExtra("title", "@" + username + "'s Event");
                 intent.putExtra(CalendarContract.Events.DESCRIPTION, pTitle);
                 context.startActivity(intent);
-
-
             }
         });
 
@@ -199,8 +225,6 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             }
         });
 
-
-
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -212,6 +236,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 intent.putExtra("pDetails", pDetails);
                 intent.putExtra("username", username);
                 intent.putExtra("pId", pId);
+                System.out.println(uPp);
                 intent.putExtra("uPp", uPp);
 
                 //different from stack
@@ -226,7 +251,6 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
                 return true;
             }
         });
-
 
     }
 
@@ -251,6 +275,7 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             //init views
             calendarIB = itemView.findViewById(R.id.calendarIB);
             sendButtonIB = itemView.findViewById(R.id.sendButtonIB);
+
             contentTextView = itemView.findViewById(R.id.contentTW);
             titleTextView = itemView.findViewById(R.id.titleTW);
             dateTW = itemView.findViewById(R.id.dateTWBuddy);
@@ -258,18 +283,18 @@ public class AdapterClubPosts extends RecyclerView.Adapter<AdapterClubPosts.MyHo
             genderTW = itemView.findViewById(R.id.genderPreferenceTW);
             quotaTW = itemView.findViewById(R.id.quotaTW);
             cardView = itemView.findViewById(R.id.card);
+
             publisherNameTW = itemView.findViewById(R.id.publisherNameTextView);
             publisherPP = itemView.findViewById(R.id.publisherPp);
+
             topicTagTW1 = itemView.findViewById(R.id.topicTagTW);
             topicTagTW2 = itemView.findViewById(R.id.topicTagTW2);
             topicTagTW3 = itemView.findViewById(R.id.topicTagTW3);
 
         }
-
-
     }
 
     private void calendarToServer() {
-
+        //left for future needs.
     }
 }
