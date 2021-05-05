@@ -291,6 +291,8 @@ public class StackFragment extends Fragment {
                 ImageView searchFilter = stackDialog.findViewById( R.id.searchFilterImageView );
                 stackTag = stackDialog.findViewById( R.id.sampleTag1 );
 
+                ImageView resetFilter = stackDialog.findViewById( R.id.resetFilterImageView );
+
                 stackTag.setVisibility( View.INVISIBLE );
                 searchFilter.setVisibility( View.INVISIBLE );
 
@@ -324,6 +326,16 @@ public class StackFragment extends Fragment {
                         stackTagSpinner.setEnabled( true );
                         stackTag.setVisibility( View.INVISIBLE );
                         searchFilter.setVisibility( View.INVISIBLE );
+                    }
+                } );
+
+                resetFilter.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick( View v ) {
+
+                        loadPosts();
+                        stackDialog.dismiss();
+
                     }
                 } );
 

@@ -88,17 +88,17 @@ public class BuddyFragment extends Fragment {
     private static final int GALLERY_REQUEST_CODE = 105;
 
     // Variables
-    private Dialog buddyDialog;
-    private Spinner genderSpinner;
-    private Spinner tagSpinner;
-    private Spinner preferredGenderFilterSpinner;
+    public Dialog buddyDialog;
+    public Spinner genderSpinner;
+    public Spinner tagSpinner;
+    public Spinner preferredGenderFilterSpinner;
 
-    private EditText postDetailsEt,
+    public EditText postDetailsEt,
             postQuotaEt,
             postLocationEt,
             postHeadlineEt;
 
-    private TextView postDateEt,
+    public TextView postDateEt,
             postTimeEt,
             clickToSeeImageTv;
 
@@ -112,53 +112,53 @@ public class BuddyFragment extends Fragment {
     private int turkishScore;// = 0;
     private int studyScore;// = 0;
 
-    private String title, description, point, nId, level;
+    public String title, description, point, nId, level;
 
-    private ProgressBar pb;
+    public ProgressBar pb;
 
     private String filterTagsToUpload;
 
-    private AppCompatButton tag1,
+    public AppCompatButton tag1,
             tag2,
             tag3,
             filterTag1,
             filterTag2,
             filterTag3;
 
-    private AppCompatButton[] tagsArray;
+    public AppCompatButton[] tagsArray;
 
-    private boolean[] tagsStatus = { false, false, false };
-    private int[] i = new int[1];
+    public boolean[] tagsStatus = { false, false, false };
+    public int[] i = new int[1];
 
-    private int lastDeletedtag = 0;
+    public int lastDeletedtag = 0;
 
-    private ImageView sendButtonIv,
+    public ImageView sendButtonIv,
             addPhotoIv;
 
 
-    private DatabaseReference userDbRef;
-    private DatabaseReference userDbRefPosts;
-    private FirebaseAuth firebaseAuth;
-    private String image_uri;
+    public DatabaseReference userDbRef;
+    public DatabaseReference userDbRefPosts;
+    public FirebaseAuth firebaseAuth;
+    public String image_uri;
 
-    private RecyclerView recyclerView;
-    private List<ModelBuddyAndClubPost> postList;
-    private AdapterBuddyPosts adapterBuddyPosts;
+    public RecyclerView recyclerView;
+    public List<ModelBuddyAndClubPost> postList;
+    public AdapterBuddyPosts adapterBuddyPosts;
 
-    private String time;
-    private String timestamp;
-    private String date;
-    private String tagsToUpload;
-    private String[] allTags;
-    private TextView[] textViewTags;
-    private DatePickerDialog.OnDateSetListener setListener;
-    private TimePickerDialog.OnTimeSetListener timeSetListener;
+    public String time;
+    public String timestamp;
+    public String date;
+    public String tagsToUpload;
+    public String[] allTags;
+    public TextView[] textViewTags;
+    public DatePickerDialog.OnDateSetListener setListener;
+    public TimePickerDialog.OnTimeSetListener timeSetListener;
 
-    private String currentPhotoPath;
-    private String pUid;
+    public String currentPhotoPath;
+    public String pUid;
 
     //user info
-    private String username, email, uid, pp;
+    public String username, email, uid, pp;
 
     @Nullable
     @Override
@@ -647,9 +647,21 @@ public class BuddyFragment extends Fragment {
                 setListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet( DatePicker view, int year, int month, int dayOfMonth ) {
+                        String monthS = month + "";
+                        String dayS = dayOfMonth + "";
+
                         month = month + 1;
-                        String date = dayOfMonth + "/" + month + "/" + year;
-                        filterDateTv.setText( date );
+
+                        if (month < 10) {
+                            monthS = "0" + month;
+                        }
+                        if (dayOfMonth < 10) {
+                            dayS = "0" + dayOfMonth;
+                        }
+
+                        String newDate = dayS + "/" + monthS + "/" + year;
+                        filterDateTv.setText( newDate );
+
 
                     }
                 };
@@ -710,8 +722,16 @@ public class BuddyFragment extends Fragment {
                     public void onClick( View v ) {
 
                         //save the user's filter choices
+
+
                         String filterQuota = filterQuotaEt.getText().toString().trim();
+                        if (filterQuota.isEmpty()) {
+                            filterQuota = "";
+                        }
                         String filterLocation = filterLocationEt.getText().toString().trim();
+                        String filterDate = filterDateTv.getText().toString().trim();
+                        String filterTime = filterTimeTv.getText().toString().trim();
+                        String filterGender = preferredGenderFilterSpinner.getSelectedItem().toString().trim();
                         filterTagsToUpload = "";
 
 
@@ -745,7 +765,7 @@ public class BuddyFragment extends Fragment {
                                 for ( DataSnapshot ds : snapshot.getChildren() ) {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue( ModelBuddyAndClubPost.class );
 
-                                    if ( modelBuddyPost.getpQuota().contains( filterQuota ) ) {
+                                    if (  modelBuddyPost.getpQuota().equals("") || modelBuddyPost.getpQuota().contains( filterQuota ) ) {
                                         if ( !filterLocation.isEmpty() ) {
                                             if ( !modelBuddyPost.getpLocation().contains( filterLocation ) ) {
                                                 continue;
@@ -763,6 +783,23 @@ public class BuddyFragment extends Fragment {
                                                 continue;
                                             }
 
+                                        }
+
+                                        if ( !filterDate.isEmpty() ) {
+                                            if (!modelBuddyPost.getpDate().contains( filterDate ) ) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if ( !filterTime.isEmpty() ) {
+                                            if (!modelBuddyPost.getpHour().contains( filterTime ) ) {
+                                                continue;
+                                            }
+                                        }
+                                        if ( !filterGender.equals( "None" ) ) {
+                                            if (!modelBuddyPost.getpGender().contains( filterGender )) {
+                                                continue;
+                                            }
                                         }
 
                                         postList.add( modelBuddyPost );
@@ -797,6 +834,7 @@ public class BuddyFragment extends Fragment {
                         filterQuotaEt.setText( "" );
                         filterTimeTv.setText( "" );
                         filterLocationEt.setText( "" );
+                        filterTagsToUpload = "";
 
                         //TODO Reset Selected filters and set the feed back to normal feed.
                         loadPosts();

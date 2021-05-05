@@ -629,9 +629,21 @@ public class ClubsFragment extends Fragment {
                 setListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet( DatePicker view, int year, int month, int dayOfMonth ) {
+                        String monthS = month + "";
+                        String dayS = dayOfMonth + "";
+
                         month = month + 1;
-                        String date = dayOfMonth + "/" + month + "/" + year;
-                        filterDateTv.setText( date );
+
+                        if (month < 10) {
+                            monthS = "0" + month;
+                        }
+                        if (dayOfMonth < 10) {
+                            dayS = "0" + dayOfMonth;
+                        }
+
+                        String newDate = dayS + "/" + monthS + "/" + year;
+                        filterDateTv.setText( newDate );
+
 
                     }
                 };
@@ -687,6 +699,9 @@ public class ClubsFragment extends Fragment {
                         //save the user's filter choices
                         String filterDate = filterDateTv.getText().toString().trim();
                         String filterQuota = filterQuotaEt.getText().toString().trim();
+                        if (filterQuota.isEmpty()) {
+                            filterQuota = "";
+                        }
                         String filterTime = filterTimeTv.getText().toString().trim();
                         String filterLocation = filterLocationEt.getText().toString().trim();
                         filterTagsToUpload = "";
@@ -723,7 +738,7 @@ public class ClubsFragment extends Fragment {
                                 for ( DataSnapshot ds : snapshot.getChildren() ) {
                                     ModelBuddyAndClubPost modelBuddyPost = ds.getValue( ModelBuddyAndClubPost.class );
 
-                                    if ( modelBuddyPost.getpQuota().contains( filterQuota ) ) {
+                                    if ( modelBuddyPost.getpQuota().isEmpty() || modelBuddyPost.getpQuota().contains( filterQuota ) ) {
 
                                         if ( !filterLocation.isEmpty() ) {
                                             if ( !modelBuddyPost.getpLocation().contains( filterLocation ) ) {
@@ -742,6 +757,18 @@ public class ClubsFragment extends Fragment {
                                                 continue;
                                             }
 
+                                        }
+
+                                        if ( !filterDate.isEmpty() ) {
+                                            if (!modelBuddyPost.getpDate().contains( filterDate ) ) {
+                                                continue;
+                                            }
+                                        }
+
+                                        if ( !filterTime.isEmpty() ) {
+                                            if (!modelBuddyPost.getpHour().contains( filterTime ) ) {
+                                                continue;
+                                            }
                                         }
 
                                         postList.add( modelBuddyPost );
