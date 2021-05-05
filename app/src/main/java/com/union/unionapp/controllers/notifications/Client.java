@@ -1,6 +1,7 @@
 package com.union.unionapp.controllers.notifications;
 
 import retrofit2.Retrofit;
+import retrofit2.Retrofit.Builder;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Client {

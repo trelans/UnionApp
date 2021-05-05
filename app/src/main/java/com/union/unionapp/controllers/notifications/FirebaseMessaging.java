@@ -70,6 +70,9 @@ public class FirebaseMessaging extends FirebaseMessagingService {
                 .setContentIntent(pIntent);
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         int j = 0;
+        if (j > 0) {
+            j = 1;
+        }
         notificationManager.notify(j , builder.build());
     }
     private void sendOAndAboveNotification(RemoteMessage remoteMessage) {
@@ -95,6 +98,9 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         int j = 0;
+        if (j > 0) {
+            j = 1;
+        }
         notification1.getManager().notify(j,builder.build());
 
     }

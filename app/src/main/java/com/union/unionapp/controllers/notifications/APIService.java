@@ -4,6 +4,7 @@ package com.union.unionapp.controllers.notifications;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.Callback;
 import retrofit2.Call;
 
 public interface APIService {
